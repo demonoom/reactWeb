@@ -1,15 +1,16 @@
 import React, {PropTypes} from 'react';
-import {Button, Radio,Progress} from 'antd';
+import {Button, Radio, Progress} from 'antd';
 import {Modal} from 'antd';
-import { Row, Col, Checkbox,Slider,Select,Tag} from 'antd';
+import {Row, Col, Checkbox, Slider, Select, Tag} from 'antd';
 import {message} from 'antd';
-import TextboxioComponentForAnswer  from '../textboxioComponents/TextboxioComponentForAnswer';
+import TextboxioComponentForAnswer from '../textboxioComponents/TextboxioComponentForAnswer';
 import SubjectVideoUploadComponents from '../SubjectVideoUploadComponents';
 import SubjectAnalysisContent from './SubjectAnalysisContent';
 import SubjectContent from '../textboxioComponents/SubjectContent';
 import {doWebService} from '../../WebServiceHelper';
-import {isEmpty,AUDIO_SUBJECT_ALLOWED} from "../../utils/Const";
+import {isEmpty, AUDIO_SUBJECT_ALLOWED} from "../../utils/Const";
 import SelectKnowledgeModal from './SelectKnowledgeModal';
+
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -36,32 +37,32 @@ const SubjectUploadComponent = React.createClass({
             mulitiAnswerDefaultValue: 'A',
             correctAnswerValue: "正确",
             useSameScheduleForCorrect: true,
-            mulitiAnswerOptions:[
+            mulitiAnswerOptions: [
                 {label: 'A', value: 'A'},
                 {label: 'B', value: 'B'},
                 {label: 'C', value: 'C'},
                 {label: 'D', value: 'D'},
             ],
-            singleAnswerOptions:[
+            singleAnswerOptions: [
                 <Radio key="A" value="A">A</Radio>,
                 <Radio key="B" value="B">B</Radio>,
                 <Radio key="C" value="C">C</Radio>,
                 <Radio key="D" value="D">D</Radio>
             ],
-            sliderValue:4,
-            singleSliderValue:4,
-            subjectVideoModalVisible:false, //音频文件上传窗口的默认状态（隐藏Modal窗口）
-            uploadPercent:0,    //上传进度的初始值
-            subjectType:'C',    //默认的题目类型为单选题C
-            pageNo:1,   //查询知识点的页码
-            conditionKeyOfKnowledge:'',  //查询知识点的关键字
-            knowledges:[],  //题目的知识点
-            subjectAnalysisModalVisible:false,  //题目的解析窗口状态
-            subjectVisibility:'all',    //题目可见性，默认全部可见
-            knowledgeChildren:[],
-            knowledgeResponse:[],
-            selectKnowledgeModalIsShow:false,
-            tags:[]
+            sliderValue: 4,
+            singleSliderValue: 4,
+            subjectVideoModalVisible: false, //音频文件上传窗口的默认状态（隐藏Modal窗口）
+            uploadPercent: 0,    //上传进度的初始值
+            subjectType: 'C',    //默认的题目类型为单选题C
+            pageNo: 1,   //查询知识点的页码
+            conditionKeyOfKnowledge: '',  //查询知识点的关键字
+            knowledges: [],  //题目的知识点
+            subjectAnalysisModalVisible: false,  //题目的解析窗口状态
+            subjectVisibility: 'all',    //题目可见性，默认全部可见
+            knowledgeChildren: [],
+            knowledgeResponse: [],
+            selectKnowledgeModalIsShow: false,
+            tags: []
         };
     },
 
@@ -72,7 +73,7 @@ const SubjectUploadComponent = React.createClass({
         //this.getKnowledgeInfosByConditionKey(this.state.pageNo,this.state.conditionKeyOfKnowledge);
         // console.log("showUpload");
         this.setState({
-            visible: true,tags:[]
+            visible: true, tags: []
         });
     },
     /**
@@ -94,38 +95,38 @@ const SubjectUploadComponent = React.createClass({
     /**
      * 完成页面内容的初始化操作，设置一些关键state回到初始值
      */
-    initPage(){
-        if(isEmpty(subjectContentEditor)==false){
+    initPage() {
+        if (isEmpty(subjectContentEditor) == false) {
             subjectContentEditor.content.set('');
         }
-        if(isEmpty(mytextareaAnswerEditor)==false){
+        if (isEmpty(mytextareaAnswerEditor) == false) {
             mytextareaAnswerEditor.content.set('');
         }
-        if(isEmpty(subjectAnalysisContentEditor)==false){
+        if (isEmpty(subjectAnalysisContentEditor) == false) {
             subjectAnalysisContentEditor.content.set('');
         }
         this.setState({
             singleAnswer: 'A',
             mulitiAnswerDefaultValue: 'A',
             correctAnswerValue: "正确",
-            mulitiAnswerOptions:[
+            mulitiAnswerOptions: [
                 {label: 'A', value: 'A'},
                 {label: 'B', value: 'B'},
                 {label: 'C', value: 'C'},
                 {label: 'D', value: 'D'},
             ],
-            singleAnswerOptions:[
+            singleAnswerOptions: [
                 <Radio key="A" value="A">A</Radio>,
                 <Radio key="B" value="B">B</Radio>,
                 <Radio key="C" value="C">C</Radio>,
                 <Radio key="D" value="D">D</Radio>
             ],
-            sliderValue:4,
-            singleSliderValue:4,
-            knowledges:[],
-            analysisContent:'',
-            tags:[],    //选中的知识点标签
-            subjectVisibility:'all',    //题目可见性，默认全部可见
+            sliderValue: 4,
+            singleSliderValue: 4,
+            knowledges: [],
+            analysisContent: '',
+            tags: [],    //选中的知识点标签
+            subjectVisibility: 'all',    //题目可见性，默认全部可见
         });
     },
 
@@ -135,8 +136,8 @@ const SubjectUploadComponent = React.createClass({
      * @param knowledgeName
      * @param isLinkToSchedule
      */
-    saveSubject(batchAddSubjectBeanJson, knowledgeName, isLinkToSchedule){
-        var _this =this;
+    saveSubject(batchAddSubjectBeanJson, knowledgeName, isLinkToSchedule) {
+        var _this = this;
         var param = {
             "method": 'batchAddSubjects',
             "batchAddSubjectBeanJson": [batchAddSubjectBeanJson],
@@ -144,19 +145,20 @@ const SubjectUploadComponent = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
-                    if(_this.props.activeKey=='2'){
+                    if (_this.props.activeKey == '2') {
                         //获取题目列表ID并添加刷新列表
                         var floderId = _this.props.floderId;
                         var subjectsIds = ret.response[0];
                         var operateUserId = sessionStorage.getItem("ident");
-                        _this.copySubjectsToCloudFile(operateUserId,floderId,subjectsIds);
+                        //_this.copySubjectsToCloudFile(operateUserId,floderId,subjectsIds);
                     }
                     if (isLinkToSchedule == true) {
                         var subjectsIds = ret.response[0];
                         var userId = sessionStorage.getItem("ident");
                         subjectUpload.teachScheduleInfo(userId, knowledgeName, subjectsIds);
-                    }else {
+                    } else {
                         message.success("题目添加成功");
+                        _this.props.courseUploadAntCloud();
                         subjectUpload.props.courseUploadCallBack();
                     }
                 } else {
@@ -175,7 +177,7 @@ const SubjectUploadComponent = React.createClass({
      * @param title
      * @param subjectsIds
      */
-    teachScheduleInfo(userId, title, subjectsIds){
+    teachScheduleInfo(userId, title, subjectsIds) {
         var param = {
             "method": 'getOrCreateTeachSchedule',
             "userId": userId,
@@ -199,7 +201,7 @@ const SubjectUploadComponent = React.createClass({
      * @param subjectsIds
      * @param scheduleId
      */
-    copySubjects(subjectsIds, scheduleId){
+    copySubjects(subjectsIds, scheduleId) {
         var _this = this;
         var param = {
             "method": 'copySubjects',
@@ -225,17 +227,17 @@ const SubjectUploadComponent = React.createClass({
      parentCloudFileId ---- 蚁盘目录的id，保存到根目录时传-1，否则传对应目录的id
      subjectId         ---- 题目的id, 当选中多个题目时，用逗号分隔
      */
-    copySubjectsToCloudFile(operateUserId, parentCloudFileId,subjectId) {
+    copySubjectsToCloudFile(operateUserId, parentCloudFileId, subjectId) {
         var _this = this;
         var floderId = _this.props.floderId;
         var param = {
             "method": 'copySubjectsToCloudFile',
             "operateUserId": sessionStorage.getItem("ident"),
             "parentCloudFileId": floderId,
-            "subjectId":subjectId
+            "subjectId": subjectId
         };
-        doWebService(JSON.stringify(param),{
-            onResponse:function(ret){
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.response == true) {
                     message.success('题目添加成功');
                     _this.props.courseUploadAntCloud();
@@ -259,14 +261,14 @@ const SubjectUploadComponent = React.createClass({
      * 判断题答案的radioGroup选项发生改变时的响应函数
      * @param e
      */
-    correctAnswerOnChange(e){
+    correctAnswerOnChange(e) {
         this.setState({correctAnswerValue: e.target.value});
     },
     /**
      * 单选答案的radioGroup选项发生改变时的响应函数
      * @param e
      */
-    singleAnswerOnChange(e){
+    singleAnswerOnChange(e) {
         this.setState({singleAnswer: e.target.value});
     },
 
@@ -276,35 +278,35 @@ const SubjectUploadComponent = React.createClass({
      * @returns {string}
      */
     sliderChange(value) {
-        var selectArray=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        var mulitiAnswerOptions=[];
-        for(var i=0;i<value;i++){
+        var selectArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        var mulitiAnswerOptions = [];
+        for (var i = 0; i < value; i++) {
             var selectValue = {label: selectArray[i], value: selectArray[i]};
             mulitiAnswerOptions.push(selectValue);
         }
-        this.setState({"mulitiAnswerOptions":mulitiAnswerOptions,"sliderValue":value});
+        this.setState({"mulitiAnswerOptions": mulitiAnswerOptions, "sliderValue": value});
     },
     /**
      * 单选题选项自定义数量变化处理函数
      * @param value
      */
-    singleSliderChange(value){
-        var selectArray=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        var singleAnswerOptions=[];
-        for(var i=0;i<value;i++){
+    singleSliderChange(value) {
+        var selectArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        var singleAnswerOptions = [];
+        for (var i = 0; i < value; i++) {
             var selectValue = <Radio key={selectArray[i]} value={selectArray[i]}>{selectArray[i]}</Radio>;
             singleAnswerOptions.push(selectValue);
         }
-        this.setState({"singleAnswerOptions":singleAnswerOptions,"singleSliderValue":value});
+        this.setState({"singleAnswerOptions": singleAnswerOptions, "singleSliderValue": value});
     },
 
     /**
      * 插入音频
      */
-    insertVideo(attachment){
-        var id = "audioTag"+parseInt(Math.random()*1000);
-        var iTagId = "iTag"+parseInt(Math.random()*1000);
-        var newContent ='<span class="adiuo_p_play"><i id="'+iTagId+'" class="audio_left" onclick="javascript:var isPaused=document.getElementById(\''+id+'\').paused;if(isPaused){ document.getElementById(\''+id+'\').play();document.getElementById(\''+iTagId+'\').className=\'audio_left_run\'; }else{ document.getElementById(\''+id+'\').pause();document.getElementById(\''+iTagId+'\').className=\'audio_left\'; }"></i><audio onended="javascript:document.getElementById(\''+iTagId+'\').className=\'audio_left\'" id="'+id+'" style="display: none"  controls="controls" width="200" height="30" src="'+attachment+'"></audio></span>';
+    insertVideo(attachment) {
+        var id = "audioTag" + parseInt(Math.random() * 1000);
+        var iTagId = "iTag" + parseInt(Math.random() * 1000);
+        var newContent = '<span class="adiuo_p_play"><i id="' + iTagId + '" class="audio_left" onclick="javascript:var isPaused=document.getElementById(\'' + id + '\').paused;if(isPaused){ document.getElementById(\'' + id + '\').play();document.getElementById(\'' + iTagId + '\').className=\'audio_left_run\'; }else{ document.getElementById(\'' + id + '\').pause();document.getElementById(\'' + iTagId + '\').className=\'audio_left\'; }"></i><audio onended="javascript:document.getElementById(\'' + iTagId + '\').className=\'audio_left\'" id="' + id + '" style="display: none"  controls="controls" width="200" height="30" src="' + attachment + '"></audio></span>';
         subjectContentEditor.content.insertHtmlAtCursor(newContent);
     },
 
@@ -312,11 +314,11 @@ const SubjectUploadComponent = React.createClass({
      * 显示音频上传窗口
      * @param subjectType
      */
-    showVideoUploadModal(subjectType){
-        if(isEmpty(this.refs.subjectVideoUpload)==false){
+    showVideoUploadModal(subjectType) {
+        if (isEmpty(this.refs.subjectVideoUpload) == false) {
             this.refs.subjectVideoUpload.initFileUploadPage();
         }
-        this.setState({subjectVideoModalVisible:true,"currentSubjectType":subjectType});
+        this.setState({subjectVideoModalVisible: true, "currentSubjectType": subjectType});
     },
 
     /**
@@ -339,11 +341,11 @@ const SubjectUploadComponent = React.createClass({
      * 音频文件上传完成后的回调
      * @param fileList
      */
-    handleFileSubmit(fileList){
-        if(fileList==null || fileList.length==0){
-            uploadFileList.splice(0,uploadFileList.length);
+    handleFileSubmit(fileList) {
+        if (fileList == null || fileList.length == 0) {
+            uploadFileList.splice(0, uploadFileList.length);
         }
-        for(var i=0;i<fileList.length;i++){
+        for (var i = 0; i < fileList.length; i++) {
             var fileJson = fileList[i];
             var fileObj = fileJson.fileObj;
             // uploadFileList.push(fileObj[0]);
@@ -354,7 +356,7 @@ const SubjectUploadComponent = React.createClass({
     /**
      * 关闭音频文件上传窗口
      */
-    subjectVideoModalHandleCancel(){
+    subjectVideoModalHandleCancel() {
         this.setState({"subjectVideoModalVisible": false});
     },
 
@@ -409,8 +411,8 @@ const SubjectUploadComponent = React.createClass({
     /**
      * 题目类型改变的响应
      */
-    subjectTypeOnChange(e){
-        this.setState({subjectType:e.target.value});
+    subjectTypeOnChange(e) {
+        this.setState({subjectType: e.target.value});
     },
 
     /**
@@ -432,14 +434,14 @@ const SubjectUploadComponent = React.createClass({
         // var subjectName = mytextareaCorrectEditor.content.get();
         var subjectName = this.refs.subjectContent.getSubjectContent();
         subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
-        var answer =this.getSubjectAnswerByType();
+        var answer = this.getSubjectAnswerByType();
         var subjectParamArray;
         var ScheduleOrSubjectId;
         var optType;
         var knowledgeName;
-        if(isEmpty(_this.props.activeKey)==true){
+        if (isEmpty(_this.props.activeKey) == true) {
             //资源库的业务逻辑
-            if(isEmpty(this.props.params)===false){
+            if (isEmpty(this.props.params) === false) {
                 subjectParamArray = this.props.params.split("#");
                 ScheduleOrSubjectId = subjectParamArray[1];
                 optType = subjectParamArray[3];
@@ -452,24 +454,24 @@ const SubjectUploadComponent = React.createClass({
         }
         var isLinkToSchedule = this.state.useSameScheduleForCorrect;
         var alterNativeAnswerCount = 4;
-        if(this.state.subjectType == "C"){
+        if (this.state.subjectType == "C") {
             alterNativeAnswerCount = this.state.singleSliderValue;
-        }else if(this.state.subjectType == "MC"){
+        } else if (this.state.subjectType == "MC") {
             alterNativeAnswerCount = this.state.sliderValue;
         }
         //题目归属的学校id，如果全部可见，则学校id为0
-        var ownerSchoolid=0;
-        if(isEmpty(_this.props.activeKey)==true){
-            if(this.state.subjectVisibility=='school'){
-                ownerSchoolid=this.state.loginUser.schoolId;
+        var ownerSchoolid = 0;
+        if (isEmpty(_this.props.activeKey) == true) {
+            if (this.state.subjectVisibility == 'school') {
+                ownerSchoolid = this.state.loginUser.schoolId;
             }
-        }else{
+        } else {
             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
             ownerSchoolid = loginUser.schoolId;
         }
 
-        var knowledges=[];
-        for(var i=0;i<this.state.tags.length;i++){
+        var knowledges = [];
+        for (var i = 0; i < this.state.tags.length; i++) {
             var tag = this.state.tags[i];
             knowledges.push(tag.name);
         }
@@ -479,19 +481,20 @@ const SubjectUploadComponent = React.createClass({
             // "score": 0,
             "userId": this.state.loginUser.colUid,
             "type": this.state.subjectType,
-            "knowledges":knowledges,
-            "analysisContent":this.state.analysisContent,
-            "alterNativeAnswerCount":alterNativeAnswerCount,
-            "ownerSchoolid":ownerSchoolid,
-            "isPrivate":false
+            "knowledges": knowledges,
+            "analysisContent": this.state.analysisContent,
+            "alterNativeAnswerCount": alterNativeAnswerCount,
+            "ownerSchoolid": ownerSchoolid,
+            "isPrivate": false
         };
-        if(isEmpty(_this.props.activeKey)==false){
+        if (isEmpty(_this.props.activeKey) == false) {
             //保存到蚁盘
             //目标文件夹的id
             var floderId = _this.props.floderId;
             batchAddSubjectBeanJson.knowledgePointId = -1;
+            batchAddSubjectBeanJson.cloudFileDirId = floderId;  //cloudFileDirId  ---------------  只在 蚁盘上传题目  时才需加上
             batchAddSubjectBeanJson.isPrivate = true;
-        }else{
+        } else {
             //保存到资源库
             if (optType == "bySubjectId") {
                 batchAddSubjectBeanJson.knowledgePointId = ScheduleOrSubjectId;
@@ -517,9 +520,9 @@ const SubjectUploadComponent = React.createClass({
     /**
      * 根据题目类型，从不同的组件中获取对应的题目答案
      */
-    getSubjectAnswerByType(){
+    getSubjectAnswerByType() {
         var answer = "";
-        switch(this.state.subjectType){
+        switch (this.state.subjectType) {
             case "C":
                 answer = this.state.singleAnswer;
                 break;
@@ -546,7 +549,7 @@ const SubjectUploadComponent = React.createClass({
      * @param title
      * @param subjectsIds
      */
-    getKnowledgeInfosByConditionKey(pageNo,conditionKey){
+    getKnowledgeInfosByConditionKey(pageNo, conditionKey) {
         var _this = this;
         var param = {
             "method": 'getKnowledgeInfoListByConditionKey',
@@ -560,13 +563,13 @@ const SubjectUploadComponent = React.createClass({
                     //children.splice(0);
                     var response = ret.response;
                     children.splice(0);
-                    _this.setState({knowledgeResponse:response});
+                    _this.setState({knowledgeResponse: response});
                     response.forEach(function (knowledgeInfo) {
                         var knowledgeId = knowledgeInfo.knowledgeId;
                         var knowledgeName = knowledgeInfo.knowledgeName;
                         children.push(<Option key={knowledgeId}>{knowledgeName}</Option>);
                     });
-                    _this.setState({"knowledgeChildren":children});
+                    _this.setState({"knowledgeChildren": children});
                 }
             },
             onError: function (error) {
@@ -575,13 +578,13 @@ const SubjectUploadComponent = React.createClass({
         });
     },
 
-    searchKnowledge(searchCondition){
+    searchKnowledge(searchCondition) {
         // console.log("searchCondition:"+searchCondition);
         // children.splice(0);
-        this.getKnowledgeInfosByConditionKey(this.state.pageNo,searchCondition);
+        this.getKnowledgeInfosByConditionKey(this.state.pageNo, searchCondition);
     },
 
-    filterKnowledge(inputValue,option){
+    filterKnowledge(inputValue, option) {
         // console.log("inputValue:"+inputValue);
         //this.getKnowledgeInfosByConditionKey(1,inputValue);
     },
@@ -592,70 +595,70 @@ const SubjectUploadComponent = React.createClass({
      */
     handleChange(value) {
         // console.log(`selected ${value}`);
-        this.setState({"knowledges":value});
-        this.getKnowledgeInfosByConditionKey(this.state.pageNo,value);
+        this.setState({"knowledges": value});
+        this.getKnowledgeInfosByConditionKey(this.state.pageNo, value);
     },
 
-    selectKnowledge(value){
+    selectKnowledge(value) {
         // console.log("sel"+value);
     },
 
     /**
      * 显示题目解析窗口
      */
-    showAnalysisModal(){
-        this.setState({"subjectAnalysisModalVisible":true});
+    showAnalysisModal() {
+        this.setState({"subjectAnalysisModalVisible": true});
     },
 
     /**
      * 题目解析窗口关闭
      */
-    subjectAnalysisModalHandleCancel(){
-        this.setState({"subjectAnalysisModalVisible":false});
+    subjectAnalysisModalHandleCancel() {
+        this.setState({"subjectAnalysisModalVisible": false});
     },
 
     /**
      * 添加题目的解析内容
      */
-    addAnalysisContent(){
+    addAnalysisContent() {
         var analysisContent = this.refs.subjectAnalysisContentComponent.getSubjectAnalysisContent();
         // console.log(analysisContent);
-        this.setState({analysisContent,subjectAnalysisModalVisible:false});
+        this.setState({analysisContent, subjectAnalysisModalVisible: false});
     },
 
     /**
      * 题目可见性选项改变时的响应函数
      */
-    subjectVisibilityOnChange(e){
-        this.setState({"subjectVisibility":e.target.value});
+    subjectVisibilityOnChange(e) {
+        this.setState({"subjectVisibility": e.target.value});
     },
 
-    showSelectKnowledgeModal(){
+    showSelectKnowledgeModal() {
         //this.state.tags.splice(0);
         // console.log("==========selectKnowledgeModalIsShow============");
-        this.setState({"selectKnowledgeModalIsShow":true});
+        this.setState({"selectKnowledgeModalIsShow": true});
     },
 
-    closeSelectKnowledgeModal(tags,buttonType){
+    closeSelectKnowledgeModal(tags, buttonType) {
         // var tags = this.state.tags;
         // newTags.forEach(function (newTag) {
         //     tags.push(newTag);
         // });
         var _this = this;
-        if(isEmpty(buttonType)==true){
+        if (isEmpty(buttonType) == true) {
             // console.log("close:"+tags);
             // this.setState({"tags":tags});
             _this.state.tags.splice(0);
-            if(isEmpty(tags)==false){
+            if (isEmpty(tags) == false) {
                 tags.forEach(function (tag) {
                     _this.state.tags.push(tag);
                 })
             }
         }
-        _this.setState({"selectKnowledgeModalIsShow":false});
+        _this.setState({"selectKnowledgeModalIsShow": false});
     },
 
-    handleClose(removedTag){
+    handleClose(removedTag) {
         var tags = this.state.tags;
         for (var i = 0; i < tags.length; i++) {
             if (tags[i].key == removedTag.key) {
@@ -679,7 +682,8 @@ const SubjectUploadComponent = React.createClass({
             </Button>
         </div>;
         //插入音频按钮
-        var audioButton = <Button className="row-t-f roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
+        var audioButton = <Button className="row-t-f roe-t-f-left"
+                                  onClick={this.showVideoUploadModal.bind(this, 'single')}>插入音频</Button>;
         var answerComponent = null;
 
         if (this.state.subjectType == "C") {
@@ -693,7 +697,8 @@ const SubjectUploadComponent = React.createClass({
                             自定义答案选项数量：
                         </Col>
                         <Col span={12}>
-                            <Slider min={4} max={8} defaultValue={this.state.singleSliderValue} value={this.state.singleSliderValue} onChange={this.singleSliderChange} />
+                            <Slider min={4} max={8} defaultValue={this.state.singleSliderValue}
+                                    value={this.state.singleSliderValue} onChange={this.singleSliderChange}/>
                         </Col>
                     </Row>
                     <Row>
@@ -706,7 +711,8 @@ const SubjectUploadComponent = React.createClass({
                     </Row>
                 </Col>
             </Row>;
-            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
+            audioButton =
+                <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this, 'single')}>插入音频</Button>;
         } else if (this.state.subjectType == "MC") {
             answerComponent = <Row>
                 <Col span={3} className="ant-form-item-label">
@@ -719,7 +725,8 @@ const SubjectUploadComponent = React.createClass({
                         </Col>
                         <Col span={12}>
 
-                            <Slider min={4} max={8} defaultValue={this.state.sliderValue} value={this.state.sliderValue} onChange={this.sliderChange} />
+                            <Slider min={4} max={8} defaultValue={this.state.sliderValue} value={this.state.sliderValue}
+                                    onChange={this.sliderChange}/>
 
                         </Col>
                     </Row>
@@ -733,7 +740,8 @@ const SubjectUploadComponent = React.createClass({
                     </Row>
                 </Col>
             </Row>;
-            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
+            audioButton = <Button className="roe-t-f-left"
+                                  onClick={this.showVideoUploadModal.bind(this, 'mulitiSelect')}>插入音频</Button>
         } else if (this.state.subjectType == "J") {
             answerComponent = <Row>
                 <Col span={3} className="ant-form-item-label">
@@ -750,9 +758,9 @@ const SubjectUploadComponent = React.createClass({
                     </div>
                 </Col>
             </Row>;
-            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
+            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this, 'correct')}>插入音频</Button>;
         } else if (this.state.subjectType == "S") {
-            answerComponent =<Row className="row-t-f">
+            answerComponent = <Row className="row-t-f">
                 <Col span={3} className="ant-form-item-label">
                     <span className="font-14">答案：</span>
                 </Col>
@@ -762,11 +770,12 @@ const SubjectUploadComponent = React.createClass({
                     </div>
                 </Col>
             </Row>;
-            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>;
+            audioButton = <Button className="roe-t-f-left"
+                                  onClick={this.showVideoUploadModal.bind(this, 'simpleAnswer')}>插入音频</Button>;
         }
 
         //如果用户不在允许的权限列表中，将audioButton设置为null，不显示
-        if(AUDIO_SUBJECT_ALLOWED.indexOf(sessionStorage.getItem("ident")) == -1){
+        if (AUDIO_SUBJECT_ALLOWED.indexOf(sessionStorage.getItem("ident")) == -1) {
             audioButton = null;
         }
 
@@ -779,14 +788,14 @@ const SubjectUploadComponent = React.createClass({
         const {tags} = this.state;
         //可见性的判断  在我的蚁盘的情况下 不要可见性
         var visibilityCon;
-        if(this.props.activeKey == '2'){
+        if (this.props.activeKey == '2') {
             visibilityCon = null;
-        }else{
+        } else {
             visibilityCon = <Row>
                 <Col span={3} className="ant-form-item-label row-t-f">
                     <span className="font-14">可见性：</span>
                 </Col>
-                <Col span={20}  className="select_knoledge_top2">
+                <Col span={20} className="select_knoledge_top2">
                     <RadioGroup onChange={this.subjectVisibilityOnChange} value={this.state.subjectVisibility}>
                         <Radio value="all">全部可见</Radio>
                         <Radio value="school">本校可见</Radio>
@@ -798,7 +807,8 @@ const SubjectUploadComponent = React.createClass({
 
         return (
             <div className="toobar right_ri ">
-                <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目" className="add_study add_study-b">添加题目</Button>
+                <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目"
+                        className="add_study add_study-b">添加题目</Button>
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
@@ -809,7 +819,7 @@ const SubjectUploadComponent = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <div >
+                        <div>
                             {buttons}
                         </div>
                     ]}
@@ -870,7 +880,8 @@ const SubjectUploadComponent = React.createClass({
                                         return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
                                     })}
                                 </div>
-                                <Button className="ding_modal_top" onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
+                                <Button className="ding_modal_top"
+                                        onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
                             </Col>
                         </Row>
                         {visibilityCon};
@@ -937,13 +948,14 @@ const SubjectUploadComponent = React.createClass({
                     <Row>
                         <Col span={2}>题目解析：</Col>
                         <Col span={22}>
-                            <SubjectAnalysisContent analysisContent={this.state.analysisContent} ref="subjectAnalysisContentComponent"></SubjectAnalysisContent>
+                            <SubjectAnalysisContent analysisContent={this.state.analysisContent}
+                                                    ref="subjectAnalysisContentComponent"></SubjectAnalysisContent>
                         </Col>
 
                     </Row>
                 </Modal>
 
-                <SelectKnowledgeModal isShow={this.state.selectKnowledgeModalIsShow}  initTags={this.state.tags}
+                <SelectKnowledgeModal isShow={this.state.selectKnowledgeModalIsShow} initTags={this.state.tags}
                                       closeSelectKnowledgeModal={this.closeSelectKnowledgeModal}></SelectKnowledgeModal>
 
 
