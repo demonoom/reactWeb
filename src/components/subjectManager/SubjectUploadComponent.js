@@ -420,7 +420,6 @@ const SubjectUploadComponent = React.createClass({
      * @param e
      */
     saveButtonOnClick(e) {
-        debugger
         var _this = this;
         e.preventDefault();
         var target = e.target;

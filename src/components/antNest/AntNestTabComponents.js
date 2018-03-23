@@ -212,7 +212,7 @@ const AntNestTabComponents = React.createClass({
     readContentsModel(e) {
         //侧边栏进场,根据voiceTopicResultType区分文字,语音,图片进行展示
         var obj = {
-            title: '跟读内容'
+            title: '比对内容'
         };
         if (e.topicVoice.voiceTopicResultType == 1) {
             //字符串  voiceTopicResult
@@ -409,7 +409,7 @@ const AntNestTabComponents = React.createClass({
                                                                                      className="antnest_talk">立即作答</Button>
                             </span>
                             <Button value={topicObj.id}
-                                    onClick={antNest.readContentsModel.bind(this, topicObj)}>跟读内容</Button>
+                                    onClick={antNest.readContentsModel.bind(this, topicObj)}>比对内容</Button>
                         </ul>
                     </div>;
                 } else {
@@ -559,7 +559,6 @@ const AntNestTabComponents = React.createClass({
                                         className="topics_btn antnest_talk teopics_spa">置顶</Button>;
                 }
                 if (topicReplayInfo.type == 3) {
-                    console.log(topicReplayInfo.topicVoice.voiceTopicResultUrl);
                     //topicReplayInfo.type == 3为新加的语音作业的回复,content为空将不再展示,只展示topicVoice中的语音和评分
                     var topicReplayCard = <div style={{marginBottom: '15px'}}>
                         <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
