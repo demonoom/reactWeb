@@ -558,7 +558,7 @@ const AntNestTabComponents = React.createClass({
                                         onClick={antNest.showSetTopicTopModal}
                                         className="topics_btn antnest_talk teopics_spa">置顶</Button>;
                 }
-                if (topicReplayInfo.type == 3) {
+                if (topicReplayInfo.type == 3 && isEmpty(topicReplayInfo.topicVoice) == false) {
                     //topicReplayInfo.type == 3为新加的语音作业的回复,content为空将不再展示,只展示topicVoice中的语音和评分
                     var topicReplayCard = <div style={{marginBottom: '15px'}}>
                         <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
