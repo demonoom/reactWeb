@@ -3166,10 +3166,10 @@ const MainLayout = React.createClass({
                             <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
                                     onClick={this.shareToAntNestModalHandleCancel}>取消</button>
                         ]}
-                        width={700}
+                        width={616}
                     >
                         <div style={{marginBottom: '14px'}}>
-                            <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}
+                            <Input type="textarea" rows={2} placeholder="这一刻的想法" style={{height:'84px'}} value={this.state.nowThinking}
                                    onChange={this.nowThinkingInputChange}/>
                         </div>
                         <div style={{marginBottom: '14px'}}>

@@ -2403,7 +2403,7 @@ pageNo   --- 页码，-1取全部
                        onCancel={cloudTable.shareModalHandleCancel}
                        onOk={cloudTable.getsharekey}
                 >
-                    <div>
+                    <div >
                         <Row>
                             <Col span={12} className="share_til">选择好友分享文件：</Col>
                             <Col span={12} className="share_til">这一刻的想法：
