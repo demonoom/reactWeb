@@ -216,7 +216,7 @@ const AntNestTabComponents = React.createClass({
         };
         if (e.topicVoice.voiceTopicResultType == 1) {
             //字符串  voiceTopicResult
-            obj.div = <div>{e.topicVoice.voiceTopicResult}</div>;
+            obj.div = <div className="side_topicText">{e.topicVoice.voiceTopicResult}</div>;
         } else if (e.topicVoice.voiceTopicResultType == 2) {
             //图片  voiceTopicResultUrl
             obj.div = <div className="side_topicVoice"><img className="noDataTipImg topics_zanImg noom_cursor"
@@ -564,13 +564,17 @@ const AntNestTabComponents = React.createClass({
                         <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
                         <ul>
                             <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>
-                            <div onClick={antNest.topicVoicePlay}>播放
-                                <audio src={topicReplayInfo.topicVoice.voiceTopicResultUrl}
-                                       controls="controls"
-                                       loop="false"
-                                       hidden="true"></audio>
-                            </div>
-                            <li>评分:{topicReplayInfo.topicVoice.voiceAccuracy}</li>
+                            <li className="date_tr">
+                                <div className="audio_play_ant">
+                                    <div className="audio_left audio_left_run" onClick={antNest.topicVoicePlay}>
+                                        <audio src={topicReplayInfo.topicVoice.voiceTopicResultUrl}
+                                               controls="controls"
+                                               loop="false"
+                                               hidden="true"></audio>
+                                    </div>
+                                </div>
+                                <span className="audio_play_ant1"><span className="audio_play_antred1">评分：</span><span className="audio_play_antred">{topicReplayInfo.topicVoice.voiceAccuracy}</span></span>
+                            </li>
                             <li>{replayAttachMentsArray}</li>
                             <li className="topics_bot"><span
                                 className="topics_time">{getLocalTime(topicReplayInfo.createTime)}</span><span

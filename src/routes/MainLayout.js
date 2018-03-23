@@ -2973,7 +2973,7 @@ const MainLayout = React.createClass({
                             {this.state.publicSidebarTitle}
                             <Icon type="close" className="d_mesclose_new" onClick={this.levPublicSidebarSet}/>
                         </div>
-                        <div className="set_in_background">
+                        <div className="set_in_background2">
                             {this.state.publicSidebarContent}
                         </div>
                     </div>
