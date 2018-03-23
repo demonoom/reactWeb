@@ -174,6 +174,23 @@ const AntNestTabComponents = React.createClass({
         LP.Start(obj);
     },
 
+    /**
+     * 语音作业播放暂停
+     * @param e
+     */
+    topicVoicePlay(e) {
+        var music = e.target.children[0];
+        //var music_btn = document.getElementById('music_btn2');
+        if (music.paused) {
+            music.play();
+            //music_btn.src = 'play.gif';
+        }
+        else {
+            music.pause();
+            //music_btn.src = 'pause.gif';
+        }
+    },
+
     whoISSecret(data) {
         var arr = [];
         data.forEach(function (v) {
@@ -462,7 +479,7 @@ const AntNestTabComponents = React.createClass({
                         </li>;
                         replayAnswerUsersArray.push(answerUserInfo);
                     }
-                })
+                });
                 //如果当前用户未点赞，则使用空心按钮表示，按钮点击功能表示“取消点赞”
                 var replayPraiseButton = <Button icon="like-o" value={topicReplayInfo.id + "#" + topicObj.id}
                                                  onClick={antNest.praiseForTopic}
@@ -542,13 +559,18 @@ const AntNestTabComponents = React.createClass({
                                         className="topics_btn antnest_talk teopics_spa">置顶</Button>;
                 }
                 if (topicReplayInfo.type == 3) {
-                    console.log(topicReplayInfo.topicVoice.voiceAccuracy);
+                    console.log(topicReplayInfo.topicVoice.voiceTopicResultUrl);
                     //topicReplayInfo.type == 3为新加的语音作业的回复,content为空将不再展示,只展示topicVoice中的语音和评分
                     var topicReplayCard = <div style={{marginBottom: '15px'}}>
                         <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
                         <ul>
                             <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>
-                            <li>语音作业</li>
+                            <div onClick={antNest.topicVoicePlay}>播放
+                                <audio src={topicReplayInfo.topicVoice.voiceTopicResultUrl}
+                                       controls="controls"
+                                       loop="false"
+                                       hidden="true"></audio>
+                            </div>
                             <li>评分:{topicReplayInfo.topicVoice.voiceAccuracy}</li>
                             <li>{replayAttachMentsArray}</li>
                             <li className="topics_bot"><span
