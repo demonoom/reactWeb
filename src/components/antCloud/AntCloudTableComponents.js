@@ -112,6 +112,7 @@ const AntCloudTableComponents = React.createClass({
             subjectModalVisible: false  //上传题目modal
         };
     },
+
     componentDidMount() {
         ms = this.props.messageUtilObj;
         var antCloudKey = this.props.antCloudKey;
@@ -780,6 +781,7 @@ pageNo   --- 页码，-1取全部
                     subjectOpt: subjectOpt,
                 });
             });
+            console.log(ret.pager.pageCount);
             // , totalCount: parseInt(ret.pager.rsCount)
             _this.setState({"tableData": data, cloudFileArray});
         } else {

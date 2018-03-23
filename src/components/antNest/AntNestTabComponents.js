@@ -180,14 +180,14 @@ const AntNestTabComponents = React.createClass({
      */
     topicVoicePlay(e) {
         var music = e.target.children[0];
-        //var music_btn = document.getElementById('music_btn2');
+        var music_btn = e.target;
         if (music.paused) {
             music.play();
-            //music_btn.src = 'play.gif';
+            music_btn.className = 'audio_left_run';
         }
         else {
             music.pause();
-            //music_btn.src = 'pause.gif';
+            music_btn.className = 'audio_left';
         }
     },
 
@@ -566,14 +566,15 @@ const AntNestTabComponents = React.createClass({
                             <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>
                             <li className="date_tr">
                                 <div className="audio_play_ant">
-                                    <div className="audio_left audio_left_run" onClick={antNest.topicVoicePlay}>
+                                    <div className="audio_left" onClick={antNest.topicVoicePlay}>
                                         <audio src={topicReplayInfo.topicVoice.voiceTopicResultUrl}
                                                controls="controls"
                                                loop="false"
                                                hidden="true"></audio>
                                     </div>
                                 </div>
-                                <span className="audio_play_ant1"><span className="audio_play_antred1">评分：</span><span className="audio_play_antred">{topicReplayInfo.topicVoice.voiceAccuracy}</span></span>
+                                <span className="audio_play_ant1"><span className="audio_play_antred1">评分：</span><span
+                                    className="audio_play_antred">{topicReplayInfo.topicVoice.voiceAccuracy}</span></span>
                             </li>
                             <li>{replayAttachMentsArray}</li>
                             <li className="topics_bot"><span
