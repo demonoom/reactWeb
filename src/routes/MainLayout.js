@@ -2592,7 +2592,7 @@ const MainLayout = React.createClass({
      * 关闭分享到蚁巢的modal
      */
     shareToAntNestModalHandleCancel(){
-        this.setState({shareToAntNestVisible:false});
+        this.setState({shareToAntNestVisible:false,nowThinking:''});
     },
 
     /**
@@ -3168,11 +3168,11 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
-                        <div style={{display: this.state.idea, marginBottom: '14px'}}>
+                        <div style={{marginBottom: '14px'}}>
                             <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}
                                    onChange={this.nowThinkingInputChange}/>
                         </div>
-                        <div style={{display: this.state.creatInput, marginBottom: '14px'}}>
+                        <div style={{marginBottom: '14px'}}>
                             {this.state.shareTitle}
                         </div>
                     </Modal>

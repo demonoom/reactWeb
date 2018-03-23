@@ -103,7 +103,13 @@ const AntCloudClassRoomComponents = React.createClass({
         </span>;
         let teamBtn = <span className="btn2 talk_ant_btn1">
             <Button className="ant-btn ant-btn-primary add_study series_top_btn2"
-                    onClick={this.createTeam}>创建团队</Button>
+                    onClick={this.createTeam}>
+                <FormattedMessage
+                    id='createTeam'
+                    description='创建团队'
+                    defaultMessage='创建团队'
+                />
+            </Button>
             <Input placeholder="请输入关键字搜索" className="series_search series_top_span2" onChange={this.searchTeamList}/>
         </span>;
         switch (this.props.currentItem) {

@@ -19,6 +19,7 @@ import {isEmpty} from '../../utils/utils';
 import {getPageSize} from '../../utils/Const';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import ConfirmModal from '../ConfirmModal';
+import {FormattedMessage} from 'react-intl';
 
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
@@ -1009,7 +1010,11 @@ const AntTeamComponents = React.createClass({
         var loadMore=null;
 
         if (_this.state.optType == "teamSet") {
-            var welcomeTitle = "团队设置";
+            var welcomeTitle = <FormattedMessage
+                id='TeamSetting'
+                description='团队设置'
+                defaultMessage='团队设置'
+            />;
             var managerUser = _this.state.settingTeam.user;
             var topButton;
             var dissolutionChatGroupButton;
@@ -1018,13 +1023,31 @@ const AntTeamComponents = React.createClass({
                 topButton = <span className="right_ri">
                     <span className="toobar">
                         <Button onClick={_this.showAddMembersModal} className="group_edit_add"><Icon
-                            type="plus"/>添加成员</Button>
+                            type="plus"/>
+                            <FormattedMessage
+                                id='AddMember'
+                                description='添加成员'
+                                defaultMessage='添加成员'
+                            />
+                        </Button>
                     </span>
                 </span>;
                 dissolutionChatGroupButton =
-                    <Button onClick={_this.showDissolutionTeamConfirmModal} className="group_red_font">解散该团队</Button>;
+                    <Button onClick={_this.showDissolutionTeamConfirmModal} className="group_red_font">
+                        <FormattedMessage
+                            id='DismissTheTeam'
+                            description='解散该团队'
+                            defaultMessage='解散该团队'
+                        />
+                    </Button>;
                 editTeamButton = <Button onClick={_this.showUpdateTeamNameModal} className="group_edit"><i
-                    className="iconfont">&#xe610;</i>编辑</Button>;
+                    className="iconfont">&#xe610;</i>
+                    <FormattedMessage
+                        id='edit'
+                        description='编辑'
+                        defaultMessage='编辑'
+                    />
+                </Button>;
             } else {
                 topButton = null;
                 dissolutionChatGroupButton =
@@ -1077,7 +1100,13 @@ const AntTeamComponents = React.createClass({
                         <div className="integral_line"></div>
                     </ul>
                     <ul className="group_fr_ul">
-                        <li className="color_gary_f"><span>团队成员：{userLiTagArray.length}人</span>{topButton}</li>
+                        <li className="color_gary_f"><span>
+                            <FormattedMessage
+                                id='TeamMembers'
+                                description='团队成员'
+                                defaultMessage='团队成员'
+                            />
+                            ：{userLiTagArray.length}人</span>{topButton}</li>
                         <li className="user_hei">
                             {userLiTagArray}
                         </li>
@@ -1089,9 +1118,27 @@ const AntTeamComponents = React.createClass({
             mainPanel = <div className="myfollow_zb">
                 <RadioGroup onChange={_this.teamTypeFliterOnChange} defaultValue={_this.state.teamTypeFliterValue}
                             value={_this.state.teamTypeFliterValue}>
-                    <Radio value="-1">全部</Radio>
-                    <Radio value="0">我创建的团队</Radio>
-                    <Radio value="1">我加入的团队</Radio>
+                    <Radio value="-1">
+                        <FormattedMessage
+                            id='all'
+                            description='全部'
+                            defaultMessage='全部'
+                        />
+                    </Radio>
+                    <Radio value="0">
+                        <FormattedMessage
+                            id='TeamsICreated'
+                            description='我创建的团队'
+                            defaultMessage='我创建的团队'
+                        />
+                    </Radio>
+                    <Radio value="1">
+                        <FormattedMessage
+                            id='TeamsIJoined'
+                            description='我加入的团队'
+                            defaultMessage='我加入的团队'
+                        />
+                    </Radio>
                 </RadioGroup>
                 <Table className="details table_team"
                        scroll={{x: true,}} columns={userTeamColumns} showHeader={false}
@@ -1120,7 +1167,13 @@ const AntTeamComponents = React.createClass({
 
                 <Modal
                     visible={this.state.createTeamModalVisible}
-                    title="创建团队"
+                    title={
+                        <FormattedMessage
+                            id='createTeam'
+                            description='创建团队'
+                            defaultMessage='创建团队'
+                        />
+                    }
                     onCancel={this.createTeamModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
@@ -1183,7 +1236,11 @@ const AntTeamComponents = React.createClass({
 
                 <Modal
                     visible={this.state.updateTeamModalVisible}
-                    title="添加团队成员"
+                    title={<FormattedMessage
+                        id='AddMember'
+                        description='添加成员'
+                        defaultMessage='添加成员'
+                    />}
                     onCancel={this.updateTeamModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭

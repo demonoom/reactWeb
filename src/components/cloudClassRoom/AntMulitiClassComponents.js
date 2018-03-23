@@ -195,7 +195,13 @@ const AntMulitiClassComponents = React.createClass({
         }
         var isTestSpan = null;
         if(isEmpty(row.test)===false && row.test === "test"){
-            isTestSpan = <span className="series_recall upexam_float margin_left ">测试课</span>;
+            isTestSpan = <span className="series_recall upexam_float margin_left ">
+                <FormattedMessage
+                    id='testLessonTip'
+                    description='测试课'
+                    defaultMessage='测试课'
+                />
+            </span>;
         }
         switch (isPublish) {
             case "1":
@@ -350,7 +356,19 @@ const AntMulitiClassComponents = React.createClass({
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
                                 className="price_between gray_line"></span><span
                                 className=" price_between font-14">
-                                共{videoNum}课时
+                                <FormattedMessage
+                                    id='HoursInTotal'
+                                    description='微课'
+                                    defaultMessage='微课'
+                                />
+                                <FormattedMessage
+                                    id='HoursInTotal'
+                                    description='HoursInTotal'
+                                    defaultMessage='共{videoNum}课时'
+                                    values={
+                                        {num:videoNum}
+                                    }
+                                />
                             </span></Col>
                             <Col span={24}><span className="series_gray_le">
                                <FormattedMessage
@@ -416,7 +434,16 @@ const AntMulitiClassComponents = React.createClass({
                             </Row>
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
                                 className="price_between gray_line"></span><span
-                                className=" price_between font-14">共{videoNum}课时</span></Col>
+                                className=" price_between font-14">
+                                <FormattedMessage
+                                    id='HoursInTotal'
+                                    description='HoursInTotal'
+                                    defaultMessage='共{videoNum}课时'
+                                    values={
+                                        {num:videoNum}
+                                    }
+                                />
+                            </span></Col>
                             <Col span={24}><span className="series_gray_le">
                                 {/*主讲老师：*/}
                              <FormattedMessage
@@ -467,10 +494,18 @@ const AntMulitiClassComponents = React.createClass({
         var isPublishStr;
         switch (isPublish) {
             case "1":
-                isPublishStr = "已发布";
+                isPublishStr = <FormattedMessage
+                    id='published'
+                    description='已发布'
+                    defaultMessage='已发布'
+                />;
                 break;
             case "2":
-                isPublishStr = "未发布";
+                isPublishStr = <FormattedMessage
+                    id='unpulished'
+                    description='未发布'
+                    defaultMessage='未发布'
+                />;
                 break;
             case "3":
                 isPublishStr = "已删除";
@@ -520,14 +555,25 @@ const AntMulitiClassComponents = React.createClass({
             endTime = null;
         } else {
             endTime = <Col span={24} className="ant-form-item">
-                <span className="series_gray_le">结束时间：</span>
+                <span className="series_gray_le">
+                    <FormattedMessage
+                        id='EndAt'
+                        description='结束时间'
+                        defaultMessage='结束时间'
+                    />：</span>
                 <span className="series_gray_ri">{endTime}</span>
             </Col>;
         }
 
         var isTestSpan = null;
         if(isEmpty(classObj.test)===false && classObj.test === "test"){
-            isTestSpan = <Col span={3} className="series_recall right_ri">测试课</Col>;
+            isTestSpan = <Col span={3} className="series_recall right_ri">
+                <FormattedMessage
+                    id='testLessonTip'
+                    description='测试课'
+                    defaultMessage='测试课'
+                />
+            </Col>;
         }
 
         if (isSeries == "3" || isSeries == "4") {
@@ -546,7 +592,16 @@ const AntMulitiClassComponents = React.createClass({
                             <Col span={24} className="price ant-form-item">
                                 <span className="c-jg price_between" id="picr">￥{classObj.money}</span>
                                 <span className="price_between gray_line"></span>
-                                <span className=" price_between font-14">共{classObj.videoNum}课时</span>
+                                <span className=" price_between font-14">
+                                    <FormattedMessage
+                                        id='HoursInTotal'
+                                        description='HoursInTotal'
+                                        defaultMessage='共{videoNum}课时'
+                                        values={
+                                            {num:classObj.videoNum}
+                                        }
+                                    />
+                                </span>
                             </Col>
                             <Col span={24} className="ant-form-item">
                                 <span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
@@ -557,7 +612,12 @@ const AntMulitiClassComponents = React.createClass({
                                 <span className="series_gray_ri">{classObj.courseClass}</span>
                             </Col>
                             <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">主讲老师：</span>
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='MainTeacher'
+                                        description='主讲老师'
+                                        defaultMessage='主讲老师'
+                                    />：</span>
                                 <span className="series_gray_ri">{userSpanArray}</span>
                             </Col>
 
@@ -566,19 +626,41 @@ const AntMulitiClassComponents = React.createClass({
                                 <span className="series_gray_ri">{createTime}</span>
                             </Col>
                             <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">排课时间：</span>
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='LessonSchedule'
+                                        description='排课时间'
+                                        defaultMessage='排课时间'
+                                    />：</span>
                                 <ul>
                                     <li className="course_section">
                                         <div className="course_section_title">
-                                            <span className="name">章节名称</span>
-                                            <span className="cont">授课老师</span>
+                                            <span className="name">
+                                                <FormattedMessage
+                                                    id='LessonName'
+                                                    description='章节名称'
+                                                    defaultMessage='章节名称'
+                                                />
+                                            </span>
+                                            <span className="cont">
+                                                <FormattedMessage
+                                                    id='Teacher'
+                                                    description='授课老师'
+                                                    defaultMessage='授课老师'
+                                                />
+                                            </span>
                                         </div>
                                     </li>
                                     {videoLiArray}
                                 </ul>
                             </Col>
                             <Col span={24}>
-                                <span className="series_gray_le">课程概述：</span>
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='courseDescription'
+                                        description='课程概述'
+                                        defaultMessage='课程概述'
+                                    />：</span>
                                 <span className="series_gray_ri">{classObj.content}</span>
                             </Col>
                         </Row>
@@ -601,10 +683,24 @@ const AntMulitiClassComponents = React.createClass({
                             <Col span={24} className="price ant-form-item">
                                 <span className="c-jg price_between" id="picr">￥{classObj.money}</span>
                                 <span className="price_between gray_line"></span>
-                                <span className=" price_between font-14">共{classObj.videoNum}课时</span>
+                                <span className=" price_between font-14">
+                                    <FormattedMessage
+                                        id='HoursInTotal'
+                                        description='HoursInTotal'
+                                        defaultMessage='共{videoNum}课时'
+                                        values={
+                                            {num:classObj.videoNum}
+                                        }
+                                    />
+                                </span>
                             </Col>
                             <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">课程分类：</span>
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='CourseCategory'
+                                        description='课程分类'
+                                        defaultMessage='课程分类'
+                                    />：</span>
                                 <span className="series_gray_ri">{classObj.courseType.name}</span>
                             </Col>
                             {/*<Col span={24} className="ant-form-item">
@@ -612,30 +708,69 @@ const AntMulitiClassComponents = React.createClass({
                                 <span className="series_gray_ri">{classObj.courseClass}</span>
                             </Col>*/}
                             <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">主讲老师：</span>
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='MainTeacher'
+                                        description='主讲老师'
+                                        defaultMessage='主讲老师'
+                                    />
+                                    ：</span>
                                 <span className="series_gray_ri">{userSpanArray}</span>
                             </Col>
 
                             <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">开始时间：</span>
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='StartFrom'
+                                        description='开始时间'
+                                        defaultMessage='开始时间'
+                                    />：</span>
                                 <span className="series_gray_ri">{startTime}</span>
                             </Col>
                             {endTime}
                             <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">排课时间：</span>
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='LessonSchedule'
+                                        description='排课时间'
+                                        defaultMessage='排课时间'
+                                    />：</span>
                                 <ul>
                                     <li className="course_section">
                                         <div className="course_section_title">
-                                            <span className="name">章节名称</span>
-                                            <span className="cont">授课老师</span>
-                                            <span className="cont">授课时间</span>
+                                            <span className="name">
+                                                <FormattedMessage
+                                                    id='LessonName'
+                                                    description='章节名称'
+                                                    defaultMessage='章节名称'
+                                                />
+                                            </span>
+                                            <span className="cont">
+                                                <FormattedMessage
+                                                    id='Teacher'
+                                                    description='授课老师'
+                                                    defaultMessage='授课老师'
+                                                />
+                                            </span>
+                                            <span className="cont">
+                                                <FormattedMessage
+                                                    id='Time'
+                                                    description='授课时间'
+                                                    defaultMessage='授课时间'
+                                                />
+                                            </span>
                                         </div>
                                     </li>
                                     {videoLiTagArray}
                                 </ul>
                             </Col>
                             <Col span={24}>
-                                <span className="series_gray_le">课程概述：</span>
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='courseDescription'
+                                        description='课程概述'
+                                        defaultMessage='课程概述'
+                                    />：</span>
                                 <span className="series_gray_ri">{classObj.content}</span>
                             </Col>
                         </Row>
@@ -861,12 +996,29 @@ const AntMulitiClassComponents = React.createClass({
                                         <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
                                     </Row>
                                     <Col span={24} className="ant-form-item">
-                                        <span className="series_gray_le">排课时间：</span>
+                                        <span className="series_gray_le">
+                                            <FormattedMessage
+                                                id='LessonSchedule'
+                                                description='排课时间'
+                                                defaultMessage='排课时间'
+                                            />：</span>
                                         <ul>
                                             <li className="course_section">
                                                 <div className="course_section_title">
-                                                    <span className="name">章节名称</span>
-                                                    <span className="cont">授课老师</span>
+                                                    <span className="name">
+                                                        <FormattedMessage
+                                                            id='LessonName'
+                                                            description='章节名称'
+                                                            defaultMessage='章节名称'
+                                                        />
+                                                    </span>
+                                                    <span className="cont">
+                                                        <FormattedMessage
+                                                            id='Teacher'
+                                                            description='授课老师'
+                                                            defaultMessage='授课老师'
+                                                        />
+                                                    </span>
                                                     <span className="cont"></span>
                                                     <span className="cont3">操作</span>
                                                 </div>
@@ -1248,7 +1400,13 @@ const AntMulitiClassComponents = React.createClass({
                     </div>
                 </Modal>
 
-                <Modal className="modal_classDetail" title="课程详情" visible={this.state.classDetailModalVisible}
+                <Modal className="modal_classDetail" title={
+                    <FormattedMessage
+                        id='CourseDetail'
+                        description='课程详情'
+                        defaultMessage='课程详情'
+                    />
+                } visible={this.state.classDetailModalVisible}
                        onCancel={this.classDetailModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
