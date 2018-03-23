@@ -26,7 +26,6 @@ import {isEmpty, TO_TYPE, SMALL_IMG} from '../../utils/Const';
 import {bubbleSort} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
 
-
 const TabPane = Tabs.TabPane;
 const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
@@ -1902,11 +1901,43 @@ pageNo   --- 页码，-1取全部
      * 显示分享文件的窗口
      */
     showShareModal(fileObject) {
-        cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
-        cloudTable.getAntGroup();
+        var _this = this;
+        // cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
+        var shareFileId = fileObject.id;
+        var operateUserId = fileObject.createUid;
+        var param = {
+            "method": 'share',
+            "operateUserId": operateUserId,
+            "cloudFileIds": shareFileId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success == true && ret.msg == "调用成功") {
+                    var response = ret.response;
+                    //cloudTable.shareFile(response);
+                    /*远程调试*/
+                    var globalSrc = "http://" + 'www.maaee.com' + ":" + 80 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
+                    /*本地调试*/
+                    // var filePath = "http://" + '192.168.1.34' + ":" + 8080 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
+                    var globalTitle = fileObject.name;
+                    // _this.setState({globalTitle,globalSrc});
+                    //显示文件分享的引导页
+                    _this.props.showShareGuideModal(globalTitle,globalSrc);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+        /*var globalTitle = fileObject.name;
+        var globalSrc = fileObject.path;
+        this.setState({globalTitle,globalSrc});
+        this.refs.guideModal.changeGuideModalVisible(true);*/
+        // window.__noomShareMbile__(globalSrc, globalTitle);
+        /*cloudTable.getAntGroup();
         this.getStructureUsers();
         this.getRecentContents();
-        cloudTable.setState({shareModalVisible: true});
+        cloudTable.setState({shareModalVisible: true});*/
     },
 
     /**

@@ -50,6 +50,7 @@ import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
 import zh from 'react-intl/locale-data/zh';
 import en from 'react-intl/locale-data/en';
+import GuideModal from '../components/GuideModal';
 
 import {createStore} from 'redux';
 
@@ -2550,6 +2551,65 @@ const MainLayout = React.createClass({
         });
     },
 
+    /**
+     * 显示文件分享的引导页
+     */
+    showShareGuideModal(globalTitle,globalSrc){
+        this.setState({globalTitle,globalSrc});
+        this.refs.guideModal.changeGuideModalVisible(true);
+    },
+
+    /**
+     * 设置不同的操作指向，用来根据不同的数据源，分别将文件/文件夹分享到朋友或蚁巢
+     * @param guideType
+     */
+    setGuideType(guideType){
+        if(guideType.key == "friend"){
+            window.__noomShareMbile__(this.state.globalSrc, this.state.globalTitle);
+        }else{
+            console.log("到蚁巢");
+            this.setState({shareToAntNestVisible:true});
+        }
+        this.refs.guideModal.changeGuideModalVisible(false);
+    },
+
+    /**
+     * 关闭分享到蚁巢的modal
+     */
+    shareToAntNestModalHandleCancel(){
+        this.setState({shareToAntNestVisible:false});
+    },
+
+    /**
+     * 分享文件到蚁巢
+     * todo 链接地址应该是文件地址，而非生成后的网页地址（待确认）
+     */
+    shareToAntNest(){
+        var _this = this;
+        var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
+        var param = {
+            "method": 'addLinkTopic',
+            "ident": sessionStorage.getItem("ident"),
+            "content": _this.state.nowThinking,
+            "cover": cover,
+            "title": _this.state.globalTitle,
+            "linkAddress": _this.state.globalSrc,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    if(response){
+                        message.success("分享成功");
+                    }
+                    _this.shareToAntNestModalHandleCancel();
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
 
     render() {
 
@@ -2664,6 +2724,7 @@ const MainLayout = React.createClass({
                 middleComponent = <AntCloudMenu callbackParent={this.getAntCloud}/>;
                 tabComponent = <AntCloudTableComponents antCloudKey={this.state.antCloudKey}
                                                         messageUtilObj={ms}
+                                                        showShareGuideModal = {this.showShareGuideModal}
                 ></AntCloudTableComponents>;
                 // tabComponent = <nAntCloudTableComponents antCloudKey={this.state.antCloudKey}
                 //                                         messageUtilObj={ms}
@@ -2868,83 +2929,6 @@ const MainLayout = React.createClass({
                         picFile={this.state.picFile}
                         sendPicToOthers={this.sendPicToOthers}
                     />
-                    {/*<Modal title="分享文件" className="cloud_share_Modal"
-                           visible={this.state.shareModalVisible}
-                           transitionName=""  //禁用modal的动画效果
-                           maskClosable={false} //设置不允许点击蒙层关闭
-                           onCancel={this.shareModalHandleCancel}
-                           onOk={this.getsharekey}
-                    >
-                        <div>
-                            <Row>
-                                <Col span={12} className="share_til">选择好友分享文件：</Col>
-                                <Col span={12} className="share_til">这一刻的想法：
-                                    <span className="right_ri cloud_share_prompt"><Icon type="link"
-                                                                                        className="info_school_s"/><span>这是一个云盘分享的文件</span></span>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col span={11}>
-                                    <Input
-                                        placeholder="首字母搜索更快捷"
-                                        suffix={this.state.searchWords ?
-                                            <Icon type="close-circle" onClick={this.emitEmpty}/> : null}
-                                        value={this.state.searchWords}
-                                        onChange={this.onChangeUserName}
-                                        ref={node => this.userNameInput = node}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row className="yinyong3">
-                                <Col style={{display: searchNotOrIf}} span={11}
-                                     className="upexam_float cloud_share_cont ant-collapse-content favorite_up cloud_share_cont_search">
-                                    <CheckboxGroup options={this.state.searchShareUsersData}
-                                                   value={this.state.searchShareUsersOptions}
-                                                   onChange={this.searchShareUsersOnChange}
-                                    />
-                                </Col>
-                                <Col style={{display: searchIfOrNot}} span={11}
-                                     className="upexam_float cloud_share_cont">
-                                    <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
-                                              onChange={this.collapseChange}
-                                    >
-                                        <Panel header="最近联系人" key="2">
-                                            <CheckboxGroup options={this.state.userMessageData}
-                                                           value={this.state.checkedRecentConnectOptions}
-                                                           onChange={this.recentConnectOptionsOnChange}
-                                            />
-                                        </Panel>
-                                        <Panel header="我的群组" key="1">
-                                            <CheckboxGroup options={this.state.groupOptions}
-                                                           value={this.state.checkedGroupOptions}
-                                                           onChange={this.groupOptionsOnChange}
-                                            />
-                                        </Panel>
-                                        <Panel header="我的好友" key="0">
-                                            <CheckboxGroup options={this.state.concatOptions}
-                                                           value={this.state.checkedConcatOptions}
-                                                           onChange={this.concatOptionsOnChange}
-                                            />
-                                        </Panel>
-                                        <Panel header="组织架构" key="3">
-                                            <CheckboxGroup options={this.state.structureOptions}
-                                                           value={this.state.checkedsSructureOptions}
-                                                           onChange={this.roleOptionsOnChange}
-                                            />
-                                        </Panel>
-                                    </Collapse>
-                                </Col>
-                                <Col span={12} className="topics_dianzan">
-                                    <div className="cloud_share_cont_ri">
-                                        <Input type="textarea" rows={14} placeholder="这是一个云盘分享的文件"
-                                               value={this.state.nowThinking}
-                                               onChange={this.nowThinkingInputChange}
-                                        />
-                                    </div>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Modal>*/}
                     <ul style={{display: 'none'}}>
                         <li className="imgLi">
                             {this.state.imgArr}
@@ -2965,7 +2949,7 @@ const MainLayout = React.createClass({
 
                         </div>
                     </div>
-
+                    <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
                     <Modal className="person_change_right"
                            visible={this.state.mainTransferModalVisible}
                            title="转移群主"
@@ -3139,6 +3123,30 @@ const MainLayout = React.createClass({
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </Modal>
+
+                    <Modal
+                        visible={this.state.shareToAntNestVisible}
+                        title="分享文件"
+                        onCancel={this.shareToAntNestModalHandleCancel}
+                        transitionName=""  //禁用modal的动画效果
+                        maskClosable={false} //设置不允许点击蒙层关闭
+                        className="add_member"
+                        footer={[
+                            <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                    onClick={this.shareToAntNest}>确定</button>,
+                            <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                    onClick={this.shareToAntNestModalHandleCancel}>取消</button>
+                        ]}
+                        width={700}
+                    >
+                        <div style={{display: this.state.idea, marginBottom: '14px'}}>
+                            <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}
+                                   onChange={this.nowThinkingInputChange}/>
+                        </div>
+                        <div style={{display: this.state.creatInput, marginBottom: '14px'}}>
+                            {this.state.globalTitle}
                         </div>
                     </Modal>
 
