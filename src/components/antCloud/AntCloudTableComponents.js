@@ -461,22 +461,23 @@ const AntCloudTableComponents = React.createClass({
                     <span className="yipan_name" onClick={cloudTable.readDoc.bind(cloudTable, e)}>{name}</span>
             </span>;
             } else {
+                var subjectI = null;
                 if (e.subject.typeName == '单选题') {
-                    var subjectI = <i className="icon_question icon_single_choice upexam_float"></i>
+                    subjectI = <i className="icon_question icon_single_choice upexam_float"></i>
                 } else if (e.subject.typeName == '判断题') {
-                    var subjectI = <i className="icon_question icon_trueOrfalse upexam_float"></i>
+                    subjectI = <i className="icon_question icon_trueOrfalse upexam_float"></i>
                 } else if (e.subject.typeName == '多选题') {
-                    var subjectI = <i className="icon_question icon_multiple_choice upexam_float"></i>
+                    subjectI = <i className="icon_question icon_multiple_choice upexam_float"></i>
                 } else {
-                    var subjectI = <i className="icon_question icon_short_answer upexam_float"></i>
+                    subjectI = <i className="icon_question icon_short_answer upexam_float"></i>
                 }
                 var subjectContent = <span className="cloud_text">
                     {subjectI}
                     <span className="antnest_name affix_bottom_tc table_name_high">
-                    <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: name}}
-                             onClick={cloudTable.readDoc.bind(cloudTable, e)}></article>
-                </span>
-            </span>
+                        <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: name}}
+                                 onClick={cloudTable.readDoc.bind(cloudTable, e)}></article>
+                    </span>
+                 </span>;
                 fileLogo = subjectContent;
             }
         }
@@ -658,11 +659,11 @@ pageNo   --- 页码，-1取全部
      */
     onChange(activeKey) {
         if (activeKey == "1") {
-            cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
+            cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999', currentPage: 1});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
             cloudTable.getUserRootCloudFiles(cloudTable.state.ident, 1);
         }
         if (activeKey == "2") {
-            cloudTable.setState({activeKey: '2'});
+            cloudTable.setState({activeKey: '2', currentPage: 1});
             cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, 1)
         }
     },
@@ -677,7 +678,8 @@ pageNo   --- 页码，-1取全部
         var data = [];
         _this.state.tableData = [];
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
-            ret.response.forEach(function (e) {
+            for (var i = 0; i < ret.response.length; i++) {
+                var e = ret.response[i];
                 if (i == 0) {
                     if (_this.state.activeKey == '1') {
                         if (e.parent) {
@@ -689,7 +691,6 @@ pageNo   --- 页码，-1取全部
                         _this.setState({"parentSubjectDirectoryId": parentDirectoryId});
                     }
                 }
-                i++
                 var key = e.id;
                 var createTime = e.createTime;
                 var createUid = e.createUid;
@@ -718,6 +719,11 @@ pageNo   --- 页码，-1取全部
                             <a href={path} target="_blank" title="下载" download={e.name} className="te_download_a_noom">
                                 <Button icon="download"/></a>;
                     }
+                }
+                if (cloudTable.state.activeKey == '2' && directory === false && isEmpty(e.subject) === true) {
+                    //题目  非文件夹  题目对象为空  则continue
+                    console.log("continue:" + e);
+                    continue;
                 }
                 var fileLogo = _this.buildFileLogo(name, directory, e, "mainTable");
                 var cloudFileJsonForEveryFile = {"fileId": key, "cloudFileObj": e};
@@ -780,10 +786,9 @@ pageNo   --- 页码，-1取全部
                     createTime: getLocalTime(createTime),
                     subjectOpt: subjectOpt,
                 });
-            });
-            console.log(ret.pager.pageCount);
+            }
             // , totalCount: parseInt(ret.pager.rsCount)
-            _this.setState({"tableData": data, cloudFileArray});
+            _this.setState({"tableData": data, cloudFileArray, totalCount: parseInt(ret.pager.rsCount)});
         } else {
             _this.setState({"tableData": [], cloudFileArray: [], totalCount: 0});
             // subjectParents.pop();
@@ -1086,7 +1091,14 @@ pageNo   --- 页码，-1取全部
     pageOnChange(pageNo) {
         var getFileType = cloudTable.state.getFileType;
         if (getFileType == "myFile") {
-            cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
+            if (this.state.activeKey == "1") {
+                cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
+                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
+            } else {
+                cloudTable.setState({activeKey: '2'});
+                cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, pageNo)
+            }
+            // cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
         } else {
             cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, pageNo);
         }
@@ -1316,6 +1328,7 @@ pageNo   --- 页码，-1取全部
                     cloudTable.state.parentDirectoryId, queryConditionJson, initPageNo, "mainTable");
             }
         }
+        this.setState({currentPage: initPageNo});
     },
     /**
      * 移动文件的modal中的回退按钮
@@ -2205,7 +2218,8 @@ pageNo   --- 页码，-1取全部
                            dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
-                        // onChange: cloudTable.pageOnChange
+                        current: this.state.currentPage,
+                        onChange: cloudTable.pageOnChange
                     }} scroll={{y: 400}}/>
                 </TabPane>
                 <TabPane tab="我的题目" key="2">
@@ -2213,7 +2227,8 @@ pageNo   --- 页码，-1取全部
                            dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
-                        // onChange: cloudTable.pageOnChange
+                        current: this.state.currentPage,
+                        onChange: cloudTable.pageOnChange
                     }} scroll={{y: 400}}/>
                 </TabPane>
             </Tabs>

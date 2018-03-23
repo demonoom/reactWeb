@@ -47,12 +47,15 @@ class SelectAntCloudSubjectsModal extends React.Component {
         var _this = this;
         var isShow = _this.props.isShow;
         this.setState({isShow});
+        targetDirDataArray.splice(0);
         this.getAntCountFileList();
     }
 
     componentWillReceiveProps(nextProps) {
         var isShow = nextProps.isShow;
-        this.setState({isShow});
+        this.getAntCountFileList();
+        targetDirDataArray.splice(0);
+        this.setState({isShow,"targetDirDataArray":[]});
     }
 
     /**
@@ -60,7 +63,8 @@ class SelectAntCloudSubjectsModal extends React.Component {
      * @constructor
      */
     SelectSubjectModalHandleCancel() {
-        this.setState({"isShow": false,selectedSubjectKeys:[]});
+        targetDirDataArray.splice(0);
+        this.setState({"isShow": false,selectedSubjectKeys:[],"targetDirDataArray":[]});
         this.props.onCancel();
     }
 
@@ -89,7 +93,7 @@ class SelectAntCloudSubjectsModal extends React.Component {
     //从蚁盘选题时，点击导航时，进入的我的文件列表
     getUserRootCloudFiles (userId, pageNo) {
         var _this = this;
-        _this.setState({currentDirectoryId: -1, totalCount: 0});
+        _this.setState({currentDirectoryIdAtMoveModal: -1, totalCount: 0});
         var param = {
             "method": 'getUserRootCloudSubjects',
             "userId": userId,
@@ -130,12 +134,18 @@ class SelectAntCloudSubjectsModal extends React.Component {
                     }
                 }
                 i++;
-                var key = e.id+"";
-                var name = e.name;
                 var directory = e.directory;
-                var fileLogo = _this.buildFileLogo(name, directory, e);
-                if(directory===true){
-                    key = key+"#"+directory;
+                var key="";
+                var fileLogo = null;
+                if(directory===false){
+                    var subject = e.subject;
+                    key = subject.id+"";
+                    var name = subject.content;
+                    fileLogo = _this.buildFileLogo(name, directory, e);
+                }else{
+                    key = e.id+"#"+directory;
+                    var name = e.name;
+                    fileLogo = _this.buildFileLogo(name, directory, e);
                 }
                 var dataJson = {
                     key: key,
@@ -251,10 +261,11 @@ class SelectAntCloudSubjectsModal extends React.Component {
         //进入文件夹前，先清空文件夹内的数据
         targetDirDataArray.splice(0);
         if (isEmpty(lastSubjectParent)===true || lastSubjectParent == 0) {
-            _this.setState({"parentSubjectDirectoryId": ''});
+            _this.setState({"parentSubjectDirectoryId": '',antCloudFileCurrentPage:initPageNo});
             subjectParents.splice(0);
             _this.getUserRootCloudFiles(_this.state.loginUser.colUid, initPageNo, "moveDirModal");
         } else {
+            _this.setState({antCloudFileCurrentPage:initPageNo});
             var queryConditionJson = "";
             _this.listFiles(_this.state.loginUser.colUid,
                 lastSubjectParent, queryConditionJson, initPageNo);
@@ -337,7 +348,7 @@ class SelectAntCloudSubjectsModal extends React.Component {
                                        dataSource={this.state.targetDirDataArray}
                                        rowSelection={subjectRowSelection}
                                        onRowClick={this.pushFileFromAntCloud}
-                                       pagination={false} />
+                                       pagination={false}/>
                                 <div className="schoolgroup_operate schoolgroup_more more_classroom2">
                                     <a onClick={this.loadMoreAntCloudFlile} className="schoolgroup_more_a">加载更多</a>
                                 </div>
