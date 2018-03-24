@@ -112,6 +112,7 @@ const AntCloudTableComponents = React.createClass({
             subjectModalVisible: false  //上传题目modal
         };
     },
+
     componentDidMount() {
         ms = this.props.messageUtilObj;
         var antCloudKey = this.props.antCloudKey;
@@ -658,11 +659,11 @@ pageNo   --- 页码，-1取全部
      */
     onChange(activeKey) {
         if (activeKey == "1") {
-            cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999',currentPage:1});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
+            cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999', currentPage: 1});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
             cloudTable.getUserRootCloudFiles(cloudTable.state.ident, 1);
         }
         if (activeKey == "2") {
-            cloudTable.setState({activeKey: '2',currentPage:1});
+            cloudTable.setState({activeKey: '2', currentPage: 1});
             cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, 1)
         }
     },
@@ -677,7 +678,7 @@ pageNo   --- 页码，-1取全部
         var data = [];
         _this.state.tableData = [];
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
-            for(var i=0;i<ret.response.length;i++){
+            for (var i = 0; i < ret.response.length; i++) {
                 var e = ret.response[i];
                 if (i == 0) {
                     if (_this.state.activeKey == '1') {
@@ -719,9 +720,9 @@ pageNo   --- 页码，-1取全部
                                 <Button icon="download"/></a>;
                     }
                 }
-                if(cloudTable.state.activeKey == '2' && directory ===false && isEmpty(e.subject)===true){
+                if (cloudTable.state.activeKey == '2' && directory === false && isEmpty(e.subject) === true) {
                     //题目  非文件夹  题目对象为空  则continue
-                    console.log("continue:"+e);
+                    console.log("continue:" + e);
                     continue;
                 }
                 var fileLogo = _this.buildFileLogo(name, directory, e, "mainTable");
@@ -787,7 +788,7 @@ pageNo   --- 页码，-1取全部
                 });
             }
             // , totalCount: parseInt(ret.pager.rsCount)
-            _this.setState({"tableData": data, cloudFileArray,totalCount: parseInt(ret.pager.rsCount)});
+            _this.setState({"tableData": data, cloudFileArray, totalCount: parseInt(ret.pager.rsCount)});
         } else {
             _this.setState({"tableData": [], cloudFileArray: [], totalCount: 0});
             // subjectParents.pop();
@@ -1093,7 +1094,7 @@ pageNo   --- 页码，-1取全部
             if (this.state.activeKey == "1") {
                 cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
                 cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
-            }else{
+            } else {
                 cloudTable.setState({activeKey: '2'});
                 cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, pageNo)
             }
@@ -1327,7 +1328,7 @@ pageNo   --- 页码，-1取全部
                     cloudTable.state.parentDirectoryId, queryConditionJson, initPageNo, "mainTable");
             }
         }
-        this.setState({currentPage:initPageNo});
+        this.setState({currentPage: initPageNo});
     },
     /**
      * 移动文件的modal中的回退按钮
@@ -2217,7 +2218,7 @@ pageNo   --- 页码，-1取全部
                            dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
-                        current : this.state.currentPage,
+                        current: this.state.currentPage,
                         onChange: cloudTable.pageOnChange
                     }} scroll={{y: 400}}/>
                 </TabPane>
@@ -2226,7 +2227,7 @@ pageNo   --- 页码，-1取全部
                            dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
-                        current : this.state.currentPage,
+                        current: this.state.currentPage,
                         onChange: cloudTable.pageOnChange
                     }} scroll={{y: 400}}/>
                 </TabPane>

@@ -180,14 +180,14 @@ const AntNestTabComponents = React.createClass({
      */
     topicVoicePlay(e) {
         var music = e.target.children[0];
-        //var music_btn = document.getElementById('music_btn2');
+        var music_btn = e.target;
         if (music.paused) {
             music.play();
-            //music_btn.src = 'play.gif';
+            music_btn.className = 'audio_left_run';
         }
         else {
             music.pause();
-            //music_btn.src = 'pause.gif';
+            music_btn.className = 'audio_left';
         }
     },
 
@@ -558,7 +558,7 @@ const AntNestTabComponents = React.createClass({
                                         onClick={antNest.showSetTopicTopModal}
                                         className="topics_btn antnest_talk teopics_spa">置顶</Button>;
                 }
-                if (topicReplayInfo.type == 3) {
+                if (topicReplayInfo.type == 3 && isEmpty(topicReplayInfo.topicVoice) == false) {
                     //topicReplayInfo.type == 3为新加的语音作业的回复,content为空将不再展示,只展示topicVoice中的语音和评分
                     var topicReplayCard = <div style={{marginBottom: '15px'}}>
                         <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
@@ -566,14 +566,15 @@ const AntNestTabComponents = React.createClass({
                             <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>
                             <li className="date_tr">
                                 <div className="audio_play_ant">
-                                    <div className="audio_left audio_left_run" onClick={antNest.topicVoicePlay}>
+                                    <div className="audio_left" onClick={antNest.topicVoicePlay}>
                                         <audio src={topicReplayInfo.topicVoice.voiceTopicResultUrl}
                                                controls="controls"
                                                loop="false"
                                                hidden="true"></audio>
                                     </div>
                                 </div>
-                                <span className="audio_play_ant1"><span className="audio_play_antred1">评分：</span><span className="audio_play_antred">{topicReplayInfo.topicVoice.voiceAccuracy}</span></span>
+                                <span className="audio_play_ant1"><span className="audio_play_antred1">评分：</span><span
+                                    className="audio_play_antred">{topicReplayInfo.topicVoice.voiceAccuracy}</span></span>
                             </li>
                             <li>{replayAttachMentsArray}</li>
                             <li className="topics_bot"><span
