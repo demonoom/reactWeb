@@ -1605,7 +1605,7 @@ const AntNestTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.success == true && ret.response == true) {
+                if (ret.success == true && ret.msg == '调用成功') {
                     message.success("发表成功");
                 } else {
                     message.error("发表失败");
