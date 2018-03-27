@@ -58,7 +58,8 @@ const AntNestTabComponents = React.createClass({
             radioDisplay: 'block',
             classSrcChecked: [],  //checkbox可见班级的名字,checkbox的value值,
             homeWorkTime: '',
-            whoISSecretModalVisible: false
+            whoISSecretModalVisible: false,
+            whiteUserList: []
         };
     },
 
@@ -1491,21 +1492,23 @@ const AntNestTabComponents = React.createClass({
         var ckeckIdArr = [];
         if (this.state.radioValue == 2) {
             //做出whiteList
-            if (this.state.classSrcChecked.length == 0) {
-                message.error('请选择可见班级', 5)
+            if (this.state.classSrcChecked.length == 0 && this.state.whiteUserList.length == 0) {
+                message.error('请选择可见班级或可见的个人', 5)
                 return
             }
-            this.state.classSrcChecked.forEach(function (v, i) {
-                //classCanSeeObj为空的时候不会到这里
-                classCanSeeObj.forEach(function (data, index) {
-                    if (data.name == v) {
-                        var obj = {
-                            id: data.id + ''
+            if (isEmpty(this.state.classSrcChecked) == false) {
+                this.state.classSrcChecked.forEach(function (v, i) {
+                    //classCanSeeObj为空的时候不会到这里
+                    classCanSeeObj.forEach(function (data, index) {
+                        if (data.name == v) {
+                            var obj = {
+                                id: data.id + ''
+                            }
+                            ckeckIdArr.push(obj);
                         }
-                        ckeckIdArr.push(obj);
-                    }
+                    })
                 })
-            })
+            }
         }
         var homeWorkDate = this.state.homeWorkDate;
         if (antNest.state.topicModalType == "homework") {
@@ -1549,32 +1552,28 @@ const AntNestTabComponents = React.createClass({
             };
             attachMents.push(attach);
         }
-        if (this.state.radioValue == 1) {
-            var topicJson = {
-                "content": inputContent,
-                "fromUserId": sessionStorage.getItem("ident"),
-                "fromUser": JSON.parse(sessionStorage.getItem("loginUser")),
-                "valid": 0,
-                "type": 0,
-                "uuid": uuid,
-                "attachMents": attachMents,
-                "comments": [],
-                "open": 0,
-            };
-        } else {
-            var topicJson = {
-                "content": inputContent,
-                "fromUserId": sessionStorage.getItem("ident"),
-                "fromUser": JSON.parse(sessionStorage.getItem("loginUser")),
-                "valid": 0,
-                "type": 0,
-                "uuid": uuid,
-                "attachMents": attachMents,
-                "comments": [],
-                "open": 0,
-                "whiteList": ckeckIdArr,
-            };
+        var topicJson = {
+            "content": inputContent,
+            "fromUserId": sessionStorage.getItem("ident"),
+            "fromUser": JSON.parse(sessionStorage.getItem("loginUser")),
+            "valid": 0,
+            "type": 0,
+            "uuid": uuid,
+            "attachMents": attachMents,
+            "comments": [],
+            "open": 0,
+        };
+        if (this.state.radioValue == 2) {
+            if (this.state.classSrcChecked.length != 0) {
+                //可见班级
+                topicJson.whiteList = ckeckIdArr;
+            }
+            if (this.state.whiteUserList.length != 0) {
+                //可见个人
+                topicJson.whiteUserList = this.state.whiteUserList;
+            }
         }
+
         if (antNest.state.topicModalType == "topic") {
             topicJson.type = 1;
             if (isEmpty(antNest.state.topicTitle) == false) {
@@ -1876,6 +1875,29 @@ const AntNestTabComponents = React.createClass({
     },
 
     /**
+     * 从蚁群中选人,调起弹窗
+     */
+    choiceCanSeePer() {
+        this.props.choiceCanSeePer(9999);
+    },
+
+    /**
+     * 接收到选择可见个人的数组
+     * @param arr
+     */
+    callBackChoiceCanSeePerToNest(arr) {
+        var array = [];
+        if (isEmpty(arr) == false) {
+            arr.forEach(function (v, i) {
+                array.push({
+                    colUid: v
+                })
+            })
+        }
+        this.setState({whiteUserList: array});
+    },
+
+    /**
      * 渲染页面
      * @returns {XML}
      */
@@ -2013,6 +2035,7 @@ const AntNestTabComponents = React.createClass({
                                                value={this.state.classSrcChecked}
                                                onChange={this.checkboxOnChange}/>
                             </div>
+                            <a href="javascript:;" onClick={this.choiceCanSeePer}>从蚁群选择</a>
                         </Row>
                     </div>
 
