@@ -2766,11 +2766,11 @@ a.topics:hover {
 }
 
 .antnest-card .ant-card-body ul li {
-    margin-bottom: 2px;
+    margin-bottom: 0;
 }
 
 .antnest-card .ant-card-body ul li.topics_cont {
-    padding: 6px 0 8px;
+    padding: 6px 0 ;
     overflow: hidden;
     line-height: 23px;
     word-wrap: break-word;
@@ -2779,9 +2779,8 @@ a.topics:hover {
 }
 
 .antnest-card .ant-card-body ul li.topics_bot {
-    margin: 7px 0;
+    margin: 0;
 }
-
 .topics_zan {
     width: 100px;
     height: 100px;
@@ -2915,6 +2914,7 @@ a.topics:hover {
 
 .topics_bor_bot {
     border-bottom: 1px solid #f0f0f0;
+    margin-top:7px
 }
 
 .topics_le {
@@ -2937,8 +2937,8 @@ a.topics:hover {
 }
 
 .topics_calc2 .antnest-card {
-    border-bottom: none;
-    margin-bottom: 0;
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom: 15px;
 }
 
 .topics_calc2_center {
@@ -8714,7 +8714,7 @@ select.course_n:hover {
 .add_member_wrap {
     box-sizing: border-box;
     width: 100%;
-    height: 300px;
+    height: 330px;
 }
 
 .add_member_left {
@@ -8723,12 +8723,12 @@ select.course_n:hover {
     width: 280px;
     border: 1px solid #e1e1e1;
     border-radius: 4px;
-    height: 300px;
+    height: 330px;
 }
 
 .add_member_left .schoolgroup_table .ant-table-content {
     max-height: 100% !important;
-    height: 252px;
+    height: 282px;
     padding: 0px;
 }
 
@@ -8746,15 +8746,15 @@ select.course_n:hover {
     width: 376px;
     border: 1px solid #e1e1e1;
     border-radius: 4px;
-    height: 300px;
+    height: 330px;
 }
 
 .add_member_right .schoolgroup_table_department {
-    height: 260px;
+    height: 290px;
 }
 
 .add_member_wrap .schoolgroup_table_department {
-    height: 300px;
+    height: 330px;
 }
 
 .add_member_right .ant-table-fixed-header .ant-table-scroll .ant-table-header, .add_member_wrap .ant-table-fixed-header .ant-table-scroll .ant-table-header {

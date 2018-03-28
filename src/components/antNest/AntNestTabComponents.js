@@ -2035,7 +2035,7 @@ const AntNestTabComponents = React.createClass({
                                                value={this.state.classSrcChecked}
                                                onChange={this.checkboxOnChange}/>
                             </div>
-                            <a href="javascript:;" onClick={this.choiceCanSeePer}>从蚁群选择</a>
+                            <a className="checkbox_left" href="javascript:;" onClick={this.choiceCanSeePer}>从蚁群选择</a>
                         </Row>
                     </div>
 
