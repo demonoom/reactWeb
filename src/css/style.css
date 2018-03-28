@@ -2811,7 +2811,7 @@ a.topics:hover {
 .topics_time {
     margin-right: 12px;
     color: #a0a0a0;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .topics_dianzan {
@@ -2935,12 +2935,6 @@ a.topics:hover {
     min-height: calc(100% - -8px);
     max-height: calc(100% - -8px);
 }
-
-.topics_calc2 .antnest-card {
-    border-bottom: 1px solid #e8e8e8;
-    margin-bottom: 15px;
-}
-
 .topics_calc2_center {
     position: relative;
     text-align: center;
