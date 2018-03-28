@@ -59,7 +59,9 @@ const AntNestTabComponents = React.createClass({
             classSrcChecked: [],  //checkbox可见班级的名字,checkbox的value值,
             homeWorkTime: '',
             whoISSecretModalVisible: false,
-            whiteUserList: []
+            whiteUserList: [],
+            whiteUserListObj: [],
+            whiteUserListNum: 0
         };
     },
 
@@ -1878,7 +1880,8 @@ const AntNestTabComponents = React.createClass({
      * 从蚁群中选人,调起弹窗
      */
     choiceCanSeePer() {
-        this.props.choiceCanSeePer(9999);
+        debugger
+        this.props.choiceCanSeePer(9999, antNest.state.whiteUserListObj);
     },
 
     /**
@@ -1890,11 +1893,16 @@ const AntNestTabComponents = React.createClass({
         if (isEmpty(arr) == false) {
             arr.forEach(function (v, i) {
                 array.push({
-                    colUid: v
+                    colUid: v.userId
                 })
             })
         }
-        this.setState({whiteUserList: array});
+        debugger
+        antNest.setState({
+            whiteUserList: array,
+            whiteUserListObj: arr,
+            whiteUserListNum: arr.length
+        });
     },
 
     /**
@@ -2036,6 +2044,7 @@ const AntNestTabComponents = React.createClass({
                                                onChange={this.checkboxOnChange}/>
                             </div>
                             <a href="javascript:;" onClick={this.choiceCanSeePer}>从蚁群选择</a>
+                            <span>已选择:{this.state.whiteUserListNum}人</span>
                         </Row>
                     </div>
 

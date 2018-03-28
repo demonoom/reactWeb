@@ -678,6 +678,21 @@ const MainLayout = React.createClass({
         this.showAddMembersModal(99);
     },
 
+    choiceCanSeePer(type, arr) {
+        debugger
+        //接收到id进行初始化
+        var array = [];
+        if (isEmpty(arr) == false) {
+            arr.forEach(function (v, i) {
+                array.push(v.userId);
+            })
+        }
+        // selectArr
+        selectArr = arr;
+        this.setState({selectedRowKeys: array, tags: arr});
+        this.showAddMembersModal(type);
+    },
+
     /**
      * 添加群成员(两种情况下的搜索fanwei)
      */
@@ -1167,6 +1182,7 @@ const MainLayout = React.createClass({
     },
 
     addDeGroupMemberModalHandleCancel() {
+        debugger
         var arr = document.getElementsByClassName('add_member_menu');
         for (var i = 0; i < arr.length; i++) {
             arr[i].className = 'add_member_menu noom_cursor'
@@ -1234,12 +1250,12 @@ const MainLayout = React.createClass({
 
     callBackChoiceCanSeePer() {
         //拿到面板中选中人的Id
-        this.callBackChoiceCanSeePerToNest(this.state.selectedRowKeys)
+        this.callBackChoiceCanSeePerToNest(this.state.tags)
     },
 
     callBackChoiceCanSeePerToNest(arr) {
         this.refs.antNestTabComponents.callBackChoiceCanSeePerToNest(arr);
-        this.setState({"addDeGroupMemberModalVisible": false});
+        this.addDeGroupMemberModalHandleCancel();
     },
 
     /**
@@ -2668,7 +2684,6 @@ const MainLayout = React.createClass({
         //引入国际化的支持
         var messageFromLanguage = getMessageFromLanguage();
         var local = getLocalFromLanguage();
-
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: this.onSelectChange,
@@ -2760,7 +2775,7 @@ const MainLayout = React.createClass({
                 tabComponent = <AntNestTabComponents
                     ref="antNestTabComponents"
                     interPublicSidebarSet={this.interPublicSidebarSet}
-                    choiceCanSeePer={this.showAddMembersModal}
+                    choiceCanSeePer={this.choiceCanSeePer}
                 />;
 
                 break;
