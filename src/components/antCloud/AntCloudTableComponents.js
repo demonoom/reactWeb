@@ -2260,7 +2260,8 @@ pageNo   --- 页码，-1取全部
                        dataSource={cloudTable.state.tableData} pagination={{
                     total: cloudTable.state.totalCount,
                     pageSize: getPageSize(),
-                    // onChange: cloudTable.pageOnChange
+                    current: this.state.currentPage,
+                    onChange: cloudTable.pageOnChange
                 }} scroll={{y: 400}}/>
             </div>
         }
