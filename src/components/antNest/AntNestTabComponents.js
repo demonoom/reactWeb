@@ -1430,7 +1430,9 @@ const AntNestTabComponents = React.createClass({
             boxDisplay: 'none',
             radioDisplay: 'block',
             homeWorkTime: '',
-            homeWorkDate: ''
+            homeWorkDate: '',
+            whiteUserListObj: [],
+            whiteUserListNum: 0
         });
     },
 
@@ -1880,7 +1882,6 @@ const AntNestTabComponents = React.createClass({
      * 从蚁群中选人,调起弹窗
      */
     choiceCanSeePer() {
-        debugger
         this.props.choiceCanSeePer(9999, antNest.state.whiteUserListObj);
     },
 
@@ -1897,7 +1898,6 @@ const AntNestTabComponents = React.createClass({
                 })
             })
         }
-        debugger
         antNest.setState({
             whiteUserList: array,
             whiteUserListObj: arr,
@@ -2043,7 +2043,7 @@ const AntNestTabComponents = React.createClass({
                                                value={this.state.classSrcChecked}
                                                onChange={this.checkboxOnChange}/>
                             </div>
-                            <a href="javascript:;" onClick={this.choiceCanSeePer}>从蚁群选择</a>
+                            <a className="checkbox_left" href="javascript:;" onClick={this.choiceCanSeePer}>从蚁群选择</a>
                             <span>已选择:{this.state.whiteUserListNum}人</span>
                         </Row>
                     </div>

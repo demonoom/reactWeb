@@ -1629,7 +1629,7 @@ const MainLayout = React.createClass({
         var messageToGrp = 4;
 
         if (typeof(nowThinking) == 'undefined' || nowThinking == '') {
-            nowThinking = '这是一个云盘分享的文件'
+            nowThinking = '这是一个蚁盘分享的文件'
         }
 
         if (isEmpty(memberTargetkeys) == true) {
