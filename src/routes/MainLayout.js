@@ -678,6 +678,21 @@ const MainLayout = React.createClass({
         this.showAddMembersModal(99);
     },
 
+    choiceCanSeePer(type, arr) {
+        debugger
+        //接收到id进行初始化
+        var array = [];
+        if (isEmpty(arr) == false) {
+            arr.forEach(function (v, i) {
+                array.push(v.userId);
+            })
+        }
+        // selectArr
+        selectArr = arr;
+        this.setState({selectedRowKeys: array, tags: arr});
+        this.showAddMembersModal(type);
+    },
+
     /**
      * 添加群成员(两种情况下的搜索fanwei)
      */
@@ -697,6 +712,7 @@ const MainLayout = React.createClass({
                 superTitleName: '添加群成员',
                 groupDiv: 'none',
                 idea: 'none',
+                choiceCanSeePer: false
             });
         } else if (type == 99) {
             //创建群聊
@@ -712,6 +728,7 @@ const MainLayout = React.createClass({
                 superTitleName: '创建群聊',
                 groupDiv: 'none',
                 idea: 'none',
+                choiceCanSeePer: false
             });
             this.getRecentShareUsers();
         } else if (type == 999) {
@@ -728,6 +745,24 @@ const MainLayout = React.createClass({
                 idea: 'block',    //控制想法textarea
                 superTitleName: '分享文件',
                 groupDiv: 'inline-block',
+                choiceCanSeePer: false
+            });
+            this.getRecentShareUsers();
+        } else if (type == 9999) {
+            //仅做选人逻辑,确定返回选人的id
+            this.setState({
+                "addDeGroupMemberModalVisible": true,
+                originDiv: 'inline-block',
+                OriUserNotOrIf: 'block',
+                OriUserIfOrNot: 'none',
+                originFlag: false,
+                searchArea: 'defaultArea',
+                inputClassName: 'ant-form-item add_member_menu_search line_block',
+                creatInput: 'none',
+                superTitleName: '添加群成员',
+                groupDiv: 'none',
+                idea: 'none',
+                choiceCanSeePer: true   //控制仅返回选择人的信息
             });
             this.getRecentShareUsers();
         } else {
@@ -747,6 +782,7 @@ const MainLayout = React.createClass({
                 superTitleName: '添加群成员',
                 groupDiv: 'none',
                 idea: 'none',
+                choiceCanSeePer: false
             });
             this.getRecentShareUsers();
         }
@@ -1146,6 +1182,7 @@ const MainLayout = React.createClass({
     },
 
     addDeGroupMemberModalHandleCancel() {
+        debugger
         var arr = document.getElementsByClassName('add_member_menu');
         for (var i = 0; i < arr.length; i++) {
             arr[i].className = 'add_member_menu noom_cursor'
@@ -1211,11 +1248,26 @@ const MainLayout = React.createClass({
         });
     },
 
+    callBackChoiceCanSeePer() {
+        //拿到面板中选中人的Id
+        this.callBackChoiceCanSeePerToNest(this.state.tags)
+    },
+
+    callBackChoiceCanSeePerToNest(arr) {
+        this.refs.antNestTabComponents.callBackChoiceCanSeePerToNest(arr);
+        this.addDeGroupMemberModalHandleCancel();
+    },
+
     /**
      * 添加群成员
      */
     addGroupMember() {
         var _this = this;
+        if (this.state.choiceCanSeePer) {
+            //跳转到只返回选择人的逻辑
+            _this.callBackChoiceCanSeePer()
+            return
+        }
         if (this.state.idea == 'block') {
             _this.shareFilesNew()
         } else {
@@ -1577,7 +1629,7 @@ const MainLayout = React.createClass({
         var messageToGrp = 4;
 
         if (typeof(nowThinking) == 'undefined' || nowThinking == '') {
-            nowThinking = '这是一个云盘分享的文件'
+            nowThinking = '这是一个蚁盘分享的文件'
         }
 
         if (isEmpty(memberTargetkeys) == true) {
@@ -2569,7 +2621,7 @@ const MainLayout = React.createClass({
     /**
      * 显示文件分享的引导页
      */
-    showShareGuideModal(globalTitle,globalSrc){
+    showShareGuideModal(globalTitle, globalSrc) {
         this.refs.guideModal.changeGuideModalVisible(true);
         this.setState({'shareSrc': globalSrc, 'shareTitle': globalTitle});
     },
@@ -2578,12 +2630,11 @@ const MainLayout = React.createClass({
      * 设置不同的操作指向，用来根据不同的数据源，分别将文件/文件夹分享到朋友或蚁巢
      * @param guideType
      */
-    setGuideType(guideType){
-        if(guideType.key == "friend"){
+    setGuideType(guideType) {
+        if (guideType.key == "friend") {
             window.__noomShareMbile__(this.state.shareSrc, this.state.shareTitle);
-        }else{
-            console.log("到蚁巢");
-            this.setState({shareToAntNestVisible:true});
+        } else {
+            this.setState({shareToAntNestVisible: true});
         }
         this.refs.guideModal.changeGuideModalVisible(false);
     },
@@ -2591,14 +2642,14 @@ const MainLayout = React.createClass({
     /**
      * 关闭分享到蚁巢的modal
      */
-    shareToAntNestModalHandleCancel(){
-        this.setState({shareToAntNestVisible:false,nowThinking:''});
+    shareToAntNestModalHandleCancel() {
+        this.setState({shareToAntNestVisible: false, nowThinking: ''});
     },
 
     /**
      * 分享文件到蚁巢
      */
-    shareToAntNest(){
+    shareToAntNest() {
         var _this = this;
         var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
         var param = {
@@ -2613,7 +2664,7 @@ const MainLayout = React.createClass({
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var response = ret.response;
-                    if(response){
+                    if (response) {
                         message.success("分享成功");
                     }
                     _this.shareToAntNestModalHandleCancel();
@@ -2633,7 +2684,6 @@ const MainLayout = React.createClass({
         //引入国际化的支持
         var messageFromLanguage = getMessageFromLanguage();
         var local = getLocalFromLanguage();
-
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: this.onSelectChange,
@@ -2725,6 +2775,7 @@ const MainLayout = React.createClass({
                 tabComponent = <AntNestTabComponents
                     ref="antNestTabComponents"
                     interPublicSidebarSet={this.interPublicSidebarSet}
+                    choiceCanSeePer={this.choiceCanSeePer}
                 />;
 
                 break;
@@ -2741,7 +2792,7 @@ const MainLayout = React.createClass({
                 middleComponent = <AntCloudMenu callbackParent={this.getAntCloud}/>;
                 tabComponent = <AntCloudTableComponents antCloudKey={this.state.antCloudKey}
                                                         messageUtilObj={ms}
-                                                        showShareGuideModal = {this.showShareGuideModal}
+                                                        showShareGuideModal={this.showShareGuideModal}
                 ></AntCloudTableComponents>;
                 // tabComponent = <nAntCloudTableComponents antCloudKey={this.state.antCloudKey}
                 //                                         messageUtilObj={ms}
@@ -3169,7 +3220,8 @@ const MainLayout = React.createClass({
                         width={616}
                     >
                         <div style={{marginBottom: '14px'}}>
-                            <Input type="textarea" rows={2} placeholder="这一刻的想法" style={{height:'84px'}} value={this.state.nowThinking}
+                            <Input type="textarea" rows={2} placeholder="这一刻的想法" style={{height: '84px'}}
+                                   value={this.state.nowThinking}
                                    onChange={this.nowThinkingInputChange}/>
                         </div>
                         <div style={{marginBottom: '14px'}}>

@@ -2009,7 +2009,7 @@ pageNo   --- 页码，-1取全部
         var messageToGrp = 4;
 
         if (typeof(nowThinking) == 'undefined') {
-            nowThinking = '这是一个云盘分享的文件'
+            nowThinking = '这是一个蚁盘分享的文件'
         }
 
         if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true && isEmpty(checkedRecentConnectOptions) == true) {
@@ -2455,7 +2455,7 @@ pageNo   --- 页码，-1取全部
                             </Col>
                             <Col span={12} className="topics_dianzan">
                                 <div className="cloud_share_cont_ri">
-                                    <Input type="textarea" rows={14} placeholder="这是一个云盘分享的文件"
+                                    <Input type="textarea" rows={14} placeholder="这是一个蚁盘分享的文件"
                                            value={cloudTable.state.nowThinking}
                                            onChange={cloudTable.nowThinkingInputChange}/>
                                 </div>
