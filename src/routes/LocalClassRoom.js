@@ -9,6 +9,7 @@ import SelectAntCloudSubjectsModal from '../components/localClassRoom/SelectAntC
 import ClazzStatusModal from '../components/localClassRoom/ClazzStatusModal';
 import ConfirmModal from '../components/ConfirmModal';
 import GuideModal from '../components/localClassRoom/GuideModal';
+import SubjectGuideModal from '../components/localClassRoom/SubjectGuideModal';
 import SendPicModel from '../components/antGroup/SendPicModel'
 
 var connection = null;
@@ -22,6 +23,7 @@ const LocalClassRoom = React.createClass({
             classRoomUrl: '',
             messageTagArray:[],
             subjectModalIsShow:false,
+            subjectInLibModalIsShow:false,
             antCloudMaterialsModalIsShow:false,
             closeScheduleMaterialsModal:false,
             sendPicModel: false,
@@ -115,8 +117,8 @@ const LocalClassRoom = React.createClass({
      * 获取课件，打开ppt，完成推ppt的操作
      */
     getPPT() {
-        //this.refs.guideModal.changeGuideModalVisible(true);
-        this.setState({antCloudMaterialsModalIsShow:true});
+        this.refs.guideModal.changeGuideModalVisible(true);
+        // this.setState({antCloudMaterialsModalIsShow:true});
     },
 
     /**
@@ -133,10 +135,23 @@ const LocalClassRoom = React.createClass({
     },
 
     /**
+     * 设置不同的操作指向，用来根据不同的数据源，分别从题库和蚁盘中获取题目
+     * @param guideType
+     */
+    setSubjectGuideType(guideType){
+        if(guideType.key == "subjectLib"){
+            this.setState({subjectInLibModalIsShow:true});
+        }else{
+            this.setState({subjectModalIsShow:true});
+        }
+        this.refs.subjectGuideModal.changeGuideModalVisible(false);
+    },
+    /**
      * 打开选择题目的modal
      */
     getSubject() {
-        this.setState({subjectModalIsShow:true});
+        this.refs.subjectGuideModal.changeGuideModalVisible(true);
+        //this.setState({subjectModalIsShow:true});
     },
 
     /**
@@ -144,6 +159,13 @@ const LocalClassRoom = React.createClass({
      */
     closeSubjectModal(){
         this.setState({subjectModalIsShow:false});
+    },
+
+    /**
+     * 关闭从资源库选择题目的modal
+     */
+    closeSubjectInLibModal(){
+        this.setState({subjectInLibModalIsShow:false});
     },
 
     pushSubjectToClass(subjectIdsArray){
@@ -262,7 +284,7 @@ const LocalClassRoom = React.createClass({
                     <div className="local_class_right" id="messageDiv">
                         <LocalClassesMessage id="localClassMessageObj" ref="localClassesMessage" ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
                     </div>
-                    {/*<SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>*/}
+                    <SelectSubjectModal isShow={this.state.subjectInLibModalIsShow} onCancel={this.closeSubjectInLibModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
                     <ClazzStatusModal isShow={this.state.clazzStatusModalIsShow} onCancel={this.closeClazzModal} vid = {this.state.vid}></ClazzStatusModal>
                     <SelectAntCloudMaterialsModal isShow={this.state.antCloudMaterialsModalIsShow} onCancel={this.closeAntCloudMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectAntCloudMaterialsModal>
                     <SelectScheduleMaterialsModal isShow={this.state.schduleMaterialsModalIsShow} onCancel={this.closeScheduleMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectScheduleMaterialsModal>
@@ -273,6 +295,7 @@ const LocalClassRoom = React.createClass({
                                   onConfirmModalOK={this.disConnectClassRoom}
                     ></ConfirmModal>
                     <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
+                    <SubjectGuideModal ref="subjectGuideModal" setGuideType={this.setSubjectGuideType}></SubjectGuideModal>
                     <SendPicModel
                         isShow={this.state.sendPicModel}
                         closeModel={this.closeSendPicModel}

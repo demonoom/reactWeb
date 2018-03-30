@@ -13,7 +13,8 @@ import {
     Cascader,
     Collapse,
     Checkbox,
-    Tabs
+    Tabs,
+    Pagination
 } from 'antd';
 import ConfirmModal from '../ConfirmModal';
 import CloudFileUploadComponents from './CloudFileUploadComponents';
@@ -529,7 +530,7 @@ const AntCloudTableComponents = React.createClass({
     },
 
     /**
-     * 点击文件夹名称，进入文件夹内部的文件列表
+     * 蚁盘中，点击文件夹名称，进入文件夹内部的文件列表
      * @param operateUserId
      * @param cloudFileId
      * @param queryConditionJson
@@ -796,7 +797,7 @@ pageNo   --- 页码，-1取全部
     },
 
     /**
-     * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
+     * 蚁盘中，如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
     intoDirectoryInner(directoryObj, optSrc) {
         var initPageNo = 1;
@@ -834,7 +835,7 @@ pageNo   --- 页码，-1取全部
             this.unique(subjectParents);
             cloudTable.listCloudSubject(directoryObj.id, initPageNo)
         }
-
+        this.setState({currentPage:initPageNo});
     },
     /**
      * 点击文件夹名称，进入文件夹内部的文件列表   cloudFileId   --- 目录的id  pageNo        --- 页码，-1取全部
@@ -846,7 +847,7 @@ pageNo   --- 页码，-1取全部
         var param = {
             "method": 'listCloudSubject',
             "cloudFileId": cloudFileId,
-            "pageNo": -1
+            "pageNo": pageNO
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -1092,17 +1093,34 @@ pageNo   --- 页码，-1取全部
         var getFileType = cloudTable.state.getFileType;
         if (getFileType == "myFile") {
             if (this.state.activeKey == "1") {
-                cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
-                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
+                if(this.state.currentDirectoryId!=-1){
+                    var queryConditionJson = "";
+                    this.listFiles(this.state.ident,
+                        this.state.currentDirectoryId, queryConditionJson, pageNo, "mainTable");
+                }else{
+                    cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
+                    cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
+                }
+
             } else {
-                cloudTable.setState({activeKey: '2'});
-                cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, pageNo)
+                if(this.state.currentSubjectDirectoryId!=-1){
+                    this.listCloudSubject(this.state.currentSubjectDirectoryId,pageNo);
+                }else{
+                    cloudTable.setState({activeKey: '2'});
+                    cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, pageNo)
+                }
             }
             // cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
         } else {
-            cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, pageNo);
+            if(this.state.currentDirectoryId!=-1){
+                var queryConditionJson = "";
+                this.listFiles(this.state.ident,
+                    this.state.currentDirectoryId, queryConditionJson, pageNo, "mainTable");
+            }else{
+                this.getUserChatGroupRootCloudFiles(this.state.ident, pageNo);
+            }
         }
-        cloudTable.setState({
+        this.setState({
             currentPage: pageNo,
         });
     },
@@ -2257,12 +2275,9 @@ pageNo   --- 页码，-1取全部
             }
             var content = <div style={{"height": '100%'}}>
                 <Table className="cloud_box" rowSelection={rowSelection} columns={columns}
-                       dataSource={cloudTable.state.tableData} pagination={{
-                    total: cloudTable.state.totalCount,
-                    pageSize: getPageSize(),
-                    current: this.state.currentPage,
-                    onChange: cloudTable.pageOnChange
-                }} scroll={{y: 400}}/>
+                       dataSource={this.state.tableData} pagination={false} scroll={{y: 400}}/>
+                <Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
+                            onChange={this.pageOnChange}/>
             </div>
         }
         if ((cloudTable.state.parentDirectoryId != -1 && cloudTable.state.currentDirectoryId != -1) && (cloudTable.state.parentSubjectDirectoryId != -1 && cloudTable.state.currentSubjectDirectoryId != -1)) {
