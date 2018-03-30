@@ -10,7 +10,7 @@ const zh_CN = {
     teachingSpace:"教学空间",
     contacts:'蚁群',
     cloudClass:'云校',
-    cloudDisk:'云盘',
+    cloudDisk:'蚁盘',
     courseMangement:'教务管理',
     notificationCenter:'叮一下',
     settings:'退出系统',

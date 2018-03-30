@@ -59,7 +59,9 @@ const AntNestTabComponents = React.createClass({
             classSrcChecked: [],  //checkbox可见班级的名字,checkbox的value值,
             homeWorkTime: '',
             whoISSecretModalVisible: false,
-            whiteUserList: []
+            whiteUserList: [],
+            whiteUserListObj: [],
+            whiteUserListNum: 0
         };
     },
 
@@ -1428,7 +1430,9 @@ const AntNestTabComponents = React.createClass({
             boxDisplay: 'none',
             radioDisplay: 'block',
             homeWorkTime: '',
-            homeWorkDate: ''
+            homeWorkDate: '',
+            whiteUserListObj: [],
+            whiteUserListNum: 0
         });
     },
 
@@ -1878,7 +1882,7 @@ const AntNestTabComponents = React.createClass({
      * 从蚁群中选人,调起弹窗
      */
     choiceCanSeePer() {
-        this.props.choiceCanSeePer(9999);
+        this.props.choiceCanSeePer(9999, antNest.state.whiteUserListObj);
     },
 
     /**
@@ -1890,11 +1894,15 @@ const AntNestTabComponents = React.createClass({
         if (isEmpty(arr) == false) {
             arr.forEach(function (v, i) {
                 array.push({
-                    colUid: v
+                    colUid: v.userId
                 })
             })
         }
-        this.setState({whiteUserList: array});
+        antNest.setState({
+            whiteUserList: array,
+            whiteUserListObj: arr,
+            whiteUserListNum: arr.length
+        });
     },
 
     /**
@@ -2035,7 +2043,10 @@ const AntNestTabComponents = React.createClass({
                                                value={this.state.classSrcChecked}
                                                onChange={this.checkboxOnChange}/>
                             </div>
-                            <a href="javascript:;" onClick={this.choiceCanSeePer}>从蚁群选择</a>
+                            <div className="yinyong3">
+                                <a className="checkbox_left2 checkbox_left2_a antnest_talk" href="javascript:;" onClick={this.choiceCanSeePer}>从蚁群选择</a>
+                                <span>已选择：{this.state.whiteUserListNum}人</span>
+                            </div>
                         </Row>
                     </div>
 
