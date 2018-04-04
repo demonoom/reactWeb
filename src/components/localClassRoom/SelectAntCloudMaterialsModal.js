@@ -584,12 +584,13 @@ class SelectAntCloudMaterialsModal extends React.Component {
         if (isEmpty(selecArr) == false) {
             selecArr.forEach(function (v, i) {
                 var selectImgData = <li>
-                    <img className=""  src={v.path + '?' + MIDDLE_IMG} alt={v.path}/>
+                    <span className="topics_zan">
+                        <img className="topics_zanImg" src={v.path + '?' + MIDDLE_IMG} alt={v.path} onClick={showLargeImg}/>
+                    </span>
                     <div className="img_title" >{v.name}</div>
                     <span className="deleteBox" id={v.id} onClick={_this.deleteChosenImg.bind(this, v.id)}></span>
                     <input type='checkbox' />
                 </li>;
-
                 chosenImgArr.push(selectImgData);
 
             })
