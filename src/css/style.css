@@ -9011,3 +9011,111 @@ select.course_n:hover {
     position: relative;
     top: -2px;
 }
+
+
+/*本地课堂*/
+.cloud_modal .ant-modal-footer{
+    text-align: right!important;
+    position: relative;
+}
+.cloud_modal .select_Num{
+    position: absolute;
+    left:0;
+}
+
+.selectTab .ant-tabs-nav{
+    margin-left: 120px;
+}
+.selectTab .ant-tabs-tabpane{
+    overflow: auto;
+}
+
+.selectTab li{
+    width: 100px;
+    height:130px;
+    text-align: center;
+    margin: 10px 10px 0 0;
+    display: inline-block;
+    position: relative;
+
+}
+.selectTab img{
+    width: 100px;
+    height: 100px;
+
+}
+.selectTab li input{
+    position: absolute;
+    top:3px;
+    right:3px;
+    /*width: 30px;*/
+    /*height: 30px;*/
+    display: none;
+
+}
+.selectTab .selectBox{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    font-size: 18px;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    background: url(../components/images/right_icon.png) no-repeat;
+}
+.on{
+    background: #0b38ac!important;
+    color:#ffffff!important;
+}
+
+
+.img_title{
+    line-height: 10px;
+}
+.selectTab .antnest_name{
+    line-heigh-t: 0;
+}
+
+.chosenBox li{
+    width:100px;
+    height:130px;
+    text-align: center;
+    margin: 10px 10px 0 0;
+    display: inline-block;
+    position: relative;
+}
+
+.chosenBox img{
+    width: 100px;
+    height: 100px;
+
+}
+
+.chosenBox .deleteBox{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    font-size: 18px;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    background: url(../components/images/deleteBox.png) no-repeat;
+}
+
+.chosenBox li input{
+    position: absolute;
+    top:3px;
+    right:3px;
+    /*width: 30px;*/
+    /*height: 30px;*/
+    display: none;
+
+}
+
+
