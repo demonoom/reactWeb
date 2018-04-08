@@ -188,10 +188,11 @@ const LocalClassRoom = React.createClass({
         this.setState({schduleMaterialsModalIsShow: false});
     },
 
-    pushMaterialsToClass(materials) {
-        var htmlPath = materials.htmlPath;
+    pushMaterialsToClass(htmlPath) {
+        // var htmlPath = materials.htmlPath;
         if(isEmpty(htmlPath)==false){
             var pptURL = htmlPath.replace("60.205.111.227", "www.maaee.com");
+            pptURL = pptURL.replace("60.205.86.217", "www.maaee.com");
             pptURL = pptURL.replace("http", "https");
             var vid = this.state.vid;
             var userId = this.state.userId;

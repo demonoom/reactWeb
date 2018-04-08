@@ -13,6 +13,7 @@ const TabPane = Tabs.TabPane;
 var scheduleData = [];
 var materialsData = [];
 var selectArr = [];
+var filterImgData = [];
 var selectedImgAtChosenModal = [];
 var materialsColumns = [{
     title: '文件',
@@ -36,7 +37,7 @@ var targetDirColumns = [{
     title: '文件夹名称',
     dataIndex: 'dirName',
 },
-];
+];                    message.error("无更多数据");
 
 var targetDirDataArray = [];
 
@@ -64,8 +65,9 @@ class SelectAntCloudMaterialsModal extends React.Component {
             selectArr: [],  //选中的数组
             selectCount: 0,//选中的数目
             chosenImgArr: [], //已选图片在modal里的集合
-            fileInto: false
-
+            fileInto: false,
+            antCloudImgCurrentPage:1,   //蚁盘图片的当前页码
+            currentDirectoryIdAtImgModal:-1 //蚁盘图片的当前文件夹id
         };
         this.SelectAntCloudMaterialsModalHandleCancel = this.SelectAntCloudMaterialsModalHandleCancel.bind(this);
         this.buildTargetDirData = this.buildTargetDirData.bind(this);
@@ -94,6 +96,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         this.okFilterCloudFile = this.okFilterCloudFile.bind(this);
         this.deleteCheckboxClicked = this.deleteCheckboxClicked.bind(this);
         this.rebuildChosenImgArr = this.rebuildChosenImgArr.bind(this);
+        this.checkCurrentIsExitAtFilterImgData = this.checkCurrentIsExitAtFilterImgData.bind(this);
     }
 
     componentDidMount() {
@@ -101,18 +104,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var isShow = _this.props.isShow;
         this.setState({isShow});
         this.getAntCountFileList();
-        this.filterCloudFile(_this.state.cloudImgDirectoryParentId, _this.state.pageNo);
-    }
-
-    componentDidUpdate() {
-        // if (this.state.fileInto) {
-        //     this.state.selectNum.forEach(function (v, i) {
-        //         if (v.content != '') {
-        //             document.getElementById(v.id + 'checkbox').click();
-        //         }
-        //     })
-        //     this.state.fileInto = false
-        // }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -124,6 +115,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         this.getAntCountFileList();
         var initCloudImgDirectoryParentId = -1;
         var initPageNo = 1;
+        console.log("==========componentWillReceiveProps===========");
         this.filterCloudFile(initCloudImgDirectoryParentId, initPageNo);
     }
 
@@ -168,11 +160,12 @@ class SelectAntCloudMaterialsModal extends React.Component {
     loadMoreAntCloudFlileImg() {
         var _this = this;
         var queryConditionJson = "";
-        var antCloudFileCurrentPage = parseInt(this.state.antCloudFileCurrentPage) + 1;
-        if (this.state.currentDirectoryIdAtMoveModal == -1) {
-            this.filterCloudFile(this.state.cloudImgDirectoryParentId, antCloudFileCurrentPage);
+        var antCloudImgCurrentPage = parseInt(this.state.antCloudImgCurrentPage) + 1;
+        if (this.state.currentDirectoryIdAtImgModal == -1) {
+            this.filterCloudFile(-1, antCloudImgCurrentPage);
         } else {
-            message.error("无更多数据");
+            this.filterCloudFile(this.state.currentDirectoryIdAtImgModal, antCloudImgCurrentPage);
+            // message.error("无更多数据");
         }
     }
 
@@ -211,6 +204,8 @@ class SelectAntCloudMaterialsModal extends React.Component {
     filterCloudFile(parentId, pageNo) {
         var _this = this;
         //_this.setState({currentDirectoryId: -1, totalCount: 0});
+        this.setState({"currentDirectoryIdAtImgModal": parentId});
+        console.log("1111111111111111");
         var param = {
             "method": 'filterCloudFile',
             "userId": this.state.loginUser.colUid, //23836
@@ -223,7 +218,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                 var response = ret.response;
                 if (isEmpty(response) == false && response.length > 0) {
                     _this.buildTargetDirImgData(ret, false);
-                    _this.setState({defaultArr: ret});
+                    _this.setState({defaultArr: ret,antCloudImgCurrentPage: pageNo});
                     // _this.state.defaultArr.push(ret);
                 } else {
                     message.error("无更多数据");
@@ -242,7 +237,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
 
     buildTargetDirImgData(ret, noomFlag) {
         var _this = this;
-        var filterImgData = [];
         var directoryCount = _this.getDirectoryCount(ret.response);
         if (isEmpty(ret.response) == false) {
 
@@ -260,8 +254,8 @@ class SelectAntCloudMaterialsModal extends React.Component {
                     var name = v.name;
                     var directory = v.directory;
                     var fileLogo = _this.buildFilterFileLogo(name, directory, v);
-                    var fileLogoArr = <li>{fileLogo}</li>
-
+                    var fileLogoArr = <li key={v.id}>{fileLogo}</li>
+                    _this.checkCurrentIsExitAtFilterImgData(v.id);
                     filterImgData.push(fileLogoArr);
                 } else {
                     if (!noomFlag) {
@@ -280,7 +274,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                         }
                     });
                     console.log(item);
-                    var filterImg = <li>
+                    var filterImg = <li key={v.id}>
                         <span className="selectTab_li">
                             <img className="topics_zanImg" onClick={showLargeImg} src={v.path + '?' + MIDDLE_IMG}
                                  alt={v.path}/>
@@ -293,12 +287,26 @@ class SelectAntCloudMaterialsModal extends React.Component {
                         <input type='checkbox' checked={item[0].content == '' ? false : true} id={v.id + 'checkbox'}
                                onClick={_this.checkboxClicked.bind(this, v)}/>
                         <div className="check_text focus_3">{v.name}</div>
-                    </li>
-                    filterImgData.push(filterImg)
+                    </li>;
+                    _this.checkCurrentIsExitAtFilterImgData(v.id);
+                    filterImgData.push(filterImg);
                 }
             })
         }
         this.setState({filterImgData: filterImgData});
+    }
+
+    checkCurrentIsExitAtFilterImgData(vid){
+        var result = false;
+        for(var i=0;i<filterImgData.length;i++){
+            var imgData = filterImgData[i];
+            if(imgData.key == vid){
+                filterImgData.splice(i,1);
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     /**
@@ -416,6 +424,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         console.log(id);
         // this.state.selectNum = [];
         this.state.fileInto = true;
+        filterImgData.splice(0);
         this.filterCloudFile(id, 1);
     }
 
@@ -595,6 +604,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                     _this.state.parentDirectoryIdAtMoveModal, queryConditionJson, initPageNo);
             }
         } else {
+            filterImgData.splice(0);
             //蚁盘图片的回退逻辑
             if (_this.state.cloudImgDirectoryParentId == 0) {
                 //回到根目录
@@ -624,7 +634,11 @@ class SelectAntCloudMaterialsModal extends React.Component {
             var fileType = fileName.substring(lastPointIndex + 1);
             if (fileType == "ppt" || fileType == "pptx") {
                 //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
-                this.props.pushMaterialsToClass(fileObj);
+                this.props.pushMaterialsToClass(fileObj.htmlPath);
+                this.SelectAntCloudMaterialsModalHandleCancel();
+            }else if (fileType == "pdf" || fileType == "doc" || fileType == "docx") {
+                //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
+                this.props.pushMaterialsToClass(fileObj.pdfPath);
                 this.SelectAntCloudMaterialsModalHandleCancel();
             } else {
                 message.error("暂不支持打开该文件");
@@ -775,11 +789,11 @@ class SelectAntCloudMaterialsModal extends React.Component {
         if (isEmpty(selectedImgAtChosenModal) == false) {
             selectedImgAtChosenModal.forEach(function (v, i) {
                 var selectImgData = <li>
-                    <span className="topics_zan">
+                    <span className="selectTab_li">
                         <img className="topics_zanImg" src={v.path + '?' + MIDDLE_IMG} alt={v.path}
                              onClick={showLargeImg}/>
                     </span>
-                    <div className="img_title">{v.name}</div>
+                    <div className="check_text focus_3">{v.name}</div>
                     <span className="deleteBox" id={v.id} onClick={_this.deleteChosenImg.bind(_this, v)}></span>
                     <input type='checkbox' onClick={_this.deleteCheckboxClicked.bind(_this, v)}/>
                 </li>;

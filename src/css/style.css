@@ -9286,11 +9286,6 @@ ul.chosenBox{
     color: #fff;
     text-align: center;
 }
-<<<<<<< HEAD
-.more_fileimg{
-    width: 100%;
-    top: 0;
-=======
 .check_img_footer2{
     position: fixed;
     bottom: 0;
@@ -9303,5 +9298,4 @@ ul.chosenBox{
 }
 .select_img_modal .ant-modal-content span.ant-modal-close-x{
     color: #827f82;
->>>>>>> 7555714c87965d8fb2f9925f48b0ced724509d05
 }
