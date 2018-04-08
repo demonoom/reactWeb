@@ -79,6 +79,7 @@ const LocalClassRoom = React.createClass({
             // 显示消息
             onMessage: function (info) {
                 var data = info.data;
+                debugger
                 console.log("=============================================>" + info);
                 switch (info.command) {
                     case "teacherLogin":
@@ -189,18 +190,22 @@ const LocalClassRoom = React.createClass({
 
     pushMaterialsToClass(materials) {
         var htmlPath = materials.htmlPath;
-        var pptURL = htmlPath.replace("60.205.111.227", "www.maaee.com");
-        pptURL = pptURL.replace("http", "https");
-        var vid = this.state.vid;
-        var userId = this.state.userId;
-        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
-        var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + pptURL + "'}}" + ')');
-        connection.send(protocal);
+        if(isEmpty(htmlPath)==false){
+            var pptURL = htmlPath.replace("60.205.111.227", "www.maaee.com");
+            pptURL = pptURL.replace("http", "https");
+            var vid = this.state.vid;
+            var userId = this.state.userId;
+            var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
+            var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + pptURL + "'}}" + ')');
+            connection.send(protocal);
 
-        //让新版的学生端显示ppt
-        var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
-        connection.send(p1);
-        this.setState({classRoomUrl});
+            //让新版的学生端显示ppt
+            var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
+            connection.send(p1);
+            this.setState({classRoomUrl});
+        }else{
+            message.error("该文件暂时无法完成推送");
+        }
     },
 
     /**
@@ -269,15 +274,17 @@ const LocalClassRoom = React.createClass({
 
         var vid = this.state.vid;
         var userId = this.state.userId;
-        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+        // var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+        var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
 
-        var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + pptURL + "'}}" + ')');
+        var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'url':'" + imgsUrl + "'}}" + ')');
         connection.send(protocal);
 
         //让新版的学生端显示ppt
         var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
         connection.send(p1);
         this.setState({classRoomUrl});
+        this.closeAntCloudMaterialsModal();
     },
 
     render() {
