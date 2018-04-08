@@ -124,10 +124,8 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * @constructor
      */
     SelectAntCloudMaterialsModalHandleCancel() {
-        this.state.selectNum = []; //选中后显示的下标
-        this.state.selectArr = [];//选中的数组
-        this.state.selectCount = 0; //选中的数目
-        this.setState({"isShow": false});
+        filterImgData.splice(0);
+        this.setState({"isShow": false,selectNum:[],selectArr:[],selectCount:0,defaultArr:[],cloudTasKey: 'cloudFile'});
         this.props.onCancel();
 
     }
@@ -429,16 +427,16 @@ class SelectAntCloudMaterialsModal extends React.Component {
     }
 
 
+
+
     /**
      * 发送
      * @param
      */
 
     sendFilterCloudFile() {
-        this.state.selectNum = []; //选中后显示的下标
-        this.state.selectArr = [];//选中的数组
-        this.state.selectCount = 0; //选中的数目
-        this.setState({"isShow": false});
+        filterImgData.splice(0);
+        this.setState({"isShow": false,selectNum:[],selectArr:[],selectCount:0,defaultArr:[]});
         this.props.sendFilterCloudFile(selectArr);
         selectArr.splice(0);
     }
