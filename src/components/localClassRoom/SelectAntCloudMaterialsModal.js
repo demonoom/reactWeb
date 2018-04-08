@@ -60,6 +60,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
             pageNo: 1,
             defaultArr: [],
             cloudImgDirectoryParentId: -1,  //蚁盘图片的文件夹的父id
+            parentDirectoryIdAtMoveModal: -1,  //蚁盘文件的文件夹的父id
             cloudTasKey: "cloudFile",
             selectNum: [],  //选中后显示的下标
             selectArr: [],  //选中的数组
@@ -334,7 +335,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
     }
 
     checkboxClicked(selectData, e) {
-        debugger
         var _this = this;
         var id = selectData.id;
         if (e.target.checked) {
@@ -585,6 +585,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * 蚁盘文件夹进入后，通过该函数完成返回
      */
     returnParentAtMoveModal() {
+        debugger
         var _this = this;
         var initPageNo = 1;
         if (_this.state.cloudTasKey == "cloudFile") {
