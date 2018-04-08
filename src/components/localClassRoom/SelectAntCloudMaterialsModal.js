@@ -12,7 +12,8 @@ const TabPane = Tabs.TabPane;
 
 var scheduleData = [];
 var materialsData = [];
-var selecArr = [];
+var selectArr = [];
+var selectedImgAtChosenModal = [];
 var materialsColumns = [{
     title: '文件',
     className: 'ant-table-selection-cont2',
@@ -60,9 +61,10 @@ class SelectAntCloudMaterialsModal extends React.Component {
             cloudImgDirectoryParentId: -1,  //蚁盘图片的文件夹的父id
             cloudTasKey: "cloudFile",
             selectNum: [],  //选中后显示的下标
-            selecArr: [],  //选中的数组
-            selectCount:0 ,//选中的数目
-            chosenImgArr: [] //已选图片在modal里的集合
+            selectArr: [],  //选中的数组
+            selectCount: 0,//选中的数目
+            chosenImgArr: [], //已选图片在modal里的集合
+            fileInto: false
 
         };
         this.SelectAntCloudMaterialsModalHandleCancel = this.SelectAntCloudMaterialsModalHandleCancel.bind(this);
@@ -70,6 +72,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         this.buildTargetDirImgData = this.buildTargetDirImgData.bind(this);
         this.getUserRootCloudFiles = this.getUserRootCloudFiles.bind(this);
         this.loadMoreAntCloudFlile = this.loadMoreAntCloudFlile.bind(this);
+        this.loadMoreAntCloudFlileImg = this.loadMoreAntCloudFlileImg.bind(this); //加载更多过滤图片
         this.getAntCountFileList = this.getAntCountFileList.bind(this);
         this.buildFileLogo = this.buildFileLogo.bind(this);
         this.buildFilterFileLogo = this.buildFilterFileLogo.bind(this);
@@ -89,6 +92,8 @@ class SelectAntCloudMaterialsModal extends React.Component {
         this.getSelectImgIndex = this.getSelectImgIndex.bind(this);
         this.deleteChosenImg = this.deleteChosenImg.bind(this);
         this.okFilterCloudFile = this.okFilterCloudFile.bind(this);
+        this.deleteCheckboxClicked = this.deleteCheckboxClicked.bind(this);
+        this.rebuildChosenImgArr = this.rebuildChosenImgArr.bind(this);
     }
 
     componentDidMount() {
@@ -99,9 +104,27 @@ class SelectAntCloudMaterialsModal extends React.Component {
         this.filterCloudFile(_this.state.cloudImgDirectoryParentId, _this.state.pageNo);
     }
 
+    componentDidUpdate() {
+        // if (this.state.fileInto) {
+        //     this.state.selectNum.forEach(function (v, i) {
+        //         if (v.content != '') {
+        //             document.getElementById(v.id + 'checkbox').click();
+        //         }
+        //     })
+        //     this.state.fileInto = false
+        // }
+    }
+
     componentWillReceiveProps(nextProps) {
         var isShow = nextProps.isShow;
         this.setState({isShow});
+        targetDirDataArray.splice(0);
+        selectArr.splice(0);
+        selectedImgAtChosenModal.splice(0);
+        this.getAntCountFileList();
+        var initCloudImgDirectoryParentId = -1;
+        var initPageNo = 1;
+        this.filterCloudFile(initCloudImgDirectoryParentId, initPageNo);
     }
 
     /**
@@ -109,8 +132,12 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * @constructor
      */
     SelectAntCloudMaterialsModalHandleCancel() {
+        this.state.selectNum = []; //选中后显示的下标
+        this.state.selectArr = [];//选中的数组
+        this.state.selectCount = 0; //选中的数目
         this.setState({"isShow": false});
         this.props.onCancel();
+
     }
 
     /**
@@ -129,9 +156,23 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var queryConditionJson = "";
         var antCloudFileCurrentPage = parseInt(this.state.antCloudFileCurrentPage) + 1;
         if (this.state.currentDirectoryIdAtMoveModal == -1) {
-            this.getUsselecArrerRootCloudFiles(this.state.loginUser.colUid, antCloudFileCurrentPage);
+            this.getUserRootCloudFiles(this.state.loginUser.colUid, antCloudFileCurrentPage);
         } else {
             this.listFiles(this.state.loginUser.colUid, this.state.currentDirectoryIdAtMoveModal, queryConditionJson, antCloudFileCurrentPage);
+        }
+    }
+
+    /**
+     * 蚁盘文件过滤图片加载更多的回调
+     */
+    loadMoreAntCloudFlileImg() {
+        var _this = this;
+        var queryConditionJson = "";
+        var antCloudFileCurrentPage = parseInt(this.state.antCloudFileCurrentPage) + 1;
+        if (this.state.currentDirectoryIdAtMoveModal == -1) {
+            this.filterCloudFile(this.state.cloudImgDirectoryParentId, antCloudFileCurrentPage);
+        } else {
+            message.error("无更多数据");
         }
     }
 
@@ -183,6 +224,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                 if (isEmpty(response) == false && response.length > 0) {
                     _this.buildTargetDirImgData(ret, false);
                     _this.setState({defaultArr: ret});
+                    // _this.state.defaultArr.push(ret);
                 } else {
                     message.error("无更多数据");
                 }
@@ -203,6 +245,9 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var filterImgData = [];
         var directoryCount = _this.getDirectoryCount(ret.response);
         if (isEmpty(ret.response) == false) {
+
+            console.log('ret', ret.response);
+
             ret.response.forEach(function (v, i) {
                 if (i == 0) {
                     if (v.parent) {
@@ -228,15 +273,25 @@ class SelectAntCloudMaterialsModal extends React.Component {
                             }
                         );
                     }
+                    console.log('selectNum', _this.state.selectNum);
+                    var item = _this.state.selectNum.filter(item => {
+                        if (item.id == v.id) {
+                            return item
+                        }
+                    });
+                    console.log(item);
                     var filterImg = <li>
                         <span className="selectTab_li">
                             <img className="topics_zanImg" onClick={showLargeImg} src={v.path + '?' + MIDDLE_IMG}
                                  alt={v.path}/>
                         </span>
-                        <span className="selectBox" id={v.id} onClick={_this.chooseSetectBox.bind(this, v)}>
-                            {_this.state.selectNum[i - directoryCount].content}
+                        <span className={item[0].content == '' ? 'selectBox' : 'selectBox on'} id={v.id}
+                              onClick={_this.chooseSetectBox.bind(this, v)}>
+                            {/*{_this.state.selectNum[i - directoryCount].content}*/}
+                            {item[0].content}
                         </span>
-                        <input type='checkbox' onClick={_this.checkboxClicked.bind(this, v)}/>
+                        <input type='checkbox' checked={item[0].content == '' ? false : true} id={v.id + 'checkbox'}
+                               onClick={_this.checkboxClicked.bind(this, v)}/>
                         <div className="check_text focus_3">{v.name}</div>
                     </li>
                     filterImgData.push(filterImg)
@@ -249,11 +304,11 @@ class SelectAntCloudMaterialsModal extends React.Component {
     /**
      * 获取当前文件夹内的子文件夹的个数
      */
-    getDirectoryCount(response){
+    getDirectoryCount(response) {
         var directoryCount = 0;
-        if(isEmpty(response)==false){
+        if (isEmpty(response) == false) {
             response.forEach(function (subFileOrDirectory) {
-                if(subFileOrDirectory.directory===true){
+                if (subFileOrDirectory.directory === true) {
                     directoryCount++;
                 }
             })
@@ -261,33 +316,48 @@ class SelectAntCloudMaterialsModal extends React.Component {
         return directoryCount;
     }
 
+    /**
+     * 选中图片的函数
+     */
+    chooseSetectBox(selectData, e) {
+        var id = selectData.id;
+        e.target.nextSibling.click();
+        console.log(id);
+        console.log(this.state.selectNum);
+
+    }
+
     checkboxClicked(selectData, e) {
+        debugger
         var _this = this;
+        var id = selectData.id;
         if (e.target.checked) {
             //选中
-            selecArr.push(selectData);
+            selectArr.push(selectData);
             this.state.selectNum.forEach(function (v, i) {
                 /*if (selectData.id == v.id) {
-                    v.content = selecArr[i].indexOf(selectData.id) + 1;
+                    v.content = selectArr[i].indexOf(selectData.id) + 1;
                 }*/
                 var index = _this.getSelectImgIndex(v.id);
-                if(index != -1){
+                if (index != -1) {
                     v.content = index;
                 }
+                $("#" + id).addClass('on');
             })
         } else {
             //取消选中
-            selecArr.forEach(function (v, i) {
+            selectArr.forEach(function (v, i) {
                 if (v.id == selectData.id) {
-                    selecArr.splice(i, 1);
+                    selectArr.splice(i, 1);
                 }
+                $("#" + id).removeClass('on');
             })
-            if (selecArr.length == 0) {
+            if (selectArr.length == 0) {
                 _this.state.selectNum.forEach(function (item, index) {
                     item.content = '';
                 })
             } else {
-                selecArr.forEach(function (m, j) {
+                selectArr.forEach(function (m, j) {
                     _this.state.selectNum.forEach(function (item, index) {
                         if (m.id == item.id) {
                             item.content = j + 1;
@@ -299,37 +369,28 @@ class SelectAntCloudMaterialsModal extends React.Component {
                 })
             }
         }
-        this.setState({selectCount:selecArr.length})
-        this.setState({selecArr:selecArr})
+        this.setState({selectCount: selectArr.length})
+        this.setState({selectArr: selectArr})
         this.buildTargetDirImgData(this.state.defaultArr, true);
     }
 
     /**
-     * 获取选中图片的索引位置,存在则+1
+     * 获取选中图片的索引位置,存在则+1selectCount
      * @param currentSelectedImgId
      * @returns {number}
      */
-    getSelectImgIndex(currentSelectedImgId){
+    getSelectImgIndex(currentSelectedImgId) {
         var index = -1;
-        for(var i=0;i<selecArr.length;i++){
-            var selectedImg = selecArr[i];
-            if(currentSelectedImgId == selectedImg.id){
-                index = i+1;
+        for (var i = 0; i < selectArr.length; i++) {
+            var selectedImg = selectArr[i];
+            if (currentSelectedImgId == selectedImg.id) {
+                index = i + 1;
                 break;
             }
         }
         return index;
     }
 
-    /**
-     * 选中图片的函数
-     */
-    chooseSetectBox(selectData, e) {
-        var id = selectData.id;
-        e.target.nextSibling.click();
-        console.log(id);
-        $("#"+id).toggleClass('on');
-    }
 
     /**
      * 生成蚁盘文件列表时，根据文件类型，构建不同的图标显示
@@ -353,6 +414,8 @@ class SelectAntCloudMaterialsModal extends React.Component {
      */
     filterIntoDirectoryInnerFile(id) {
         console.log(id);
+        // this.state.selectNum = [];
+        this.state.fileInto = true;
         this.filterCloudFile(id, 1);
     }
 
@@ -363,7 +426,12 @@ class SelectAntCloudMaterialsModal extends React.Component {
      */
 
     sendFilterCloudFile() {
-
+        this.state.selectNum = []; //选中后显示的下标
+        this.state.selectArr = [];//选中的数组
+        this.state.selectCount = 0; //选中的数目
+        this.setState({"isShow": false});
+        this.props.sendFilterCloudFile(selectArr);
+        selectArr.splice(0);
     }
 
     /**
@@ -577,51 +645,149 @@ class SelectAntCloudMaterialsModal extends React.Component {
     /**
      * 已选择图片的modal
      */
-    chosenImgModal(){
+    chosenImgModal() {
         var _this = this;
-        var chosenImgArr =[];
-
-        if (isEmpty(selecArr) == false) {
-            selecArr.forEach(function (v, i) {
-                var selectImgData = <li>
+        var chosenImgArr = [];
+        if (this.state.selectCount === 0) {
+            message.error("请选择图片");
+        } else {
+            selectedImgAtChosenModal.splice(0);
+            selectedImgAtChosenModal = selectArr.slice(0);
+            if (isEmpty(selectedImgAtChosenModal) == false) {
+                selectedImgAtChosenModal.forEach(function (v, i) {
+                    var selectImgData = <li>
                     <span className="selectTab_li">
-                        <img className="topics_zanImg" src={v.path + '?' + MIDDLE_IMG} alt={v.path} onClick={showLargeImg}/>
+                        <img className="topics_zanImg" src={v.path + '?' + MIDDLE_IMG} alt={v.path}
+                             onClick={showLargeImg}/>
                     </span>
-                    <div className="check_text focus_3" >{v.name}</div>
-                    <span className="deleteBox" id={v.id} onClick={_this.deleteChosenImg.bind(this, v.id)}></span>
-                    <input type='checkbox' />
-                </li>;
-                chosenImgArr.push(selectImgData);
-
-            })
+                        <div className="check_text focus_3">{v.name}</div>
+                        <span className="deleteBox" id={v.id} onClick={_this.deleteChosenImg.bind(_this, v)}></span>
+                        <input type='checkbox' onClick={_this.deleteCheckboxClicked.bind(_this, v)}/>
+                    </li>;
+                    chosenImgArr.push(selectImgData);
+                })
+            }
+            this.setState({chosenImgArr: chosenImgArr});
+            this.setState({chosenImgModalVisible: true});
         }
-
-        this.setState({chosenImgArr: chosenImgArr});
-        this.setState({chosenImgModalVisible: true});
 
     }
 
     /**
      * 关闭已选择图片的modal
      */
-    closeChosenHandleCancel(){
+    closeChosenHandleCancel() {
         this.setState({chosenImgModalVisible: false});
     }
 
     /**
      * 删除已选择图片
      */
-    deleteChosenImg(){
+    deleteChosenImg(chosenImg, e) {
+        var _this = this;
+        // e.target.nextSibling.click();
+        for (var i = 0; i < selectedImgAtChosenModal.length; i++) {
+            var imgObj = selectedImgAtChosenModal[i];
+            if (imgObj.id === chosenImg.id) {
+                selectedImgAtChosenModal.splice(i, 1);
+            }
+        }
+        _this.rebuildChosenImgArr();
+    }
+
+    deleteCheckboxClicked(chosenImgArr, e) {
+        var _this = this;
+        if (e.target.checked) {
+            _this.state.chosenImgArr.forEach(function (v, i) {
+                if (v.id == chosenImgArr.id) {
+                    selectArr.splice(i, 1);
+                }
+            })
+        }
 
     }
 
     /**
      * 确定已选择图片
      */
-    okFilterCloudFile(){
-
+    okFilterCloudFile() {
+        console.log(selectedImgAtChosenModal);
+        console.log(selectArr);
+        var _this = this;
+        selectArr.forEach(function (selectedImg) {
+            var isRemoved = _this.checkSelectedImgIsRemove(selectedImg);
+            if (isRemoved === true) {
+                _this.rebuildSelectedArray(selectedImg);
+            }
+        })
+        this.setState({chosenImgModalVisible: false});
     }
 
+    checkSelectedImgIsRemove(selectedImg) {
+        var isRemove = true;
+        for (var i = 0; i < selectedImgAtChosenModal.length; i++) {
+            var chosenImg = selectedImgAtChosenModal[i];
+            if (chosenImg.id === selectedImg.id) {
+                isRemove = false;
+                break;
+            }
+        }
+        return isRemove;
+    }
+
+    rebuildSelectedArray(selectData) {
+        var _this = this;
+        var id = selectData.id;
+        //取消选中
+        selectArr.forEach(function (v, i) {
+            if (v.id == selectData.id) {
+                selectArr.splice(i, 1);
+            }
+            $("#" + id).removeClass('on');
+        })
+        if (selectArr.length == 0) {
+            _this.state.selectNum.forEach(function (item, index) {
+                item.content = '';
+            })
+        } else {
+            selectArr.forEach(function (m, j) {
+                _this.state.selectNum.forEach(function (item, index) {
+                    if (m.id == item.id) {
+                        item.content = j + 1;
+                    }
+                    if (item.id == selectData.id) {
+                        item.content = '';
+                    }
+                })
+            })
+        }
+        _this.setState({selectCount: selectArr.length, selectArr: selectArr});
+        _this.buildTargetDirImgData(this.state.defaultArr, true);
+    }
+
+
+    /**
+     * 重新构建已选页面上的图片内容
+     */
+    rebuildChosenImgArr() {
+        var _this = this;
+        var chosenImgArr = [];
+        if (isEmpty(selectedImgAtChosenModal) == false) {
+            selectedImgAtChosenModal.forEach(function (v, i) {
+                var selectImgData = <li>
+                    <span className="topics_zan">
+                        <img className="topics_zanImg" src={v.path + '?' + MIDDLE_IMG} alt={v.path}
+                             onClick={showLargeImg}/>
+                    </span>
+                    <div className="img_title">{v.name}</div>
+                    <span className="deleteBox" id={v.id} onClick={_this.deleteChosenImg.bind(_this, v)}></span>
+                    <input type='checkbox' onClick={_this.deleteCheckboxClicked.bind(_this, v)}/>
+                </li>;
+                chosenImgArr.push(selectImgData);
+            })
+        }
+        _this.setState({chosenImgArr: chosenImgArr});
+    }
 
 
     render() {
@@ -645,7 +811,8 @@ class SelectAntCloudMaterialsModal extends React.Component {
                         <Col span={24} className="17_hei ant-form">
                             <Row>
                                 <Col span={24}>
-                                    <Icon type="left" className="ant-modal-header_i" onClick={this.returnParentAtMoveModal}/>
+                                    <Icon type="left" className="ant-modal-header_i"
+                                          onClick={this.returnParentAtMoveModal}/>
                                     <span className="ant-modal-header_font">蚁盘</span>
                                     <Tabs
                                         transitionName="" //禁用Tabs的动画效果
@@ -660,18 +827,25 @@ class SelectAntCloudMaterialsModal extends React.Component {
                                                    dataSource={this.state.targetDirDataArray}
                                                    onRowClick={this.pushFileFromAntCloud}
                                                    pagination={false}/>
-                                            {/*<div className="schoolgroup_operate schoolgroup_more more_classroom">
-                                            <a onClick={this.loadMoreAntCloudFlile} className="schoolgroup_more_a">加载更多</a>
-                                        </div>*/}
+                                            <div
+                                                className="schoolgroup_operate schoolgroup_more more_classroom more_fileimg">
+                                                <a onClick={this.loadMoreAntCloudFlile} className="schoolgroup_more_a">加载更多</a>
+                                            </div>
                                         </TabPane>
 
                                         <TabPane tab="蚁盘图片" key="cloudImg">
                                             <ul>
                                                 {this.state.filterImgData}
+                                                <div className="schoolgroup_operate schoolgroup_more more_classroom">
+                                                    <a onClick={this.loadMoreAntCloudFlileImg}
+                                                       className="schoolgroup_more_a">加载更多</a>
+                                                </div>
                                             </ul>
                                             <div className="footerButton check_img_footer">
-                                                <span className="check_img_btn" onClick={this.chosenImgModal}>已选择：<span className="check_img_number">{this.state.selectCount}</span></span>
-                                                <Button type="primary" className="check_img_btn2 right_ri"  onClick={this.sendFilterCloudFile}>使用</Button>
+                                                <span className="check_img_btn" onClick={this.chosenImgModal}>已选择：<span
+                                                    className="check_img_number">{this.state.selectCount}</span></span>
+                                                <Button type="primary" className="check_img_btn2 right_ri"
+                                                        onClick={this.sendFilterCloudFile}>使用</Button>
                                             </div>
                                         </TabPane>
                                     </Tabs>
@@ -694,12 +868,13 @@ class SelectAntCloudMaterialsModal extends React.Component {
                        footer={null}
                        closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
                 >
-                    <Icon type="left" className="ant-modal-header_i" onClick={this.returnParentAtMoveModal}/>
+                    <Icon type="left" className="ant-modal-header_i" onClick={this.closeChosenHandleCancel}/>
                     <span className="ant-modal-header_font">蚁盘</span>
                     <div className="modal_register_main">
                         <ul className="chosenBox">
                             {this.state.chosenImgArr}
                         </ul>
+
                         <div className="footerButton check_img_footer2">
                             <Button type="primary" className="check_img_btn2 right_ri"  onClick={this.okFilterCloudFile}>确定</Button>
                         </div>
@@ -707,11 +882,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
                 </Modal>
 
             </div>
-
-
-
-
-
         );
     }
 
