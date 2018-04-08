@@ -700,8 +700,9 @@ class SelectAntCloudMaterialsModal extends React.Component {
                         <ul className="chosenBox">
                             {this.state.chosenImgArr}
                         </ul>
-                        <Button type="primary"  onClick={this.okFilterCloudFile}>确定</Button>
-
+                        <div className="footerButton check_img_footer2">
+                            <Button type="primary" className="check_img_btn2 right_ri"  onClick={this.okFilterCloudFile}>确定</Button>
+                        </div>
                     </div>
                 </Modal>
 
