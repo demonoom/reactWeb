@@ -9026,7 +9026,7 @@ select.course_n:hover {
 }
 
 .selectTab .ant-tabs-nav{
-    margin-left: 120px;
+    margin-left: 154px;
 }
 .selectTab .ant-tabs-tabpane{
     overflow: auto;
@@ -9043,6 +9043,9 @@ select.course_n:hover {
     float: left;
     width: 100%;
     align-content: flex-start;
+}
+.selectTab ul{
+    height: calc(100% - 65px);
 }
 ul.chosenBox{
     padding:10px 0 10px 10px;
@@ -9286,11 +9289,6 @@ ul.chosenBox{
     color: #fff;
     text-align: center;
 }
-<<<<<<< HEAD
-.more_fileimg{
-    width: 100%;
-    top: 0;
-=======
 .check_img_footer2{
     position: fixed;
     bottom: 0;
@@ -9303,5 +9301,10 @@ ul.chosenBox{
 }
 .select_img_modal .ant-modal-content span.ant-modal-close-x{
     color: #827f82;
->>>>>>> 7555714c87965d8fb2f9925f48b0ced724509d05
+}
+.check_img_more{
+    display: inline-block;
+    width: 100%;
+    line-height: 28px;
+    text-align: center;
 }
