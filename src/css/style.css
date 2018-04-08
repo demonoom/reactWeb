@@ -9031,7 +9031,7 @@ select.course_n:hover {
 .selectTab .ant-tabs-tabpane{
     overflow: auto;
 }
-.selectTab ul{
+.selectTab ul, ul.chosenBox{
     margin: 0;
     padding: 0;
     display: flex;
@@ -9042,6 +9042,10 @@ select.course_n:hover {
     overflow-x: hidden;
     float: left;
     width: 100%;
+    align-content: flex-start;
+}
+ul.chosenBox{
+    padding:10px 0 10px 10px;
 }
 .selectTab li{
     width: 192px;
@@ -9123,17 +9127,21 @@ select.course_n:hover {
 }
 
 .chosenBox li{
-    width:100px;
-    height:130px;
+    width: 192px;
+    height:192px;
     text-align: center;
-    margin: 10px 10px 0 0;
+    margin: 0 10px 10px 0;
     display: inline-block;
     position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    background: #e5e5e5;
 }
 
 .chosenBox img{
-    width: 100px;
-    height: 100px;
+    max-width: 100%;
+    max-height: 100%;
 
 }
 
@@ -9165,7 +9173,8 @@ select.course_n:hover {
 }
 .select_img_modal .ant-modal-body{
     height:490px;
-    padding:0
+    padding:0;
+    position: relative;
 }
 .select_img_modal .ant-modal-body .ant-tabs-tabpane{
     padding:10px 0 10px 10px;
@@ -9262,7 +9271,7 @@ select.course_n:hover {
     display: inline-block;
     line-height: 28px;
     text-align: center;
-    background: #fff;
+    background: #f8f8f8;
 }
 .check_img_number {
     font-size: 16px;
@@ -9277,7 +9286,22 @@ select.course_n:hover {
     color: #fff;
     text-align: center;
 }
+<<<<<<< HEAD
 .more_fileimg{
     width: 100%;
     top: 0;
+=======
+.check_img_footer2{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 44px;
+    background: #f8f8f8;
+    padding: 7px 10px;
+    border-radius: 0 0 6px 6px;
+    margin-left: 0;
+}
+.select_img_modal .ant-modal-content span.ant-modal-close-x{
+    color: #827f82;
+>>>>>>> 7555714c87965d8fb2f9925f48b0ced724509d05
 }
