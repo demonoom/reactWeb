@@ -405,7 +405,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         if (directory) {
             fileLogo = <span className="selectTab_li">
                 <img className="pc_file" src={require('../images/pc_file.png')} alt=""
-                     onDoubleClick={_this.filterIntoDirectoryInnerFile.bind(this, v.id)}/>
+                     onClick={_this.filterIntoDirectoryInnerFile.bind(this, v.id)}/>
                 <div className="check_text focus_3">{name}</div>
             </span>;
         }
