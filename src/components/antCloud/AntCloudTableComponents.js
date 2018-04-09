@@ -835,7 +835,7 @@ pageNo   --- 页码，-1取全部
             this.unique(subjectParents);
             cloudTable.listCloudSubject(directoryObj.id, initPageNo)
         }
-        this.setState({currentPage:initPageNo});
+        this.setState({currentPage: initPageNo});
     },
     /**
      * 点击文件夹名称，进入文件夹内部的文件列表   cloudFileId   --- 目录的id  pageNo        --- 页码，-1取全部
@@ -1093,30 +1093,30 @@ pageNo   --- 页码，-1取全部
         var getFileType = cloudTable.state.getFileType;
         if (getFileType == "myFile") {
             if (this.state.activeKey == "1") {
-                if(this.state.currentDirectoryId!=-1){
+                if (this.state.currentDirectoryId != -1) {
                     var queryConditionJson = "";
                     this.listFiles(this.state.ident,
                         this.state.currentDirectoryId, queryConditionJson, pageNo, "mainTable");
-                }else{
+                } else {
                     cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
                     cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
                 }
 
             } else {
-                if(this.state.currentSubjectDirectoryId!=-1){
-                    this.listCloudSubject(this.state.currentSubjectDirectoryId,pageNo);
-                }else{
+                if (this.state.currentSubjectDirectoryId != -1) {
+                    this.listCloudSubject(this.state.currentSubjectDirectoryId, pageNo);
+                } else {
                     cloudTable.setState({activeKey: '2'});
                     cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, pageNo)
                 }
             }
             // cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
         } else {
-            if(this.state.currentDirectoryId!=-1){
+            if (this.state.currentDirectoryId != -1) {
                 var queryConditionJson = "";
                 this.listFiles(this.state.ident,
                     this.state.currentDirectoryId, queryConditionJson, pageNo, "mainTable");
-            }else{
+            } else {
                 this.getUserChatGroupRootCloudFiles(this.state.ident, pageNo);
             }
         }
@@ -1934,33 +1934,6 @@ pageNo   --- 页码，-1取全部
      * 显示分享文件的窗口
      */
     showShareModal(fileObject) {
-        var _this = this;
-        /*//分享到蚁巢的业务逻辑
-        var shareFileId = fileObject.id;
-        var param = {
-            "method": 'share',
-            "operateUserId": sessionStorage.getItem("ident"),
-            "cloudFileIds": shareFileId,
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                if (ret.success == true && ret.msg == "调用成功") {
-                    var response = ret.response;
-                    //cloudTable.shareFile(response);
-                    /!*远程调试*!/
-                    var globalSrc = "http://" + 'www.maaee.com' + ":" + 80 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
-                    /!*本地调试*!/
-                    // var filePath = "http://" + '192.168.1.34' + ":" + 8080 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
-                    var globalTitle = fileObject.name;
-                    // _this.setState({globalTitle,globalSrc});
-                    //显示文件分享的引导页
-                    _this.props.showShareGuideModal(globalTitle,globalSrc);
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });*/
         cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
         cloudTable.getAntGroup();
         this.getStructureUsers();
@@ -2036,10 +2009,9 @@ pageNo   --- 页码，-1取全部
         }
 
         /*远程调试*/
-        var filePath = "http://" + 'www.maaee.com' + ":" + 80 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
+        //var filePath = "http://" + 'www.maaee.com' + ":" + 80 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
 
-        /*本地调试*/
-        // var filePath = "http://" + '192.168.1.34' + ":" + 8080 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
+        var filePath = "http://jiaoxue.maaee.com:8091/#/fileShareLink?shareId=" + response + "&userId=" + sessionStorage.getItem("ident");
 
         var attachement = {
             "address": filePath,

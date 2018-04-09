@@ -241,6 +241,7 @@ const AntGroupTabComponents = React.createClass({
         window.__sendfile__ = this.sendFile;
         //查看分享的文件
         window.__noomShareId__ = this.noomShareId;
+        window.__noomSaveFile__ = this.noomSaveFile;
     },
 
     componentDidUpdate() {
@@ -508,6 +509,14 @@ const AntGroupTabComponents = React.createClass({
         antGroup.setState({
             currentPage: pageNo,
         });
+    },
+
+    /**
+     * 保存分享文件的回调(新版)
+     */
+    noomSaveFile(id) {
+        this.saveFile(id);
+        this.setState({isShare: true});
     },
 
     /**
@@ -2274,6 +2283,12 @@ const AntGroupTabComponents = React.createClass({
                         var colUtype = fromUser.colUtype;
                         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                         var content = messageOfSinge.content;
+                        if (colUtype == 'SGZH_WEB' && loginUser.colUid == 119665) {
+                            content = JSON.parse(messageOfSinge.content).messageTip;
+                            var flowTypeObj = JSON.parse(messageOfSinge.content);
+                            delete flowTypeObj.messageTip;
+                            antGroup.setState({FlowType: flowTypeObj});
+                        }
                         var uuidsArray = [];
                         var uuid = messageOfSinge.uuid;
                         var toId = messageOfSinge.toId;
@@ -3005,12 +3020,23 @@ const AntGroupTabComponents = React.createClass({
      * 审批助手逻辑
      */
     getShengpiMes(id) {
-        let obj = {
+
+        var obj = {
             mode: 'teachingAdmin',
             title: '审批助手',
+            // url: 'http://www.maaee.com/Excoord_PhoneService/gongzhonghao/show/' + id + '/' + antGroup.state.loginUser.colUid + str,
             url: 'http://www.maaee.com/Excoord_PhoneService/gongzhonghao/show/' + id + '/' + antGroup.state.loginUser.colUid,
             width: '380px'
         };
+
+        if (antGroup.state.loginUser.colUid == 119665) {
+            var FlowType = antGroup.state.FlowType;
+            var str = '';
+            for (var k in FlowType) {
+                str += '?' + k + '=' + FlowType[k];
+            }
+            obj.url = 'http://www.maaee.com/Excoord_PhoneService/gongzhonghao/show/' + id + '/' + antGroup.state.loginUser.colUid + str
+        }
 
         LP.Start(obj);
     },
@@ -3114,7 +3140,6 @@ const AntGroupTabComponents = React.createClass({
      * 查看链接的回调
      */
     readLink(id) {
-        console.log(id);
         let obj = {mode: 'teachingAdmin', url: id, title: ""};
         LP.Start(obj);
     },
@@ -3394,7 +3419,7 @@ const AntGroupTabComponents = React.createClass({
                         } else if (extname == 'xls') {
                             styleImg = '../src/components/images/xls.png';
                         } else {
-                            styleImg = '../src/components/images/maaee_link_file_102_102.png';
+                            styleImg = '../src/components/images/lALPBY0V4pdU_AxmZg_102_102.png';
                         }
                     }
 
