@@ -11,6 +11,7 @@ import ConfirmModal from '../components/ConfirmModal';
 import GuideModal from '../components/localClassRoom/GuideModal';
 import SubjectGuideModal from '../components/localClassRoom/SubjectGuideModal';
 import SendPicModel from '../components/antGroup/SendPicModel'
+import {doWebService} from '../WebServiceHelper';
 
 var connection = null;
 var ms = null;
@@ -209,12 +210,11 @@ const LocalClassRoom = React.createClass({
     },
 
     /**
-     * 在课堂中使用此材料
+     * 从教学空间里使用此材料
      */
     useMaterialInClass(materialId){
         var _this = this;
         var vclassId = this.state.vid;
-        console.log(materialId)
         var param = {
             "method": 'useMaterialInClass',
             "vclassId": vclassId, //虚拟课堂id
@@ -223,6 +223,28 @@ const LocalClassRoom = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                // pushMaterialsToClass(ret);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 从蚁盘文件里使用此材料
+     */
+    useCloudFileInClass(cid){
+        debugger
+        var _this = this;
+        var vclassId = this.state.vid;
+        var param = {
+            "method": 'useCloudFileInClass',
+            "vclassId": vclassId, //虚拟课堂id
+            "cid": cid, //材料id
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
             },
             onError: function (error) {
                 message.error(error);
@@ -282,6 +304,7 @@ const LocalClassRoom = React.createClass({
     },
 
     sendFilterCloudFile(selectArr) {
+        var cidArray = [];
         if (isEmpty(selectArr)) {
             message.error('请选择图片;')
             return
@@ -289,7 +312,10 @@ const LocalClassRoom = React.createClass({
         var url = '';
         selectArr.forEach(function (v, i) {
             url += v.path + ',';
+            cidArray.push(v.id);
         })
+        //保存到课堂回顾的蚁盘文件id
+        var cid = cidArray.join(",");
         var imgURL = url.replace("60.205.86.217", "www.maaee.com");
         imgURL = imgURL.replace("http", "https");
         var imgsUrl = imgURL.substr(0, imgURL.length - 1);
@@ -305,6 +331,8 @@ const LocalClassRoom = React.createClass({
         //让新版的学生端显示ppt
         var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
         connection.send(p1);
+        //将当前推送的图片保存到课堂的资源回顾中
+        this.useCloudFileInClass(cid);
         this.setState({classRoomUrl});
         this.closeAntCloudMaterialsModal();
     },
@@ -354,6 +382,7 @@ const LocalClassRoom = React.createClass({
                 <SelectAntCloudMaterialsModal sendFilterCloudFile={this.sendFilterCloudFile}
                                               isShow={this.state.antCloudMaterialsModalIsShow}
                                               onCancel={this.closeAntCloudMaterialsModal}
+                                              useCloudFileInClass={this.useCloudFileInClass}
                                               pushMaterialsToClass={this.pushMaterialsToClass}></SelectAntCloudMaterialsModal>
                 <SelectScheduleMaterialsModal isShow={this.state.schduleMaterialsModalIsShow}
                                               onCancel={this.closeScheduleMaterialsModal}

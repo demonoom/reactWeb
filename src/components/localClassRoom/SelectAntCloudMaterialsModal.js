@@ -605,7 +605,9 @@ class SelectAntCloudMaterialsModal extends React.Component {
             //蚁盘图片的回退逻辑
             if (_this.state.cloudImgDirectoryParentId == 0) {
                 //回到根目录
+                message.error("无更多数据");
                 _this.filterCloudFile(-1, initPageNo);
+
             } else {
                 //回到上级目录
                 _this.filterIntoDirectoryInnerFile(_this.state.cloudImgDirectoryParentId);
@@ -618,11 +620,11 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * @param file
      */
     pushFileFromAntCloud(fileOrDirectory) {
-        var _this = this;
-        console.log(fileOrDirectory);
+        debugger
         var fileObj = fileOrDirectory.fileObj;
         var fileName = fileObj.name;
         var isDirectory = fileObj.directory;
+        var cid = fileObj.id;
         if (isDirectory == true) {
             this.intoDirectoryInner(fileObj);
         } else {
@@ -630,11 +632,13 @@ class SelectAntCloudMaterialsModal extends React.Component {
             //通过截取文件后缀名的形式，完成对上传文件类型的判断
             var fileType = fileName.substring(lastPointIndex + 1);
             if (fileType == "ppt" || fileType == "pptx") {
+                this.props.useCloudFileInClass(cid);
                 //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
                 this.props.pushMaterialsToClass(fileObj.htmlPath);
                 this.SelectAntCloudMaterialsModalHandleCancel();
             }else if (fileType == "pdf" || fileType == "doc" || fileType == "docx") {
                 //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
+                this.props.useCloudFileInClass(cid);
                 this.props.pushMaterialsToClass(fileObj.pdfPath);
                 this.SelectAntCloudMaterialsModalHandleCancel();
             } else {
@@ -824,7 +828,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                                 <Col span={24}>
                                     <Icon type="left" className="ant-modal-header_i"
                                           onClick={this.returnParentAtMoveModal}/>
-                                    <span className="ant-modal-header_font">蚁盘</span>
+                                    {/*<span className="ant-modal-header_font">蚁盘</span>*/}
                                     <Tabs
                                         transitionName="" //禁用Tabs的动画效果
                                         className="selectTab"
