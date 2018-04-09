@@ -582,7 +582,7 @@ const AntNestTabComponents = React.createClass({
                 }
                 if (topicReplayInfo.type == 3 && isEmpty(topicReplayInfo.topicVoice) == false) {
                     //topicReplayInfo.type == 3为新加的语音作业的回复,content为空将不再展示,只展示topicVoice中的语音和评分
-                    var topicReplayCard = <div style={{marginBottom: '15px'}}>
+                    var topicReplayCard = <div className="antnest_line">
                         <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
                         <ul>
                             <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>
@@ -614,7 +614,7 @@ const AntNestTabComponents = React.createClass({
                         </ul>
                     </div>;
                 } else {
-                    var topicReplayCard = <div style={{marginBottom: '15px'}}>
+                    var topicReplayCard = <div className="antnest_line">
                         <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
                         <ul>
                             <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>

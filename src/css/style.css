@@ -3890,7 +3890,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     flex-direction: row;
     font-size: 14px;
     line-height: 24px;
-    word-break: break-word;
+    word-break: break-all;
     white-space: pre-wrap;
     border: 1px solid #eee;
     color: #333
@@ -3908,7 +3908,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     flex-direction: row;
     font-size: 14px;
     line-height: 24px;
-    word-break: break-word;
+    word-break: break-all;
     white-space: pre-wrap;
     border: 1px solid #eee;
     color: #333;
@@ -9062,7 +9062,7 @@ select.course_n:hover {
 .audio_play_ant1 {
     position: absolute;
     right: 0;
-    top: 4px;
+    top: 0;
     line-height: 24px;
     color: #f40;
 }
@@ -9076,6 +9076,14 @@ select.course_n:hover {
     top: -2px;
 }
 
+<
+<
+<
+<
+<
+<
+<
+HEAD
 .noomUpLoadFile {
     border-radius: 50%;
     border: 1px solid #F75D45;
@@ -9084,4 +9092,345 @@ select.course_n:hover {
 
 .noomUpLoadFileDiv {
     margin-bottom: 10px;
+
+=
+=
+=
+=
+=
+=
+=
+.antnest_line {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f3f3f3;
+    padding-bottom: 15px;
+}
+
+/*本地课堂*/
+.cloud_modal .ant-modal-footer {
+    text-align: right !important;
+    position: relative;
+}
+
+.cloud_modal .select_Num {
+    position: absolute;
+    left: 0;
+}
+
+.selectTab .ant-tabs-nav {
+    margin-left: 154px;
+}
+
+.selectTab .ant-tabs-tabpane {
+    overflow: auto;
+}
+
+.selectTab ul, ul.chosenBox {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 0;
+    height: calc(100% - 44px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    float: left;
+    width: 100%;
+    align-content: flex-start;
+}
+
+.selectTab ul {
+    height: calc(100% - 65px);
+}
+
+ul.chosenBox {
+    padding: 10px 0 10px 10px;
+}
+
+.selectTab li {
+    width: 192px;
+    height: 192px;
+    text-align: center;
+    margin: 0 10px 10px 0;
+    display: inline-block;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    background: #e5e5e5;
+}
+
+.selectTab li:nth-child(3n) {
+    margin-right: 0;
+}
+
+.selectTab_li {
+    width: 192px;
+    height: 192px;
+    text-align: center;
+    margin: 0;
+    display: inline-block;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.selectTab img {
+    max-width: 100%;
+    max-height: 100%;
+
+}
+
+.check_text {
+    position: absolute;
+    bottom: 0;
+    height: 26px;
+    background: rgba(255, 255, 255, 0.6);
+    line-height: 26px;
+    width: 100%;
+    text-align: center;
+    color: #4e4e4e;
+    font-size: 14px;
+}
+
+.selectTab li input {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    /*width: 30px;*/
+    /*height: 30px;*/
+    display: none;
+
+}
+
+.selectTab .selectBox {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%;
+    background: #ffffff;
+    font-size: 18px;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: url(../components/images/right_icon.png) no-repeat;
+    color: #fff;
+    background-size: 30px;
+}
+
+.on {
+    background: #5d92f8 !important;
+    color: #ffffff !important;
+}
+
+.img_title {
+    line-height: 10px;
+}
+
+.selectTab .antnest_name {
+    line-heigh-t: 0;
+}
+
+.chosenBox li {
+    width: 192px;
+    height: 192px;
+    text-align: center;
+    margin: 0 10px 10px 0;
+    display: inline-block;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    background: #e5e5e5;
+}
+
+.chosenBox img {
+    max-width: 100%;
+    max-height: 100%;
+
+}
+
+.chosenBox .deleteBox {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    font-size: 18px;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    background: url(../components/images/deleteBox.png) no-repeat;
+}
+
+.chosenBox li input {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    /*width: 30px;*/
+    /*height: 30px;*/
+    display: none;
+
+}
+
+.select_img_modal .ant-modal-content {
+    height: 540px
+}
+
+.select_img_modal .ant-modal-body {
+    height: 490px;
+    padding: 0;
+    position: relative;
+}
+
+.select_img_modal .ant-modal-body .ant-tabs-tabpane {
+    padding: 10px 0 10px 10px;
+    height: 448px;
+    overflow: hidden;
+    position: relative;
+}
+
+.select_img_modal .ant-modal-title {
+    text-align: center;
+}
+
+.ant-modal-header {
+    background: #f9f9f9;
+    color: #827f82;
+    font-size: 16px;
+}
+
+.ant-modal-header_i {
+    font-size: 22px;
+    color: #0078e4;
+    font-weight: normal;
+    cursor: pointer;
+    position: absolute;
+    top: -36px;
+    left: 8px;
+}
+
+.ant-modal-header_font {
+    font-weight: normal;
+    cursor: pointer;
+    position: absolute;
+    top: -37px;
+    left: 36px;
+    font-size: 16px;
+    color: #827f82;
+}
+
+/*.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab{*/
+/*background: #5d9af2;*/
+/*font-size: 18px;*/
+/*color: #fff;*/
+/*border: #5d9af2 2px solid ;*/
+/*}*/
+/*.select_img_moda .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active{*/
+/*background: #fff !important;*/
+/*color: #5d9af2 !important;*/
+/*}*/
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+    border: 2px solid #5d9af2;
+    background: #5d9af2;
+    height: 34px;
+    line-height: 30px;
+    padding: 0 16px;
+    margin-right: 0px;
+}
+
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:hover {
+    color: #fff
+}
+
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
+    border-color: #5d9af2;
+    color: #5d9af2;
+    background: #fff;
+}
+
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active:hover {
+    color: #5d9af2;
+}
+
+.select_img_modal .ant-tabs {
+    color: #fff;
+    padding: 10px 0 0 0;
+}
+
+.select_img_modal .ant-tabs-nav {
+    height: 32px;
+}
+
+.select_img_modal .ant-tabs-bar {
+    border-bottom: 2px solid #5d9af2;
+    margin: 0 10px;
+}
+
+.select_img_modal .ant-tabs-nav-container {
+    margin-bottom: -2px;
+}
+
+.check_img_footer {
+    position: fixed;
+    bottom: -17px;
+    width: 100%;
+    height: 44px;
+    background: #f8f8f8;
+    padding: 7px 10px;
+    border-radius: 0 0 6px 6px;
+    margin-left: -10px;
+}
+
+.check_img_btn {
+    border: 1px solid #5d9af2;
+    width: 100px;
+    border-radius: 4px;
+    height: 30px;
+    font-size: 14px;
+    color: #5d9af2;
+    display: inline-block;
+    line-height: 28px;
+    text-align: center;
+    background: #f8f8f8;
+}
+
+.check_img_number {
+    font-size: 16px;
+}
+
+.check_img_btn2 {
+    border: 1px solid #5d9af2;
+    width: 80px;
+    background: #5d9af2;
+    border-radius: 4px;
+    height: 30px;
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+}
+
+.check_img_footer2 {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 44px;
+    background: #f8f8f8;
+    padding: 7px 10px;
+    border-radius: 0 0 6px 6px;
+    margin-left: 0;
+}
+
+.select_img_modal .ant-modal-content span.ant-modal-close-x {
+    color: #827f82;
+}
+
+.check_img_more {
+    display: inline-block;
+    width: 100%;
+    line-height: 28px;
+    text-align: center;
 }
