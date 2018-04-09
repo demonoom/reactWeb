@@ -90,7 +90,7 @@ const UploadImgComponents = React.createClass({
             <div className="ding_modal_left_noom">
                 <Upload {...props}>
                     <div className='noom_cursor noomUpLoadFileDiv'>
-                        <Icon className="noomUpLoadFile" type="plus"/>
+                        <Icon className="noomUpLoadFile" type="plus-circle" />
                         <span>添加文件</span>
                     </div>
                 </Upload>

@@ -97,10 +97,10 @@ class MakeDingModal extends React.Component {
                 footer={[]}
                 className="new_add_ding"
             >
-                <div>
+                <div className="noomUpLoadFile_wrap">
                     <UploadImgComponents callBackParent={this.getUploadedImgList}
                                          fileList={this.state.topicImgUrl}/>
-                    <Button type="primary" onClick={this.upLoad}>上传</Button>
+                    <div className="class_right"><Button className="noomUpLoadFile_btn" type="primary" onClick={this.upLoad}>上传</Button></div>
                 </div>
             </Modal>
         );

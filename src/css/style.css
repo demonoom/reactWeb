@@ -9075,31 +9075,24 @@ select.course_n:hover {
     position: relative;
     top: -2px;
 }
-
-<
-<
-<
-<
-<
-<
-<
-HEAD
+.noomUpLoadFile_wrap .ant-upload-list{
+    padding-left:22px;
+}
 .noomUpLoadFile {
     border-radius: 50%;
-    border: 1px solid #F75D45;
-    margin-right: 7px;
+    font-size: 15px;
+    color: #309ffb;
+    margin-right: 8px;
 }
-
+.noomUpLoadFile_btn{
+    width:66px;
+    margin-top: 22px;
+}
 .noomUpLoadFileDiv {
     margin-bottom: 10px;
-
-=
-=
-=
-=
-=
-=
-=
+    color: #309ffb;
+    font-size: 14px;
+}
 .antnest_line {
     margin-bottom: 15px;
     border-bottom: 1px solid #f3f3f3;
@@ -9297,13 +9290,13 @@ ul.chosenBox {
     text-align: center;
 }
 
-.ant-modal-header {
+.select_img_modal .ant-modal-header {
     background: #f9f9f9;
     color: #827f82;
     font-size: 16px;
 }
 
-.ant-modal-header_i {
+.select_img_modal .ant-modal-header_i {
     font-size: 22px;
     color: #0078e4;
     font-weight: normal;
@@ -9313,7 +9306,7 @@ ul.chosenBox {
     left: 8px;
 }
 
-.ant-modal-header_font {
+.select_img_modal .ant-modal-header_font {
     font-weight: normal;
     cursor: pointer;
     position: absolute;
