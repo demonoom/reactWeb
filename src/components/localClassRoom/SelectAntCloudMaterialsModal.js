@@ -116,7 +116,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
         this.getAntCountFileList();
         var initCloudImgDirectoryParentId = -1;
         var initPageNo = 1;
-        console.log("==========componentWillReceiveProps===========");
         this.filterCloudFile(initCloudImgDirectoryParentId, initPageNo);
     }
 
@@ -204,7 +203,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var _this = this;
         //_this.setState({currentDirectoryId: -1, totalCount: 0});
         this.setState({"currentDirectoryIdAtImgModal": parentId});
-        console.log("1111111111111111");
         var param = {
             "method": 'filterCloudFile',
             "userId": this.state.loginUser.colUid, //23836
@@ -847,7 +845,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                                         </TabPane>
 
                                         <TabPane tab="蚁盘图片" key="cloudImg">
-                                            <ul>
+                                            <ul className="imgLi">
                                                 {this.state.filterImgData}
                                             </ul>
                                             <div className="check_img_more ">
@@ -884,7 +882,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                     <Icon type="left" className="ant-modal-header_i" onClick={this.closeChosenHandleCancel}/>
                     <span className="ant-modal-header_font">蚁盘</span>
                     <div className="modal_register_main">
-                        <ul className="chosenBox">
+                        <ul className="chosenBox imgLi">
                             {this.state.chosenImgArr}
                         </ul>
 

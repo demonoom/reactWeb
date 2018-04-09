@@ -56,6 +56,7 @@ class SelectScheduleMaterialsModal extends React.Component {
         this.getMaterialsBySheduleId = this.getMaterialsBySheduleId.bind(this);
         this.buildMaterialsFileLogo = this.buildMaterialsFileLogo.bind(this);
         this.selectMaterials = this.selectMaterials.bind(this);
+
     }
 
     componentDidMount() {
@@ -173,16 +174,27 @@ class SelectScheduleMaterialsModal extends React.Component {
      * 从备课计划列表中，选中一个文件
      */
     selectMaterials(record, index, event) {
+        var _this = this;
         console.log(record);
+        var fileObj = record.materialsObj;
+        var fileName = fileObj.name;
+        var materialId = fileObj.id;
+        var lastPointIndex = fileName.lastIndexOf(".");
+        //通过截取文件后缀名的形式，完成对上传文件类型的判断
+        var fileType = fileName.substring(lastPointIndex + 1);
         if(isEmpty(record.htmlPath)){
             message.error("暂不支持打开该文件");
             return;
-        }else{
-            //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
-            this.props.pushMaterialsToClass(record);
-            this.SelectScheduleMaterialsModalHandleCancel();
         }
+        if (fileType == "ppt" || fileType == "pptx") {
+            this.props.useMaterialInClass(materialId);
+            //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
+            this.props.pushMaterialsToClass(record.htmlPath);
+        }
+        this.SelectScheduleMaterialsModalHandleCancel();
+
     }
+
 
     /**
      * 生成备课计划资源文件列表时，根据文件类型，构建不同的图标显示

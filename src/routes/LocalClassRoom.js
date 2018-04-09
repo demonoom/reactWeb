@@ -79,7 +79,6 @@ const LocalClassRoom = React.createClass({
             // 显示消息
             onMessage: function (info) {
                 var data = info.data;
-                debugger
                 console.log("=============================================>" + info);
                 switch (info.command) {
                     case "teacherLogin":
@@ -210,6 +209,28 @@ const LocalClassRoom = React.createClass({
     },
 
     /**
+     * 在课堂中使用此材料
+     */
+    useMaterialInClass(materialId){
+        var _this = this;
+        var vclassId = this.state.vid;
+        console.log(materialId)
+        var param = {
+            "method": 'useMaterialInClass',
+            "vclassId": vclassId, //虚拟课堂id
+            "materialId": materialId, //材料id
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+               // pushMaterialsToClass(ret);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
      * 下课，断开与课堂的连接
      */
     disConnectClassRoom() {
@@ -336,7 +357,8 @@ const LocalClassRoom = React.createClass({
                                               pushMaterialsToClass={this.pushMaterialsToClass}></SelectAntCloudMaterialsModal>
                 <SelectScheduleMaterialsModal isShow={this.state.schduleMaterialsModalIsShow}
                                               onCancel={this.closeScheduleMaterialsModal}
-                                              pushMaterialsToClass={this.pushMaterialsToClass}></SelectScheduleMaterialsModal>
+                                              pushMaterialsToClass={this.pushMaterialsToClass}
+                                              useMaterialInClass={this.useMaterialInClass} ></SelectScheduleMaterialsModal>
                 <SelectAntCloudSubjectsModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal}
                                              pushSubjectToClass={this.pushSubjectToClass}></SelectAntCloudSubjectsModal>
                 <ConfirmModal ref="confirmModal"
