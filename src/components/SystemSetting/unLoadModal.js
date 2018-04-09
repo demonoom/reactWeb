@@ -50,7 +50,8 @@ class MakeDingModal extends React.Component {
     /*获取上传图片信息*/
     getUploadedImgList(file, isRemoved) {
         this.removeImgViewStyle(); //移除图片上传组件的pointerEvents样式属性
-        var imgUrl = file.response;
+        var imgUrl = file.response + '?' + file.name;
+        // var imgUrl = file.response;
         if (isEmpty(isRemoved) == false && isRemoved == "removed") {
             for (var i = 0; i < this.state.topicImgUrl.length; i++) {
                 if (this.state.topicImgUrl[i] == imgUrl) {
@@ -79,7 +80,7 @@ class MakeDingModal extends React.Component {
         var arr = this.state.topicImgUrl;
         //传给littlePanel
         var callbackId = this.state.callbackId;
-        window.__noomUpLoad__(arr,callbackId);
+        window.__noomUpLoad__(arr, callbackId);
         //设置model关闭
         this.MakeDingModalHandleCancel();
     }
@@ -96,10 +97,10 @@ class MakeDingModal extends React.Component {
                 footer={[]}
                 className="new_add_ding"
             >
-                <div>
+                <div className="noomUpLoadFile_wrap">
                     <UploadImgComponents callBackParent={this.getUploadedImgList}
                                          fileList={this.state.topicImgUrl}/>
-                    <Button type="primary" onClick={this.upLoad}>上传</Button>
+                    <div className="class_right"><Button className="noomUpLoadFile_btn" type="primary" onClick={this.upLoad}>上传</Button></div>
                 </div>
             </Modal>
         );

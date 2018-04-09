@@ -184,7 +184,6 @@
                 //data.method方式
                 //data.callbackId回调方法名
                 //data.errorbackId错误回调方法名
-                // console.log(data);
                 if (data.method == 'selectPictures') {
 
                     //调用选择图片插件，获取图片的路径存入paths
@@ -206,6 +205,7 @@
 
                 } else if (data.method == 'openNewPage') {
                     // console.log(data.title);
+                    console.log(data);
                     let obj = {mode: 'teachingAdmin', title: '', url: data.url};
                     LP.Start(obj);
                 } else if (data.method == 'setPanelTitle') {
@@ -232,6 +232,12 @@
                     if (data.shareAble) {
                         document.getElementById(data.windowName + '_share').style.display = 'none'
                     }
+                } else if (data.method == 'saveFile') {
+                    //保存到蚁盘,只返回了文件id
+                    window.__noomSaveFile__(data.id);
+                } else if (data.method == 'downLoadFile') {
+                    //下载文件,返回了文件对象  window.open(url,'_blank')
+                    window.location = JSON.parse(data.cloudFile).path;
                 }
             });
             isAddedListener = true;
