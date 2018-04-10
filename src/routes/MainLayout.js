@@ -50,6 +50,7 @@ import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
 import zh from 'react-intl/locale-data/zh';
 import en from 'react-intl/locale-data/en';
+import enUS from 'antd/lib/locale-provider/en_US';
 import GuideModal from '../components/GuideModal';
 import {createStore} from 'redux';
 import {doWebService} from '../WebServiceHelper';
@@ -2859,313 +2860,302 @@ const MainLayout = React.createClass({
                     </Row>;
                 break;
         }
-        //
-        //
-        //
+        var localProviderLanguage = "";
+        if(local=="en"){
+            localProviderLanguage = enUS;
+        }
         return (
-            <IntlProvider
-                locale={local}
-                messages={messageFromLanguage}
-            >
-                <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
+            <LocaleProvider locale={localProviderLanguage}>
+                <IntlProvider
+                    locale={local}
+                    messages={messageFromLanguage}
+                >
+                    <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
-                    <aside className="ant-layout-sider">
-                        <div className="ant-layout-logo">
-                            <UserFace callbackParent={this.getTeacherResource}/>
-                        </div>
-                        <Menu mode="inline" theme="dark"
-                              defaultSelectedKeys={[this.state.currentKey]}
-                              selectedKeys={[this.state.currentKey]}
-                            // onClick={this.toolbarClick.bind(this,event,this.state.vipKey)}>
-                              onClick={this.toolbarClick}>
-                            <Menu.Item key="message" className="padding_menu">
-                                <i className="icon_menu_ios icon_message"></i>
-                                <b className="ding_alert" ref='msgAlert'></b>
-                                <div className="tan">
-                                    <FormattedMessage
-                                        id='chat'
-                                        description='动态'
-                                        defaultMessage='动态'
-                                    />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item key="antNest" className="padding_menu">
-                                <i className="icon_menu_ios icon_yichao1"></i>
-                                <div className="tan">
-                                    <FormattedMessage
-                                        id='antNest'
-                                        description='蚁巢'
-                                        defaultMessage='蚁巢'
-                                    />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item key="teachSpace" className="padding_menu">
-                                <i className="icon_menu_ios icon_jiaoxue"></i>
-                                <div className="tan">
-                                    <FormattedMessage
-                                        id='teachingSpace'
-                                        description='教学空间'
-                                        defaultMessage='教学空间'
-                                    />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item key="antGroup" className="padding_menu">
-                                <i className="icon_menu_ios icon_antgroup"></i>
-                                <div className="tan">
-                                    <FormattedMessage
-                                        id='contacts'
-                                        description='蚁群'
-                                        defaultMessage='蚁群'
-                                    />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item key="antCloudClassRoom" className="padding_menu">
-                                <i className="icon_menu_ios icon_cloud"></i>
-                                <div className="tan">
-                                    <FormattedMessage
-                                        id='cloudClass'
-                                        description='云校'
-                                        defaultMessage='云校'
-                                    />
-                                </div>
-                            </Menu.Item>
-                            <Menu.Item key="antCloud" className="padding_menu">
-                                <i className="icon_menu_ios icon_antdisk"></i>
-                                <div className="tan">
-                                    <FormattedMessage
-                                        id='cloudDisk'
-                                        description='蚁盘'
-                                        defaultMessage='蚁盘'
-                                    /></div>
-                            </Menu.Item>
-                            <Menu.Item key="systemSetting" className="padding_menu">
-                                <i className="icon_menu_ios icon_schoolGroup"></i>
-                                <div className="tan">
-                                    <FormattedMessage
-                                        id='courseMangement'
-                                        description='教务管理'
-                                        defaultMessage='教务管理'
-                                    /></div>
-                            </Menu.Item>
-                            <Menu.Item key="dingMessage" className="padding_menu">
-                                <i className="icon_menu_ios icon_ding"></i>
-                                <b className="ding_alert" ref='dingAlert'></b>
-                                <div className="tan">
-                                    <FormattedMessage
-                                        id='notificationCenter'
-                                        description='叮一下'
-                                        defaultMessage='叮一下'
-                                    /></div>
-                            </Menu.Item>
-                            <FloatButton ref="floatButton" messageUtilObj={ms}/>
-                        </Menu>
-
-                        <div className="ant-aside-action">
-
-                        </div>
-
-                    </aside>
-
-                    <div className="ant-layout-main">
-                        <div className="ant-layout-header">
-                            <HeaderComponents search={this.search}/>
-                        </div>
-
-                        <div className="ant-layout-operation">
-                            {mainContent}
-                        </div>
-                    </div>
-                    <div className="panleArea"></div>
-                    <div className="downloadArea"></div>
-                    <div>
-                        <audio id="dingMusic" ref='dingMusic'>
-
-                        </audio>
-                        <audio id="mesMusic" ref='mesMusic'>
-
-                        </audio>
-                    </div>
-                    <AddShiftPosModel
-                        isShow={this.state.addShiftPosModel}
-                        closeModel={this.closeModel}
-                        postPos={this.postPos}
-                    />
-                    <SendPicModel
-                        isShow={this.state.sendPicModel}
-                        closeModel={this.closeSendPicModel}
-                        pinSrc={this.state.pinSrc}
-                        picFile={this.state.picFile}
-                        sendPicToOthers={this.sendPicToOthers}
-                    />
-                    <ul style={{display: 'none'}}>
-                        <li className="imgLi">
-                            {this.state.imgArr}
-                        </li>
-                    </ul>
-                    {/*群设置侧边栏*/}
-                    <div className="groupSet_panel" ref="groupSetPanel">
-                        <div className="side_header">
-                            群设置
-                            <Icon type="close" className="d_mesclose_new" onClick={this.levGroupSet}/>
-                        </div>
-                        <div className="set_in_background">
-                            {this.state.personDate}
-                        </div>
-                        <div className="set_in_del_btn">
-                            <Button onClick={this.showExitChatGroupConfirmModal}
-                                    className="group_red_btn">删除并退出</Button>{this.state.dissolutionChatGroupButton}
-
-                        </div>
-                    </div>
-                    <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
-                    {/*公共侧边栏*/}
-                    <div className="groupSet_panel" ref="publicSidebar">
-                        <div className="side_header">
-                            {this.state.publicSidebarTitle}
-                            <Icon type="close" className="d_mesclose_new" onClick={this.levPublicSidebarSet}/>
-                        </div>
-                        <div className="set_in_background2">
-                            {this.state.publicSidebarContent}
-                        </div>
-                    </div>
-                    <Modal className="person_change_right"
-                           visible={this.state.mainTransferModalVisible}
-                           title="转移群主"
-                           onCancel={this.mainTransferModalHandleCancel}
-                           transitionName=""  //禁用modal的动画效果
-                           maskClosable={false} //设置不允许点击蒙层关闭
-                           footer={[
-                               <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                       onClick={this.mainTransferForSure}>确定</button>,
-                               <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                       onClick={this.mainTransferModalHandleCancel}>取消</button>
-                           ]}
-                    >
-                        <Row className="ant-form-item">
-                            <Col span={24}>
-                                <RadioGroup onChange={this.mainTransferOnChange} value={this.state.radioValue}>
-                                    {this.state.radioSon}
-                                </RadioGroup>
-                            </Col>
-                        </Row>
-                    </Modal>
-
-                    <Modal className="modol_width"
-                           visible={this.state.updateChatGroupNameModalVisible}
-                           title="修改群名称"
-                           onCancel={this.updateChatGroupNameModalHandleCancel}
-                           transitionName=""  //禁用modal的动画效果
-                           maskClosable={false} //设置不允许点击蒙层关闭
-                           footer={[
-                               <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                       onClick={this.updateChatGroupName}>确定</button>,
-                               <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                       onClick={this.updateChatGroupNameModalHandleCancel}>取消</button>
-                           ]}
-                    >
-                        <Row className="ant-form-item">
-                            <Col span={6} className="right_look">群名称：</Col>
-                            <Col span={14}>
-                                <Input value={this.state.updateChatGroupTitle}
-                                       defaultValue={this.state.updateChatGroupTitle}
-                                       onChange={this.updateChatGroupTitleOnChange}/>
-                            </Col>
-                        </Row>
-                    </Modal>
-
-                    <Modal
-                        visible={this.state.addDeGroupMemberModalVisible}
-                        title={this.state.superTitleName}
-                        onCancel={this.addDeGroupMemberModalHandleCancel}
-                        transitionName=""  //禁用modal的动画效果
-                        maskClosable={false} //设置不允许点击蒙层关闭
-                        className="add_member"
-                        footer={[
-                            <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                    onClick={this.addGroupMember}>确定</button>,
-                            <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                    onClick={this.addDeGroupMemberModalHandleCancel}>取消</button>
-                        ]}
-                        width={700}
-                    >
-                        <div style={{display: this.state.idea, marginBottom: '14px'}}>
-                            <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}
-                                   onChange={this.nowThinkingInputChange}/>
-                        </div>
-                        <div style={{display: this.state.creatInput, marginBottom: '14px'}}>
-                            <Input
-                                placeholder="请输入群名称"
-                                value={this.state.groupCreatName}
-                                onChange={this.onChangeGroupName}
-                                ref={node => this.userNameInput = node}
-                            />
-                        </div>
-                        <div id="mebChecked" className="ant-form-item add_member_menu_tab"
-                             style={{display: this.state.originDiv}}>
-                            <span className="add_member_menu noom_cursor add_member_menu_select"
-                                  onClick={this.rencentClicked}>最近联系人</span>
-                            <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
-                            <span style={{display: this.state.groupDiv}} className="add_member_menu noom_cursor"
-                                  onClick={this.groupClicked}>我的群组</span>
-                            <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
-                        </div>
-                        <div id="inPut100" className={this.state.inputClassName}>
-                            <Col span={24} className="right_ri">
-                                <Input
-                                    placeholder="请输入要搜索的姓名"
-                                    value={this.state.userNameFromOri}
-                                    onChange={this.onChangeUserNameFromOri}
-                                    ref={node => this.userNameInput = node}
-                                />
-                            </Col>
-                        </div>
-                        <div className="ant-form-item flex">
-                          <span className="gray_6_12" style={{height: '24px'}}>
-                                <span className="upexam_float " style={{lineHeight: '24px'}}>已选择：</span>
-                                <div className="add_member_tags_wrap">
-                                    <div className="add_member_tags upexam_float">
-                                        {tags.map((tag, index) => {
-                                            const isLongTag = tag.length > 20;
-                                            const tagElem = (
-                                                <Tag key={tag.key} closable={index !== -1}
-                                                     afterClose={() => this.handleClose(tag)}>
-                                                    {isLongTag ? `${tag.userName.slice(0, 20)}...` : tag.userName}
-                                                </Tag>
-                                            );
-                                            return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
-                                        })}
-                                        {inputVisible && (
-                                            <Input
-                                                type="text" size="small"
-                                                style={{width: 78}}
-                                                value={inputValue}
-                                                onChange={this.handleInputChange}
-                                                onBlur={this.handleInputConfirm}
-                                                onPressEnter={this.handleInputConfirm}
-                                            />
-                                        )}
+                        <aside className="ant-layout-sider">
+                            <div className="ant-layout-logo">
+                                <UserFace callbackParent={this.getTeacherResource}/>
+                            </div>
+                            <Menu mode="inline" theme="dark"
+                                  defaultSelectedKeys={[this.state.currentKey]}
+                                  selectedKeys={[this.state.currentKey]}
+                                // onClick={this.toolbarClick.bind(this,event,this.state.vipKey)}>
+                                  onClick={this.toolbarClick}>
+                                <Menu.Item key="message" className="padding_menu">
+                                    <i className="icon_menu_ios icon_message"></i>
+                                    <b className="ding_alert" ref='msgAlert'></b>
+                                    <div className="tan">
+                                        <FormattedMessage
+                                            id='chat'
+                                            description='动态'
+                                            defaultMessage='动态'
+                                        />
                                     </div>
-                                </div>
-                            </span>
-                        </div>
-                        <div className="ant-form-item flex">
-                            <div style={{display: this.state.OriUserNotOrIf}} className="favorite_scroll">
-                                <div className="add_member_wrap">
-                                    <Table columns={memberColumns}
-                                           pagination={false} dataSource={this.state.defaultUserData}
-                                           className="schoolgroup_table1 schoolgroup_table_department"
-                                           scroll={{y: 240}}
-                                           rowSelection={rowSelection}
-                                    />
-                                </div>
+                                </Menu.Item>
+                                <Menu.Item key="antNest" className="padding_menu">
+                                    <i className="icon_menu_ios icon_yichao1"></i>
+                                    <div className="tan">
+                                        <FormattedMessage
+                                            id='antNest'
+                                            description='蚁巢'
+                                            defaultMessage='蚁巢'
+                                        />
+                                    </div>
+                                </Menu.Item>
+                                <Menu.Item key="teachSpace" className="padding_menu">
+                                    <i className="icon_menu_ios icon_jiaoxue"></i>
+                                    <div className="tan">
+                                        <FormattedMessage
+                                            id='teachingSpace'
+                                            description='教学空间'
+                                            defaultMessage='教学空间'
+                                        />
+                                    </div>
+                                </Menu.Item>
+                                <Menu.Item key="antGroup" className="padding_menu">
+                                    <i className="icon_menu_ios icon_antgroup"></i>
+                                    <div className="tan">
+                                        <FormattedMessage
+                                            id='contacts'
+                                            description='蚁群'
+                                            defaultMessage='蚁群'
+                                        />
+                                    </div>
+                                </Menu.Item>
+                                <Menu.Item key="antCloudClassRoom" className="padding_menu">
+                                    <i className="icon_menu_ios icon_cloud"></i>
+                                    <div className="tan">
+                                        <FormattedMessage
+                                            id='cloudClass'
+                                            description='云校'
+                                            defaultMessage='云校'
+                                        />
+                                    </div>
+                                </Menu.Item>
+                                <Menu.Item key="antCloud" className="padding_menu">
+                                    <i className="icon_menu_ios icon_antdisk"></i>
+                                    <div className="tan">
+                                        <FormattedMessage
+                                            id='cloudDisk'
+                                            description='蚁盘'
+                                            defaultMessage='蚁盘'
+                                        /></div>
+                                </Menu.Item>
+                                <Menu.Item key="systemSetting" className="padding_menu">
+                                    <i className="icon_menu_ios icon_schoolGroup"></i>
+                                    <div className="tan">
+                                        <FormattedMessage
+                                            id='courseMangement'
+                                            description='教务管理'
+                                            defaultMessage='教务管理'
+                                        /></div>
+                                </Menu.Item>
+                                <Menu.Item key="dingMessage" className="padding_menu">
+                                    <i className="icon_menu_ios icon_ding"></i>
+                                    <b className="ding_alert" ref='dingAlert'></b>
+                                    <div className="tan">
+                                        <FormattedMessage
+                                            id='notificationCenter'
+                                            description='叮一下'
+                                            defaultMessage='叮一下'
+                                        /></div>
+                                </Menu.Item>
+                                <FloatButton ref="floatButton" messageUtilObj={ms}/>
+                            </Menu>
+
+                            <div className="ant-aside-action">
+
                             </div>
 
-                            <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll bai">
-                                <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
-                                    {/*获取组织架构的部门下的人*/}
+                        </aside>
+
+                        <div className="ant-layout-main">
+                            <div className="ant-layout-header">
+                                <HeaderComponents search={this.search}/>
+                            </div>
+
+                            <div className="ant-layout-operation">
+                                {mainContent}
+                            </div>
+                        </div>
+                        <div className="panleArea"></div>
+                        <div className="downloadArea"></div>
+                        <div>
+                            <audio id="dingMusic" ref='dingMusic'>
+
+                            </audio>
+                            <audio id="mesMusic" ref='mesMusic'>
+
+                            </audio>
+                        </div>
+                        <AddShiftPosModel
+                            isShow={this.state.addShiftPosModel}
+                            closeModel={this.closeModel}
+                            postPos={this.postPos}
+                        />
+                        <SendPicModel
+                            isShow={this.state.sendPicModel}
+                            closeModel={this.closeSendPicModel}
+                            pinSrc={this.state.pinSrc}
+                            picFile={this.state.picFile}
+                            sendPicToOthers={this.sendPicToOthers}
+                        />
+                        <ul style={{display: 'none'}}>
+                            <li className="imgLi">
+                                {this.state.imgArr}
+                            </li>
+                        </ul>
+                        {/*群设置侧边栏*/}
+                        <div className="groupSet_panel" ref="groupSetPanel">
+                            <div className="side_header">
+                                群设置
+                                <Icon type="close" className="d_mesclose_new" onClick={this.levGroupSet}/>
+                            </div>
+                            <div className="set_in_background">
+                                {this.state.personDate}
+                            </div>
+                            <div className="set_in_del_btn">
+                                <Button onClick={this.showExitChatGroupConfirmModal}
+                                        className="group_red_btn">删除并退出</Button>{this.state.dissolutionChatGroupButton}
+
+                            </div>
+                        </div>
+                        <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
+                        {/*公共侧边栏*/}
+                        <div className="groupSet_panel" ref="publicSidebar">
+                            <div className="side_header">
+                                {this.state.publicSidebarTitle}
+                                <Icon type="close" className="d_mesclose_new" onClick={this.levPublicSidebarSet}/>
+                            </div>
+                            <div className="set_in_background2">
+                                {this.state.publicSidebarContent}
+                            </div>
+                        </div>
+                        <Modal className="person_change_right"
+                               visible={this.state.mainTransferModalVisible}
+                               title="转移群主"
+                               onCancel={this.mainTransferModalHandleCancel}
+                               transitionName=""  //禁用modal的动画效果
+                               maskClosable={false} //设置不允许点击蒙层关闭
+                               footer={[
+                                   <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                           onClick={this.mainTransferForSure}>确定</button>,
+                                   <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                           onClick={this.mainTransferModalHandleCancel}>取消</button>
+                               ]}
+                        >
+                            <Row className="ant-form-item">
+                                <Col span={24}>
+                                    <RadioGroup onChange={this.mainTransferOnChange} value={this.state.radioValue}>
+                                        {this.state.radioSon}
+                                    </RadioGroup>
+                                </Col>
+                            </Row>
+                        </Modal>
+
+                        <Modal className="modol_width"
+                               visible={this.state.updateChatGroupNameModalVisible}
+                               title="修改群名称"
+                               onCancel={this.updateChatGroupNameModalHandleCancel}
+                               transitionName=""  //禁用modal的动画效果
+                               maskClosable={false} //设置不允许点击蒙层关闭
+                               footer={[
+                                   <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                           onClick={this.updateChatGroupName}>确定</button>,
+                                   <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                           onClick={this.updateChatGroupNameModalHandleCancel}>取消</button>
+                               ]}
+                        >
+                            <Row className="ant-form-item">
+                                <Col span={6} className="right_look">群名称：</Col>
+                                <Col span={14}>
+                                    <Input value={this.state.updateChatGroupTitle}
+                                           defaultValue={this.state.updateChatGroupTitle}
+                                           onChange={this.updateChatGroupTitleOnChange}/>
+                                </Col>
+                            </Row>
+                        </Modal>
+
+                        <Modal
+                            visible={this.state.addDeGroupMemberModalVisible}
+                            title={this.state.superTitleName}
+                            onCancel={this.addDeGroupMemberModalHandleCancel}
+                            transitionName=""  //禁用modal的动画效果
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            className="add_member"
+                            footer={[
+                                <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                        onClick={this.addGroupMember}>确定</button>,
+                                <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                        onClick={this.addDeGroupMemberModalHandleCancel}>取消</button>
+                            ]}
+                            width={700}
+                        >
+                            <div style={{display: this.state.idea, marginBottom: '14px'}}>
+                                <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}
+                                       onChange={this.nowThinkingInputChange}/>
+                            </div>
+                            <div style={{display: this.state.creatInput, marginBottom: '14px'}}>
+                                <Input
+                                    placeholder="请输入群名称"
+                                    value={this.state.groupCreatName}
+                                    onChange={this.onChangeGroupName}
+                                    ref={node => this.userNameInput = node}
+                                />
+                            </div>
+                            <div id="mebChecked" className="ant-form-item add_member_menu_tab"
+                                 style={{display: this.state.originDiv}}>
+                                <span className="add_member_menu noom_cursor add_member_menu_select"
+                                      onClick={this.rencentClicked}>最近联系人</span>
+                                <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
+                                <span style={{display: this.state.groupDiv}} className="add_member_menu noom_cursor"
+                                      onClick={this.groupClicked}>我的群组</span>
+                                <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
+                            </div>
+                            <div id="inPut100" className={this.state.inputClassName}>
+                                <Col span={24} className="right_ri">
+                                    <Input
+                                        placeholder="请输入要搜索的姓名"
+                                        value={this.state.userNameFromOri}
+                                        onChange={this.onChangeUserNameFromOri}
+                                        ref={node => this.userNameInput = node}
+                                    />
+                                </Col>
+                            </div>
+                            <div className="ant-form-item flex">
+                              <span className="gray_6_12" style={{height: '24px'}}>
+                                    <span className="upexam_float " style={{lineHeight: '24px'}}>已选择：</span>
+                                    <div className="add_member_tags_wrap">
+                                        <div className="add_member_tags upexam_float">
+                                            {tags.map((tag, index) => {
+                                                const isLongTag = tag.length > 20;
+                                                const tagElem = (
+                                                    <Tag key={tag.key} closable={index !== -1}
+                                                         afterClose={() => this.handleClose(tag)}>
+                                                        {isLongTag ? `${tag.userName.slice(0, 20)}...` : tag.userName}
+                                                    </Tag>
+                                                );
+                                                return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                            })}
+                                            {inputVisible && (
+                                                <Input
+                                                    type="text" size="small"
+                                                    style={{width: 78}}
+                                                    value={inputValue}
+                                                    onChange={this.handleInputChange}
+                                                    onBlur={this.handleInputConfirm}
+                                                    onPressEnter={this.handleInputConfirm}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                            <div className="ant-form-item flex">
+                                <div style={{display: this.state.OriUserNotOrIf}} className="favorite_scroll">
                                     <div className="add_member_wrap">
                                         <Table columns={memberColumns}
-                                               pagination={false} dataSource={this.state.searchUserFromOri}
+                                               pagination={false} dataSource={this.state.defaultUserData}
                                                className="schoolgroup_table1 schoolgroup_table_department"
                                                scroll={{y: 240}}
                                                rowSelection={rowSelection}
@@ -3173,76 +3163,90 @@ const MainLayout = React.createClass({
                                     </div>
                                 </div>
 
-                                <div style={{display: searchOriIfOrNot}} className="favorite_scroll">
-                                    {/*获取组织架构的所有部门*/}
-                                    <div className="add_member_left">
-                                        {/*面包屑*/}
-                                        <Breadcrumb separator=">">
-                                            {breadcrumbItemObjArray}
-                                        </Breadcrumb>
-                                        <Table showHeader={false} columns={columns}
-                                               dataSource={this.state.subGroupList}
-                                               className="schoolgroup_table"
-                                               pagination={false}/>
+                                <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll bai">
+                                    <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
+                                        {/*获取组织架构的部门下的人*/}
+                                        <div className="add_member_wrap">
+                                            <Table columns={memberColumns}
+                                                   pagination={false} dataSource={this.state.searchUserFromOri}
+                                                   className="schoolgroup_table1 schoolgroup_table_department"
+                                                   scroll={{y: 240}}
+                                                   rowSelection={rowSelection}
+                                            />
+                                        </div>
                                     </div>
 
-                                    {/*获取组织架构的部门下的人*/}
-                                    <div className="add_member_right">
-                                        <Table columns={memberColumns}
-                                               pagination={false} dataSource={this.state.subGroupMemberList}
-                                               className="schoolgroup_table1 schoolgroup_table_department"
-                                               scroll={{y: 240}}
-                                               rowSelection={rowSelection}
-                                        />
-                                        <div className="schoolgroup_operate schoolgroup_more">
-                                            <a onClick={this.loadMoreMember}
-                                               className="schoolgroup_more_a">{this.state.wordSrc}</a>
+                                    <div style={{display: searchOriIfOrNot}} className="favorite_scroll">
+                                        {/*获取组织架构的所有部门*/}
+                                        <div className="add_member_left">
+                                            {/*面包屑*/}
+                                            <Breadcrumb separator=">">
+                                                {breadcrumbItemObjArray}
+                                            </Breadcrumb>
+                                            <Table showHeader={false} columns={columns}
+                                                   dataSource={this.state.subGroupList}
+                                                   className="schoolgroup_table"
+                                                   pagination={false}/>
+                                        </div>
+
+                                        {/*获取组织架构的部门下的人*/}
+                                        <div className="add_member_right">
+                                            <Table columns={memberColumns}
+                                                   pagination={false} dataSource={this.state.subGroupMemberList}
+                                                   className="schoolgroup_table1 schoolgroup_table_department"
+                                                   scroll={{y: 240}}
+                                                   rowSelection={rowSelection}
+                                            />
+                                            <div className="schoolgroup_operate schoolgroup_more">
+                                                <a onClick={this.loadMoreMember}
+                                                   className="schoolgroup_more_a">{this.state.wordSrc}</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </Modal>
+                        </Modal>
 
-                    <Modal
-                        visible={this.state.shareToAntNestVisible}
-                        title="分享文件"
-                        onCancel={this.shareToAntNestModalHandleCancel}
-                        transitionName=""  //禁用modal的动画效果
-                        maskClosable={false} //设置不允许点击蒙层关闭
-                        className="add_member"
-                        footer={[
-                            <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                    onClick={this.shareToAntNest}>确定</button>,
-                            <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                    onClick={this.shareToAntNestModalHandleCancel}>取消</button>
-                        ]}
-                        width={616}
-                    >
-                        <div style={{marginBottom: '14px'}}>
-                            <Input type="textarea" rows={2} placeholder="这一刻的想法" style={{height: '84px'}}
-                                   value={this.state.nowThinking}
-                                   onChange={this.nowThinkingInputChange}/>
-                        </div>
-                        <div style={{marginBottom: '14px'}}>
-                            {this.state.shareTitle}
-                        </div>
-                    </Modal>
+                        <Modal
+                            visible={this.state.shareToAntNestVisible}
+                            title="分享文件"
+                            onCancel={this.shareToAntNestModalHandleCancel}
+                            transitionName=""  //禁用modal的动画效果
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            className="add_member"
+                            footer={[
+                                <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                        onClick={this.shareToAntNest}>确定</button>,
+                                <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                        onClick={this.shareToAntNestModalHandleCancel}>取消</button>
+                            ]}
+                            width={616}
+                        >
+                            <div style={{marginBottom: '14px'}}>
+                                <Input type="textarea" rows={2} placeholder="这一刻的想法" style={{height: '84px'}}
+                                       value={this.state.nowThinking}
+                                       onChange={this.nowThinkingInputChange}/>
+                            </div>
+                            <div style={{marginBottom: '14px'}}>
+                                {this.state.shareTitle}
+                            </div>
+                        </Modal>
 
-                    <ConfirmModal ref="dissolutionChatGroupConfirmModal"
-                                  title="确定要解散该群组?"
-                                  onConfirmModalCancel={this.closeDissolutionChatGroupConfirmModal}
-                                  onConfirmModalOK={this.dissolutionChatGroup}/>
-                    <ConfirmModal ref="exitChatGroupConfirmModal"
-                                  title="确定要退出该群组?"
-                                  onConfirmModalCancel={this.closeExitChatGroupConfirmModal}
-                                  onConfirmModalOK={this.exitChatGroup}/>
-                    <ConfirmModal ref="confirmModal"
-                                  title="确定要移除选中的群成员?"
-                                  onConfirmModalCancel={this.closeConfirmModal}
-                                  onConfirmModalOK={this.deleteSelectedMember}/>
-                </div>
-            </IntlProvider>
+                        <ConfirmModal ref="dissolutionChatGroupConfirmModal"
+                                      title="确定要解散该群组?"
+                                      onConfirmModalCancel={this.closeDissolutionChatGroupConfirmModal}
+                                      onConfirmModalOK={this.dissolutionChatGroup}/>
+                        <ConfirmModal ref="exitChatGroupConfirmModal"
+                                      title="确定要退出该群组?"
+                                      onConfirmModalCancel={this.closeExitChatGroupConfirmModal}
+                                      onConfirmModalOK={this.exitChatGroup}/>
+                        <ConfirmModal ref="confirmModal"
+                                      title="确定要移除选中的群成员?"
+                                      onConfirmModalCancel={this.closeConfirmModal}
+                                      onConfirmModalOK={this.deleteSelectedMember}/>
+                    </div>
+                </IntlProvider>
+            </LocaleProvider>
         );
     },
 

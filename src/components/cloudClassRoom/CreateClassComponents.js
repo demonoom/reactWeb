@@ -6,15 +6,15 @@ import {
 import moment from 'moment';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import WeiClassUploadComponents from './WeiClassUploadComponents';
-import {isEmpty, getLocalTime} from '../../utils/utils';
+import {isEmpty, getLocalTime,isDateTime,getLocalFromLanguage} from '../../utils/utils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 // import SelectKnowledgeModal from '../subjectManager/SelectKnowledgeModal';
 import KnowledgePointModal from './KnowledgePointModal';
 //国际化
 import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
-import zh from 'react-intl/locale-data/zh';
 import en from 'react-intl/locale-data/en';
+import 'moment/locale/zh-cn';
 
 const dateFormat = 'YYYY/MM/DD';
 const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -564,7 +564,6 @@ const CreateClassComponents = React.createClass({
                     className="lessonTime"
                     showTime
                     format="YYYY-MM-DD HH:mm:ss"
-                    placeholder="Select Time"
                     onChange={this.lessonTimeOnChange}
                     onOk={this.lessonTimeOnOk}
                 />
@@ -1114,6 +1113,7 @@ const CreateClassComponents = React.createClass({
      */
     render() {
         var _this = this;
+        var local = getLocalFromLanguage();
         const radioStyle = {
             display: 'block',
             height: '30px',
@@ -1569,6 +1569,8 @@ const CreateClassComponents = React.createClass({
                     </Row>
                 </div>;
             } else {
+                //这个可以设置日期组件上的月份显示
+                moment.locale('en');
                 if (typeof(this.state.lessonArray) != "undefined") {
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
@@ -1584,14 +1586,13 @@ const CreateClassComponents = React.createClass({
                         }
 
                         var datePicker = null;
-                        if (isEmpty(liveTime)) {
+                        if (isEmpty(liveTime) || isDateTime(getLocalTime(liveTime))==false) {
                             datePicker = <DatePicker
                                 //defaultValue={moment(liveTime, dateFormat)}
                                 //value={moment(liveTime, dateFormat)}
                                 className="lessonTime"
                                 showTime
                                 format="YYYY-MM-DD HH:mm:ss"
-                                placeholder="Select Time"
                                 onChange={this.lessonTimeOnChange.bind(_this, lessonJson.squence)}
                                 onOk={this.lessonTimeOnOk}
                             />;
@@ -1602,7 +1603,6 @@ const CreateClassComponents = React.createClass({
                                 className="lessonTime"
                                 showTime
                                 format="YYYY-MM-DD HH:mm:ss"
-                                placeholder="Select Time"
                                 onChange={this.lessonTimeOnChange.bind(_this, lessonJson.squence)}
                                 onOk={this.lessonTimeOnOk}
                             />;
