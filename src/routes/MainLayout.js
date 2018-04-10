@@ -680,7 +680,6 @@ const MainLayout = React.createClass({
     },
 
     choiceCanSeePer(type, arr) {
-        debugger
         //接收到id进行初始化
         var array = [];
         if (isEmpty(arr) == false) {
@@ -1183,7 +1182,6 @@ const MainLayout = React.createClass({
     },
 
     addDeGroupMemberModalHandleCancel() {
-        debugger
         var arr = document.getElementsByClassName('add_member_menu');
         for (var i = 0; i < arr.length; i++) {
             arr[i].className = 'add_member_menu noom_cursor'
