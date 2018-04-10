@@ -9211,6 +9211,7 @@ ul.chosenBox {
     background: url(../components/images/right_icon.png) no-repeat;
     color: #fff;
     background-size: 30px;
+    cursor:pointer
 }
 
 .selectBox.on{
@@ -9251,12 +9252,12 @@ ul.chosenBox {
     text-align: center;
     line-height: 30px;
     border-radius: 50%;
-    background-color: #ffffff;
     font-size: 18px;
     position: absolute;
     top: 3px;
     right: 3px;
-    background: url(../components/images/deleteBox.png) no-repeat;
+    background: url(../components/images/deleteBox.png) no-repeat #5d9af2;
+    cursor: pointer;
 }
 
 .chosenBox li input {
@@ -9389,6 +9390,7 @@ ul.chosenBox {
     line-height: 28px;
     text-align: center;
     background: #f8f8f8;
+    cursor:pointer
 }
 
 .check_img_number {
