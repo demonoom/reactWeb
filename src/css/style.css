@@ -9213,7 +9213,7 @@ ul.chosenBox {
     background-size: 30px;
 }
 
-.on {
+.selectBox.on{
     background: #5d92f8 !important;
     color: #ffffff !important;
 }
