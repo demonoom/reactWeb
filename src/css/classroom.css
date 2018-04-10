@@ -30,7 +30,7 @@
     background: none;
 }
 .classroom_btn_b img{
-    width: 100%;
+    max-width: 100%;
 }
 .classroom_btn_b:hover{
     background: none;

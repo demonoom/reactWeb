@@ -204,8 +204,7 @@
                     window.__sendImg__(data.currentUrl, data.url);
 
                 } else if (data.method == 'openNewPage') {
-                    // console.log(data.title);
-                    console.log(data);
+                    data.url += '?access_user=' + sessionStorage.getItem('ident');
                     let obj = {mode: 'teachingAdmin', title: '', url: data.url};
                     LP.Start(obj);
                 } else if (data.method == 'setPanelTitle') {

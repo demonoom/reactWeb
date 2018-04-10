@@ -585,7 +585,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * 蚁盘文件夹进入后，通过该函数完成返回
      */
     returnParentAtMoveModal() {
-        debugger
         var _this = this;
         var initPageNo = 1;
         if (_this.state.cloudTasKey == "cloudFile") {
@@ -621,7 +620,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * @param file
      */
     pushFileFromAntCloud(fileOrDirectory) {
-        debugger
         var fileObj = fileOrDirectory.fileObj;
         var fileName = fileObj.name;
         var isDirectory = fileObj.directory;

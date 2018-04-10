@@ -234,7 +234,6 @@ const LocalClassRoom = React.createClass({
      * 从蚁盘文件里使用此材料
      */
     useCloudFileInClass(cid){
-        debugger
         var _this = this;
         var vclassId = this.state.vid;
         var param = {
