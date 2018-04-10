@@ -37,7 +37,7 @@ var targetDirColumns = [{
     title: '文件夹名称',
     dataIndex: 'dirName',
 },
-];                    message.error("无更多数据");
+];
 
 var targetDirDataArray = [];
 

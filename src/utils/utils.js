@@ -240,3 +240,15 @@ export function setLocalLanaguage(la) {
     }
     localStorage.setItem("language", language);
 }
+
+/**
+ * 验证是否是一个有效的日期格式
+ * @param str
+ * @returns {boolean}
+ */
+export function isDateTime(str)
+{
+    var re = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/;
+    var result = re.test(str);
+    return result;
+}
