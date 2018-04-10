@@ -194,13 +194,21 @@ const AntNestTabComponents = React.createClass({
         }
     },
 
-    whoISSecret(data) {
+    whoISSecret(data, UserData) {
         var arr = [];
-        data.forEach(function (v) {
-            var li = <li>{v.grade.name + ' ' + v.name}</li>
-            arr.push(li);
+        if (isEmpty(data) == false) {
+            data.forEach(function (v) {
+                var li = <li>{v.grade.name + ' ' + v.name}</li>
+                arr.push(li);
 
-        });
+            });
+        }
+        if (isEmpty(UserData) == false) {
+            UserData.forEach(function (v) {
+                var li = <li>{v.userName}</li>
+                arr.push(li);
+            });
+        }
         this.setState({whoISSecretModalVisible: true, whoISSecretLis: arr});
     },
 
@@ -240,9 +248,20 @@ const AntNestTabComponents = React.createClass({
      */
     buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
         var screatPic = '';
+
+        var whiteList,
+            whiteUserList;
+        if (isEmpty(topicObj.whiteList) == false) {
+            whiteList = topicObj.whiteList;
+        }
+        if (isEmpty(topicObj.whiteUserList) == false) {
+            whiteUserList = topicObj.whiteUserList;
+        }
+
         if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
             screatPic =
-                <span onClick={this.whoISSecret.bind(this, topicObj.whiteList)} className="topics_time noom_cursor"><img
+                <span onClick={this.whoISSecret.bind(this, whiteList, whiteUserList)}
+                      className="topics_time noom_cursor"><img
                     src={require('../images/screatPic.png')} alt="" className="screatPic"/></span>
         }
         //如果用户头像为空，使用系统默认头像
@@ -2074,7 +2093,7 @@ const AntNestTabComponents = React.createClass({
 
                 </Modal>
 
-                <Modal title="可见班级"
+                <Modal title="可见的朋友"
                        visible={antNest.state.whoISSecretModalVisible}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭

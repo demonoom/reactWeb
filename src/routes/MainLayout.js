@@ -1871,7 +1871,9 @@ const MainLayout = React.createClass({
         });
         this.setState({imgArr});
         //图片已渲染到DOM
-        document.querySelectorAll(".noomSendImg")[num].click();   //使用noomSendImg可以区分选择的图片是聊天里的还是审批里的,不会造成混乱
+        setTimeout(function () {
+            document.querySelectorAll(".noomSendImg")[num].click();   //使用noomSendImg可以区分选择的图片是聊天里的还是审批里的,不会造成混乱
+        }, 150)
     },
 
     noomSelect(obj) {
