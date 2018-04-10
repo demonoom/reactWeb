@@ -2409,7 +2409,7 @@ pageNo   --- 页码，-1取全部
                             <Col span={12} className="share_til">选择好友分享文件：</Col>
                             <Col span={12} className="share_til">这一刻的想法：
                                 <span className="right_ri cloud_share_prompt">
-                                    <Icon type="link" className="info_school_s"/><span>这是一个云盘分享的文件</span>
+                                    <Icon type="link" className="info_school_s"/><span>这是一个蚁盘分享的文件</span>
                                 </span>
                             </Col>
                         </Row>
