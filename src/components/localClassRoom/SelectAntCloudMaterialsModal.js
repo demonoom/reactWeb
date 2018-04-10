@@ -233,6 +233,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
      */
 
     buildTargetDirImgData(ret, noomFlag) {
+        debugger
         var _this = this;
         var directoryCount = _this.getDirectoryCount(ret.response);
         if (isEmpty(ret.response) == false) {
@@ -486,6 +487,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
             var lastPointIndex = name.lastIndexOf(".");
             //通过截取文件后缀名的形式，完成对上传文件类型的判断
             var fileType = name.substring(lastPointIndex + 1);
+            var fileType =fileType.toLowerCase();
             var fileTypeLog;
             switch (fileType) {
                 case "png":
@@ -604,7 +606,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
             //蚁盘图片的回退逻辑
             if (_this.state.cloudImgDirectoryParentId == 0) {
                 //回到根目录
-                message.error("无更多数据");
                 _this.filterCloudFile(-1, initPageNo);
 
             } else {
