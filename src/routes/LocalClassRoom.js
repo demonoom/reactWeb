@@ -356,16 +356,24 @@ const LocalClassRoom = React.createClass({
 
                     {classIfream}
                     <div className="classroom_btn">
-                        <Button className="classroom_btn_b" onClick={this.getPPT}><img
-                            src={require('../components/images/icon_kejian.png')}/></Button>
-                        <Button className="classroom_btn_b  add_out" onClick={this.getSubject}><img
-                            src={require('../components/images/icon_timu_class_white.png')}/></Button>
-                        <Button className="classroom_btn_b  add_out" onClick={this.getClazzStatus}><img
-                            src={require('../components/images/icon_statistical_section.png')}/></Button>
+                        <Button className="classroom_btn_b classroom_btn_courseware" onClick={this.getPPT}>
+                            <i><img src={require('../components/images/classroome_courseware.png')}/></i>
+                            <div>课件</div>
+                        </Button>
+                        <Button className="classroom_btn_b classroom_btn_subject  add_out" onClick={this.getSubject}>
+                            <i><img src={require('../components/images/classroom_subject.png')}/></i>
+                            <div>题目</div>
+                        </Button>
+                        <Button className="classroom_btn_b classroom_btn_statistics add_out" onClick={this.getClazzStatus}>
+                            <i><img src={require('../components/images/classroom_statistics.png')}/></i>
+                            <div>统计</div>
+                        </Button>
                     </div>
                     <div className="classroom_btn_finish">
-                        <Button className="classroom_btn_b add_out" onClick={this.showConfirmModal}><img
-                            src={require('../components/images/finish_class.png')}/></Button>
+                        <Button className="classroom_btn_b classroom_btn_finish add_out" onClick={this.showConfirmModal}>
+                            <i><img src={require('../components/images/classroom_finish.png')}/></i>
+                            <div>下课</div>
+                        </Button>
                     </div>
                     <div><i className="shrinkage" id="closeITag" onClick={this.closeOrOpenMessageDiv}></i></div>
                 </div>
