@@ -47,7 +47,7 @@ class GuideModal extends React.Component{
     render(){
         const dataSource = [{
             key: 'schedule',
-            name: '从教学空间选择',
+            name: '从备课计划选择',
         }, {
             key: 'antCloud',
             name: '从蚁盘选择',
