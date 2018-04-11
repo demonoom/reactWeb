@@ -312,7 +312,8 @@ const LocalClassRoom = React.createClass({
         selectArr.forEach(function (v, i) {
             url += v.path + ',';
             cidArray.push(v.id);
-        })
+        });
+        console.log(url)
         //保存到课堂回顾的蚁盘文件id
         var cid = cidArray.join(",");
         var imgURL = url.replace("60.205.86.217", "www.maaee.com");
@@ -321,8 +322,8 @@ const LocalClassRoom = React.createClass({
 
         var vid = this.state.vid;
         var userId = this.state.userId;
-        // var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
-        var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard2/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+        //var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
 
         var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'url':'" + imgsUrl + "'}}" + ')');
         connection.send(protocal);

@@ -1112,7 +1112,6 @@ pageNo   --- 页码，-1取全部
             }
             // cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
         } else {
-            debugger
             if (this.state.currentDirectoryId != -1) {
                 var queryConditionJson = "";
                 this.listFiles(this.state.ident,

@@ -68,7 +68,8 @@ class SelectAntCloudMaterialsModal extends React.Component {
             chosenImgArr: [], //已选图片在modal里的集合
             fileInto: false,
             antCloudImgCurrentPage:1,   //蚁盘图片的当前页码
-            currentDirectoryIdAtImgModal:-1 //蚁盘图片的当前文件夹id
+            currentDirectoryIdAtImgModal:-1, //蚁盘图片的当前文件夹id
+            showIconBtn: false, //回退按钮
         };
         this.SelectAntCloudMaterialsModalHandleCancel = this.SelectAntCloudMaterialsModalHandleCancel.bind(this);
         this.buildTargetDirData = this.buildTargetDirData.bind(this);
@@ -125,7 +126,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
      */
     SelectAntCloudMaterialsModalHandleCancel() {
         filterImgData.splice(0);
-        this.setState({"isShow": false,selectNum:[],selectArr:[],selectCount:0,defaultArr:[],cloudTasKey: 'cloudFile'});
+        this.setState({"isShow": false,selectNum:[],selectArr:[],selectCount:0,defaultArr:[],cloudTasKey: 'cloudFile',currentDirectoryIdAtMoveModal: -1});
         this.props.onCancel();
 
     }
@@ -183,6 +184,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                     _this.buildTargetDirData(ret);
                     _this.setState({
                         antCloudFileCurrentPage: pageNo,
+                        showIconBtn: false
                     });
                 } else {
                     message.error("无更多数据");
@@ -233,7 +235,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
      */
 
     buildTargetDirImgData(ret, noomFlag) {
-        debugger
         var _this = this;
         var directoryCount = _this.getDirectoryCount(ret.response);
         if (isEmpty(ret.response) == false) {
@@ -246,6 +247,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                         var parentDirectoryId = v.parent.parentId;
                         _this.setState({"cloudImgDirectoryParentId": parentDirectoryId});
                     }
+
                 }
                 if (v.fileType == 1) {
                     //文件夹
@@ -418,14 +420,15 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * @param
      */
     filterIntoDirectoryInnerFile(id) {
+        var initPageNo = 1;
         console.log(id);
         // this.state.selectNum = [];
         this.state.fileInto = true;
         filterImgData.splice(0);
-        this.filterCloudFile(id, 1);
+        this.setState({showIconBtn: true});
+        this.filterCloudFile(id, initPageNo);
+
     }
-
-
 
 
     /**
@@ -540,7 +543,8 @@ class SelectAntCloudMaterialsModal extends React.Component {
         targetDirDataArray.splice(0);
         _this.setState({
             "parentDirectoryIdAtMoveModal": directoryObj.parentId,
-            "currentDirectoryIdAtMoveModal": directoryObj.id
+            "currentDirectoryIdAtMoveModal": directoryObj.id,
+             showIconBtn: true
         });
         _this.listFiles(_this.state.loginUser.colUid, directoryObj.id, queryConditionJson, initPageNo);
     }
@@ -607,6 +611,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
             if (_this.state.cloudImgDirectoryParentId == 0) {
                 //回到根目录
                 _this.filterCloudFile(-1, initPageNo);
+                _this.setState({showIconBtn: false})
 
             } else {
                 //回到上级目录
@@ -805,8 +810,8 @@ class SelectAntCloudMaterialsModal extends React.Component {
 
 
     render() {
-
-
+        var showIcon = <Icon type="left" className="ant-modal-header_i"
+                             onClick={this.returnParentAtMoveModal}/>
         return (
             <div>
                 <Modal className="select_img_modal"
@@ -825,8 +830,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                         <Col span={24} className="17_hei ant-form">
                             <Row>
                                 <Col span={24}>
-                                    <Icon type="left" className="ant-modal-header_i"
-                                          onClick={this.returnParentAtMoveModal}/>
+                                    {this.state.showIconBtn ==true ? showIcon : ''}
                                     {/*<span className="ant-modal-header_font">蚁盘</span>*/}
                                     <Tabs
                                         transitionName="" //禁用Tabs的动画效果
