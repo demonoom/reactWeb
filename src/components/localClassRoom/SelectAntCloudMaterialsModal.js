@@ -215,11 +215,14 @@ class SelectAntCloudMaterialsModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+                debugger
                 if (isEmpty(response) == false && response.length > 0) {
                     _this.buildTargetDirImgData(ret, false);
                     _this.setState({defaultArr: ret,antCloudImgCurrentPage: pageNo});
                     // _this.state.defaultArr.push(ret);
                 } else {
+                    var parentDirectoryId = _this.state.currentDirectory.parentId;
+                    _this.setState({"cloudImgDirectoryParentId": parentDirectoryId});
                     message.error("无更多数据");
                 }
             },
@@ -408,7 +411,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         if (directory) {
             fileLogo = <span className="selectTab_li">
                 <img className="pc_file" src={require('../images/pc_file.png')} alt=""
-                     onClick={_this.filterIntoDirectoryInnerFile.bind(this, v.id)}/>
+                     onClick={_this.filterIntoDirectoryInnerFile.bind(this,v.id, v)}/>
                 <div className="check_text focus_3">{name}</div>
             </span>;
         }
@@ -419,14 +422,14 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * 过滤图片进入文件夹内部
      * @param
      */
-    filterIntoDirectoryInnerFile(id) {
+    filterIntoDirectoryInnerFile(directoryId,directoryObj) {
         var initPageNo = 1;
-        console.log(id);
+        console.log(directoryId);
         // this.state.selectNum = [];
         this.state.fileInto = true;
         filterImgData.splice(0);
-        this.setState({showIconBtn: true});
-        this.filterCloudFile(id, initPageNo);
+        this.setState({showIconBtn: true,"currentDirectory":directoryObj});
+        this.filterCloudFile(directoryId, initPageNo);
 
     }
 
