@@ -118,8 +118,8 @@ const LocalClassRoom = React.createClass({
      * 获取课件，打开ppt，完成推ppt的操作
      */
     getPPT() {
-        this.refs.guideModal.changeGuideModalVisible(true);
-        // this.setState({antCloudMaterialsModalIsShow:true});
+        //this.refs.guideModal.changeGuideModalVisible(true);
+         this.setState({antCloudMaterialsModalIsShow:true});
     },
 
     /**
@@ -210,9 +210,10 @@ const LocalClassRoom = React.createClass({
     },
 
     /**
-     * 从教学空间里使用此材料
+     * 从备课计划里使用此材料
      */
     useMaterialInClass(materialId){
+        debugger
         var _this = this;
         var vclassId = this.state.vid;
         var param = {
@@ -312,7 +313,8 @@ const LocalClassRoom = React.createClass({
         selectArr.forEach(function (v, i) {
             url += v.path + ',';
             cidArray.push(v.id);
-        })
+        });
+        console.log(url)
         //保存到课堂回顾的蚁盘文件id
         var cid = cidArray.join(",");
         var imgURL = url.replace("60.205.86.217", "www.maaee.com");
@@ -321,8 +323,8 @@ const LocalClassRoom = React.createClass({
 
         var vid = this.state.vid;
         var userId = this.state.userId;
-        // var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
-        var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard2/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+        //var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
 
         var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'url':'" + imgsUrl + "'}}" + ')');
         connection.send(protocal);
@@ -356,16 +358,24 @@ const LocalClassRoom = React.createClass({
 
                     {classIfream}
                     <div className="classroom_btn">
-                        <Button className="classroom_btn_b" onClick={this.getPPT}><img
-                            src={require('../components/images/icon_kejian.png')}/></Button>
-                        <Button className="classroom_btn_b  add_out" onClick={this.getSubject}><img
-                            src={require('../components/images/icon_timu_class_white.png')}/></Button>
-                        <Button className="classroom_btn_b  add_out" onClick={this.getClazzStatus}><img
-                            src={require('../components/images/icon_statistical_section.png')}/></Button>
+                        <Button className="classroom_btn_b classroom_btn_courseware" onClick={this.getPPT}>
+                            <i><img src={require('../components/images/classroome_courseware.png')}/></i>
+                            <div>课件</div>
+                        </Button>
+                        <Button className="classroom_btn_b classroom_btn_subject  add_out" onClick={this.getSubject}>
+                            <i><img src={require('../components/images/classroom_subject.png')}/></i>
+                            <div>题目</div>
+                        </Button>
+                        <Button className="classroom_btn_b classroom_btn_statistics add_out" onClick={this.getClazzStatus}>
+                            <i><img src={require('../components/images/classroom_statistics.png')}/></i>
+                            <div>统计</div>
+                        </Button>
                     </div>
                     <div className="classroom_btn_finish">
-                        <Button className="classroom_btn_b add_out" onClick={this.showConfirmModal}><img
-                            src={require('../components/images/finish_class.png')}/></Button>
+                        <Button className="classroom_btn_b classroom_btn_finish add_out" onClick={this.showConfirmModal}>
+                            <i><img src={require('../components/images/classroom_finish.png')}/></i>
+                            <div>下课</div>
+                        </Button>
                     </div>
                     <div><i className="shrinkage" id="closeITag" onClick={this.closeOrOpenMessageDiv}></i></div>
                 </div>

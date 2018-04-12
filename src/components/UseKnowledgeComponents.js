@@ -524,7 +524,7 @@ const UseKnowledgeComponents = React.createClass({
 
             <Modal
                 visible={this.state.visible}
-                title="使用至我的资源"
+                title="使用至我的蚁盘资源"
                 onCancel={this.handleCancel}
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭

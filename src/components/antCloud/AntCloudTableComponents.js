@@ -754,7 +754,7 @@ pageNo   --- 页码，-1取全部
                         deleteButton = "";
                         moveButton = "";
                     }
-                    var saveButton = <Button type="button" value={key} text={key}
+                    var saveButton = <Button title="保存至我的蚁盘" type="button" value={key} text={key}
                                              onClick={cloudTable.getCloudFileSave.bind(cloudTable, e)}
                                              icon="save"></Button>;
                 }
@@ -1112,7 +1112,6 @@ pageNo   --- 页码，-1取全部
             }
             // cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
         } else {
-            debugger
             if (this.state.currentDirectoryId != -1) {
                 var queryConditionJson = "";
                 this.listFiles(this.state.ident,

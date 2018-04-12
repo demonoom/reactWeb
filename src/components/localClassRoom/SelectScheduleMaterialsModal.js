@@ -2,10 +2,11 @@
  * Created by devnote on 17-4-17.
  */
 import React, {PropTypes} from 'react';
-import {Modal, Button, Row, Col, message,Table,Popover,Radio,Icon} from 'antd';
+import {Modal, Button, Row, Col, message, Table, Popover, Radio, Icon} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
 import {getPageSize} from '../../utils/Const';
+
 const RadioGroup = Radio.Group;
 
 var scheduleData = [];
@@ -38,7 +39,8 @@ var targetDirColumns = [{
  * 从备课计划选择课件的modal
  */
 //是否给出无更多数据的提示
-var isTipNoDataMessage=true;
+var isTipNoDataMessage = true;
+
 class SelectScheduleMaterialsModal extends React.Component {
 
     constructor(props) {
@@ -47,7 +49,7 @@ class SelectScheduleMaterialsModal extends React.Component {
         this.state = {
             loginUser: loginUser,
             isShow: false,
-            dataSourceValue:1,  //默认为从备课计划中选择
+            dataSourceValue: 1,  //默认为从备课计划中选择
         };
         this.SelectScheduleMaterialsModalHandleCancel = this.SelectScheduleMaterialsModalHandleCancel.bind(this);
         this.loadMoreScheduleFlile = this.loadMoreScheduleFlile.bind(this);
@@ -83,13 +85,13 @@ class SelectScheduleMaterialsModal extends React.Component {
     /**
      * 备课计划下的课件加载更多
      */
-    loadMoreScheduleFlile(){
-        var newPageNo = parseInt(this.state.currentPage)+1;
+    loadMoreScheduleFlile() {
+        var newPageNo = parseInt(this.state.currentPage) + 1;
         this.getMaterialsBySheduleId(this.state.currentScheduleId, newPageNo);
     }
 
     //获取老师名下的备课计划
-    getScheduleList(){
+    getScheduleList() {
         var _this = this;
         scheduleData.splice(0);
         var param = {
@@ -130,7 +132,7 @@ class SelectScheduleMaterialsModal extends React.Component {
     }
 
     //本地课堂中，点击左侧备课计划时，根据备课计划获取对应的资源文件
-    getMaterialsBySheduleId (ScheduleId, pageNo) {
+    getMaterialsBySheduleId(ScheduleId, pageNo) {
         var _this = this;
         var param = {
             "method": 'getMaterialsBySheduleId',
@@ -139,26 +141,36 @@ class SelectScheduleMaterialsModal extends React.Component {
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
                 let courseWareList = [];
                 _this.activeKey = [];
                 courseWareList.splice(0);
                 var response = ret.response;
-                if(isEmpty(response)==false && response.length>0){
+                if (isEmpty(response) == false && response.length > 0) {
                     isTipNoDataMessage = true;
                     response.forEach(function (e) {
                         var name = e.name;
                         var fileLog = _this.buildMaterialsFileLogo(name);
+                        var lastPointIndex = e.path.lastIndexOf(".");
+                        //通过截取文件后缀名的形式，完成对上传文件类型的判断
+                        var noomPath = e.path.substring(lastPointIndex + 1);
+                        var htmlPath;
+                        if (noomPath == 'ppt' || noomPath == 'pptx') {
+                            htmlPath = e.htmlPath
+                        } else if (noomPath == "pdf") {
+                            htmlPath = e.pdfPath
+                        }
                         materialsData.push({
                             key: e.id,
                             fileName: fileLog,
-                            htmlPath: e.htmlPath,
-                            materialsObj:e
+                            htmlPath: htmlPath,
+                            materialsObj: e
                         });
 
                     });
-                    _this.setState({currentPage: pageNo });
-                }else{
-                    if(isTipNoDataMessage==true){
+                    _this.setState({currentPage: pageNo});
+                } else {
+                    if (isTipNoDataMessage == true) {
                         message.error("无更多数据");
                     }
                 }
@@ -182,7 +194,7 @@ class SelectScheduleMaterialsModal extends React.Component {
         var lastPointIndex = fileName.lastIndexOf(".");
         //通过截取文件后缀名的形式，完成对上传文件类型的判断
         var fileType = fileName.substring(lastPointIndex + 1);
-        if(isEmpty(record.htmlPath)){
+        if (isEmpty(record.htmlPath)) {
             message.error("暂不支持打开该文件");
             return;
         }
@@ -190,6 +202,11 @@ class SelectScheduleMaterialsModal extends React.Component {
             this.props.useMaterialInClass(materialId);
             //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
             this.props.pushMaterialsToClass(record.htmlPath);
+        }
+        else if (fileType == "pdf") {
+            //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
+            this.props.useMaterialInClass(materialId);
+            this.props.pushMaterialsToClass(fileObj.pdfPath);
         }
         this.SelectScheduleMaterialsModalHandleCancel();
 
@@ -238,8 +255,8 @@ class SelectScheduleMaterialsModal extends React.Component {
                 break;
         }
         fileLogo = <div className="classroom_push_td">
-                {fileTypeLog}<span className="classroom_file_50">{name}</span>
-            </div>;
+            {fileTypeLog}<span className="classroom_file_50">{name}</span>
+        </div>;
         return fileLogo;
     }
 
@@ -258,10 +275,10 @@ class SelectScheduleMaterialsModal extends React.Component {
                 <Row className="modal_flex">
                     <Col className="ant-form modal_classroom_push_left">
                         <Table className="lesson classroom_prepare_lessons"
-                                                              onRowClick={this.onScheduleSelectChange}
-                                                              columns={scheduleColumns} dataSource={scheduleData}
-                                                              pagination={false}
-                                                              scroll={{y: 300, x:'hidden'}} />
+                               onRowClick={this.onScheduleSelectChange}
+                               columns={scheduleColumns} dataSource={scheduleData}
+                               pagination={false}
+                               scroll={{y: 300, x: 'hidden'}}/>
                     </Col>
                     <Col className="col17_le 17_hei ant-form modal_flex_1">
                         <div className="17_hei1">

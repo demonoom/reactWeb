@@ -9265,8 +9265,8 @@ ul.chosenBox {
     border-radius: 50%;
     font-size: 18px;
     position: absolute;
-    top: 3px;
-    right: 3px;
+    top: 6px;
+    right: 6px;
     background: url(../components/images/deleteBox.png) no-repeat #5d9af2;
     cursor: pointer;
 }

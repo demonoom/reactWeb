@@ -19,21 +19,58 @@
     position: absolute;
     top:20px;
     right: 20px;
+    background: #888685
+}
+.classroom_btn_finish:hover, .classroom_btn_finish:focus{
+    background: #a2a09f;
+    color: #fff;
+}
+.classroom_btn_statistics{
+    z-index: 10;
+    background: #6cb4e4
+}
+.classroom_btn_statistics:hover, .classroom_btn_statistics:focus{
+    background: #80c1ed;
+    color: #fff;
+}
+.classroom_btn_subject{
+    z-index: 10;
+    background: #7eb8fc
+}
+.classroom_btn_subject:hover, .classroom_btn_subject:focus{
+    background: #97c7ff;
+    color: #fff;
+}
+.classroom_btn_courseware{
+    z-index: 10;
+    background: #ffba47
+}
+.classroom_btn_courseware:hover, .classroom_btn_courseware:focus{
+    background: #ffc25b;
+    color: #fff;
 }
 .classroom_btn_b{
-    font-size: 14px;
+    font-size: 12px !important;
     border: none;
     width: 48px;
     height: 48px;
-    border-radius: 0;
+    border-radius: 50%;
     padding: 0;
-    background: none;
+    color: #fff;
+    letter-spacing: -1px;
+    text-align: center;
 }
-.classroom_btn_b img{
+.classroom_btn_b i{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+.classroom_btn_b i img{
     max-width: 100%;
 }
-.classroom_btn_b:hover{
-    background: none;
+.classroom_btn_b div{
+    line-height: 1;
+    margin-top: -2px;
 }
 .classroom_btn_green{
     background: #9cc232
