@@ -442,6 +442,10 @@ const MessageMenu = React.createClass({
      * 如：{{colUid:23836,userName:'王丹'},[{content:'123'}{content:'test'}]}
      */
     setMessageArrayForOnePerson(messageObj) {
+        if (messageObj.fromUser.colUtype == 'SGZH_WEB' && JSON.parse(sessionStorage.getItem("loginUser")).colUid == 119665) {
+            messageObj.content = JSON.parse(messageObj.content).messageTip;
+        }
+
         if (messageObj.command == "message") {
             var fromUser = messageObj.fromUser;
             var content = messageObj.content;

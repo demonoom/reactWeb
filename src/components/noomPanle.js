@@ -204,7 +204,11 @@
                     window.__sendImg__(data.currentUrl, data.url);
 
                 } else if (data.method == 'openNewPage') {
-                    data.url += '?access_user=' + sessionStorage.getItem('ident');
+                    if (data.url.indexOf('?') == -1) {
+                        data.url += '?access_user=' + sessionStorage.getItem('ident');
+                    } else {
+                        data.url += '&access_user=' + sessionStorage.getItem('ident');
+                    }
                     let obj = {mode: 'teachingAdmin', title: '', url: data.url};
                     LP.Start(obj);
                 } else if (data.method == 'setPanelTitle') {
