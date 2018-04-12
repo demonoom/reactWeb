@@ -326,7 +326,7 @@ const LocalClassRoom = React.createClass({
         var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
         //var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
 
-        var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'url':'" + imgsUrl + "'}}" + ')');
+        var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + imgsUrl + "'}}" + ')');
         connection.send(protocal);
 
         //让新版的学生端显示ppt
