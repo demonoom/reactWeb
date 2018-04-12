@@ -25,7 +25,7 @@ const LocalClasses = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
-            classRoomList:[]
+            classRoomList: []
         };
     },
 
@@ -33,7 +33,7 @@ const LocalClasses = React.createClass({
         this.getTeacherClasses()
     },
 
-    getMsObj(){
+    getMsObj() {
         return window.ms;
     },
 
@@ -56,11 +56,12 @@ const LocalClasses = React.createClass({
                             var classInfoArray = classInfo.split("#");
                             var classId = classInfoArray[0];
                             var className = classInfoArray[1];
-                            var openButton = <div><Button onClick={_this.openClass.bind(_this,classId)} className="lesson_start">开课</Button></div>
+                            var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
+                                                          className="lesson_start">开课</Button></div>
                             var obj = {
                                 key: classId,
-                                className:className,
-                                action:openButton
+                                className: className,
+                                action: openButton
                             }
                             classRoomList.push(obj);
                         })
@@ -80,13 +81,12 @@ const LocalClasses = React.createClass({
      * 开启本地课堂
      * @param classId 班级id
      */
-    openClass(classId){
-        console.log(classId);
+    openClass(classId) {
         var classType = "A";
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
-        // window.open(LOCAL_CLASS_ROOM_URL+"?userId="+userId+"&account="+account+"&classCode="+classId+"&classType="+classType);
-        window.open("http://localhost:8090/#/localClassRoom?userId="+userId+"&account="+account+"&classCode="+classId+"&classType="+classType);
+        window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        // window.open("http://localhost:8090/#/localClassRoom?userId="+userId+"&account="+account+"&classCode="+classId+"&classType="+classType);
     },
 
     /**
@@ -103,7 +103,7 @@ const LocalClasses = React.createClass({
                 <div className="localclass_scroll">
                     <Table columns={classRoomColumns}
                            dataSource={this.state.classRoomList}
-                           pagination={false} scroll={{y:'420px'}}/>
+                           pagination={false} scroll={{y: '420px'}}/>
                 </div>
             </div>
         );

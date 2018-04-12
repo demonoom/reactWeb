@@ -141,7 +141,6 @@ class SelectScheduleMaterialsModal extends React.Component {
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 let courseWareList = [];
                 _this.activeKey = [];
                 courseWareList.splice(0);

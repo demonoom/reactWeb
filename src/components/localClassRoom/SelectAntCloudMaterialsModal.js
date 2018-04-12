@@ -223,7 +223,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                debugger
                 if (isEmpty(response) == false && response.length > 0) {
                     _this.buildTargetDirImgData(ret, false);
                     _this.setState({defaultArr: ret, antCloudImgCurrentPage: pageNo});

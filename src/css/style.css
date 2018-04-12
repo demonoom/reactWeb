@@ -6930,6 +6930,12 @@ select.course_n:hover {
     height: 350px;
 }
 
+.noom_downloadLive_div {
+    max-height: 350px;
+    padding: 0 15px;
+    overflow: scroll;
+}
+
 .move_file .clearfix {
     height: calc(100% - 30px);
 }
@@ -9075,24 +9081,29 @@ select.course_n:hover {
     position: relative;
     top: -2px;
 }
-.noomUpLoadFile_wrap .ant-upload-list{
-    padding-left:22px;
+
+.noomUpLoadFile_wrap .ant-upload-list {
+    padding-left: 22px;
 }
+
 .noomUpLoadFile {
     border-radius: 50%;
     font-size: 15px;
     color: #309ffb;
     margin-right: 8px;
 }
-.noomUpLoadFile_btn{
-    width:66px;
+
+.noomUpLoadFile_btn {
+    width: 66px;
     margin-top: 22px;
 }
+
 .noomUpLoadFileDiv {
     margin-bottom: 10px;
     color: #309ffb;
     font-size: 14px;
 }
+
 .antnest_line {
     margin-bottom: 15px;
     border-bottom: 1px solid #f3f3f3;
@@ -9211,10 +9222,10 @@ ul.chosenBox {
     background: url(../components/images/right_icon.png) no-repeat;
     color: #fff;
     background-size: 30px;
-    cursor:pointer
+    cursor: pointer
 }
 
-.selectBox.on{
+.selectBox.on {
     background: #5d92f8 !important;
     color: #ffffff !important;
 }
@@ -9390,7 +9401,7 @@ ul.chosenBox {
     line-height: 28px;
     text-align: center;
     background: #f8f8f8;
-    cursor:pointer
+    cursor: pointer
 }
 
 .check_img_number {
@@ -9428,4 +9439,35 @@ ul.chosenBox {
     width: 100%;
     line-height: 28px;
     text-align: center;
+}
+
+.noom_downloadLive {
+    font-size: 18px;
+    text-decoration: none;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.noom_downloadLive_span {
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.noom_downloadLive_title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.noom_downloadLive_name {
+    font-weight: 400;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.noom_downloadLive_item {
+    position: relative;
+    border-bottom: 1px dashed #0e90d2;
+    margin-bottom: 4px;
 }
