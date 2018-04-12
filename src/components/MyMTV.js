@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Card, Button, message, Breadcrumb, Icon, Pagination} from 'antd';
+import {Card, Button, message, Breadcrumb, Icon, Pagination, Modal} from 'antd';
 import {getLocalTime} from '../utils/utils';
 import {getPageSize, isEmpty} from '../utils/Const';
 import {doWebService} from '../WebServiceHelper';
@@ -16,7 +16,8 @@ class MyMTV extends React.Component {
             data: [],
             pageNo: 1,
             pager: {pageNo: 1, rsCount: 30},
-            method: 'getLiveInfoByUid'
+            method: 'getLiveInfoByUid',
+            downloadArray: ''
         };
         this.changeState = this.changeState.bind(this);
         this._updateLiveInfos = this._updateLiveInfos.bind(this);
@@ -107,15 +108,46 @@ class MyMTV extends React.Component {
 
 
     downloadLiveVideos(arr) {
-        if (!arr.liveVideos.length) {
+        if (arr.liveVideos.length == 0) {
             message.info('无效的视频地址！');
             return;
         }
-        var downloadArr = arr.liveVideos;
-        for (var i = 0; i < downloadArr.length; i++) {
-            // console.log(document.getElementById(downloadArr[i].id + '_download'));
-            document.getElementById(downloadArr[i].id + '_download').click();
+
+        if (arr.liveVideos.length == 1) {
+            var downloadArr = arr.liveVideos;
+            document.getElementById(downloadArr[0].id + '_download').click();
+            return;
         }
+
+        var array = [];
+        arr.liveVideos.forEach(function (v, i) {
+            array.push(
+                <div className='noom_downloadLive_item'>
+                    <div className='noom_downloadLive_span'>
+                        <div className="noom_downloadLive_title">{arr.title}</div>
+                        <div>
+                            <span className='noom_downloadLive_name'>{arr.schoolName}</span>
+                            <span className='noom_downloadLive_name'>{arr.courseName}</span>
+                        </div>
+                    </div>
+
+                    <a className='noom_downloadLive' href={v.path} target="_blank" title="下载"
+                       download={v.path}>
+                        <Icon type="download"/></a>
+
+                </div>
+            )
+
+        });
+
+        //打开model
+        this.setState({downloadArray: array, fileDownLoadModalVisible: true});
+
+        // var downloadArr = arr.liveVideos;
+        // for (var i = 0; i < downloadArr.length; i++) {
+        //     // console.log(document.getElementById(downloadArr[i].id + '_download'));
+        //     document.getElementById(downloadArr[i].id + '_download').click();
+        // }
         // let ifrArr = [];
         // for (let i = 0; i < arr.liveVideos.length; i++) {
         //     let obj = arr.liveVideos[i];
@@ -182,12 +214,10 @@ class MyMTV extends React.Component {
                 downloadBtn = <Button icon="download" className="star_del" onClick={() => {
                     this.downloadLiveVideos(e)
                 }}/>
-                if (isEmpty(e.liveVideos) == false) {
-                    for (var i = 0; i < liveVideos.length; i++) {
-                        let obj = liveVideos[i];
-                        downloadnoom.push(<a href={obj.path} key={'download_' + i} id={obj.id + '_download'}
-                                             download="help"></a>);
-                    }
+                if (e.liveVideos.length == 1) {
+                    let obj = liveVideos[0];
+                    downloadnoom.push(<a href={obj.path} key={'download_' + 0} id={obj.id + '_download'}
+                                         download="help"></a>);
                 }
             }
             let liveCard = <Card className="live">
@@ -231,6 +261,13 @@ class MyMTV extends React.Component {
         });
     }
 
+    /**
+     * 关闭文件下载窗口
+     */
+    fileDownLoadModalHandleCancel = () => {
+        this.setState({fileDownLoadModalVisible: false});
+    }
+
     render() {
 
         this.buildFavShipionUi();
@@ -241,6 +278,20 @@ class MyMTV extends React.Component {
                             pageSize={getPageSize()}
                             current={this.state.pager.pageNo}
                             onChange={this._updateLiveInfos}/>
+
+                <Modal title="文件下载列表"
+                       visible={this.state.fileDownLoadModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={this.fileDownLoadModalHandleCancel}
+                       footer={null}
+                       width={450}
+                >
+                    <div className="noom_downloadLive_div">
+                        {this.state.downloadArray}
+                    </div>
+                </Modal>
+
             </div>
         );
     }

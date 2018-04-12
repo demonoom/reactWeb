@@ -1369,6 +1369,7 @@ var utilsCommon = (function () {
 
 
 function onPasteFunction(event) {
+    debugger
     event = event || window.event;
 
     // 添加到事件对象中的访问系统剪贴板的接口
