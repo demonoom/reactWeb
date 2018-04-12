@@ -5,7 +5,7 @@ import React, {PropTypes} from 'react';
 import {Modal, Button, Row, Col, message, Table, Popover, Radio, Icon, Tabs} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty, showLargeImg} from '../../utils/utils';
-import {getPageSize, MIDDLE_IMG, SMALL_IMG, ANT_CLOUD_FILTER_OPTION} from '../../utils/Const';
+import {getPageSize, MIDDLE_IMG, SMALL_IMG, ANT_CLOUD_FILTER_OPTION, ANT_CLOUD_FILTER_OPTION_IMG} from '../../utils/Const';
 
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
@@ -144,7 +144,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
      */
     getAntCountFileList() {
         var initPageNo = 1;
-        this.getUserRootCloudFiles(this.state.loginUser.colUid, initPageNo);
+        this.getUserRootCloudFiles(-1, initPageNo);
         this.setState({parentDirectoryId: -1, antCloudFileCurrentPage: 1});
     }
 
@@ -155,7 +155,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var queryConditionJson = "";
         var antCloudFileCurrentPage = parseInt(this.state.antCloudFileCurrentPage) + 1;
         if (this.state.currentDirectoryIdAtMoveModal == -1) {
-            this.getUserRootCloudFiles(this.state.loginUser.colUid, antCloudFileCurrentPage);
+            this.getUserRootCloudFiles(-1, antCloudFileCurrentPage);
         } else {
             this.listFiles(this.state.loginUser.colUid, this.state.currentDirectoryIdAtMoveModal, queryConditionJson, antCloudFileCurrentPage);
         }
@@ -177,12 +177,14 @@ class SelectAntCloudMaterialsModal extends React.Component {
     }
 
     //点击导航时，进入的我的文件列表
-    getUserRootCloudFiles(userId, pageNo) {
+    getUserRootCloudFiles(parentId, pageNo) {
         var _this = this;
         _this.setState({currentDirectoryId: -1, totalCount: 0});
         var param = {
-            "method": 'getUserRootCloudFiles',
-            "userId": userId,
+            "method": 'filterCloudFile',
+            "userId": this.state.loginUser.colUid, //23836
+            "parentId": parentId, //1454
+            "filterOption": ANT_CLOUD_FILTER_OPTION_IMG,
             "pageNo": pageNo,
         };
         doWebService(JSON.stringify(param), {
@@ -570,12 +572,20 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var _this = this;
         _this.setState({totalCount: 0});
         _this.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
-        var param = {
-            "method": 'listFiles',
+        /*var param = {
+            "method": 'filterCloudFile',
             "operateUserId": operateUserId,
             "cloudFileId": cloudFileId,
             "queryConditionJson": queryConditionJson,
-            "pageNo": pageNo
+            "pageNo": pageNo,
+            "filterOption": ANT_CLOUD_FILTER_OPTION_IMG,
+        };*/
+        var param = {
+            "method": 'filterCloudFile',
+            "userId": this.state.loginUser.colUid, //23836
+            "parentId": cloudFileId, //1454
+            "filterOption": ANT_CLOUD_FILTER_OPTION_IMG,
+            "pageNo": pageNo,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -609,7 +619,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
             }
             if (_this.state.parentDirectoryIdAtMoveModal == 0) {
                 _this.setState({"parentDirectoryIdAtMoveModal": -1, "currentDirectoryIdAtMoveModal": -1});
-                _this.getUserRootCloudFiles(_this.state.loginUser.colUid, initPageNo, "moveDirModal");
+                _this.getUserRootCloudFiles(-1, initPageNo, "moveDirModal");
             } else {
                 var queryConditionJson = "";
                 _this.listFiles(_this.state.loginUser.colUid,
