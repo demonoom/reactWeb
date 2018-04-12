@@ -5,7 +5,13 @@ import React, {PropTypes} from 'react';
 import {Modal, Button, Row, Col, message, Table, Popover, Radio, Icon, Tabs} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty, showLargeImg} from '../../utils/utils';
-import {getPageSize, MIDDLE_IMG, SMALL_IMG, ANT_CLOUD_FILTER_OPTION, ANT_CLOUD_FILTER_OPTION_IMG} from '../../utils/Const';
+import {
+    getPageSize,
+    MIDDLE_IMG,
+    SMALL_IMG,
+    ANT_CLOUD_FILTER_OPTION,
+    ANT_CLOUD_FILTER_OPTION_IMG
+} from '../../utils/Const';
 
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
@@ -169,9 +175,9 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var queryConditionJson = "";
         var antCloudImgCurrentPage = parseInt(this.state.antCloudImgCurrentPage) + 1;
         if (this.state.currentDirectoryIdAtImgModal == -1) {
-            this.filterCloudFile(-1, antCloudImgCurrentPage);
+            this.filterCloudFile(-1, antCloudImgCurrentPage, 'loadMore');
         } else {
-            this.filterCloudFile(this.state.currentDirectoryIdAtImgModal, antCloudImgCurrentPage);
+            this.filterCloudFile(this.state.currentDirectoryIdAtImgModal, antCloudImgCurrentPage, 'loadMore');
             // message.error("无更多数据");
         }
     }
@@ -211,7 +217,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * @param file
      */
 
-    filterCloudFile(parentId, pageNo) {
+    filterCloudFile(parentId, pageNo, keyWord) {
         var _this = this;
         //_this.setState({currentDirectoryId: -1, totalCount: 0});
         this.setState({"currentDirectoryIdAtImgModal": parentId});
@@ -226,8 +232,15 @@ class SelectAntCloudMaterialsModal extends React.Component {
             onResponse: function (ret) {
                 var response = ret.response;
                 if (isEmpty(response) == false && response.length > 0) {
-                    _this.buildTargetDirImgData(ret, false);
-                    _this.setState({defaultArr: ret, antCloudImgCurrentPage: pageNo});
+                    if (keyWord == 'loadMore') {
+                        var loadMoreObj = _this.state.defaultArr;
+                        loadMoreObj.response = loadMoreObj.response.concat(ret.response);
+                        _this.setState({defaultArr: loadMoreObj, antCloudImgCurrentPage: pageNo});
+                        _this.buildTargetDirImgData(loadMoreObj, false);
+                    } else {
+                        _this.buildTargetDirImgData(ret, false);
+                        _this.setState({defaultArr: ret, antCloudImgCurrentPage: pageNo});
+                    }
                     // _this.state.defaultArr.push(ret);
                 } else {
                     var parentDirectoryId = _this.state.currentDirectory.parentId;
@@ -250,8 +263,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var _this = this;
         var directoryCount = _this.getDirectoryCount(ret.response);
         if (isEmpty(ret.response) == false) {
-
-            console.log('ret', ret.response);
 
             ret.response.forEach(function (v, i) {
                 if (i == 0) {
@@ -279,13 +290,11 @@ class SelectAntCloudMaterialsModal extends React.Component {
                             }
                         );
                     }
-                    console.log('selectNum', _this.state.selectNum);
                     var item = _this.state.selectNum.filter(item => {
                         if (item.id == v.id) {
                             return item
                         }
                     });
-                    console.log(item);
                     var filterImg = <li key={v.id}>
                         <span className="selectTab_li">
                             <img className="topics_zanImg" onClick={showLargeImg} src={v.path + '?' + MIDDLE_IMG}
@@ -390,6 +399,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         }
         this.setState({selectCount: selectArr.length})
         this.setState({selectArr: selectArr})
+        console.log(this.state.defaultArr);
         this.buildTargetDirImgData(this.state.defaultArr, true);
     }
 
