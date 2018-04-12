@@ -55,14 +55,15 @@ const UploadImgComponents = React.createClass({
                     return false;
                 }
                 var fileType = file.type;
-                if (fileType !== 'application/pdf' && fileType !== 'image/jpeg' && fileType !== 'image/png') {
-                    message.error('文件格式不符合，请重新上传', 5);
-                    return false;
-                }
-                // if (fileType !== 'image/jpeg') {
+                // if (fileType !== 'application/pdf' && fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'application/msword' && fileType !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
                 //     message.error('文件格式不符合，请重新上传', 5);
                 //     return false;
                 // }
+
+                if (fileType.indexOf("application") == -1 && fileType.indexOf("image") == -1) {
+                    message.error('文件格式不符合，请重新上传', 5);
+                    return false;
+                }
             },
             onChange(info) {
                 if (info.file.status !== 'uploading') {
@@ -90,7 +91,7 @@ const UploadImgComponents = React.createClass({
             <div className="ding_modal_left_noom">
                 <Upload {...props}>
                     <div className='noom_cursor noomUpLoadFileDiv'>
-                        <Icon className="noomUpLoadFile" type="plus-circle" />
+                        <Icon className="noomUpLoadFile" type="plus-circle"/>
                         <span>添加文件</span>
                     </div>
                 </Upload>
