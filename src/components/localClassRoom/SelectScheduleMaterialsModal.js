@@ -157,7 +157,7 @@ class SelectScheduleMaterialsModal extends React.Component {
                         var htmlPath;
                         if (noomPath == 'ppt' || noomPath == 'pptx') {
                             htmlPath = e.htmlPath
-                        } else if (noomPath == "pdf" || noomPath == "doc" || noomPath == "docx") {
+                        } else if (noomPath == "pdf") {
                             htmlPath = e.pdfPath
                         }
                         materialsData.push({
