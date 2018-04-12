@@ -304,6 +304,7 @@ const LocalClassRoom = React.createClass({
     },
 
     sendFilterCloudFile(selectArr) {
+        debugger
         var cidArray = [];
         if (isEmpty(selectArr)) {
             message.error('请选择图片;')
@@ -323,7 +324,7 @@ const LocalClassRoom = React.createClass({
 
         var vid = this.state.vid;
         var userId = this.state.userId;
-        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard2/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
         //var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
 
         var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'url':'" + imgsUrl + "'}}" + ')');
