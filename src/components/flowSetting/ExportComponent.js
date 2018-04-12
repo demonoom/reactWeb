@@ -405,8 +405,8 @@ const ExportComponent = React.createClass({
                                 <div className="date_export_input">
                                     <Row>
                                         <Col span={3} className="framework_m_l">审批类型：</Col>
-                                        <Col span={9}>
-                                            <Row className="margin_0_4">
+                                        <Col span={21}>
+                                            <Row className="margin_0_4" style={{width:315}}>
                                                 <Col span={12}>
                                                     <Select style={{width: 150}} defaultValue={this.state.flowType} value={this.state.flowType} onChange={this.flowTypeChange}>
                                                         {this.state.optionGroupArray}
