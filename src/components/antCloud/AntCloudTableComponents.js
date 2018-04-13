@@ -2326,7 +2326,7 @@ pageNo   --- 页码，-1取全部
                        onCancel={cloudTable.mkdirModalHandleCancel}
                        className="schoolgroup_modal"
                 >
-                    <div className="modal_register_main">
+                    <div className="">
                         <Row className="ant_row">
                             <Col span={6} className="right_look">名称：</Col>
                             <Col span={16} className="framework_m_r">
