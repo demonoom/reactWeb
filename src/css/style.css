@@ -169,7 +169,7 @@ i, cite, em, var, address, dfn {
     }
 
     .ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name {
-        width: 41%;
+        width: 40%;
     }
 
 }
@@ -9142,13 +9142,11 @@ select.course_n:hover {
     width: 100%;
     align-content: flex-start;
 }
-
+ul.chosenBox{
+    height:100%;
+}
 .selectTab ul {
     height: calc(100% - 65px);
-}
-
-ul.chosenBox {
-    padding: 10px 0 10px 10px;
 }
 
 .selectTab li {
@@ -9164,7 +9162,7 @@ ul.chosenBox {
     background: #e5e5e5;
 }
 
-.selectTab li:nth-child(3n) {
+.selectTab li:nth-child(3n), ul.chosenBox li:nth-child(3n) {
     margin-right: 0;
 }
 
@@ -9291,7 +9289,7 @@ ul.chosenBox {
     position: relative;
 }
 
-.select_img_modal .ant-modal-body .ant-tabs-tabpane {
+.select_img_modal .ant-modal-body .ant-tabs-tabpane, .modal_register_main {
     padding: 10px 0 10px 10px;
     height: 448px;
     overflow: hidden;
@@ -9427,7 +9425,7 @@ ul.chosenBox {
     background: #f8f8f8;
     padding: 7px 10px;
     border-radius: 0 0 6px 6px;
-    margin-left: 0;
+    margin-left: -10px;
 }
 
 .select_img_modal .ant-modal-content span.ant-modal-close-x {
