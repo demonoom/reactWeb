@@ -1935,12 +1935,12 @@ pageNo   --- 页码，-1取全部
      */
     showShareModal(fileObject) {
         this.props.showShareFromCloud(fileObject)
-        return
-        cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
-        cloudTable.getAntGroup();
-        this.getStructureUsers();
-        this.getRecentContents();
-        cloudTable.setState({shareModalVisible: true});
+        // return
+        // cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
+        // cloudTable.getAntGroup();
+        // this.getStructureUsers();
+        // this.getRecentContents();
+        // cloudTable.setState({shareModalVisible: true});
     },
 
     /**
