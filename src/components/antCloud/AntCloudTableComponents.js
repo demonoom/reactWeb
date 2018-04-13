@@ -122,8 +122,12 @@ const AntCloudTableComponents = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        var antCloudKey = nextProps.antCloudKey;
-        this.getFileByType(antCloudKey);
+        // var antCloudKey = nextProps.antCloudKey;
+        // this.getFileByType(antCloudKey);
+    },
+
+    changeFileType(optType) {
+        this.getFileByType(optType);
     },
 
     componentDidUpdate() {

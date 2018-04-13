@@ -2329,7 +2329,11 @@ const MainLayout = React.createClass({
     },
 
     getAntCloud(optType) {
-        this.setState({"antCloudKey": optType});
+        // this.setState({"antCloudKey": optType});
+        var _this = this;
+        setTimeout(function () {
+            _this.refs.antCloudTableComponents.changeFileType(optType);
+        }, 50)
     },
 
     getSubGroup(structureId, structure) {
@@ -2888,6 +2892,7 @@ const MainLayout = React.createClass({
                 middleComponent = <AntCloudMenu callbackParent={this.getAntCloud}/>;
                 tabComponent = <AntCloudTableComponents antCloudKey={this.state.antCloudKey}
                                                         messageUtilObj={ms}
+                                                        ref="antCloudTableComponents"
                                                         showShareGuideModal={this.showShareGuideModal}
                                                         showShareFromCloud={this.showShareFromCloud}
                 ></AntCloudTableComponents>;
