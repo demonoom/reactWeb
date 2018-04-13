@@ -169,7 +169,7 @@ i, cite, em, var, address, dfn {
     }
 
     .ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name {
-        width: 41%;
+        width: 40%;
     }
 
 }
