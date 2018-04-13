@@ -1934,6 +1934,8 @@ pageNo   --- 页码，-1取全部
      * 显示分享文件的窗口
      */
     showShareModal(fileObject) {
+        this.props.showShareFromCloud(fileObject)
+        return
         cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
         cloudTable.getAntGroup();
         this.getStructureUsers();
