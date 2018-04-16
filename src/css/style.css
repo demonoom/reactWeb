@@ -6931,9 +6931,12 @@ select.course_n:hover {
 }
 
 .noom_downloadLive_div {
-    max-height: 350px;
+    max-height: 401px;
     padding: 0 15px;
-    overflow: scroll;
+    overflow-y: auto;
+    min-height: 151px;
+    overflow-x: hidden;
+    margin-top: -14px;
 }
 
 .move_file .clearfix {
@@ -9450,22 +9453,31 @@ ul.chosenBox{
 
 .noom_downloadLive_span {
     display: inline-block;
-    padding-bottom: 5px;
+    padding:8px 0 12px 0;
+    width: 90%;
 }
 
 .noom_downloadLive_title {
-    font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
+    color:#4f4f4f;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .noom_downloadLive_name {
-    font-weight: 400;
     font-size: 12px;
-    margin-right: 5px;
+    margin-right: 14px;
 }
 
 .noom_downloadLive_item {
     position: relative;
     border-bottom: 1px dashed #f3f3f3;
-    margin-bottom: 4px;
+}
+.noom_downloadLive_cont{
+    color: #888
+}
+.noom_downloadLive_i{
+    font-size: 20px;
 }
