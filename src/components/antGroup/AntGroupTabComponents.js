@@ -3694,10 +3694,12 @@ const AntGroupTabComponents = React.createClass({
                                                 </div>
                                                 <div className="talk-cont">
                                                     <span className="name">{userPhoneIcon}</span>
-                                                    <span className="borderballoon"
-                                                          onClick={this.entDingMesDetil}>{e.content}
-                                                        <i className="borderballoon_dingcorner_le"></i>
-                                                    </span>
+                                                    <div className="talk_bubble_box">
+                                                        <span className="borderballoon"
+                                                              onClick={this.entDingMesDetil}>{e.content}
+                                                            <i className="borderballoon_dingcorner_le"></i>
+                                                        </span>
+                                                    </div>
                                                     {/*<Dropdown overlay={msgMenu} placement="topLeft"*/}
                                                     {/*onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>*/}
                                                     {/*<Icon type="ellipsis"/>*/}

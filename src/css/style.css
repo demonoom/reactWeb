@@ -3115,6 +3115,7 @@ a.topics:hover {
     margin-left: 12px;
     font-size: 14px;
     color: #2896fb;
+    cursor:pointer
 }
 
 .share_font:hover {
