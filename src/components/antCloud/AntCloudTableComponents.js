@@ -796,8 +796,10 @@ pageNo   --- 页码，-1取全部
                         editButton = "";
                         deleteButton = "";
                         moveButton = "";
-                        saveButton = "";
-                        shareButton = "";
+                        if(_this.state.currentDirectoryId == -1){
+                            saveButton = "";
+                            shareButton = "";
+                        }
                     }
                 }else{
                     //我的文件夹中，如果是文件夹，则不应该有保存按钮
@@ -1372,7 +1374,7 @@ pageNo   --- 页码，-1取全部
                         //TODO 调用本地上传文件的方法
                         var arr = fileUrl.split(',');
                         arr.forEach(function (v, i) {
-                            cloudTable.createCloudFile(fileUrl, uploadFileList[i]);
+                            cloudTable.createCloudFile(v, uploadFileList[i]);
                         });
                     }
                 },
@@ -1388,9 +1390,10 @@ pageNo   --- 页码，-1取全部
      * @param fileList
      */
     handleFileSubmit(fileList) {
-        if (fileList == null || fileList.length == 0) {
+        /*if (fileList == null || fileList.length == 0) {
             uploadFileList.splice(0, uploadFileList.length);
-        }
+        }*/
+        uploadFileList.splice(0);
         for (var i = 0; i < fileList.length; i++) {
             var fileJson = fileList[i];
             var fileObj = fileJson.fileObj;
@@ -1453,7 +1456,7 @@ pageNo   --- 页码，-1取全部
                 } else {
                     message.error("文件上传失败");
                 }
-                cloudTable.setState({cloudFileUploadModalVisible: false});
+                cloudTable.setState({cloudFileUploadModalVisible: false,currentPage:1});
             },
             onError: function (error) {
                 message.error(error);
@@ -1545,6 +1548,7 @@ pageNo   --- 页码，-1取全部
                     cloudTable.state.parentDirectoryIdAtMoveModal, queryConditionJson, initPageNo, "moveDirModal");
             }
         }
+        this.setState({currentPageModal:initPageNo});
     },
 
     /**
@@ -1814,29 +1818,27 @@ pageNo   --- 页码，-1取全部
     saveBarBack() {
         var initPageNo = 1;
         //我的文件 列表里面 我的资源
-        if (cloudTable.state.activeKey == '1') {
-            if (cloudTable.state.parentDirectoryIdAtMoveModalSave == '0') {
-                cloudTable.setState({"parentDirectoryIdAtMoveModalSave": -1, "currentDirectoryIdAtMoveModalSave": -1});
-                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, '', true);
-            } else {
-                var queryConditionJson = "";
-                cloudTable.listFilesLocal(cloudTable.state.ident, cloudTable.state.parentDirectoryIdAtMoveModalSave, queryConditionJson, initPageNo);
-            }
+        if (cloudTable.state.parentDirectoryIdAtMoveModalSave == '0') {
+            cloudTable.setState({"parentDirectoryIdAtMoveModalSave": -1, "currentDirectoryIdAtMoveModalSave": -1});
+            // cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, '', true);
+            cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, "copyDirModal");
         } else {
-            //我的题目
-            if (cloudTable.state.parentSubjectDirectoryId == '0') {
-                cloudTable.setState({parentSubjectDirectoryId: '-1', currentSubjectDirectoryId: "-1"});
-                cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, initPageNo);
-            } else {
-                cloudTable.listCloudSubject(cloudTable.state.parentSubjectDirectoryId, initPageNo)
-            }
+            var queryConditionJson = "";
+            cloudTable.listFilesLocal(cloudTable.state.ident, cloudTable.state.parentDirectoryIdAtMoveModalSave, queryConditionJson, initPageNo);
+            //this.listFiles(this.state.ident,this.state.currentDirectoryId, queryConditionJson, initPageNo, "copyDirModal");
         }
-        if (cloudTable.state.getFileType != 'myfile') {
-            cloudTable.setState({
-                "parentDirectoryIdAtMoveModalSave": directoryObj.parentId,
-                "currentDirectoryIdAtMoveModalSave": directoryObj.id,
-            });
-        }
+        //判断是否是第一层文件夹
+        /*if (this.state.currentDirectoryId != -1) {
+            var queryConditionJson = "";
+            this.buildPageNoMap(this.state.currentDirectoryId, initPageNo);
+            this.listFiles(this.state.ident,
+                this.state.currentDirectoryId, queryConditionJson, initPageNo, "copyDirModal");
+        } else {
+            this.buildPageNoMap(-1, pageNo);
+            cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
+            cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, "copyDirModal");
+        }*/
+        this.setState({currentPageForCopyModal:initPageNo});
     },
 
 
@@ -2526,7 +2528,7 @@ pageNo   --- 页码，-1取全部
                        onCancel={cloudTable.reNameModalHandleCancel}
                        className="schoolgroup_modal"
                 >
-                    <div className="modal_register_main">
+                    <div className="">
                         <Row className="ant_row">
                             <Col span={6} className="right_look">名称：</Col>
                             <Col span={16} className="framework_m_r">
