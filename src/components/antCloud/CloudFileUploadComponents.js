@@ -80,9 +80,9 @@ const CloudFileUploadComponents = React.createClass({
     //判断已上传文件个数，目前只允许单文件上传
     checkSubmitFileCount() {
         var isOk = false;
-        /*if(this.state.submitFileOptions.length>=1){
+        if(this.state.submitFileOptions.length>=1){
             isOk=true;
-        }*/
+        }
         return isOk;
     },
 

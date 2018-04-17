@@ -88,7 +88,9 @@ const AntCloudTableComponents = React.createClass({
             loading: false,
             count: 0,
             totalCount: 0,
+            totalCountModal: 0,   //Modal 数据总条数
             currentPage: 1,
+            currentPageModal: 1,   //Modal当前页数
             currentView: 'myFile',
             clazzId: '',
             dateTime: '',
@@ -110,7 +112,8 @@ const AntCloudTableComponents = React.createClass({
             disabledFlag: false,
             defaultActiveKey: "1",
             activeKey: "1",
-            subjectModalVisible: false  //上传题目modal
+            subjectModalVisible: false,  //上传题目modal
+            pageNoMap: [],   //存放文件夹的id和pageNo的对应关系
         };
     },
 
@@ -213,9 +216,10 @@ const AntCloudTableComponents = React.createClass({
 
     //点击导航时，进入的我的文件列表
     getUserRootCloudFiles: function (userId, pageNo, optSrc, flag) {
+        debugger
         var _this = this;
         data = [];
-        cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
+        _this.setState({currentDirectoryId: -1, totalCount: 0});
         var param = {
             "method": 'getUserRootCloudFiles',
             "userId": userId,
@@ -224,12 +228,13 @@ const AntCloudTableComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+                debugger
                 if (response) {
                     if (isEmpty(optSrc) == false && optSrc == "mainTable") {
                         cloudTable.buildTableDataByResponse(ret);
                     } else if (optSrc == "moveDirModal") {
                         cloudTable.buildTargetDirData(ret);
-                        _this.buildTargetDirDataSaveLocal(ret);
+                        //_this.buildTargetDirDataSaveLocal(ret);
                     } else if (optSrc == "copyDirModal") {
                         // 保存
                         cloudTable.buildTargetDirDataSaveLocal(ret);
@@ -238,7 +243,7 @@ const AntCloudTableComponents = React.createClass({
                             cloudTable.buildTableDataByResponse(ret);
                         }
                         cloudTable.buildTargetDirData(ret);
-                        cloudTable.buildTargetDirDataSaveLocal(ret);
+                        //cloudTable.buildTargetDirDataSaveLocal(ret);
                     }
                 }
             },
@@ -250,6 +255,7 @@ const AntCloudTableComponents = React.createClass({
 
     //点击导航时，获取用户的根群文件夹
     getUserChatGroupRootCloudFiles: function (userId, pageNo, optSrc) {
+        debugger
         data = [];
         cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
         var param = {
@@ -257,14 +263,17 @@ const AntCloudTableComponents = React.createClass({
             "userId": userId,
             "pageNo": pageNo,
         };
+
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
                 var response = ret.response;
                 if (response) {
                     if (optSrc == 'mainTable') {
                         cloudTable.buildTableDataByResponse(ret);//构建表格的数据
                     } else if (optSrc == 'moveDirModal') {
                         cloudTable.buildTargetDirData(ret);//构建移动文件时的目标文件夹数据
+                    } else if (optSrc == 'copyDirModal') {
                         cloudTable.buildTargetDirDataSaveLocal(ret);
                     } else {
                         cloudTable.buildTableDataByResponse(ret);//构建表格的数据
@@ -339,10 +348,10 @@ const AntCloudTableComponents = React.createClass({
                 var key = e.id;
                 var name = e.name;
                 var directory = e.directory;
-                var fileLogo = cloudTable.buildFileLogo(name, directory, e, "moveDirModal");
+                var fileLogo = cloudTable.buildFileLogo(name, directory, e, "copyDirModal");
                 var dirName = <span className="font_gray_666"
                     //这是点击文件名进入文件夹的功能
-                                    onClick={cloudTable.intoDirectoryInner.bind(cloudTable, e, "moveDirModal")}>
+                                    onClick={cloudTable.intoDirectoryInner.bind(cloudTable, e, "copyDirModal")}>
                 {fileLogo}
             </span>;
                 var moveDirOpt;
@@ -350,7 +359,7 @@ const AntCloudTableComponents = React.createClass({
                     moveDirOpt = <div>
                         {/*这是确定保存的功能*/}
                         <Button
-                            onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key, "moveDirModal")}>确定</Button>
+                            onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key, "copyDirModal")}>确定</Button>
                     </div>;
                 } else {
                     dirName = name;
@@ -362,7 +371,12 @@ const AntCloudTableComponents = React.createClass({
                 };
                 targetDirDataArray.push(dataJson);
             })
-            cloudTable.setState({"targetDirDataArray1": targetDirDataArray});
+            var totalCount = ret.pager.rsCount;
+            //更新保存modal的数据和页码
+            cloudTable.setState({
+                "targetDirDataArray1": targetDirDataArray,
+                "totalCountForCopyModal": totalCount
+            });
         }
     },
 
@@ -386,7 +400,7 @@ const AntCloudTableComponents = React.createClass({
                 var key = e.id;
                 var name = e.name;
                 var directory = e.directory;
-                var fileLogo = cloudTable.buildFileLogo(name, directory, e);
+                var fileLogo = cloudTable.buildFileLogo(name, directory, e, "moveDirModal");
 
                 var dirName = <span className="font_gray_666"
                                     onClick={cloudTable.intoDirectoryInner.bind(cloudTable, e, "moveDirModal")}>
@@ -395,7 +409,8 @@ const AntCloudTableComponents = React.createClass({
                 var moveDirOpt;
                 if (e.directory == true) {
                     moveDirOpt = <div>
-                        <Button onClick={cloudTable.moveFileToTargetDir.bind(cloudTable, key)}>确定</Button>
+                        <Button
+                            onClick={cloudTable.moveFileToTargetDir.bind(cloudTable, key, "moveDirModal")}>确定</Button>
                     </div>;
                 } else {
                     dirName = name;
@@ -407,7 +422,11 @@ const AntCloudTableComponents = React.createClass({
                 };
                 targetDirDataArray.push(dataJson);
             });
-            cloudTable.setState({"targetDirDataArray": targetDirDataArray});
+            cloudTable.setState({
+                "targetDirDataArray1": targetDirDataArray,
+                totalCount: parseInt(ret.pager.rsCount),
+                totalCountModal: parseInt(ret.pager.rsCount)
+            });
         }
     },
 
@@ -537,6 +556,7 @@ const AntCloudTableComponents = React.createClass({
      * @param pageNo
      */
     listFiles: function (operateUserId, cloudFileId, queryConditionJson, pageNo, optSrc) {
+        debugger
         data = [];
         cloudTable.setState({totalCount: 0});
         var param = {
@@ -548,12 +568,22 @@ const AntCloudTableComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
                 var response = ret.response;
+                console.log("ss" + optSrc)
                 if (response) {
                     if (isEmpty(optSrc) == false && optSrc == "mainTable") {
                         cloudTable.setState({"currentDirectoryId": cloudFileId});
                         cloudTable.buildTableDataByResponse(ret);
-                    } else {
+                    }else if (isEmpty(optSrc) == false && optSrc == "moveDirModal") {
+                        //移动文件夹页面进入文件
+                        cloudTable.setState({"currentDirectoryId": cloudFileId});
+                        cloudTable.buildTargetDirData(ret);
+                    }else if (isEmpty(optSrc) == false && optSrc == "copyDirModal") {
+                        // 保存
+                        cloudTable.setState({"currentDirectoryId": cloudFileId});
+                        cloudTable.buildTargetDirDataSaveLocal(ret);
+                    }else {
                         cloudTable.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
                         cloudTable.buildTargetDirData(ret);
                         cloudTable.buildTargetDirDataSaveLocal(ret);
@@ -660,11 +690,16 @@ pageNo   --- 页码，-1取全部
      */
     onChange(activeKey) {
         if (activeKey == "1") {
-            cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999', currentPage: 1});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
+            cloudTable.setState({
+                activeKey: '1',
+                currentSubjectDirectoryId: '-999',
+                currentPage: 1,
+                selectedRowKeys: []
+            });//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
             cloudTable.getUserRootCloudFiles(cloudTable.state.ident, 1);
         }
         if (activeKey == "2") {
-            cloudTable.setState({activeKey: '2', currentPage: 1});
+            cloudTable.setState({activeKey: '2', currentPage: 1, selectedRowKeys: []});
             cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, 1)
         }
     },
@@ -673,6 +708,7 @@ pageNo   --- 页码，-1取全部
      * @param ret
      */
     buildTableDataByResponse(ret) {
+        debugger
         var _this = this;
         var i = 0;
         var cloudFileArray = [];
@@ -691,6 +727,7 @@ pageNo   --- 页码，-1取全部
                         var parentDirectoryId = e.parentId;
                         _this.setState({"parentSubjectDirectoryId": parentDirectoryId});
                     }
+
                 }
                 var key = e.id;
                 var createTime = e.createTime;
@@ -741,7 +778,9 @@ pageNo   --- 页码，-1取全部
                 var moveButton = <Button title="移动" type="button" value={key} text={key}
                                          onClick={cloudTable.showMoveFileModal.bind(cloudTable, e)}
                                          icon="swap"></Button>;
-
+                var saveButton = <Button title="保存至我的蚁盘" type="button" value={key} text={key}
+                                         onClick={cloudTable.getCloudFileSave.bind(cloudTable, e)}
+                                         icon="save"></Button>;
 
                 var getFileType = cloudTable.state.getFileType;
                 //我的蚁盘是私有的，用户具备所有的操作权限
@@ -753,10 +792,12 @@ pageNo   --- 页码，-1取全部
                         editButton = "";
                         deleteButton = "";
                         moveButton = "";
+                        saveButton = "";
+                        shareButton = "";
                     }
-                    var saveButton = <Button title="保存至我的蚁盘" type="button" value={key} text={key}
-                                             onClick={cloudTable.getCloudFileSave.bind(cloudTable, e)}
-                                             icon="save"></Button>;
+                }else{
+                    //我的文件夹中，如果是文件夹，则不应该有保存按钮
+                    saveButton = "";
                 }
                 var subjectOpt;
                 if (cloudTable.state.activeKey == '2' && cloudTable.state.getFileType == "myFile") {
@@ -800,8 +841,10 @@ pageNo   --- 页码，-1取全部
      * 蚁盘中，如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
     intoDirectoryInner(directoryObj, optSrc) {
+        debugger
         var initPageNo = 1;
         var queryConditionJson = "";
+        this.buildPageNoMap(this.state.currentDirectoryId, this.state.currentPage);
         //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
         if (cloudTable.state.currentDirectoryId == -1 && cloudTable.state.getFileType != "myFile") {
             if (directoryObj.createUid == this.state.ident) {
@@ -816,7 +859,15 @@ pageNo   --- 页码，-1取全部
                 "currentDirectoryId": directoryObj.id,
                 "currentDirectoryCreatorId": directoryObj.creator.colUid
             });
-        } else {
+        }
+        if (isEmpty(optSrc) == false && optSrc == "moveDirModal") {
+            cloudTable.setState({
+                "parentDirectoryId": directoryObj.parentId,
+                "currentDirectoryId": directoryObj.id,
+                "currentDirectoryCreatorId": directoryObj.creator.colUid
+            });
+        }
+        else {
             cloudTable.setState({
                 "parentDirectoryIdAtMoveModal": directoryObj.parentId,
                 "currentDirectoryIdAtMoveModal": directoryObj.id
@@ -1019,8 +1070,10 @@ pageNo   --- 页码，-1取全部
                         if (cloudTable.state.currentDirectoryId != -1) {
                             cloudTable.listFiles(cloudTable.state.ident,
                                 cloudTable.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                            cloudTable.setState({currentPage: 1});
                         } else {
-                            cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                            cloudTable.getUserRootCloudFiles(cloudTable.state.ident, 1);
+                            cloudTable.setState({currentPage: 1});
                         }
                     }
                     message.success("文件夹创建成功");
@@ -1090,14 +1143,18 @@ pageNo   --- 页码，-1取全部
      * @param pageNo
      */
     pageOnChange(pageNo) {
+        debugger
         var getFileType = cloudTable.state.getFileType;
         if (getFileType == "myFile") {
             if (this.state.activeKey == "1") {
+                //判断是否是第一层文件夹
                 if (this.state.currentDirectoryId != -1) {
                     var queryConditionJson = "";
+                    this.buildPageNoMap(this.state.currentDirectoryId, pageNo);
                     this.listFiles(this.state.ident,
                         this.state.currentDirectoryId, queryConditionJson, pageNo, "mainTable");
                 } else {
+                    this.buildPageNoMap(-1, pageNo);
                     cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
                     cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
                 }
@@ -1119,9 +1176,89 @@ pageNo   --- 页码，-1取全部
             } else {
                 this.getUserChatGroupRootCloudFiles(this.state.ident, pageNo);
             }
+
         }
+        $(".ant-table-body").animate({scrollTop: 0}, 0);
         this.setState({
             currentPage: pageNo,
+            //totalCount: parseInt(ret.pager.rsCount)
+
+        });
+    },
+
+
+    /**
+     * 表格分页响应函数
+     * 需要注意该表格承载了不同的数据，需要根据情况进行分页
+     * @param pageNo
+     */
+    pageOnChangeModal(pageNo) {
+        debugger
+        var getFileType = cloudTable.state.getFileType;
+        if (getFileType == "myFile") {
+            if (this.state.activeKey == "1") {
+                //判断是否是第一层文件夹
+                if (this.state.currentDirectoryId != -1) {
+                    var queryConditionJson = "";
+                    this.buildPageNoMap(this.state.currentDirectoryId, pageNo);
+                    this.listFiles(this.state.ident,
+                        this.state.currentDirectoryId, queryConditionJson, pageNo, "mainTable");
+                } else {
+                    this.buildPageNoMap(-1, pageNo);
+                    cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
+                    cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo, "moveDirModal");
+                }
+
+            } else {
+                if (this.state.currentSubjectDirectoryId != -1) {
+                    this.listCloudSubject(this.state.currentSubjectDirectoryId, pageNo);
+                } else {
+                    cloudTable.setState({activeKey: '2'});
+                    cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, pageNo)
+                }
+            }
+            // cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
+        } else {
+            if (this.state.currentDirectoryId != -1) {
+                var queryConditionJson = "";
+                this.listFiles(this.state.ident,
+                    this.state.currentDirectoryId, queryConditionJson, pageNo, "moveDirModal");
+            } else {
+                this.getUserChatGroupRootCloudFiles(this.state.ident, pageNo, "moveDirModal");
+            }
+        }
+        $(".ant-table-body").animate({scrollTop: 0}, 0);
+        this.setState({
+            currentPageModal: pageNo,
+            //totalCount: parseInt(ret.pager.rsCount)
+
+        });
+    },
+
+    /**
+     * 表格分页响应函数
+     * 需要注意该表格承载了不同的数据，需要根据情况进行分页
+     * @param pageNo
+     */
+    pageOnChangeForCopyModal(pageNo) {
+        debugger
+        var getFileType = cloudTable.state.getFileType;
+        //判断是否是第一层文件夹
+        if (this.state.currentDirectoryId != -1) {
+            var queryConditionJson = "";
+            this.buildPageNoMap(this.state.currentDirectoryId, pageNo);
+            this.listFiles(this.state.ident,
+                this.state.currentDirectoryId, queryConditionJson, pageNo, "copyDirModal");
+        } else {
+            this.buildPageNoMap(-1, pageNo);
+            cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
+            cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo, "copyDirModal");
+        }
+        $(".ant-table-body").animate({scrollTop: 0}, 0);
+        this.setState({
+            currentPageForCopyModal: pageNo,
+            //totalCount: parseInt(ret.pager.rsCount)
+
         });
     },
 
@@ -1188,6 +1325,8 @@ pageNo   --- 页码，-1取全部
 
     //点击保存按钮，向蚁盘指定文件夹上传文件
     uploadFile() {
+        debugger
+        var formDataArr = [];
         cloudTable.state.disabledFlag = "false";
         if (uploadFileList.length == 0) {
             message.warning("请选择上传的文件,谢谢！");
@@ -1197,7 +1336,10 @@ pageNo   --- 页码，-1取全部
             for (var i = 0; i < uploadFileList.length; i++) {
                 formData.append("file" + i, uploadFileList[i]);
                 formData.append("name" + i, uploadFileList[i].name);
+                formDataArr.push(formData);
             }
+            console.log(formData);
+            console.log(formDataArr);
             $.ajax({
                 type: "POST",
                 url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
@@ -1224,7 +1366,10 @@ pageNo   --- 页码，-1取全部
                     if (responseStr != "") {
                         var fileUrl = responseStr;
                         //TODO 调用本地上传文件的方法
-                        cloudTable.createCloudFile(fileUrl, uploadFileList[0]);
+                        var arr = fileUrl.split(',');
+                        arr.forEach(function (v, i) {
+                            cloudTable.createCloudFile(fileUrl, uploadFileList[i]);
+                        });
                     }
                 },
                 error: function (responseStr) {
@@ -1268,6 +1413,7 @@ pageNo   --- 页码，-1取全部
      * 向指定文件夹上传文件
      */
     createCloudFile(fileUrl, fileObj) {
+        debugger
         var param = {
             "method": 'createCloudFile',
             "operateUserId": cloudTable.state.ident,
@@ -1278,6 +1424,7 @@ pageNo   --- 页码，-1取全部
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
                 if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
                     var initPageNo = 1;
                     var queryConditionJson = "";
@@ -1314,16 +1461,30 @@ pageNo   --- 页码，-1取全部
      * 返回上级目录
      */
     returnParent() {
-        var initPageNo = 1;
+        debugger
+        var pageNoMap = this.state.pageNoMap;
+        // var initPageNo = 1;
+        var currentPageNo = 1;
         if (cloudTable.state.getFileType == "myFile") {
             if (cloudTable.state.activeKey == '1') {
                 if (cloudTable.state.parentDirectoryId == 0) {
                     cloudTable.setState({"parentDirectoryId": -1, "currentDirectoryId": -1});
-                    cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, "mainTable");
+                    var pageNoIndex = this.getPageNoIndex(-1, pageNoMap);
+                    if (pageNoIndex != -1) {
+                        var pageNoJson = pageNoMap[pageNoIndex];
+                        currentPageNo = pageNoJson.pageNo;
+                        // cloudTable.getUserRootCloudFiles(cloudTable.state.ident, currentPageNo, "mainTable");
+                    }
+                    cloudTable.getUserRootCloudFiles(cloudTable.state.ident, currentPageNo, "mainTable");
                 } else {
                     var queryConditionJson = "";
+                    var pageNoIndex = this.getPageNoIndex(this.state.parentDirectoryId, pageNoMap);
+                    if (pageNoIndex != -1) {
+                        var pageNoJson = pageNoMap[pageNoIndex];
+                        currentPageNo = pageNoJson.pageNo;
+                    }
                     cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.parentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                        cloudTable.state.parentDirectoryId, queryConditionJson, currentPageNo, "mainTable");
                 }
             } else {
                 var lastSubjectParent = subjectParents.pop();
@@ -1331,22 +1492,27 @@ pageNo   --- 页码，-1取全部
                 if (lastSubjectParent == '0') {
                     lastSubjectParent = [];
                     cloudTable.setState({parentSubjectDirectoryId: '-1', currentSubjectDirectoryId: "-1"});
-                    cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, initPageNo);
+                    cloudTable.getUserRootCloudSubjects(cloudTable.state.ident, currentPageNo);
                 } else {
-                    cloudTable.listCloudSubject(lastSubjectParent, initPageNo)
+                    cloudTable.listCloudSubject(lastSubjectParent, currentPageNo)
                 }
             }
         } else {
             if (cloudTable.state.parentDirectoryId == 0) {
                 cloudTable.setState({"parentDirectoryId": -1, "currentDirectoryId": -1});
-                cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, initPageNo, 'mainTable');
+                cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, currentPageNo, 'mainTable');
             } else {
                 var queryConditionJson = "";
+                var pageNoIndex = this.getPageNoIndex(this.state.parentDirectoryId, pageNoMap);
+                if (pageNoIndex != -1) {
+                    var pageNoJson = pageNoMap[pageNoIndex];
+                    currentPageNo = pageNoJson.pageNo;
+                }
                 cloudTable.listFiles(cloudTable.state.ident,
-                    cloudTable.state.parentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                    cloudTable.state.parentDirectoryId, queryConditionJson, currentPageNo, "mainTable");
             }
         }
-        this.setState({currentPage: initPageNo});
+        this.setState({currentPage: currentPageNo});
     },
     /**
      * 移动文件的modal中的回退按钮
@@ -1406,7 +1572,7 @@ pageNo   --- 页码，-1取全部
     getCloudFileSave(fileObject) {
         var initPageNo = 1;
         this.getUserRootCloudFiles(this.state.ident, initPageNo, "copyDirModal");
-        this.setState({saveFileModalVisible: true, "saveFileId": fileObject.id});
+        this.setState({saveFileModalVisible: true, "saveFileId": fileObject.id,"currentPageForCopyModal":1});
     },
 
     /**
@@ -1421,6 +1587,7 @@ pageNo   --- 页码，-1取全部
      * 点击确定按钮，保存文件到指定目录   点击 父亲
      */
     saveFileToLocalDir(parentCloudFileId) {
+        debugger
         var _this = this;
         //1.请求用户的私人网盘用数据构建model的table
         var id = JSON.parse(sessionStorage.getItem("loginUser")).colUid;
@@ -1428,10 +1595,11 @@ pageNo   --- 页码，-1取全部
             "method": 'copyCloudFiles',
             "operateUserId": id,
             "toCloudFileId": parentCloudFileId,
-            "fromCloudFileIds": this.state.moveFileId,
+            "fromCloudFileIds": this.state.saveFileId,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
                 if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
                     var initPageNo = 1;
                     var queryConditionJson = "";
@@ -1535,7 +1703,18 @@ pageNo   --- 页码，-1取全部
      * 显示移动文件的窗口
      */
     showMoveFileModal(fileObject) {
-        cloudTable.setState({moveFileModalVisible: true, "moveFileId": fileObject.id, fileType: "myFile"});
+        var initPageNo = 1;
+        var getFileType = cloudTable.state.getFileType;
+        if (getFileType == "myFile") {
+            if (this.state.activeKey == "1") {
+                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, "moveDirModal");
+                cloudTable.setState({moveFileModalVisible: true, "moveFileId": fileObject.id, fileType: "myFile",currentPageModal:1});
+            }
+        } else {
+            cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, initPageNo, "moveDirModal");
+            cloudTable.setState({moveFileModalVisible: true, "moveFileId": fileObject.id, fileType: "groupFile",currentPageModal:1});
+        }
+
     },
 
     /**
@@ -1553,6 +1732,7 @@ pageNo   --- 页码，-1取全部
      * 完成文件向目标文件夹的移动
      */
     moveCloudFiles(fromCloudFileIds, toCloudFileId) {
+        debugger
         var param = {
             "method": 'moveCloudFiles',
             "operateUserId": cloudTable.state.ident,
@@ -1561,6 +1741,7 @@ pageNo   --- 页码，-1取全部
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
                 if (ret.success == true && ret.msg == "调用成功" && ret.response == true) {
                     var initPageNo = 1;
                     var queryConditionJson = "";
@@ -2158,6 +2339,44 @@ pageNo   --- 页码，-1取全部
         _this.listCloudSubject(id, initPageNo)
     },
 
+    /**
+     * 构建存放了文件夹id和pageNo关系的集合
+     * @param directoryId
+     * @param pageNo
+     */
+    buildPageNoMap(directoryId, pageNo) {
+        var pageNoMap = this.state.pageNoMap;
+        var pageNoIndex = this.getPageNoIndex(directoryId, pageNoMap);
+        if (pageNoIndex == -1) {
+            var pageNoJson = {};
+            pageNoJson.directoryId = directoryId;
+            pageNoJson.pageNo = pageNo;
+            pageNoMap.push(pageNoJson);
+        } else {
+            var pageNoJson = pageNoMap[pageNoIndex];
+            pageNoJson.pageNo = pageNo;
+        }
+        this.setState({pageNoMap});
+    },
+
+    /**
+     * 检查给定的文件夹id在pageNoMap中是否存在,如果存在,则返回所在的index位置,否则返回-1
+     * @param directoryId
+     * @param pageNoMap
+     * @returns {number}
+     */
+    getPageNoIndex(directoryId, pageNoMap) {
+        var pageNoIndex = -1;
+        for (var i = 0; i < pageNoMap.length; i++) {
+            var pageNoJson = pageNoMap[i];
+            if (pageNoJson.directoryId == directoryId) {
+                pageNoIndex = i;
+                break;
+            }
+        }
+        return pageNoIndex;
+    },
+
     render() {
         const {loading, selectedRowKeys} = cloudTable.state;
         const rowSelection = {
@@ -2388,10 +2607,23 @@ pageNo   --- 页码，-1取全部
                                 <Table columns={targetDirColumns} showHeader={false}
                                        dataSource={cloudTable.state.targetDirDataArray1}
                                        pagination={{
-                                           total: cloudTable.state.totalCount,
+                                           total: cloudTable.state.totalCountModal,
                                            pageSize: getPageSize(),
-                                           // onChange: cloudTable.pageOnChange
+                                           current: this.state.currentPageModal,
+                                           onChange: cloudTable.pageOnChangeModal
                                        }} scroll={{y: 300}}/>
+
+
+                                {/* <Table className="cloud_box" rowSelection={rowSelection} columns={columns}
+                                       dataSource={cloudTable.state.tableData}
+                                       pagination={{
+                                            total: cloudTable.state.totalCount,
+                                            pageSize: getPageSize(),
+                                            current: this.state.currentPage,
+                                            onChange: cloudTable.pageOnChange
+                                       }} scroll={{y: 400}}/>*/}
+
+
                             </Col>
                         </Row>
                     </div>
@@ -2465,9 +2697,10 @@ pageNo   --- 页码，-1取全部
                                 <Table columns={targetDirColumns} showHeader={false}
                                        dataSource={cloudTable.state.targetDirDataArray1}
                                        pagination={{
-                                           total: cloudTable.state.totalCount,
+                                           total: cloudTable.state.totalCountForCopyModal,
                                            pageSize: getPageSize(),
-                                           // onChange: cloudTable.pageOnChange
+                                           current: this.state.currentPageForCopyModal,
+                                           onChange: cloudTable.pageOnChangeForCopyModal
                                        }}
 
                                        scroll={{y: 300}}/>
