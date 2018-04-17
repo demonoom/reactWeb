@@ -541,14 +541,17 @@ const AntGroupTabComponents = React.createClass({
         this.setState({isShare: true});
     },
 
-    getMesUUid(uuid, e) {
+    getMesUUid(uuid, e, keyWord) {
+        var dingMenu = keyWord == 'dingMes' ? 'none' : 'block';
+        //dingMes
         var nowTime = (new Date()).valueOf();
+
         var withdrawMsg = (
             <Menu>
                 <Menu.Item>
                     <a target="_blank" className="ellips_t" onClick={this.withdrawMsg}>撤回</a>
                 </Menu.Item>
-                <Menu.Item>
+                <Menu.Item style={{display: dingMenu}}>
                     <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
                 </Menu.Item>
                 <Menu.Item>
@@ -561,7 +564,7 @@ const AntGroupTabComponents = React.createClass({
         );
         var withdrawMsgCannot = (
             <Menu>
-                <Menu.Item>
+                <Menu.Item style={{display: dingMenu}}>
                     <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
                 </Menu.Item>
                 <Menu.Item>
@@ -572,6 +575,7 @@ const AntGroupTabComponents = React.createClass({
                 </Menu.Item>
             </Menu>
         );
+
         if ((nowTime - e.mesTimeForDetil) < 120000) {
             this.setState({msgMenu: withdrawMsg});
         } else {
@@ -1824,7 +1828,7 @@ const AntGroupTabComponents = React.createClass({
             }
             $.ajax({
                 type: "POST",
-                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                url: "http://60.205.86.217:8890/Excoord_Upload_Server/file/upload",
                 enctype: 'multipart/form-data',
                 data: formData,
                 // 告诉jQuery不要去处理发送的数据
@@ -3699,6 +3703,14 @@ const AntGroupTabComponents = React.createClass({
                                                               onClick={this.entDingMesDetil}>{e.content}
                                                             <i className="borderballoon_dingcorner_le"></i>
                                                         </span>
+                                                        <span className="talk_bubble_ellipsis">
+                                                                <Dropdown overlay={this.state.msgMenu}
+                                                                          trigger={['click']}
+                                                                          placement="topCenter"
+                                                                          onVisibleChange={this.getMesUUid.bind(this, e.uuid, e, 'dingMes')}>
+                                                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                                </Dropdown>
+                                                            </span>
                                                     </div>
                                                     {/*<Dropdown overlay={msgMenu} placement="topLeft"*/}
                                                     {/*onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>*/}

@@ -213,7 +213,6 @@ const LocalClassRoom = React.createClass({
      * 从备课计划里使用此材料
      */
     useMaterialInClass(materialId){
-        debugger
         var _this = this;
         var vclassId = this.state.vid;
         var param = {

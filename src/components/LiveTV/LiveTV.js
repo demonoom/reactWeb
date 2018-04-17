@@ -164,7 +164,6 @@ class LiveTV extends React.Component {
             mode: 'history'
         }
 
-
         LP.Start(obj);
 
     }
@@ -230,7 +229,6 @@ class LiveTV extends React.Component {
 
 
         }
-
 
         let obj = {
             title: title,

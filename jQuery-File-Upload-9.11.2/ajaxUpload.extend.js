@@ -2,7 +2,7 @@
 
 //图片上传
 function uploadImg() {
-    var uploadActionUrl = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+    var uploadActionUrl = 'http://60.205.86.217:8890/Excoord_Upload_Server/file/upload';
 
 
   let ajaxUpload =  new AjaxUpload(button, {

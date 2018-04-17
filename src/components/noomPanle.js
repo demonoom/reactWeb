@@ -692,7 +692,7 @@
             ms.send(con);
         }
 
-        var action = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+        var action = 'http://60.205.86.217:8890/Excoord_Upload_Server/file/upload';
 
         $('#' + elId).fileupload({
             url: action,
