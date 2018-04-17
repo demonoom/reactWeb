@@ -240,7 +240,10 @@
                     window.__noomSaveFile__(data.id);
                 } else if (data.method == 'downLoadFile') {
                     //下载文件,返回了文件对象  window.open(url,'_blank')
-                    window.location = JSON.parse(data.cloudFile).path;
+                    var aTag = `<a download="help" href="${JSON.parse(data.cloudFile).path}" id="${JSON.parse(data.cloudFile).id}downLoadFile"></a>`;
+                    $(document.body).append(aTag);
+                    document.getElementById(`${JSON.parse(data.cloudFile).id}downLoadFile`).click();
+                    $(`#${JSON.parse(data.cloudFile).id}downLoadFile`).remove();
                 }
             });
             isAddedListener = true;
@@ -689,7 +692,7 @@
             ms.send(con);
         }
 
-        var action = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+        var action = 'http://60.205.86.217:8890/Excoord_Upload_Server/file/upload';
 
         $('#' + elId).fileupload({
             url: action,

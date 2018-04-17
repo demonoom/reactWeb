@@ -67,7 +67,7 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
     render() {
         const props = {
             key:antUploadComponentsForExamPagerUpdate.props.params,
-            action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
+            action: 'http://60.205.86.217:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture-card',
             fileList:antUploadComponentsForExamPagerUpdate.state.fileList,
             onPreview:antUploadComponentsForExamPagerUpdate.handlePreview,

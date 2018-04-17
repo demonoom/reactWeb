@@ -41,7 +41,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             courseWareUpload.setState({spinLoading:true});
             $.ajax({
                 type: "POST",
-                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                url: "http://60.205.86.217:8890/Excoord_Upload_Server/file/upload",
                 enctype: 'multipart/form-data',
                 data: formData,
                 // 告诉jQuery不要去处理发送的数据

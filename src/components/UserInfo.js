@@ -95,7 +95,7 @@ const UserInfo = React.createClass({
     getTitle() {
         let _this = this;
         let uploadProps = {
-            action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
+            action: 'http://60.205.86.217:8890/Excoord_Upload_Server/file/upload',
             showUploadList: false,
             className: "avatar-uploader",
             name: "avatar",

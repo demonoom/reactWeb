@@ -122,8 +122,12 @@ const AntCloudTableComponents = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        var antCloudKey = nextProps.antCloudKey;
-        this.getFileByType(antCloudKey);
+        // var antCloudKey = nextProps.antCloudKey;
+        // this.getFileByType(antCloudKey);
+    },
+
+    changeFileType(optType) {
+        this.getFileByType(optType);
     },
 
     componentDidUpdate() {
@@ -1200,7 +1204,7 @@ pageNo   --- 页码，-1取全部
             }
             $.ajax({
                 type: "POST",
-                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                url: "http://60.205.86.217:8890/Excoord_Upload_Server/file/upload",
                 enctype: 'multipart/form-data',
                 data: formData,
                 // 告诉jQuery不要去处理发送的数据
@@ -1934,11 +1938,13 @@ pageNo   --- 页码，-1取全部
      * 显示分享文件的窗口
      */
     showShareModal(fileObject) {
-        cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
-        cloudTable.getAntGroup();
-        this.getStructureUsers();
-        this.getRecentContents();
-        cloudTable.setState({shareModalVisible: true});
+        this.props.showShareFromCloud(fileObject)
+        // return
+        // cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
+        // cloudTable.getAntGroup();
+        // this.getStructureUsers();
+        // this.getRecentContents();
+        // cloudTable.setState({shareModalVisible: true});
     },
 
     /**
@@ -2320,7 +2326,7 @@ pageNo   --- 页码，-1取全部
                        onCancel={cloudTable.mkdirModalHandleCancel}
                        className="schoolgroup_modal"
                 >
-                    <div className="modal_register_main">
+                    <div className="">
                         <Row className="ant_row">
                             <Col span={6} className="right_look">名称：</Col>
                             <Col span={16} className="framework_m_r">

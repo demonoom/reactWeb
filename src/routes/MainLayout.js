@@ -222,15 +222,27 @@ const MainLayout = React.createClass({
 
     /**
      * 分享移动网页的回调
+     * 因为需要填写想法,因此使用到999的就只有这两处,他们在确定时发送的对象略有不同,在此用shareType做以区分
      * @param src
      */
     noomShareMbile(src, title) {
         this.showAddMembersModal(999);
         this.setState({shareSrc: src, shareTitle: title});
+        this.setState({shareType: 0});
         // this.getAntGroup();
         // this.getStructureUsers();
         // this.getRecentContents();
         // this.setState({shareModalVisible: true});
+    },
+
+    /**
+     * 从蚁盘分享文件调用新model
+     * 因为需要填写想法,因此使用到999的就只有这两处,他们在确定时发送的对象略有不同,在此用shareType做以区分
+     * @param obj
+     */
+    showShareFromCloud(obj) {
+        this.showAddMembersModal(999);
+        this.setState({shareType: 1, shareCloudFile: obj});
     },
 
     collapseChange(key) {
@@ -1268,7 +1280,7 @@ const MainLayout = React.createClass({
             return
         }
         if (this.state.idea == 'block') {
-            _this.shareFilesNew()
+            _this.shareFilesNew(this.state.shareType);
         } else {
             if (this.state.creatInput == 'block') {
                 //创建群名的输入框显示,确定转到创建群的逻辑
@@ -1613,10 +1625,78 @@ const MainLayout = React.createClass({
     },
 
     /**
+     * 调用分享接口
+     */
+    getsharekey() {
+        var _this = this;
+        var shareFileId = this.state.shareCloudFile.id;
+        var operateUserId = this.state.shareCloudFile.createUid;
+        var param = {
+            "method": 'share',
+            "operateUserId": operateUserId,
+            "cloudFileIds": shareFileId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success == true && ret.msg == "调用成功") {
+                    _this.shareCloudFile(ret.response);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 新版分享文件从蚁盘
+     * @param response
+     */
+    shareCloudFile(response) {
+        var _this = this;
+        var memberTargetkeys = this.state.selectedRowKeys;
+        var nowThinking = this.state.nowThinking;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var createTime = (new Date()).valueOf();
+        var messageToPer = 1;//根据接收者是群组还是个人来决定
+        var messageToGrp = 4;
+
+        if (typeof(nowThinking) == 'undefined' || nowThinking == '') {
+            nowThinking = '这是一个蚁盘分享的文件'
+        }
+
+        if (isEmpty(memberTargetkeys) == true) {
+            message.error('请选择转发好友或群组');
+            return false
+        }
+
+        var filePath = "http://jiaoxue.maaee.com:8091/#/fileShareLink?shareId=" + response + "&userId=" + sessionStorage.getItem("ident");
+
+        //链接消息
+        var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
+
+        var attachement = {
+            "address": filePath,
+            "user": loginUser,
+            "createTime": createTime,
+            "cover": cover,
+            "content": this.state.shareCloudFile.name,
+            "type": 4
+        };
+        this.sendShareMeg(memberTargetkeys, attachement, messageToPer, messageToGrp, nowThinking, createTime, loginUser);
+    },
+
+    /**
      * 新版分享文件
      * @returns {boolean}
      */
-    shareFilesNew() {
+    shareFilesNew(shareType) {
+        //shareType=0分享是链接,=1分享是的文件  具体到这只是attachment不同
+        if (shareType == 1) {
+            //分享文件先要获取shareId,之后做出attachement
+            this.getsharekey();
+            return
+        }
         var _this = this;
         var memberTargetkeys = this.state.selectedRowKeys;
         var nowThinking = this.state.nowThinking;
@@ -1648,6 +1728,21 @@ const MainLayout = React.createClass({
             "content": shareTitle,
         };
 
+        this.sendShareMeg(memberTargetkeys, attachment, messageToPer, messageToGrp, nowThinking, createTime, loginUser);
+    },
+
+    /**
+     * 分享文件 发送->
+     * @param memberTargetkeys
+     * @param attachment
+     * @param messageToPer
+     * @param messageToGrp
+     * @param nowThinking
+     * @param createTime
+     * @param loginUser
+     */
+    sendShareMeg(memberTargetkeys, attachment, messageToPer, messageToGrp, nowThinking, createTime, loginUser) {
+        var _this = this;
         memberTargetkeys.forEach(function (v, i) {
             var str = v + '';
             if (str.indexOf('@') == '-1') {
@@ -2234,7 +2329,11 @@ const MainLayout = React.createClass({
     },
 
     getAntCloud(optType) {
-        this.setState({"antCloudKey": optType});
+        // this.setState({"antCloudKey": optType});
+        var _this = this;
+        setTimeout(function () {
+            _this.refs.antCloudTableComponents.changeFileType(optType);
+        }, 50)
     },
 
     getSubGroup(structureId, structure) {
@@ -2793,7 +2892,9 @@ const MainLayout = React.createClass({
                 middleComponent = <AntCloudMenu callbackParent={this.getAntCloud}/>;
                 tabComponent = <AntCloudTableComponents antCloudKey={this.state.antCloudKey}
                                                         messageUtilObj={ms}
+                                                        ref="antCloudTableComponents"
                                                         showShareGuideModal={this.showShareGuideModal}
+                                                        showShareFromCloud={this.showShareFromCloud}
                 ></AntCloudTableComponents>;
                 // tabComponent = <nAntCloudTableComponents antCloudKey={this.state.antCloudKey}
                 //                                         messageUtilObj={ms}
@@ -2861,7 +2962,7 @@ const MainLayout = React.createClass({
                 break;
         }
         var localProviderLanguage = "";
-        if(local=="en"){
+        if (local == "en") {
             localProviderLanguage = enUS;
         }
         return (
@@ -3038,9 +3139,11 @@ const MainLayout = React.createClass({
                                transitionName=""  //禁用modal的动画效果
                                maskClosable={false} //设置不允许点击蒙层关闭
                                footer={[
-                                   <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                   <button type="primary" htmlType="submit"
+                                           className="ant-btn ant-btn-primary ant-btn-lg"
                                            onClick={this.mainTransferForSure}>确定</button>,
-                                   <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                   <button type="ghost" htmlType="reset"
+                                           className="ant-btn ant-btn-ghost login-form-button"
                                            onClick={this.mainTransferModalHandleCancel}>取消</button>
                                ]}
                         >
@@ -3060,9 +3163,11 @@ const MainLayout = React.createClass({
                                transitionName=""  //禁用modal的动画效果
                                maskClosable={false} //设置不允许点击蒙层关闭
                                footer={[
-                                   <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                   <button type="primary" htmlType="submit"
+                                           className="ant-btn ant-btn-primary ant-btn-lg"
                                            onClick={this.updateChatGroupName}>确定</button>,
-                                   <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                   <button type="ghost" htmlType="reset"
+                                           className="ant-btn ant-btn-ghost login-form-button"
                                            onClick={this.updateChatGroupNameModalHandleCancel}>取消</button>
                                ]}
                         >
@@ -3086,7 +3191,8 @@ const MainLayout = React.createClass({
                             footer={[
                                 <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
                                         onClick={this.addGroupMember}>确定</button>,
-                                <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                <button type="ghost" htmlType="reset"
+                                        className="ant-btn ant-btn-ghost login-form-button"
                                         onClick={this.addDeGroupMemberModalHandleCancel}>取消</button>
                             ]}
                             width={700}
@@ -3217,7 +3323,8 @@ const MainLayout = React.createClass({
                             footer={[
                                 <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
                                         onClick={this.shareToAntNest}>确定</button>,
-                                <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                <button type="ghost" htmlType="reset"
+                                        className="ant-btn ant-btn-ghost login-form-button"
                                         onClick={this.shareToAntNestModalHandleCancel}>取消</button>
                             ]}
                             width={616}

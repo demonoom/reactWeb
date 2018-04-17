@@ -125,7 +125,7 @@ class MyMTV extends React.Component {
                 <div className='noom_downloadLive_item'>
                     <div className='noom_downloadLive_span'>
                         <div className="noom_downloadLive_title">{arr.title}</div>
-                        <div>
+                        <div className="noom_downloadLive_cont">
                             <span className='noom_downloadLive_name'>{arr.schoolName}</span>
                             <span className='noom_downloadLive_name'>{arr.courseName}</span>
                         </div>
@@ -133,7 +133,7 @@ class MyMTV extends React.Component {
 
                     <a className='noom_downloadLive' href={v.path} target="_blank" title="下载"
                        download={v.path}>
-                        <Icon type="download"/></a>
+                        <Icon type="download" className="noom_downloadLive_i" /></a>
 
                 </div>
             )

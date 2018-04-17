@@ -50,7 +50,7 @@ class MakeDingModal extends React.Component {
     /*获取上传图片信息*/
     getUploadedImgList(file, isRemoved) {
         this.removeImgViewStyle(); //移除图片上传组件的pointerEvents样式属性
-        var imgUrl = file.response + '?name=' + file.name;
+        var imgUrl = file.response + '?fileName=' + file.name;
         // var imgUrl = file.response;
         if (isEmpty(isRemoved) == false && isRemoved == "removed") {
             for (var i = 0; i < this.state.topicImgUrl.length; i++) {
