@@ -303,6 +303,7 @@ const LocalClassRoom = React.createClass({
     },
 
     sendFilterCloudFile(selectArr) {
+        debugger
         var cidArray = [];
         if (isEmpty(selectArr)) {
             message.error('请选择图片;')

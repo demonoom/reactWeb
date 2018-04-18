@@ -56,7 +56,8 @@ const CloudFileUploadComponents = React.createClass({
                 var fileType = fileName.substring(lastPointIndex + 1);
                 var fileSize = file.size;
                 var isExit = this.checkCurrentFileIsSubmit(fileName);
-                var isMuliti = this.checkSubmitFileCount();
+                //var isMuliti = this.checkSubmitFileCount();
+                var isMuliti = false;
                 if (isMuliti == true) {
                     message.warning("请勿同时上传多个文件,谢谢！");
                 } else if (isExit == true) {
@@ -80,9 +81,9 @@ const CloudFileUploadComponents = React.createClass({
     //判断已上传文件个数，目前只允许单文件上传
     checkSubmitFileCount() {
         var isOk = false;
-        /*if(this.state.submitFileOptions.length>=1){
+        if(this.state.submitFileOptions.length>=1){
             isOk=true;
-        }*/
+        }
         return isOk;
     },
 
@@ -193,6 +194,7 @@ const CloudFileUploadComponents = React.createClass({
         submitFileOptions.splice(0);
         var files = target.files;
         this.checkFileInfo(files);
+        this.setState({submitFileOptions});
     },
 
     F_Open_dialog() {
