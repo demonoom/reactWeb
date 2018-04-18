@@ -6928,7 +6928,7 @@ select.course_n:hover {
 }
 
 .move_file {
-    height: 350px;
+    height: 351px;
 }
 
 .noom_downloadLive_div {
@@ -9481,4 +9481,22 @@ ul.chosenBox{
 }
 .noom_downloadLive_i{
     font-size: 20px;
+}
+.btn_font{
+    color: #2fa9ff;
+    background: transparent;
+    border: none;
+    letter-spacing: -1.5px;
+}
+.btn_font:hover{
+    color:#40a9ff;
+    background: transparent;
+}
+.btn_font:active {
+    color:#096dd9;
+    background: transparent;
+}
+a:active,a:hover{
+    outline:0;
+    text-decoration:none
 }
