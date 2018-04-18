@@ -9500,10 +9500,12 @@ a:active,a:hover{
     outline:0;
     text-decoration:none
 }
+.ant-col-24,
 .ant-col-4 {
     text-align: center;
 }
 
+.ant-col-24 img,
 .ant-col-4 img {
     max-width: 100%;
 }

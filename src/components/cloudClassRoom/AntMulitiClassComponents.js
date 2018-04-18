@@ -575,7 +575,7 @@ const AntMulitiClassComponents = React.createClass({
             var classDetailPanel = <Card>
                 <Row>
                     <Col span={24}>
-                        <img alt="example" width="100%" src={classObj.image}/>
+                        <img alt="example" src={classObj.image}/>
                     </Col>
                     <Col span={24}>
                         <Row className="modal_cloud_info">
@@ -666,7 +666,7 @@ const AntMulitiClassComponents = React.createClass({
             var classDetailPanel = <Card>
                 <Row>
                     <Col span={24}>
-                        <img alt="example" width="100%" src={classObj.image}/>
+                        <img alt="example"  src={classObj.image}/>
                     </Col>
                     <Col span={24}>
                         <Row className="modal_cloud_info">
