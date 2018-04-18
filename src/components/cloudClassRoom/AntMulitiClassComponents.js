@@ -332,7 +332,7 @@ const AntMulitiClassComponents = React.createClass({
             var cardObj = <Card key={id}>
                 <Row>
                     <Col span={4}>
-                        <img alt="example" width="100%" src={image}/>
+                        <img alt="example" src={image}/>
                     </Col>
                     <Col span={18}>
                         <Row className="details_cont">
@@ -414,7 +414,7 @@ const AntMulitiClassComponents = React.createClass({
             var cardObj = <Card key={id}>
                 <Row>
                     <Col span={4}>
-                        <img alt="example" width="100%" src={image}/>
+                        <img alt="example"  src={image}/>
                     </Col>
                     <Col span={18}>
                         <Row className="details_cont">

@@ -1930,7 +1930,7 @@ const AntNestTabComponents = React.createClass({
      */
     render() {
         const radioStyle = {
-            display: 'block',
+            display: 'block',   
             height: '30px',
             lineHeight: '30px',
         };
