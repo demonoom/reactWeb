@@ -490,7 +490,7 @@ const StudentMainLayout = React.createClass({
     },
 
     /**
-     * 公共侧边栏离场
+     * 公共侧边栏离场   
      */
     levPublicSidebarSet() {
         this.refs.publicSidebar.className = 'groupSet_panel ding_leave';

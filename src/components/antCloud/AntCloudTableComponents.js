@@ -364,7 +364,7 @@ const AntCloudTableComponents = React.createClass({
                 if (e.directory == true) {
                     moveDirOpt = <div>
                         {/*这是确定保存的功能*/}
-                        <Button
+                        <Button className="btn_font"
                             onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key, "copyDirModal")}>确定</Button>
                     </div>;
                 } else {
@@ -415,7 +415,7 @@ const AntCloudTableComponents = React.createClass({
                 var moveDirOpt;
                 if (e.directory == true) {
                     moveDirOpt = <div>
-                        <Button
+                        <Button className="btn_font"
                             onClick={cloudTable.moveFileToTargetDir.bind(cloudTable, key, "moveDirModal")}>确定</Button>
                     </div>;
                 } else {
