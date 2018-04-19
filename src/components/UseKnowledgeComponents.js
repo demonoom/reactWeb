@@ -231,7 +231,7 @@ const UseKnowledgeComponents = React.createClass({
                     var moveDirOpt;
                     if (e.directory == true) {
                         moveDirOpt = <div>
-                            <Button onClick={_this.copySubjectsToCloudFile.bind(_this, e)}>确定</Button>
+                            <Button className="btn_font" onClick={_this.copySubjectsToCloudFile.bind(_this, e)}>确定</Button>
                         </div>;
                     } else {
                         dirName = name;

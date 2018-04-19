@@ -5024,11 +5024,11 @@ a.color_gary_f, .color_gary_f {
 
 .ghostMenu .headler {
     position: absolute;
-    width: 28px;
+    width: 22px;
     height: 30px;
     margin-top: -40px;
     top: 50%;
-    right: -28px;
+    right: -22px;
     border-radius: 0px 6px 6px 0px;
     background: #309FFB;
     color: #fff;
@@ -5050,7 +5050,7 @@ a.color_gary_f, .color_gary_f {
 }
 
 .ghostMenuShow .headler i {
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .ghostMenu .first, .cloud_class_menu .first {
@@ -6928,7 +6928,7 @@ select.course_n:hover {
 }
 
 .move_file {
-    height: 350px;
+    height: 351px;
 }
 
 .noom_downloadLive_div {
@@ -9481,4 +9481,31 @@ ul.chosenBox{
 }
 .noom_downloadLive_i{
     font-size: 20px;
+}
+.btn_font{
+    color: #2fa9ff;
+    background: transparent;
+    border: none;
+    letter-spacing: -1.5px;
+}
+.btn_font:hover{
+    color:#40a9ff;
+    background: transparent;
+}
+.btn_font:active {
+    color:#096dd9;
+    background: transparent;
+}
+a:active,a:hover{
+    outline:0;
+    text-decoration:none
+}
+.ant-col-24,
+.ant-col-4 {
+    text-align: center;
+}
+
+.ant-col-24 img,
+.ant-col-4 img {
+    max-width: 100%;
 }
