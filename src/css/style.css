@@ -1110,7 +1110,7 @@ html, body, #root {
 	width:144px !important;
 }*/
 .ant-tabs-nav .ant-tabs-tab {
-    padding: 8px 36px;
+    /* padding: 8px 36px; */
     font-size: 18px;
     width: 144px;
     text-align: center;
@@ -9508,4 +9508,10 @@ a:active,a:hover{
 .ant-col-24 img,
 .ant-col-4 img {
     max-width: 100%;
+}
+.ant-tabs-nav-wrap .ant-tabs-nav .ant-tabs-ink-bar-animated {
+    width: 144px!important;
+}
+.ant-tabs-nav-wrap .ant-tabs-nav .ant-tabs-ink-bar {
+    left:8px;
 }
