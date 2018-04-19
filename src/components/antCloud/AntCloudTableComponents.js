@@ -381,7 +381,8 @@ const AntCloudTableComponents = React.createClass({
             //更新保存modal的数据和页码
             cloudTable.setState({
                 "targetDirDataArray1": targetDirDataArray,
-                "totalCountForCopyModal": totalCount
+                "totalCountForCopyModal": totalCount,
+                totalCount: totalCount
             });
         }
     },
@@ -430,7 +431,7 @@ const AntCloudTableComponents = React.createClass({
             });
             cloudTable.setState({
                 "targetDirDataArray1": targetDirDataArray,
-                //totalCount: parseInt(ret.pager.rsCount),
+                totalCount: parseInt(ret.pager.rsCount),
                 totalCountModal: parseInt(ret.pager.rsCount)
             });
         }
