@@ -286,7 +286,7 @@ class SelectAntCloudSubjectsModal extends React.Component {
         } else {
             let obj = {
                 mode: 'noomselectQue',
-                title: '蚂蚁云校课程删除',
+                title: '题目详情',
                 url: "http://jiaoxue.maaee.com:8091/#/questionDetil?courseId=" + fileObj.subject.id + "&subjectType=" + fileObj.subject.subjectType,
                 width: '380px'
             };

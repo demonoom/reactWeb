@@ -64,7 +64,6 @@
         enterFull(nodeEl[0]);
     };
     littlePanle.prototype.zoomMinView = function (id) {
-        // alert(2);
         let nodeEl = $('#' + id);
         let perInfo = nodeEl.attr('per');
         nodeEl.removeAttr('per');
@@ -236,37 +235,13 @@
 
         let styleObj = (refStyle, index, orderIndex) => {
 
-            // var layouts = $('.ant-layout-operation');
-            // console.log(layouts);
-            // // 计算出复位的位置
-            // var refOff = $('.ant-layout-operation').eq(layouts.length - 1).offset();
-            // var refW = $('.ant-layout-operation').width();
-            //
-            // //
-            // if (!refStyle.width) {
-            //     refStyle.width = 380;
-            // }
-            // let leftRef = (refOff.left + refW) - refStyle.width;
-            // //  leftRef = leftRef + tmpInterval;
-            // refStyle.left = parseInt(leftRef.toFixed());
-            // //
-            // let topReff = refOff.top;
-            // // let topRef = refOff.top ;
-            // topReff = topReff - $(document.body).height();
-            // // console.log(topRef);-590
-            // // topRef = topRef - refStyle.height * orderIndex + 25 * orderIndex;
-            // topReff = topReff - refStyle.height * orderIndex;
-            // // console.log(topRef);减500
-            // refStyle.top = parseInt(topReff.toFixed());
-            //
-            // console.log(window.screen.height);
-            // refStyle.zIndex = index++;
+            var height = document.body.offsetHeight / 2 - 280;
 
             refStyle = {
                 backgroundColor: '#fff',
                 height: '500',
-                left: '306',
-                top: '87',
+                right: '0',
+                top: height,
                 width: '380',
                 zIndex: '9999999999',
             };
@@ -1343,7 +1318,6 @@
         },
 
         GetLP(objParam) {
-            debugger
             let _this = this;
             let objA;
 
