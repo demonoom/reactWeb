@@ -180,6 +180,7 @@
 }
 .schoolgroup_modal .modal_register_main .ant-row, .schoolgroup_modal .modal_register_main .ant-radio-group label{
     margin-top: 15px;
+    height: auto;
 }
 .schoolgroup_modal_col6{
     text-align: right;
