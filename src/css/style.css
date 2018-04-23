@@ -8897,7 +8897,7 @@ select.course_n:hover {
     background: url(../../src/components/images/board_shen1.png) no-repeat;
     width: 54px;
     height: 42px;
-    z-index: 20000;
+    z-index: 20;
     position: absolute;
     right: 0;
     top: 54%;
@@ -9135,7 +9135,7 @@ select.course_n:hover {
 
 .selectTab ul, ul.chosenBox {
     margin: 0;
-    padding: 0;
+    padding: 10px 0 0 0;
     display: flex;
     flex-wrap: wrap;
     margin-left: 0;
@@ -9288,14 +9288,14 @@ ul.chosenBox{
 }
 
 .select_img_modal .ant-modal-body {
-    height: 490px;
+    height: 540px;
     padding: 0;
     position: relative;
 }
 
 .select_img_modal .ant-modal-body .ant-tabs-tabpane, .modal_register_main {
-    padding: 10px 0 10px 10px;
-    height: 448px;
+    padding: 0 0 10px 10px;
+    height: 498px;
     overflow: hidden;
     position: relative;
 }
@@ -9316,8 +9316,9 @@ ul.chosenBox{
     font-weight: normal;
     cursor: pointer;
     position: absolute;
-    top: -36px;
-    left: 8px;
+    top:5px;
+    left: 5px;
+    z-index: 1;
 }
 
 .select_img_modal .ant-modal-header_font {
@@ -9340,50 +9341,81 @@ ul.chosenBox{
 /*background: #fff !important;*/
 /*color: #5d9af2 !important;*/
 /*}*/
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab{
+    border-radius: 6px 0 0 6px ;
+    margin-right: 0;
+}
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:last-child{
+    border-radius: 0 6px 6px 0;
+}
 .select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+    font-size: 14px;
+    height: 28px;
+    color: #5d9af2;
+    display: inline-block;
+    line-height: 24px;
     border: 2px solid #5d9af2;
-    background: #5d9af2;
-    height: 34px;
-    line-height: 30px;
-    padding: 0 16px;
-    margin-right: 0px;
+    min-width: 100px;
+    text-align: center;
+    margin-top: 7px;
+    cursor: pointer;
+    padding: 0 12px;
 }
 
 .select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:hover {
-    color: #fff
+    color: #5d9af2
 }
 
 .select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
-    border-color: #5d9af2;
-    color: #5d9af2;
-    background: #fff;
+    background: #5d9af2;
+    font-size: 14px;
+    height: 28px;
+    color: #fff;
+    display: inline-block;
+    line-height: 24px;
+    min-width: 100px;
+    text-align: center;
+    margin-top: 7px;
+    cursor: pointer;
+    padding: 0 12px;
 }
 
 .select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active:hover {
-    color: #5d9af2;
+    color: #fff;
 }
 
 .select_img_modal .ant-tabs {
     color: #fff;
-    padding: 10px 0 0 0;
+    padding:0;
 }
 
-.select_img_modal .ant-tabs-nav {
-    height: 32px;
+.select_img_modal .ant-tabs-nav, .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-nav-container{
+    height: 42px;
 }
 
 .select_img_modal .ant-tabs-bar {
-    border-bottom: 2px solid #5d9af2;
-    margin: 0 10px;
+    padding: 0 20px 0 20px;
+    height: 42px;
+    line-height: 42px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    background-color: #F8F8F8;
+    border-radius: 2px 2px 0 0;
 }
-
 .select_img_modal .ant-tabs-nav-container {
     margin-bottom: -2px;
 }
-
+.select_img_modal .more_classroom{
+    top:-30px
+}
+.select_img_modal .clearfix > div:first-child{
+    height: calc(100% - 28px);
+}
 .check_img_footer {
     position: fixed;
-    bottom: -17px;
+    bottom: -7px;
     width: 100%;
     height: 44px;
     background: #f8f8f8;
@@ -9499,13 +9531,4 @@ ul.chosenBox{
 a:active,a:hover{
     outline:0;
     text-decoration:none
-}
-.ant-col-24,
-.ant-col-4 {
-    text-align: center;
-}
-
-.ant-col-24 img,
-.ant-col-4 img {
-    max-width: 100%;
 }

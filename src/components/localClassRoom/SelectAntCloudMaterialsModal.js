@@ -839,18 +839,17 @@ class SelectAntCloudMaterialsModal extends React.Component {
         }
         _this.setState({chosenImgArr: chosenImgArr});
     }
-
-
     render() {
-        var showIcon = <Icon type="left" className="ant-modal-header_i"
-                             onClick={this.returnParentAtMoveModal}/>
+        var showIcon =<div className="ant-modal-header_i">
+            <Icon type="left" className="ant-modal-header_i"
+            onClick={this.returnParentAtMoveModal}/>
+        </div>
         return (
             <div>
                 <Modal className="select_img_modal"
                        visible={this.state.isShow}
                        onCancel={this.SelectAntCloudMaterialsModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
-                       title="选择课件"
                        maskClosable={false} //设置不允许点击蒙层关闭
                        zIndex='998'
                        height="540px"
@@ -869,6 +868,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                                         className="selectTab"
                                         onChange={this.cloudTabsChange}
                                         type="card"
+                                        animated={false}
                                     >
                                         <TabPane tab="蚁盘文件" key="cloudFile">
 
