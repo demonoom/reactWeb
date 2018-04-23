@@ -109,7 +109,7 @@ class SelectAntCloudSubjectsModal extends React.Component {
                         antCloudFileCurrentPage: pageNo,
                     });
                 } else {
-                    message.error("无更多数据");
+                    message.success("无更多数据");
                 }
             },
             onError: function (error) {
@@ -242,7 +242,7 @@ class SelectAntCloudSubjectsModal extends React.Component {
                         antCloudFileCurrentPage: pageNo,
                     });
                 } else {
-                    message.error("无更多数据");
+                    message.success("无更多数据");
                 }
             },
             onError: function (error) {

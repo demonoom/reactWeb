@@ -203,7 +203,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                         showIconBtn: false
                     });
                 } else {
-                    message.error("无更多数据");
+                    message.success("无更多数据");
                 }
             },
             onError: function (error) {
@@ -245,7 +245,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                 } else {
                     var parentDirectoryId = _this.state.currentDirectory.parentId;
                     _this.setState({"cloudImgDirectoryParentId": parentDirectoryId});
-                    message.error("无更多数据");
+                    message.success("无更多数据");
                 }
             },
             onError: function (error) {
@@ -607,7 +607,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                         antCloudFileCurrentPage: pageNo,
                     });
                 } else {
-                    message.error("无更多数据");
+                    message.success("无更多数据");
                 }
             },
             onError: function (error) {
