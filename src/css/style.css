@@ -105,7 +105,9 @@ i, cite, em, var, address, dfn {
     .little-layout-aside-r-show {
         height: 596px !important
     }
-
+    .little-layout-aside-r-show_ant{
+        height:100% !important;
+    }
     .gz_title_flex, .gz_title_flex + div {
         width: 876px !important;
     }
@@ -154,6 +156,9 @@ i, cite, em, var, address, dfn {
 
     .little-layout-aside-r-show {
         height: 557px !important
+    }
+    .little-layout-aside-r-show_ant{
+        height:100% !important;
     }
 
     .little-layout-aside-r-show .content {

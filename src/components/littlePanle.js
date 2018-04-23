@@ -218,7 +218,7 @@
         let id = UUID(8, 16);
         this.id = id;
         this.ifrid = 'ifr' + id;
-        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin">
+        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin little-layout-aside-r-show_ant">
                 <div class="header draggable">
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
@@ -241,7 +241,7 @@
                 backgroundColor: '#fff',
                 height: '500',
                 right: '0',
-                top: height,
+                top: '0',
                 width: '380',
                 zIndex: '9999999999',
             };
