@@ -160,6 +160,15 @@
 
             refStyle.zIndex = index++;
 
+            // refStyle = {
+            //     backgroundColor: '#fff',
+            //     height: '500',
+            //     left: '306',
+            //     top: '87',
+            //     width: '380',
+            //     zIndex: '9999999999',
+            // };
+
             return refStyle
 
         };
