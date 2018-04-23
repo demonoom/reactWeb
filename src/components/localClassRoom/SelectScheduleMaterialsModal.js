@@ -170,7 +170,7 @@ class SelectScheduleMaterialsModal extends React.Component {
                     _this.setState({currentPage: pageNo});
                 } else {
                     if (isTipNoDataMessage == true) {
-                        message.error("无更多数据");
+                        message.success("无更多数据");
                     }
                 }
             },
