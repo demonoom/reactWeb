@@ -127,6 +127,7 @@ const LocalClassRoom = React.createClass({
      * @param guideType
      */
     setGuideType(guideType) {
+        console.log(guideType);
         if (guideType.key == "schedule") {
             this.setState({schduleMaterialsModalIsShow: true});
         } else {

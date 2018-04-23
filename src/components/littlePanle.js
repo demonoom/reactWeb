@@ -64,7 +64,6 @@
         enterFull(nodeEl[0]);
     };
     littlePanle.prototype.zoomMinView = function (id) {
-        // alert(2);
         let nodeEl = $('#' + id);
         let perInfo = nodeEl.attr('per');
         nodeEl.removeAttr('per');
@@ -156,6 +155,96 @@
 
             console.log(window.screen.height);
             refStyle.zIndex = index++;
+
+            return refStyle
+
+        };
+
+        this.htm = $(this.htm).css(styleObj(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex));
+        $(document.body).append(this.htm);
+        this.el = $('#' + this.id);
+        if (obj.drag) {
+            $(this.el).drag();
+        }
+
+        $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+        $(this.el).find('.goback').on('click', this.gobackpanle.bind(this, this.id));
+        this.ifrel = $('#' + this.ifrid);
+
+        var iframe = this.ifrel[0];
+        var idd = iframe.id;
+        console.log(idd);
+        if (!isAddedListener) {
+            window.addEventListener('message', function (e) {
+                var data = JSON.parse(e.data);
+                //data.method方式
+                //data.callbackId回调方法名
+                //data.errorbackId错误回调方法名
+                console.log(data);
+                if (data.method == 'selectPictures') {
+
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__noom__(data.callbackId);
+
+                    window.__noomUpLoad__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == 'showImage') {
+                    //data.currentUrl   当前的地址
+                    //data.url  全部地址，用#分割
+                    window.__sendImg__(data.currentUrl, data.url);
+
+                } else if (data.method == 'openNewPage') {
+                    let obj = {mode: 'teachingAdmin', title: '', url: data.url};
+                    LP.Start(obj);
+                }
+            });
+            isAddedListener = true;
+        }
+
+
+        this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid, 1));
+        return this;
+    };
+
+    littlePanle.prototype._noomselectQue_UI_templet = function (obj) {
+
+        let id = UUID(8, 16);
+        this.id = id;
+        this.ifrid = 'ifr' + id;
+        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin">
+                <div class="header draggable">
+                <h3 class="title">${ obj.title }</h3>
+                    <div class="little-tilte">
+                        <a class="back"><i class="anticon anticon-left "></i></a>
+                        <!--<div class="goback">后退</div>-->
+                    </div>
+                </div>
+                <div class="content">
+                    <section class="littleAnt-iframe-panle">
+                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${ obj.url }" name="${this.ifrid}" ></iframe>
+                    </section>
+                </div>
+                </div>`;
+
+        let styleObj = (refStyle, index, orderIndex) => {
+
+            var height = document.body.offsetHeight / 2 - 280;
+
+            refStyle = {
+                backgroundColor: '#fff',
+                height: '500',
+                right: '0',
+                top: height,
+                width: '380',
+                zIndex: '9999999999',
+            };
 
             return refStyle
 
@@ -1144,6 +1233,9 @@
                 // this._liveTV_UI_templet(this.param);
                 this._liveTVHistory_UI_templet(this.param);
                 break;
+            case 'noomselectQue':
+                this._noomselectQue_UI_templet(this.param);
+                break;
 
         }
 
@@ -1241,6 +1333,11 @@
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     break;
                 case 'history':
+                    _this.delAll();
+                    objA = new littlePanle().GetLP(objParam, _this.mgr);
+                    break;
+
+                case 'noomselectQue':
                     _this.delAll();
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     break;
