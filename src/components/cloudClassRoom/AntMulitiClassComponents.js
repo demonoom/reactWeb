@@ -331,7 +331,7 @@ const AntMulitiClassComponents = React.createClass({
             //微课
             var cardObj = <Card key={id}>
                 <Row>
-                    <Col span={4}>
+                    <Col span={4} className="clound_img">
                         <img alt="example" src={image}/>
                     </Col>
                     <Col span={18}>
@@ -413,7 +413,7 @@ const AntMulitiClassComponents = React.createClass({
             //直播课
             var cardObj = <Card key={id}>
                 <Row>
-                    <Col span={4}>
+                    <Col span={4} className="clound_img">
                         <img alt="example"  src={image}/>
                     </Col>
                     <Col span={18}>
@@ -574,7 +574,7 @@ const AntMulitiClassComponents = React.createClass({
         if (isSeries == "3" || isSeries == "4") {
             var classDetailPanel = <Card>
                 <Row>
-                    <Col span={24}>
+                    <Col span={24} className="clound_img">
                         <img alt="example" src={classObj.image}/>
                     </Col>
                     <Col span={24}>
@@ -665,7 +665,7 @@ const AntMulitiClassComponents = React.createClass({
         } else {
             var classDetailPanel = <Card>
                 <Row>
-                    <Col span={24}>
+                    <Col span={24} className="clound_img">
                         <img alt="example"  src={classObj.image}/>
                     </Col>
                     <Col span={24}>
