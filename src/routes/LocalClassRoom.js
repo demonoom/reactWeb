@@ -56,10 +56,6 @@ const LocalClassRoom = React.createClass({
 
     componentDidMount() {
         window.__noomSelectPic__ = this.noomSelectPic;
-        var htmlPath = sessionStorage.getItem("htmlPath");
-        if(isEmpty(htmlPath)==false){
-            this.pushMaterialsToClass(htmlPath);
-        }
     },
 
     noomSelectPic(src, obj) {
@@ -124,6 +120,10 @@ const LocalClassRoom = React.createClass({
         };
         //连接登入课堂
         connection.connect(loginPro);
+        var htmlPath = sessionStorage.getItem("htmlPath");
+        if(isEmpty(htmlPath)==false){
+            this.pushMaterialsToClass(htmlPath);
+        }
     },
 
     /**
