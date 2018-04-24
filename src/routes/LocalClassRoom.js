@@ -416,7 +416,7 @@ const LocalClassRoom = React.createClass({
 
                 <Modal
                     visible={this.state.errorVisible}
-                    width={400}
+                    width={300}
                     title={"提示"}
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭

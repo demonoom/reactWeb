@@ -9545,7 +9545,34 @@ a:active,a:hover{
     max-height: 100%;
 }
 
-
-.calmNewClass .ant-modal-close {
-    display: none;
+.calmNewClass .ant-modal-header {
+    padding: 0 20px 0 16px;
+    height: 42px;
+    line-height: 42px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    background-color: #F8F8FA;
+    border-radius: 2px 2px 0 0;
+}
+.calmNewClass .ant-modal-content .ant-modal-close {
+    top: 12px;
+}
+.calmNewClass .ant-modal-content .ant-modal-close-x {
+    font-size: 17px;
+    color:#333;
+}
+.calmNewClass .ant-modal-body {
+    font-size: 14px;
+    color:#333;
+}
+.calmNewClass .ant-modal-body .class_right .ant-btn{
+    background: #1E9FFF;
+    border-radius: 2px;
+}
+.calmNewClass .ant-modal-title {
+    /* display: none; */
+    line-height:42px;
+   
 }
