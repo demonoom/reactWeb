@@ -30,7 +30,8 @@ const LocalClassRoom = React.createClass({
             sendPicModel: false,
             errorVisible: false,
             closeIconType: 'double-right',
-            closeOrOpen: 'open'
+            closeOrOpen: 'open',
+            isClassStatusShow:false
         };
     },
 
@@ -44,12 +45,21 @@ const LocalClassRoom = React.createClass({
         var classType = searchArray[3].split('=')[1];
         document.title = "本地课堂";   //设置title
         sessionStorage.setItem("userId", userId);
-        this.connectClazz(userId, classCode, classType, account);
+        /*if(isEmpty(sessionStorage.getItem("userId"))==true){
+
+        }else{
+            this.connectClazz(userId, classCode, classType, account);
+        }*/
+        this.getDisconnectedClass();
         this.setState({userId, account, classCode, classType});
     },
 
     componentDidMount() {
         window.__noomSelectPic__ = this.noomSelectPic;
+        var htmlPath = sessionStorage.getItem("htmlPath");
+        if(isEmpty(htmlPath)==false){
+            this.pushMaterialsToClass(htmlPath);
+        }
     },
 
     noomSelectPic(src, obj) {
@@ -194,6 +204,7 @@ const LocalClassRoom = React.createClass({
     pushMaterialsToClass(htmlPath) {
         // var htmlPath = materials.htmlPath;
         if (isEmpty(htmlPath) == false) {
+            sessionStorage.setItem("htmlPath",htmlPath);
             var pptURL = htmlPath.replace("60.205.111.227", "www.maaee.com");
             pptURL = pptURL.replace("60.205.86.217", "www.maaee.com");
             pptURL = pptURL.replace("http", "https");
@@ -341,6 +352,62 @@ const LocalClassRoom = React.createClass({
         this.closeAntCloudMaterialsModal();
     },
 
+    /**
+     * 获取当前未关闭的课堂
+     */
+    getDisconnectedClass(){
+        var _this = this;
+        var param = {
+            "method": 'getDisconnectedClass',
+            "userId": sessionStorage.getItem("userId")
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                var response = ret.response;
+                if(isEmpty(response)==false){
+                    var vid = response.vid;
+                    _this.setState({isClassStatusShow:true,vid});
+                }else{
+                    _this.enterDisconnectionClass();
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 关闭未断开的课堂
+     */
+    closeDisconnectionClass(){
+        var _this = this;
+        var param = {
+            "method": 'closeVirtureClass',
+            "userId": sessionStorage.getItem("userId"),
+            "vid": _this.state.vid,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                _this.setState({isClassStatusShow:false});
+                window.close();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 进入课堂
+     */
+    enterDisconnectionClass(){
+        this.connectClazz(this.state.userId, this.state.classCode, this.state.classType, this.state.account);
+        this.setState({isClassStatusShow:false});
+    },
+
     errorHandleOk() {
         window.close();
     },
@@ -440,6 +507,24 @@ const LocalClassRoom = React.createClass({
                     picFile={this.state.picFile}
                     sendPicToOthers={this.sendPicToOthers}
                 />
+                <Modal
+                    visible={this.state.isClassStatusShow}
+                    width={440}
+                    transitionName=""  //禁用modal的动画效果
+                    closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[
+                        <Button key="back" size="large" onClick={this.closeDisconnectionClass}>关闭课堂</Button>,
+                        <Button key="submit" type="primary" size="large" onClick={this.enterDisconnectionClass}>
+                            进入课堂
+                        </Button>,
+                    ]}
+                >
+                    <div className="class_right">
+                        <Icon type="question-circle" className="icon_Alert icon_orange" />
+                        <span style={{fontSize:'14px'}}>存在未断开的课堂,请选择关闭/进入课堂?</span>
+                    </div>
+                </Modal>
             </div>
         );
     },
@@ -447,4 +532,3 @@ const LocalClassRoom = React.createClass({
 });
 
 export default LocalClassRoom;
-
