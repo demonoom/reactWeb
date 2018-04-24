@@ -417,11 +417,11 @@ const LocalClassRoom = React.createClass({
                 <Modal
                     visible={this.state.errorVisible}
                     width={400}
-                    title={"提示信息"}
+                    title={"提示"}
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[]}
-                    className="new_add_ding"
+                    className="new_add_ding calmNewClass"
                 >
                     <div className="noomUpLoadFile_wrap">
                         <div>你被强制下线了!</div>

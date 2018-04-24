@@ -9537,8 +9537,6 @@ a:active,a:hover{
     outline:0;
     text-decoration:none
 }
-<<<<<<< HEAD
-=======
 .clound_img{
     text-align: center;
 }
@@ -9546,4 +9544,8 @@ a:active,a:hover{
     max-width: 100%;
     max-height: 100%;
 }
->>>>>>> 30915d332677bd39ef7950187dbbaddc26f38619
+
+
+.calmNewClass .ant-modal-close {
+    display: none;
+}
