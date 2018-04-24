@@ -86,7 +86,11 @@ const LocalClasses = React.createClass({
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
         // window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+<<<<<<< HEAD
         window.open("http://localhost:8090/#/localClassRoom?userId="+userId+"&account="+account+"&classCode="+classId+"&classType="+classType);
+=======
+        window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+>>>>>>> 30915d332677bd39ef7950187dbbaddc26f38619
     },
 
     /**

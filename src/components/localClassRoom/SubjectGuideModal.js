@@ -36,7 +36,6 @@ class SubjectGuideModal extends React.Component{
      * 选择一个具体的操作指向
      */
     selectGuide(guideRecord){
-        console.log(guideRecord);
         this.props.setGuideType(guideRecord);
     }
 

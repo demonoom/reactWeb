@@ -28,6 +28,7 @@ const LocalClassRoom = React.createClass({
             antCloudMaterialsModalIsShow: false,
             closeScheduleMaterialsModal: false,
             sendPicModel: false,
+            errorVisible: false,
             closeIconType: 'double-right',
             closeOrOpen: 'open'
         };
@@ -70,8 +71,9 @@ const LocalClassRoom = React.createClass({
 
             onError: function (errorMsg) {
                 //强制退出课堂
-                message.error(errorMsg);
+                // message.error(errorMsg);
                 // window.close();
+                _this.setState({errorVisible: true});
             },
 
             onWarn: function (warnMsg) {
@@ -119,7 +121,7 @@ const LocalClassRoom = React.createClass({
      */
     getPPT() {
         //this.refs.guideModal.changeGuideModalVisible(true);
-         this.setState({antCloudMaterialsModalIsShow:true});
+        this.setState({antCloudMaterialsModalIsShow: true});
     },
 
     /**
@@ -127,6 +129,7 @@ const LocalClassRoom = React.createClass({
      * @param guideType
      */
     setGuideType(guideType) {
+        console.log(guideType);
         if (guideType.key == "schedule") {
             this.setState({schduleMaterialsModalIsShow: true});
         } else {
@@ -190,7 +193,7 @@ const LocalClassRoom = React.createClass({
 
     pushMaterialsToClass(htmlPath) {
         // var htmlPath = materials.htmlPath;
-        if(isEmpty(htmlPath)==false){
+        if (isEmpty(htmlPath) == false) {
             var pptURL = htmlPath.replace("60.205.111.227", "www.maaee.com");
             pptURL = pptURL.replace("60.205.86.217", "www.maaee.com");
             pptURL = pptURL.replace("http", "https");
@@ -204,7 +207,7 @@ const LocalClassRoom = React.createClass({
             var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
             connection.send(p1);
             this.setState({classRoomUrl});
-        }else{
+        } else {
             message.error("该文件暂时无法完成推送");
         }
     },
@@ -212,7 +215,7 @@ const LocalClassRoom = React.createClass({
     /**
      * 从备课计划里使用此材料
      */
-    useMaterialInClass(materialId){
+    useMaterialInClass(materialId) {
         var _this = this;
         var vclassId = this.state.vid;
         var param = {
@@ -222,7 +225,7 @@ const LocalClassRoom = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-               // pushMaterialsToClass(ret);
+                // pushMaterialsToClass(ret);
             },
             onError: function (error) {
                 message.error(error);
@@ -233,7 +236,7 @@ const LocalClassRoom = React.createClass({
     /**
      * 从蚁盘文件里使用此材料
      */
-    useCloudFileInClass(cid){
+    useCloudFileInClass(cid) {
         var _this = this;
         var vclassId = this.state.vid;
         var param = {
@@ -338,6 +341,10 @@ const LocalClassRoom = React.createClass({
         this.closeAntCloudMaterialsModal();
     },
 
+    errorHandleOk() {
+        window.close();
+    },
+
     render() {
 
         var classIfream = null;
@@ -366,13 +373,15 @@ const LocalClassRoom = React.createClass({
                             <i><img src={require('../components/images/classroom_subject.png')}/></i>
                             <div>题目</div>
                         </Button>
-                        <Button className="classroom_btn_b classroom_btn_statistics add_out" onClick={this.getClazzStatus}>
+                        <Button className="classroom_btn_b classroom_btn_statistics add_out"
+                                onClick={this.getClazzStatus}>
                             <i><img src={require('../components/images/classroom_statistics.png')}/></i>
                             <div>统计</div>
                         </Button>
                     </div>
                     <div className="classroom_btn_finish">
-                        <Button className="classroom_btn_b classroom_btn_finish add_out" onClick={this.showConfirmModal}>
+                        <Button className="classroom_btn_b classroom_btn_finish add_out"
+                                onClick={this.showConfirmModal}>
                             <i><img src={require('../components/images/classroom_finish.png')}/></i>
                             <div>下课</div>
                         </Button>
@@ -396,7 +405,7 @@ const LocalClassRoom = React.createClass({
                 <SelectScheduleMaterialsModal isShow={this.state.schduleMaterialsModalIsShow}
                                               onCancel={this.closeScheduleMaterialsModal}
                                               pushMaterialsToClass={this.pushMaterialsToClass}
-                                              useMaterialInClass={this.useMaterialInClass} ></SelectScheduleMaterialsModal>
+                                              useMaterialInClass={this.useMaterialInClass}></SelectScheduleMaterialsModal>
                 <SelectAntCloudSubjectsModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal}
                                              pushSubjectToClass={this.pushSubjectToClass}></SelectAntCloudSubjectsModal>
                 <ConfirmModal ref="confirmModal"
@@ -404,6 +413,16 @@ const LocalClassRoom = React.createClass({
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.disConnectClassRoom}
                 ></ConfirmModal>
+
+                <Modal
+                    visible={this.state.errorVisible}
+                    onOk={this.errorHandleOk}
+                    onCancel={false}
+                    width='300'
+                >
+                    你被强制下线了!
+                </Modal>
+
                 <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
                 <SubjectGuideModal ref="subjectGuideModal" setGuideType={this.setSubjectGuideType}></SubjectGuideModal>
                 <SendPicModel

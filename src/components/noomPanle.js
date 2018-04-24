@@ -159,7 +159,6 @@
             refStyle.top = top;
 
             refStyle.zIndex = index++;
-
             return refStyle
 
         };
