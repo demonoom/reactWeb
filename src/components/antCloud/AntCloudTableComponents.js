@@ -365,7 +365,7 @@ const AntCloudTableComponents = React.createClass({
                     moveDirOpt = <div>
                         {/*这是确定保存的功能*/}
                         <Button className="btn_font"
-                            onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key, "copyDirModal")}>确定</Button>
+                                onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key, "copyDirModal")}>确定</Button>
                     </div>;
                 } else {
                     dirName = name;
@@ -417,7 +417,7 @@ const AntCloudTableComponents = React.createClass({
                 if (e.directory == true) {
                     moveDirOpt = <div>
                         <Button className="btn_font"
-                            onClick={cloudTable.moveFileToTargetDir.bind(cloudTable, key, "moveDirModal")}>确定</Button>
+                                onClick={cloudTable.moveFileToTargetDir.bind(cloudTable, key, "moveDirModal")}>确定</Button>
                     </div>;
                 } else {
                     dirName = name;
@@ -582,21 +582,28 @@ const AntCloudTableComponents = React.createClass({
                     if (isEmpty(optSrc) == false && optSrc == "mainTable") {
                         cloudTable.setState({"currentDirectoryId": cloudFileId});
                         cloudTable.buildTableDataByResponse(ret);
-                    }else if (isEmpty(optSrc) == false && optSrc == "moveDirModal") {
-                        if(isEmpty(response) == true){
-                            cloudTable.setState({"currentDirectoryId": cloudTable.state.cloudFileIdMove, "currentPageModal": cloudTable.state.pageNo});
+                    } else if (isEmpty(optSrc) == false && optSrc == "moveDirModal") {
+                        if (isEmpty(response) == true) {
+                            cloudTable.setState({
+                                "currentDirectoryId": cloudTable.state.cloudFileIdMove,
+                                "currentPageModal": cloudTable.state.pageNo
+                            });
                             //cloudTable.buildTargetDirData(ret);
-                        }else{
+                        } else {
                             //移动文件夹页面进入文件
-                            cloudTable.setState({"currentDirectoryId": cloudFileId, "currentPageModal": pageNo, "cloudFileIdMove": cloudFileId});
+                            cloudTable.setState({
+                                "currentDirectoryId": cloudFileId,
+                                "currentPageModal": pageNo,
+                                "cloudFileIdMove": cloudFileId
+                            });
                             cloudTable.buildTargetDirData(ret);
                         }
 
-                    }else if (isEmpty(optSrc) == false && optSrc == "copyDirModal") {
+                    } else if (isEmpty(optSrc) == false && optSrc == "copyDirModal") {
                         // 保存
                         cloudTable.setState({"currentDirectoryId": cloudFileId, "currentPageForCopyModal": pageNo});
                         cloudTable.buildTargetDirDataSaveLocal(ret);
-                    }else {
+                    } else {
                         cloudTable.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
                         cloudTable.buildTargetDirData(ret);
                         cloudTable.buildTargetDirDataSaveLocal(ret);
@@ -806,12 +813,12 @@ pageNo   --- 页码，-1取全部
                         editButton = "";
                         deleteButton = "";
                         moveButton = "";
-                        if(_this.state.currentDirectoryId == -1){
+                        if (_this.state.currentDirectoryId == -1) {
                             saveButton = "";
                             shareButton = "";
                         }
                     }
-                }else{
+                } else {
                     //我的文件夹中，如果是文件夹，则不应该有保存按钮
                     saveButton = "";
                 }
@@ -944,7 +951,7 @@ pageNo   --- 页码，-1取全部
         var createUid = e.createUid;
         var name = e.name;
         if (type == 'mp4') {
-            var url = path;
+            var url = 'http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/' + e.uuid + '/' + e.id;
             this.view(event, url, name);
         } else if (type == 'jpg' || type == 'bmp' || type == 'png') {
             var url = path;
@@ -1468,7 +1475,7 @@ pageNo   --- 页码，-1取全部
                 } else {
                     message.error("文件上传失败");
                 }
-                cloudTable.setState({cloudFileUploadModalVisible: false,currentPage:1});
+                cloudTable.setState({cloudFileUploadModalVisible: false, currentPage: 1});
             },
             onError: function (error) {
                 message.error(error);
@@ -1560,7 +1567,7 @@ pageNo   --- 页码，-1取全部
                     cloudTable.state.parentDirectoryIdAtMoveModal, queryConditionJson, initPageNo, "moveDirModal");
             }
         }
-        this.setState({currentPageModal:initPageNo});
+        this.setState({currentPageModal: initPageNo});
     },
 
     /**
@@ -1592,7 +1599,7 @@ pageNo   --- 页码，-1取全部
     getCloudFileSave(fileObject) {
         var initPageNo = 1;
         this.getUserRootCloudFiles(this.state.ident, initPageNo, "copyDirModal");
-        this.setState({saveFileModalVisible: true, "saveFileId": fileObject.id,"currentPageForCopyModal":1});
+        this.setState({saveFileModalVisible: true, "saveFileId": fileObject.id, "currentPageForCopyModal": 1});
     },
 
     /**
@@ -1729,11 +1736,21 @@ pageNo   --- 页码，-1取全部
         if (getFileType == "myFile") {
             if (this.state.activeKey == "1") {
                 cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, "moveDirModal");
-                cloudTable.setState({moveFileModalVisible: true, "moveFileId": fileObject.id, fileType: "myFile",currentPageModal:1});
+                cloudTable.setState({
+                    moveFileModalVisible: true,
+                    "moveFileId": fileObject.id,
+                    fileType: "myFile",
+                    currentPageModal: 1
+                });
             }
         } else {
             cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, initPageNo, "moveDirModal");
-            cloudTable.setState({moveFileModalVisible: true, "moveFileId": fileObject.id, fileType: "groupFile",currentPageModal:1});
+            cloudTable.setState({
+                moveFileModalVisible: true,
+                "moveFileId": fileObject.id,
+                fileType: "groupFile",
+                currentPageModal: 1
+            });
         }
 
     },
@@ -1851,7 +1868,7 @@ pageNo   --- 页码，-1取全部
             cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
             cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, "copyDirModal");
         }*/
-        this.setState({currentPageForCopyModal:initPageNo});
+        this.setState({currentPageForCopyModal: initPageNo});
     },
 
 

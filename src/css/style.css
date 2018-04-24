@@ -9574,5 +9574,13 @@ a:active,a:hover{
 .calmNewClass .ant-modal-title {
     /* display: none; */
     line-height:42px;
-   
+}
+.calmVideoBoxWrap {
+    height: 100%;
+}
+.calmVideoBoxWrap .calmVideoBox {
+    height: 100%;
+}
+.calmVideoBoxWrap .calmVideoBox .video-js {
+    height: 100%;
 }
