@@ -416,12 +416,20 @@ const LocalClassRoom = React.createClass({
 
                 <Modal
                     visible={this.state.errorVisible}
-                    onOk={this.errorHandleOk}
-                    onCancel={false}
-                    width='300'
+                    width={400}
+                    title={"提示信息"}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[]}
+                    className="new_add_ding"
                 >
-                    你被强制下线了!
+                    <div className="noomUpLoadFile_wrap">
+                        <div>你被强制下线了!</div>
+                        <div className="class_right"><Button className="noomUpLoadFile_btn" type="primary"
+                                                             onClick={this.errorHandleOk}>确定</Button></div>
+                    </div>
                 </Modal>
+
 
                 <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
                 <SubjectGuideModal ref="subjectGuideModal" setGuideType={this.setSubjectGuideType}></SubjectGuideModal>
