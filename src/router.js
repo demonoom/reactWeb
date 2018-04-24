@@ -4,6 +4,7 @@ import MainLayout from './routes/MainLayout';
 import StudentMainLayout from './routes/StudentMainLayout';
 import Login from './routes/Login';
 import LocalClassRoom from './routes/LocalClassRoom';
+import playVideoPage from './routes/playVideoPage';
 
 export default function({ history }) {
     return (
@@ -14,6 +15,7 @@ export default function({ history }) {
             <Route path="/login" component={Login}/>
             <Route path="/LittleAntWeb" component={Login}/>
             <Route path="/localClassRoom" component={LocalClassRoom}/>
+	    <Route path="/playVideoPage" component={playVideoPage}/>
         </Router>
     );
 };

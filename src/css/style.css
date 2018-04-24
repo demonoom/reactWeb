@@ -9545,7 +9545,12 @@ a:active,a:hover{
     max-height: 100%;
 }
 
-
-.calmNewClass .ant-modal-close {
-    display: none;
+.calmVideoBoxWrap {
+    height: 100%;
+}
+.calmVideoBoxWrap .calmVideoBox {
+    height: 100%;
+}
+.calmVideoBoxWrap .calmVideoBox .video-js {
+    height: 100%;
 }
