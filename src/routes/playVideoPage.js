@@ -25,9 +25,14 @@ class PlayVideoPage extends React.Component {
         document.title = "小蚂蚁直播";   //设置title
         this.setState({videoUrl});
         this.buildSourceObj(videoUrl);
+        // console.log($(".vjs-volume-control"));
+        $(".vjs-volume-control").css({
+
+        })
     }
 
     componentDidMount(){
+        // console.log($(".vjs-volume-control"));
         var options = {
             sourceOrder: true,
             controls: true,
@@ -60,7 +65,6 @@ class PlayVideoPage extends React.Component {
     }
 
     render() {
-
         return (
             <div className="calmVideoBoxWrap">
                 <div className="calmVideoBox">

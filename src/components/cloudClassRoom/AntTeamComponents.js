@@ -1170,18 +1170,18 @@ const AntTeamComponents = React.createClass({
                     title={
                         <FormattedMessage
                             id='createTeam'
-                            description='创建团队'
-                            defaultMessage='创建团队'
+                            description='创建团队11'
+                            defaultMessage='创建团队11'
                         />
                     }
                     onCancel={this.createTeamModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
-                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn"
-                                onClick={this.createTeam}>确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                onClick={this.createTeamModalHandleCancel}>取消</button>
+                                onClick={this.createTeamModalHandleCancel}>取消</button>,
+                                <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn"
+                                onClick={this.createTeam}>确定</button>
                     ]}
                 >
                     <Row className="ant-form-item">

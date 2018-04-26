@@ -2161,6 +2161,7 @@ const PersonCenterComponents = React.createClass({
             var tabComponent = <Tabs
                 hideAdd
                 ref="studentStudyTrackTab"
+                animated={false}
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
                 transitionName=""  //禁用Tabs的动画效果
@@ -2246,6 +2247,7 @@ const PersonCenterComponents = React.createClass({
             personDate = <Tabs
                 hideAdd
                 ref="mainTab"
+                animated={false}
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
                 tabBarExtraContent={returnPersonCenterBar}
@@ -2265,6 +2267,7 @@ const PersonCenterComponents = React.createClass({
             personDate = <Tabs
                 hideAdd
                 ref="mainTab"
+                animated={false}
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
                 tabBarExtraContent={returnPersonCenterToolBar}
@@ -2288,6 +2291,7 @@ const PersonCenterComponents = React.createClass({
             personDate = <Tabs
                 hideAdd
                 ref="mainTab"
+                animated={false}
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
                 tabBarExtraContent={returnPersonCenterToolBar}

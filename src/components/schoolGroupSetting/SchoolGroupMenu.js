@@ -408,6 +408,7 @@ class SchoolGroupMenu extends React.Component {
                               defaultOpenKeys={[this.state.openKeys]}
                               openKeys={[this.state.openKeys]}
                               className="cont_t"
+                              animated={false}
                               mode="inline"
                         >
                             {this.state.subMenu}

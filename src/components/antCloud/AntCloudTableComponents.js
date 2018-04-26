@@ -2455,6 +2455,7 @@ pageNo   --- 页码，-1取全部
             var content = <Tabs
                 hideAdd
                 onChange={cloudTable.onChange}
+                animated={false}
                 activeKey={cloudTable.state.activeKey}
                 defaultActiveKey={cloudTable.state.defaultActiveKey}
                 tabBarExtraContent={delBtn}

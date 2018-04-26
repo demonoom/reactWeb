@@ -344,6 +344,7 @@ const Login = Form.create()(React.createClass({
                                 <Tabs type="card">
                                     <TabPane tab={<FormattedMessage
                                         id='scanLogin'
+                                        animated={false}
                                         description='扫码登录'
                                         defaultMessage='扫码登录'
                                     />} key="1">

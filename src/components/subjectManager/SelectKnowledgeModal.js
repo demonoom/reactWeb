@@ -249,11 +249,12 @@ class SelectKnowledgeModal extends React.Component {
             onSelectAll: this.onSelectAll
         };
         var buttons = <div>
-            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.saveButtonOnClick}>
-                确定
-            </Button>
+            
             <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.SelectKnowledgeModalHandleCancel}>
                 取消
+            </Button>
+            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.saveButtonOnClick}>
+                确定
             </Button>
         </div>
         return (

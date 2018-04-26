@@ -470,11 +470,9 @@ const AssignHomeWorkComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-
-                           <Button key="return" type="primary" size="large"
-                                   onClick={assignHomeWork.subjectModalHandleOk}>确定</Button>,
-
                            <Button key="ok" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>取消</Button>,
+                           <Button key="return" type="primary" size="large"
+                                   onClick={assignHomeWork.subjectModalHandleOk}>确定</Button>
 
                        ]}
                 >

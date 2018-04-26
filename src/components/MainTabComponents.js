@@ -202,6 +202,7 @@ const MainTabComponents = React.createClass({
                     onChange={this.onChange}
                     onEdit={this.onEdit}
                     ref = "mainTab"
+                    animated={false}
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={toolbarExtra}

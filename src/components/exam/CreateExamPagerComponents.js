@@ -1476,11 +1476,11 @@ const CreateExamPagerComponents = React.createClass({
     },
 
     showDelAllAnswerCardConfirmModal(){
-        createExamPager.refs.delAllAnswerCardConfirmModal.changeConfirmModalVisible(true);
+        this.setState({delAnswModalVisible:true})
     },
 
     closeDelAllAnswerCardConfirmModal(){
-        createExamPager.refs.delAllAnswerCardConfirmModal.changeConfirmModalVisible(false);
+        this.setState({delAnswModalVisible:false})
     },
 
 
@@ -1497,11 +1497,25 @@ const CreateExamPagerComponents = React.createClass({
                               onConfirmModalCancel={createExamPager.closeDelAnswerCardConfirmModal}
                               onConfirmModalOK={createExamPager.deleteAnswerCard}
                 ></ConfirmModal>
-                <ConfirmModal ref="delAllAnswerCardConfirmModal"
-                              title="确定要清除全部答题卡?"
+                {/* <ConfirmModal ref="delAllAnswerCardConfirmModal"
+                              title="确定要清除全部答题卡?1111"
                               onConfirmModalCancel={createExamPager.closeDelAllAnswerCardConfirmModal}
                               onConfirmModalOK={createExamPager.deleteAllCardChild}
-                ></ConfirmModal>
+                ></ConfirmModal> */}
+                <Modal
+                    visible={createExamPager.state.delAnswModalVisible}
+                    title="提示"
+                    onCancel={createExamPager.closeDelAllAnswerCardConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="ghost" className="login-form-button examination_btn_white calmSure" onClick={createExamPager.closeDelAllAnswerCardConfirmModal} >取消</button>,
+                        <button type="primary" className="login-form-button examination_btn_blue calmCancle" onClick={createExamPager.deleteAllCardChild}  >确定</button>
+                    ]}
+                >
+                <div className="isDel">确定要清除全部答题卡?</div>
+
+                </Modal>
                 <Modal
                     visible={createExamPager.state.analysisModalVisible}
                     title="添加解析"

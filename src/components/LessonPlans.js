@@ -301,6 +301,7 @@ class LessonPlans extends React.Component {
                 <div className="favorite_scroll">
                     <Tabs
                         hideAdd
+                        animated={false}
                         onChange={this.onChange}
                         onEdit={this.onEdit}
                         activeKey={this.state.activeKey}

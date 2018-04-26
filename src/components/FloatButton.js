@@ -96,13 +96,16 @@ const FloatButton = React.createClass({
             </Menu>
         );
         return (
+
+            
             <div className="more_div">
                 <ConfirmModal ref="confirmModal"
                               title="您确定退出登录么?"
                               onConfirmModalCancel={floatButton.closeConfirmModal}
                               onConfirmModalOK={floatButton.logOut}
+                              
                 ></ConfirmModal>
-
+               
                 <UserPasswordModifyComponents ref="userPasswordModify"/>
 
                 <Dropdown overlay={menu} trigger={['click']} className='affix_bottom'>
