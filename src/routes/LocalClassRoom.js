@@ -31,7 +31,7 @@ const LocalClassRoom = React.createClass({
             errorVisible: false,
             closeIconType: 'double-right',
             closeOrOpen: 'open',
-            isClassStatusShow:false
+            isClassStatusShow: false
         };
     },
 
@@ -50,12 +50,20 @@ const LocalClassRoom = React.createClass({
         }else{
             this.connectClazz(userId, classCode, classType, account);
         }*/
-        this.getDisconnectedClass();
+        // this.getDisconnectedClass();
+        this.connectClazz(userId, classCode, classType, account);
         this.setState({userId, account, classCode, classType});
     },
 
     componentDidMount() {
         window.__noomSelectPic__ = this.noomSelectPic;
+    },
+
+    componentDidUpdate(){
+        if(isEmpty(this.state.currentPage)==false){
+            window.frames['ppt_frame'].window.pptCheckPage(this.state.currentPage);
+            this.setState({currentPage:''});
+        }
     },
 
     noomSelectPic(src, obj) {
@@ -79,7 +87,7 @@ const LocalClassRoom = React.createClass({
                 //强制退出课堂
                 // message.error(errorMsg);
                 // window.close();
-                _this.setState({errorVisible: true});
+                _this.setState({errorVisible: true, errorMsg: errorMsg});
             },
 
             onWarn: function (warnMsg) {
@@ -95,6 +103,8 @@ const LocalClassRoom = React.createClass({
                         var account = data.account;
                         var vid = data.vid;
                         sessionStorage.setItem("vid", vid);
+                        // var vid = sessionStorage.getItem('vid')
+                        _this.getVclassPPTOpenInfo(vid);
                         _this.setState({vid});
                         break;
                     case'simpleClassDanmu': // 弹幕
@@ -120,11 +130,39 @@ const LocalClassRoom = React.createClass({
         };
         //连接登入课堂
         connection.connect(loginPro);
-        var htmlPath = sessionStorage.getItem("htmlPath");
-        if(isEmpty(htmlPath)==false){
-            this.pushMaterialsToClass(htmlPath);
-        }
+        /*var htmlPath = sessionStorage.getItem("htmlPath");
+        if (isEmpty(htmlPath) == false) {
+            this.pushMaterialsToClass(htmlPath, 'currentPage');
+        }*/
     },
+
+    /**
+     * 获取课件，打开ppt，接口
+     */
+    getVclassPPTOpenInfo (vid){
+        var _this = this;
+        var param = {
+            "method":'getVclassPPTOpenInfo',
+            "vid" : vid+""
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                var response = ret.response;
+                if (isEmpty(response) == false) {
+                    var url = response.pptUrl.replace("httpss",'https');
+                    _this.pushMaterialsToClass(url,response.currentPage);
+                }
+            },
+            onError: function (error) {
+                //  alert(error);
+            }
+        })
+
+
+    },
+
+
 
     /**
      * 获取课件，打开ppt，完成推ppt的操作
@@ -201,13 +239,15 @@ const LocalClassRoom = React.createClass({
         this.setState({schduleMaterialsModalIsShow: false});
     },
 
-    pushMaterialsToClass(htmlPath) {
+    pushMaterialsToClass(htmlPath,currentPage) {
         // var htmlPath = materials.htmlPath;
         if (isEmpty(htmlPath) == false) {
-            sessionStorage.setItem("htmlPath",htmlPath);
+            sessionStorage.setItem("htmlPath", htmlPath);
             var pptURL = htmlPath.replace("60.205.111.227", "www.maaee.com");
             pptURL = pptURL.replace("60.205.86.217", "www.maaee.com");
-            pptURL = pptURL.replace("http", "https");
+            if(pptURL.indexOf("https")==-1 && pptURL.indexOf("http")!=-1){
+                pptURL = pptURL.replace("http", "https");
+            }
             var vid = this.state.vid;
             var userId = this.state.userId;
             var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
@@ -217,7 +257,8 @@ const LocalClassRoom = React.createClass({
             //让新版的学生端显示ppt
             var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
             connection.send(p1);
-            this.setState({classRoomUrl});
+            this.setState({classRoomUrl,currentPage});
+            //this.getVclassPPTOpenInfo (vid);
         } else {
             message.error("该文件暂时无法完成推送");
         }
@@ -365,10 +406,10 @@ const LocalClassRoom = React.createClass({
             onResponse: function (ret) {
                 console.log(ret);
                 var response = ret.response;
-                if(isEmpty(response)==false){
+                if (isEmpty(response) == false) {
                     var vid = response.vid;
-                    _this.setState({isClassStatusShow:true,vid});
-                }else{
+                    _this.setState({isClassStatusShow: true, vid});
+                } else {
                     _this.enterDisconnectionClass();
                 }
             },
@@ -381,7 +422,7 @@ const LocalClassRoom = React.createClass({
     /**
      * 关闭未断开的课堂
      */
-    closeDisconnectionClass(){
+    closeDisconnectionClass() {
         var _this = this;
         var param = {
             "method": 'closeVirtureClass',
@@ -391,7 +432,7 @@ const LocalClassRoom = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 console.log(ret);
-                _this.setState({isClassStatusShow:false});
+                _this.setState({isClassStatusShow: false});
                 window.close();
             },
             onError: function (error) {
@@ -403,9 +444,9 @@ const LocalClassRoom = React.createClass({
     /**
      * 进入课堂
      */
-    enterDisconnectionClass(){
+    enterDisconnectionClass() {
         this.connectClazz(this.state.userId, this.state.classCode, this.state.classType, this.state.account);
-        this.setState({isClassStatusShow:false});
+        this.setState({isClassStatusShow: false});
     },
 
     errorHandleOk() {
@@ -417,7 +458,7 @@ const LocalClassRoom = React.createClass({
         var classIfream = null;
         if (isEmpty(this.state.classRoomUrl) == false) {
             classIfream = <div className="classroom_draw">
-                <iframe src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe>
+                <iframe name="ppt_frame" src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe>
             </div>;
         } else {
             classIfream = <div className="classroom_welcome">
@@ -491,7 +532,7 @@ const LocalClassRoom = React.createClass({
                     className="new_add_ding calmNewClass"
                 >
                     <div className="noomUpLoadFile_wrap">
-                        <div>你被强制下线了!</div>
+                        <div>{this.state.errorMsg}</div>
                         <div className="class_right"><Button className="noomUpLoadFile_btn" type="primary"
                                                              onClick={this.errorHandleOk}>确定</Button></div>
                     </div>
@@ -521,8 +562,8 @@ const LocalClassRoom = React.createClass({
                     ]}
                 >
                     <div className="class_right">
-                        <Icon type="question-circle" className="icon_Alert icon_orange" />
-                        <span style={{fontSize:'14px'}}>存在未断开的课堂,请选择关闭/进入课堂?</span>
+                        <Icon type="question-circle" className="icon_Alert icon_orange"/>
+                        <span style={{fontSize: '14px'}}>存在未断开的课堂,请选择关闭/进入课堂?</span>
                     </div>
                 </Modal>
             </div>

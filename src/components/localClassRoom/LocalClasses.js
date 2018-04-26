@@ -25,9 +25,18 @@ const LocalClasses = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
-            classRoomList: []
+            classRoomList: [],
+            courseState: false, //开课状态
+            courseVid : ''  ,     //课程id
+            classId : '',
+            account: ''   //te...
         };
     },
+
+    componentWillMount() {
+        this.getDisconnectedClass();
+    },
+
 
     componentDidMount() {
         this.getTeacherClasses()
@@ -85,20 +94,84 @@ const LocalClasses = React.createClass({
         var classType = "A";
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
-        window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        // window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        // window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
     },
+
+    /**
+     * 获取当前未关闭的课堂-班级列表
+     */
+    getDisconnectedClass() {
+        var _this = this;
+        var param = {
+            "method": 'getDisconnectedClass',
+            "userId": _this.state.loginUser.colUid
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                var response = ret.response;
+                if (isEmpty(response) == false) {
+                    var vid = response.vid;
+                    var classId = response.classCode;
+                    var account = response.account
+                    _this.setState({courseState:true, courseVid: vid,classId:classId, account:account});
+                } else {
+                    _this.setState({courseState:false});
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+
+    /**
+     * 关闭未断开的课堂
+     */
+    closeDisconnectionClass() {
+        debugger
+        var _this = this;
+        var param = {
+            "method": 'closeVirtureClass',
+            "userId": _this.state.loginUser.colUid,
+            "vid": _this.state.courseVid,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                _this.setState({courseState: false});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+
+
 
     /**
      * 渲染页面
      * @returns {XML}
      */
     render() {
+
+        var courseState = <div>
+            <span>当前正在开课</span>
+            <Button   onClick={this.openClass.bind(this,this.state.classId)} className="lesson_start">进入课堂</Button>
+            <Button  onClick={this.closeDisconnectionClass} className="lesson_start">关闭课堂</Button>
+
+        </div>
         var _this = this;
         return (
             <div>
                 <div className="public—til—blue">
                     班级列表
+                </div>
+                <div>
+                    {this.state.courseState == true ? courseState : ''}
                 </div>
                 <div className="localclass_scroll">
                     <Table columns={classRoomColumns}
