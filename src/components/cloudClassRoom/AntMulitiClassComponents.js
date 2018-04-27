@@ -1250,7 +1250,7 @@ const AntMulitiClassComponents = React.createClass({
                         defaultMessage='下一步'
                     />
                 </Button>,
-                <Button onClick={this.createClassModalHandleCancel}>
+                <Button className="calmClose" onClick={this.createClassModalHandleCancel}>
                     <FormattedMessage
                         id='close'
                         description='关闭'
@@ -1265,7 +1265,7 @@ const AntMulitiClassComponents = React.createClass({
                         defaultMessage='下一步'
                     />
                 </Button>,
-                <Button onClick={this.updateClassModalHandleCancel}>
+                <Button className="calmClose" onClick={this.updateClassModalHandleCancel}>
                     <FormattedMessage
                         id='close'
                         description='关闭'
@@ -1275,50 +1275,38 @@ const AntMulitiClassComponents = React.createClass({
             ];
         } else if (this.state.stepDirect == "next") {
             saveButtons = [
-                <Button onClick={this.changeStep.bind(this, "pre", "save")}>
+                <Button className="calmPre" onClick={this.changeStep.bind(this, "pre", "save")}>
                     <FormattedMessage
                         id='back'
                         description='上一步'
                         defaultMessage='上一步'
                     />
                 </Button>,
-                <Button onClick={this.saveClassInfo.bind(this, "save")}>
+                <Button className="calmSubmit" onClick={this.saveClassInfo.bind(this, "save")}>
                     <FormattedMessage
                         id='submit'
                         description='提交'
                         defaultMessage='提交'
                     />
-                </Button>,
-                <Button onClick={this.createClassModalHandleCancel}>
-                    <FormattedMessage
-                        id='close'
-                        description='关闭'
-                        defaultMessage='关闭'
-                    />
                 </Button>
+               
             ];
             var updateButtons = [
-                <Button onClick={this.changeStep.bind(this, "pre", "update")}>
+                <Button className="calmPre" onClick={this.changeStep.bind(this, "pre", "update")}>
                     <FormattedMessage
                         id='back'
                         description='上一步'
                         defaultMessage='上一步'
                     />
                 </Button>,
-                <Button onClick={this.saveClassInfo.bind(this, "update")}>
+                <Button className="calmSubmit" onClick={this.saveClassInfo.bind(this, "update")}>
                     <FormattedMessage
                         id='submit'
                         description='提交'
                         defaultMessage='提交'
                     />
-                </Button>,
-                <Button onClick={this.updateClassModalHandleCancel}>
-                    <FormattedMessage
-                        id='close'
-                        description='关闭'
-                        defaultMessage='关闭'
-                    />
                 </Button>
+               
             ];
         }
 
@@ -1407,7 +1395,7 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-                           <Button onClick={this.classDetailModalHandleCancel}>
+                           <Button className="calmClose" onClick={this.classDetailModalHandleCancel}>
                                <FormattedMessage
                                    id='close'
                                    description='关闭'
@@ -1447,7 +1435,7 @@ const AntMulitiClassComponents = React.createClass({
                               onConfirmModalOK={this.withDrawClass}
                 ></ConfirmModal> */}
 
-                <Modal
+                <Modal      className="calmModal"
                             visible={this.state.changeConfirmModalVisible}
                             title="提示"
                             onCancel={this.closeConfirmDrawModal}
@@ -1474,7 +1462,7 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-                           <Button onClick={this.classPlayDetailModalHandleCancel}>
+                           <Button className="calmClose" onClick={this.classPlayDetailModalHandleCancel}>
                                <FormattedMessage
                                    id='close'
                                    description='关闭'

@@ -9547,6 +9547,9 @@ a:active,a:hover{
 
 
 /* 修改弹出框的样式 ---start--- */
+.calmModal {
+    width: 300px!important;
+}
 .ant-modal-header {
     padding: 0 20px 0 16px;
     height: 42px;
@@ -9564,34 +9567,54 @@ a:active,a:hover{
 
 
 /* 关闭按钮*/
+
 .ant-modal-content .ant-modal-close-x {
     font-size: 17px;
     color:#666!important;
 }
-
-.ant-modal-header .ant-modal-title,
+.calmNewClass .ant-modal-content .ant-modal-header .ant-modal-title {
+    font-size: 17px;
+    color:#333;
+    text-align: center;
+}
+.calmNewClass .ant-modal-content .ant-modal-close-x {
+    display: none;
+}
 .ant-modal-body .isDel,
 .calmNewClass .ant-modal-body {
     font-size: 14px;
-    color:#333;
+    color:#444;
 }
 /* .ant-modal-footer .login-form-button, */
 .ant-modal-content .calmSure,
 .ant-modal-content .calmCancle,
+.ant-modal-footer .calmCancle,
+.ant-modal-footer .calmPre,
 .ant-modal-footer .ant-btn{
     border-radius: 2px;
+    background: transparent;
+}
+
+.ant-modal-footer .calmSure{
+    background: red;
 }
 .ant-modal-content .calmSure {
+    border: 0;
+    color: #fff;
     background: #ff4234;
 }
-.ant-modal-content .calmCancle {
+
+.ant-modal-footer .calmPre,
+.calmCancleHover:hover,
+.ant-modal-footer .calmSave,
+.ant-modal-footer .calmClose,
+.ant-modal-content .calmCancle,
+.ant-modal-footer .calmSubmit,
+.ant-modal-footer .ant-btn-primary,
+.ant-modal-body .class_right .ant-btn-primary{
     color: #fff;
     background:#5d9af2;
     border: 0;
-}
-.ant-modal-footer .ant-btn-primary,
-.ant-modal-body .class_right .ant-btn-primary{
-    background: #5d9af2;
     border-radius: 2px;
 }
 
@@ -9644,3 +9667,20 @@ a:active,a:hover{
     left: 95%;
 }
 /* 显示框---end--- */
+
+.startClass {
+    height: 50px;
+    line-height: 50px;
+    padding:0px 8px 0px 20px;
+}
+.startClass .lesson_start {
+    /* border-color: #666;
+    color: #666; */
+    overflow: hidden;
+    float: right;
+    margin: 9px 3px;
+}
+.startClass .closeClass {
+    border-color: red;
+    color:red;
+}

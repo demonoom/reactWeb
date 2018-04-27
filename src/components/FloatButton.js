@@ -109,6 +109,7 @@ const FloatButton = React.createClass({
                               
                 ></ConfirmModal> */}
                         <Modal
+                            className="calmModal"
                             visible={floatButton.state.changeConfirmModalVisible}
                             title="提示"
                             onCancel={floatButton.closeConfirmModal}

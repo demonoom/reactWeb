@@ -1053,8 +1053,8 @@ pageNo   --- 页码，-1取全部
      * @param fileObject
      */
     deleteFileOrDirectory(fileObject) {
-        cloudTable.setState({"delCloudFileIds": fileObject.id, "delType": "single"});
-        cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
+        cloudTable.setState({"delCloudFileIds": fileObject.id, "delType": "single",confirmModal:true});
+        // cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
     },
     /**
      * 创建文件夹
@@ -1151,8 +1151,8 @@ pageNo   --- 页码，-1取全部
                 } else {
                     message.error(ret.msg);
                 }
-                cloudTable.setState({"selectedRowKeys": []});
-                cloudTable.refs.confirmModal.changeConfirmModalVisible(false);
+                cloudTable.setState({"selectedRowKeys": [],confirmModal:false});
+                // cloudTable.refs.confirmModal.changeConfirmModalVisible(false);
             },
             onError: function (error) {
                 message.error(error);
@@ -1338,7 +1338,9 @@ pageNo   --- 页码，-1取全部
      * 关闭删除确认的弹窗
      */
     closeConfirmModal() {
-        cloudTable.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({
+            confirmModal:false
+        })
     },
 
     /**
@@ -1574,8 +1576,8 @@ pageNo   --- 页码，-1取全部
      * 执行批量删除操作
      */
     showdelAllDirectoryConfirmModal() {
-        cloudTable.setState({"delType": "muliti"});
-        cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
+        cloudTable.setState({"delType": "muliti",confirmModal:true});
+        // cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     userAccountInputChange(e) {
@@ -2588,11 +2590,37 @@ pageNo   --- 页码，-1取全部
                         </Row>
                     </div>
                 </Modal>
-                <ConfirmModal ref="confirmModal"
+                {/* <ConfirmModal ref="confirmModal"
                               title="确定要删除选中的文件/文件夹"
                               onConfirmModalCancel={cloudTable.closeConfirmModal}
                               onConfirmModalOK={cloudTable.deleteCloudFiles}
-                ></ConfirmModal>
+                ></ConfirmModal> */}
+                 <Modal 
+                    visible={cloudTable.state.confirmModal}
+                    title="提示"
+                    className="calmModal"
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    onCancel={cloudTable.closeConfirmModal}
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <div>
+                             <button type="primary" 
+                                    className="calmSure login-form-button examination_btn_blue" 
+                                    onClick={cloudTable.deleteCloudFiles} 
+                                    >
+                            确定</button>
+                            <button type="ghost" 
+                                    className="calmPre  login-form-button examination_btn_white" 
+                                    onClick={cloudTable.closeConfirmModal} >取消</button>
+                           
+                        </div>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要删除选中的文件/文件夹?
+                    </div>
+                </Modal>
 
                 <Modal
                     visible={cloudTable.state.cloudFileUploadModalVisible}
@@ -2603,14 +2631,15 @@ pageNo   --- 页码，-1取全部
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                            <Button type="primary" htmlType="submit" className="login-form-button"
-                                    onClick={cloudTable.uploadFile}
-                                    disabled={cloudTable.state.disabledFlag}>
-                                保存
-                            </Button>
+                            
                             <Button type="ghost" htmlType="reset" className="login-form-button"
                                     onClick={cloudTable.cloudFileUploadModalHandleCancel}>
                                 取消
+                            </Button>
+                            <Button type="primary" htmlType="submit" className="calmSave login-form-button"
+                                    onClick={cloudTable.uploadFile}
+                                    disabled={cloudTable.state.disabledFlag}>
+                                保存
                             </Button>
                         </div>
                     ]}

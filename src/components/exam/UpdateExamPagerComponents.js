@@ -2017,7 +2017,7 @@ const UpdateExamPagerComponents = React.createClass({
                                 <button type="primary" htmlType="submit"
                                         className="login-form-button examination_btn_blue"
                                         onClick={createExamPager.uploadFile}>
-                                    保存
+                                    保存222
                                 </button>
                                 <button type="ghost" htmlType="reset"
                                         className="login-form-button examination_btn_white"
@@ -2119,7 +2119,7 @@ const UpdateExamPagerComponents = React.createClass({
                    <button type="primary" htmlType="submit"
                            className="login-form-button class_right examination_btn_blue"
                            onClick={createExamPager.saveExampager}>
-                    保存
+                    保存111
                    </button>
                    <button type="ghost" htmlType="reset" className="login-form-button examination_btn_white"
                            onClick={createExamPager.handleCancel}>

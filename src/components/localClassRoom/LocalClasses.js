@@ -158,11 +158,11 @@ const LocalClasses = React.createClass({
      */
     render() {
 
-        var courseState = <div>
-            <span>当前正在开课</span>
-            <Button   onClick={this.openClass.bind(this,this.state.classId)} className="lesson_start">进入课堂</Button>
-            <Button  onClick={this.closeDisconnectionClass} className="lesson_start">关闭课堂</Button>
-
+        var courseState = <div className="startClass">
+            <span>当前正在开课:</span>
+            <Button  onClick={this.closeDisconnectionClass} className="lesson_start closeClass ">关闭课堂</Button>
+            <Button  onClick={this.openClass.bind(this,this.state.classId)} className="lesson_start">继续上课</Button>
+            
         </div>
         var _this = this;
         return (

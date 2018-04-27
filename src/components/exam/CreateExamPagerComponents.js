@@ -1503,6 +1503,7 @@ const CreateExamPagerComponents = React.createClass({
                               onConfirmModalOK={createExamPager.deleteAllCardChild}
                 ></ConfirmModal> */}
                 <Modal
+                    className="calmModal"
                     visible={createExamPager.state.delAnswModalVisible}
                     title="提示"
                     onCancel={createExamPager.closeDelAllAnswerCardConfirmModal}
@@ -1513,7 +1514,9 @@ const CreateExamPagerComponents = React.createClass({
                         <button type="primary" className="login-form-button examination_btn_blue calmCancle" onClick={createExamPager.deleteAllCardChild}  >确定</button>
                     ]}
                 >
-                <div className="isDel">确定要清除全部答题卡?</div>
+                <div className="isDel">
+                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                确定要清除全部答题卡?</div>
 
                 </Modal>
                 <Modal
@@ -1613,11 +1616,12 @@ const CreateExamPagerComponents = React.createClass({
                                 maskClosable={false} //设置不允许点击蒙层关闭
                                 footer={[
                                     <div>
-                                        <button type="primary" className="login-form-button examination_btn_blue" onClick={createExamPager.uploadFile}>
-                                            保存
-                                        </button>
-                                        <button type="ghost" className="login-form-button examination_btn_white" onClick={createExamPager.examPagerModalHandleCancel}>
+                                       
+                                        <button type="ghost" className="calmCancle login-form-button examination_btn_white" onClick={createExamPager.examPagerModalHandleCancel}>
                                             取消
+                                        </button>
+                                        <button type="primary" className="calmSave login-form-button examination_btn_blue" onClick={createExamPager.uploadFile}>
+                                            保存
                                         </button>
                                     </div>
                                 ]}
@@ -1703,12 +1707,13 @@ const CreateExamPagerComponents = React.createClass({
                 <Row className="homework_out ant-modal-footer">
                     <Col span={24}>
                  <span>
-                   <button type="primary" className="login-form-button class_right examination_btn_blue"
+                   
+                   <button type="ghost" className="calmCancle login-form-button examination_btn_white" onClick={createExamPager.handleCancel}>
+                    取消
+                   </button>
+                   <button type="primary" className="calmSave login-form-button class_right examination_btn_blue"
                            onClick={createExamPager.saveExampager}>
                     保存
-                   </button>
-                   <button type="ghost" className="login-form-button examination_btn_white" onClick={createExamPager.handleCancel}>
-                    取消
                    </button>
                  </span>
                     </Col>
