@@ -1,8 +1,15 @@
 import React from 'react';
+import {Button} from 'antd';
+import {doWebService} from '../WebServiceHelper';
+
 
 /**
  * 播放视屏页面
  */
+
+
+
+
 function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var index = window.location.href.indexOf('?') + 1;
@@ -26,14 +33,13 @@ class PlayVideoPage extends React.Component {
     }
 
     componentWillMount() {
+        //var locationHref = window.location.href;
+        //var locationSearch = locationHref.substr(locationHref.indexOf("?") + 1);
+        //var searchArray = locationSearch.split("&");
         var videoUrl = getQueryString("path");
         document.title = "小蚂蚁直播";   //设置title
         this.setState({videoUrl});
         this.buildSourceObj(videoUrl);
-        // console.log($(".vjs-volume-control"));
-        $(".vjs-volume-control").css({
-
-        })
     }
 
     componentDidMount() {
@@ -68,6 +74,7 @@ class PlayVideoPage extends React.Component {
     }
 
     render() {
+
         return (
             <div className="calmVideoBoxWrap">
                 <div className="calmVideoBox">
@@ -79,4 +86,6 @@ class PlayVideoPage extends React.Component {
 
 }
 
+
 export default PlayVideoPage;
+
