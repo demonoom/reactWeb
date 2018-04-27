@@ -1275,7 +1275,7 @@ const AntMulitiClassComponents = React.createClass({
             ];
         } else if (this.state.stepDirect == "next") {
             saveButtons = [
-                <Button className="calmPre" onClick={this.changeStep.bind(this, "pre", "save")}>
+                <Button  onClick={this.changeStep.bind(this, "pre", "save")}>
                     <FormattedMessage
                         id='back'
                         description='上一步'
