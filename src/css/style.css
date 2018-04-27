@@ -9622,21 +9622,21 @@ a:active,a:hover{
 /* 音量 */
 .calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal  {
     position: absolute;
-    left: 85%;
+    left: 88%;
 }
 .calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal .vjs-menu{
     left: 3em;
 }
 /* 进度条 */
 .calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-progress-control.vjs-control{
-    width: 75%;
+    width: 80%;
     position: absolute;
     left: 4%;
 }
 /* 剩余时间 */
 .calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-remaining-time {
     position: absolute;
-    left: 80%;
+    left: 85%;
 }   
 /* 全凭按钮 */
 .calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-fullscreen-control.vjs-control.vjs-button{

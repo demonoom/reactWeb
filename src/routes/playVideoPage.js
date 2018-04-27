@@ -36,12 +36,7 @@ class PlayVideoPage extends React.Component {
         })
     }
 
-<<<<<<< HEAD
-    componentDidMount(){
-        // console.log($(".vjs-volume-control"));
-=======
     componentDidMount() {
->>>>>>> a81aa2ed6e35c44a22d4faed9d32828b75214ce8
         var options = {
             sourceOrder: true,
             controls: true,
