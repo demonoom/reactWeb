@@ -806,8 +806,8 @@ const AntMulitiClassComponents = React.createClass({
      */
 
     showConfirmDrwaModal(classId) {
-        this.setState({classId, isDisabled: true});
-        this.refs.confirmDrawModal.changeConfirmModalVisible(true);
+        this.setState({classId, isDisabled: true,changeConfirmModalVisible:true});
+        // this.refs.confirmDrawModal.changeConfirmModalVisible(true);
     },
 
 
@@ -1218,14 +1218,15 @@ const AntMulitiClassComponents = React.createClass({
      */
     closeConfirmPushModal() {
         this.setState({"classId": ''});
+        
         this.refs.confirmPushModal.changeConfirmModalVisible(false);
     },
     /**
      * 关闭删除操作确认Modal
      */
     closeConfirmDrawModal() {
-        this.setState({"classId": ''});
-        this.refs.confirmDrawModal.changeConfirmModalVisible(false);
+        this.setState({"classId": '',changeConfirmModalVisible:false});
+        // this.refs.confirmDrawModal.changeConfirmModalVisible(false);
     },
 
     tipModalHandleCancel(){
@@ -1440,11 +1441,28 @@ const AntMulitiClassComponents = React.createClass({
                               onConfirmModalOK={this.publishClass}
                 ></ConfirmModal>
 
-                <ConfirmModal ref="confirmDrawModal"
+                {/* <ConfirmModal ref="confirmDrawModal"
                               title="确定要删除该课程?"
                               onConfirmModalCancel={this.closeConfirmDrawModal}
                               onConfirmModalOK={this.withDrawClass}
-                ></ConfirmModal>
+                ></ConfirmModal> */}
+
+                <Modal
+                            visible={this.state.changeConfirmModalVisible}
+                            title="提示"
+                            onCancel={this.closeConfirmDrawModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.withDrawClass}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmDrawModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                确定要删除该课程?
+                            </div>
+                        </Modal>
                 <Modal className="modal_classDetail" title={
                     <FormattedMessage
                         id='courseInformationOpen'

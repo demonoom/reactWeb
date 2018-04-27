@@ -488,6 +488,7 @@ class LessonPlans extends React.Component {
                         </Breadcrumb>
                         <Tabs
                             hideAdd
+                            animated={false}
                             onChange={this.onChange2}
                             activeKey={this.state.activeKey}
                             defaultActiveKey={this.state.defaultActiveKey}

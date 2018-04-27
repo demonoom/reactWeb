@@ -455,12 +455,13 @@ const AssignHomeWorkComponents = React.createClass({
                 <Row className="homework_out ant-modal-footer">
                     <Col span={24}>
                  <span>
+                   
+                   <Button type="ghost" htmlType="reset" className="login-form-button" onClick={this.handleCancel}>
+                    取消
+                   </Button>
                    <Button type="primary" htmlType="submit" className="login-form-button class_right"
                            onClick={assignHomeWork.handleSubmit}>
                     保存
-                   </Button>
-                   <Button type="ghost" htmlType="reset" className="login-form-button" onClick={this.handleCancel}>
-                    取消
                    </Button>
                  </span>
                     </Col>
@@ -470,11 +471,9 @@ const AssignHomeWorkComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-
-                           <Button key="return" type="primary" size="large"
-                                   onClick={assignHomeWork.subjectModalHandleOk}>确定</Button>,
-
                            <Button key="ok" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>取消</Button>,
+                           <Button key="return" type="primary" size="large"
+                                   onClick={assignHomeWork.subjectModalHandleOk}>确定</Button>
 
                        ]}
                 >

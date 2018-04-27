@@ -132,10 +132,11 @@ const TeachingComponents = React.createClass({
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
                 footer={[
-                    <Button type="primary" htmlType="submit" className="login-form-button"
-                            onClick={subjectForm.handleSubmit}>确定</Button>,
+                    
                     <Button type="ghost" htmlType="reset" className="login-form-button"
-                            onClick={subjectForm.handleCancel}>取消</Button>
+                            onClick={subjectForm.handleCancel}>取消</Button>,
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                            onClick={subjectForm.handleSubmit}>确定</Button>
                 ]}
             >
                 <div className="ant-form-item">

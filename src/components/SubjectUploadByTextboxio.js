@@ -831,6 +831,7 @@ const SubjectUploadTabComponents = React.createClass({
                 >
                     <Tabs
                         hideAdd
+                        animated={false}
                         onChange={this.tabOnChange}
                         defaultActiveKey={this.state.activeKey}
                         onEdit={this.onEdit}

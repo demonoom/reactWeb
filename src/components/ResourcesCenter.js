@@ -271,6 +271,7 @@ class ResourcesCenter extends React.Component{
                     hideAdd
                     onChange={this.onChange}
                     onEdit={this.onEdit}
+                    animated={false}
                     ref="mainTab"
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}

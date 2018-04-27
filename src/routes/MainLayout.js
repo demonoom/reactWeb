@@ -3012,6 +3012,7 @@ const MainLayout = React.createClass({
                                             defaultMessage='教学空间'
                                         />
                                     </div>
+                                    
                                 </Menu.Item>
                                 <Menu.Item key="antGroup" className="padding_menu">
                                     <i className="icon_menu_ios icon_antgroup"></i>
@@ -3139,12 +3140,13 @@ const MainLayout = React.createClass({
                                transitionName=""  //禁用modal的动画效果
                                maskClosable={false} //设置不允许点击蒙层关闭
                                footer={[
-                                   <button type="primary" htmlType="submit"
-                                           className="ant-btn ant-btn-primary ant-btn-lg"
-                                           onClick={this.mainTransferForSure}>确定</button>,
+                                   
                                    <button type="ghost" htmlType="reset"
                                            className="ant-btn ant-btn-ghost login-form-button"
-                                           onClick={this.mainTransferModalHandleCancel}>取消</button>
+                                           onClick={this.mainTransferModalHandleCancel}>取消</button>,
+                                           <button type="primary" htmlType="submit"
+                                           className="ant-btn ant-btn-primary ant-btn-lg"
+                                           onClick={this.mainTransferForSure}>确定</button>
                                ]}
                         >
                             <Row className="ant-form-item">
@@ -3163,12 +3165,13 @@ const MainLayout = React.createClass({
                                transitionName=""  //禁用modal的动画效果
                                maskClosable={false} //设置不允许点击蒙层关闭
                                footer={[
-                                   <button type="primary" htmlType="submit"
-                                           className="ant-btn ant-btn-primary ant-btn-lg"
-                                           onClick={this.updateChatGroupName}>确定</button>,
+                                  
                                    <button type="ghost" htmlType="reset"
                                            className="ant-btn ant-btn-ghost login-form-button"
-                                           onClick={this.updateChatGroupNameModalHandleCancel}>取消</button>
+                                           onClick={this.updateChatGroupNameModalHandleCancel}>取消</button>,
+                                           <button type="primary" htmlType="submit"
+                                           className="ant-btn ant-btn-primary ant-btn-lg"
+                                           onClick={this.updateChatGroupName}>确定</button>
                                ]}
                         >
                             <Row className="ant-form-item">
@@ -3189,13 +3192,14 @@ const MainLayout = React.createClass({
                             maskClosable={false} //设置不允许点击蒙层关闭
                             className="add_member"
                             footer={[
-                                <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                        onClick={this.addGroupMember}>确定</button>,
+                                
                                 <button type="ghost" htmlType="reset"
                                         className="ant-btn ant-btn-ghost login-form-button"
-                                        onClick={this.addDeGroupMemberModalHandleCancel}>取消</button>
+                                        onClick={this.addDeGroupMemberModalHandleCancel}>取消</button>,
+                                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                        onClick={this.addGroupMember}>确定</button>
                             ]}
-                            width={700}
+                            width={800}
                         >
                             <div style={{display: this.state.idea, marginBottom: '14px'}}>
                                 <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}
@@ -3321,11 +3325,12 @@ const MainLayout = React.createClass({
                             maskClosable={false} //设置不允许点击蒙层关闭
                             className="add_member"
                             footer={[
-                                <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                        onClick={this.shareToAntNest}>确定</button>,
+                               
                                 <button type="ghost" htmlType="reset"
                                         className="ant-btn ant-btn-ghost login-form-button"
-                                        onClick={this.shareToAntNestModalHandleCancel}>取消</button>
+                                        onClick={this.shareToAntNestModalHandleCancel}>取消</button>,
+                                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                        onClick={this.shareToAntNest}>确定</button>
                             ]}
                             width={616}
                         >

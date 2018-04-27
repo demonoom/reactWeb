@@ -162,7 +162,9 @@ class Favorites extends React.Component {
             <div className="favorite_my">
 			{toolbar}
 			<div className="favorite_scroll">
-                <Tabs onTabClick={this.tabClick} defaultActiveKey={this.state.activeKey}>
+                <Tabs onTabClick={this.tabClick} 
+                        animated={false}
+                        defaultActiveKey={this.state.activeKey}>
 
                     <TabPane tab={this.FAVTYPE[1][2]} key='1' className="topics_rela">
                         <SubjectItem param={this.state.subject}
