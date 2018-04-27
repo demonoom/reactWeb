@@ -361,7 +361,7 @@ class AddRoleMemberModal extends React.Component {
     return (
         <Modal
             visible={this.state.isShow}
-            title="创建团队"
+            title="创建团队111"
             onCancel={this.AddRoleMemberModalHandleCancel}
             transitionName=""  //禁用modal的动画效果
             maskClosable={false} //设置不允许点击蒙层关闭

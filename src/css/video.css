@@ -349,7 +349,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-	width:100%;
+	width:100%!important;
 }
 
 .video-js:-moz-full-screen {
@@ -799,7 +799,7 @@ body.vjs-full-window {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-    min-width: 4em
+    min-width: 3em
 }
 
 .vjs-live .vjs-progress-control {
@@ -1558,3 +1558,4 @@ video::-webkit-media-text-track-display {
 	position:absolute;
 	right:0
 }
+

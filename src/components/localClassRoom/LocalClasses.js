@@ -96,6 +96,7 @@ const LocalClasses = React.createClass({
         var userId = this.state.loginUser.colUid;
         // window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
         window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        this.setState({courseState: false});
     },
 
     /**
@@ -158,11 +159,11 @@ const LocalClasses = React.createClass({
      */
     render() {
 
-        var courseState = <div>
-            <span>当前正在开课</span>
-            <Button   onClick={this.openClass.bind(this,this.state.classId)} className="lesson_start">进入课堂</Button>
-            <Button  onClick={this.closeDisconnectionClass} className="lesson_start">关闭课堂</Button>
-
+        var courseState = <div className="startClass">
+            <span>您的课堂已中断,是否继续刚才的课堂?</span>
+            <Button  onClick={this.closeDisconnectionClass} className="lesson_start closeClass ">关闭课堂</Button>
+            <Button  onClick={this.openClass.bind(this,this.state.classId)} className="lesson_start">继续上课</Button>
+            
         </div>
         var _this = this;
         return (

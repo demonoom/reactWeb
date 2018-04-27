@@ -1939,6 +1939,7 @@ const MyFollowExtend = React.createClass({
                 tabComponent = <Tabs
                     hideAdd
                     ref="personCenterTab"
+                    animated={false}
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={returnPersonCenterToolBar}
@@ -1962,6 +1963,7 @@ const MyFollowExtend = React.createClass({
                 tabComponent = <Tabs
                     hideAdd
                     ref="mainTab"
+                    animated={false}
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={returnToolBar}
@@ -2053,6 +2055,7 @@ const MyFollowExtend = React.createClass({
                 tabComponent = <Tabs
                     hideAdd
                     ref="personGroupTab"
+                    animated={false}
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={returnToolBar}
@@ -2084,6 +2087,7 @@ const MyFollowExtend = React.createClass({
                 tabComponent = <Tabs
                     hideAdd
                     ref="studentAskTab"
+                    animated={false}
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={returnPersonCenterToolBar}
@@ -2102,6 +2106,7 @@ const MyFollowExtend = React.createClass({
                     hideAdd
                     ref="studentStudyTrackTab"
                     activeKey={this.state.activeKey}
+                    animated={false}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={returnPersonCenterToolBar}
                     transitionName=""  //禁用Tabs的动画效果
@@ -2117,6 +2122,7 @@ const MyFollowExtend = React.createClass({
                 tabComponent = <Tabs
                     hideAdd
                     ref="mainTab"
+                    animated={false}
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={returnPersonCenterToolBar}
@@ -2195,6 +2201,7 @@ const MyFollowExtend = React.createClass({
                     hideAdd
                     ref="studentStudyTrackTab"
                     activeKey={this.state.activeKey}
+                    animated={false}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={returnToolBar}
                     transitionName=""  //禁用Tabs的动画效果
@@ -2237,6 +2244,7 @@ const MyFollowExtend = React.createClass({
                 tabComponent = <Tabs
                     hideAdd
                     ref="studentStudyTrackTab"
+                    animated={false}
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={returnPersonCenterToolBar}

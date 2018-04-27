@@ -398,7 +398,7 @@ const ExportComponent = React.createClass({
         }
 
         return (
-                <Tabs defaultActiveKey="dataExport" onChange={this.exportTabsChange} className="data_export">
+                <Tabs defaultActiveKey="dataExport" animated={false} onChange={this.exportTabsChange} className="data_export">
                     <TabPane tab="数据导出" key="dataExport">
                         <div>
                             <div className="group_cont data_export">

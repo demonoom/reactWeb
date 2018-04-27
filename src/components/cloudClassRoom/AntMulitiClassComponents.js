@@ -806,8 +806,8 @@ const AntMulitiClassComponents = React.createClass({
      */
 
     showConfirmDrwaModal(classId) {
-        this.setState({classId, isDisabled: true});
-        this.refs.confirmDrawModal.changeConfirmModalVisible(true);
+        this.setState({classId, isDisabled: true,changeConfirmModalVisible:true});
+        // this.refs.confirmDrawModal.changeConfirmModalVisible(true);
     },
 
 
@@ -1218,14 +1218,15 @@ const AntMulitiClassComponents = React.createClass({
      */
     closeConfirmPushModal() {
         this.setState({"classId": ''});
+        
         this.refs.confirmPushModal.changeConfirmModalVisible(false);
     },
     /**
      * 关闭删除操作确认Modal
      */
     closeConfirmDrawModal() {
-        this.setState({"classId": ''});
-        this.refs.confirmDrawModal.changeConfirmModalVisible(false);
+        this.setState({"classId": '',changeConfirmModalVisible:false});
+        // this.refs.confirmDrawModal.changeConfirmModalVisible(false);
     },
 
     tipModalHandleCancel(){
@@ -1249,7 +1250,7 @@ const AntMulitiClassComponents = React.createClass({
                         defaultMessage='下一步'
                     />
                 </Button>,
-                <Button onClick={this.createClassModalHandleCancel}>
+                <Button className="calmClose" onClick={this.createClassModalHandleCancel}>
                     <FormattedMessage
                         id='close'
                         description='关闭'
@@ -1264,7 +1265,7 @@ const AntMulitiClassComponents = React.createClass({
                         defaultMessage='下一步'
                     />
                 </Button>,
-                <Button onClick={this.updateClassModalHandleCancel}>
+                <Button className="calmClose" onClick={this.updateClassModalHandleCancel}>
                     <FormattedMessage
                         id='close'
                         description='关闭'
@@ -1274,50 +1275,38 @@ const AntMulitiClassComponents = React.createClass({
             ];
         } else if (this.state.stepDirect == "next") {
             saveButtons = [
-                <Button onClick={this.changeStep.bind(this, "pre", "save")}>
+                <Button  onClick={this.changeStep.bind(this, "pre", "save")}>
                     <FormattedMessage
                         id='back'
                         description='上一步'
                         defaultMessage='上一步'
                     />
                 </Button>,
-                <Button onClick={this.saveClassInfo.bind(this, "save")}>
+                <Button className="calmSubmit" onClick={this.saveClassInfo.bind(this, "save")}>
                     <FormattedMessage
                         id='submit'
                         description='提交'
                         defaultMessage='提交'
                     />
-                </Button>,
-                <Button onClick={this.createClassModalHandleCancel}>
-                    <FormattedMessage
-                        id='close'
-                        description='关闭'
-                        defaultMessage='关闭'
-                    />
                 </Button>
+               
             ];
             var updateButtons = [
-                <Button onClick={this.changeStep.bind(this, "pre", "update")}>
+                <Button className="calmPre" onClick={this.changeStep.bind(this, "pre", "update")}>
                     <FormattedMessage
                         id='back'
                         description='上一步'
                         defaultMessage='上一步'
                     />
                 </Button>,
-                <Button onClick={this.saveClassInfo.bind(this, "update")}>
+                <Button className="calmSubmit" onClick={this.saveClassInfo.bind(this, "update")}>
                     <FormattedMessage
                         id='submit'
                         description='提交'
                         defaultMessage='提交'
                     />
-                </Button>,
-                <Button onClick={this.updateClassModalHandleCancel}>
-                    <FormattedMessage
-                        id='close'
-                        description='关闭'
-                        defaultMessage='关闭'
-                    />
                 </Button>
+               
             ];
         }
 
@@ -1406,7 +1395,7 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-                           <Button onClick={this.classDetailModalHandleCancel}>
+                           <Button className="calmClose" onClick={this.classDetailModalHandleCancel}>
                                <FormattedMessage
                                    id='close'
                                    description='关闭'
@@ -1440,11 +1429,28 @@ const AntMulitiClassComponents = React.createClass({
                               onConfirmModalOK={this.publishClass}
                 ></ConfirmModal>
 
-                <ConfirmModal ref="confirmDrawModal"
+                {/* <ConfirmModal ref="confirmDrawModal"
                               title="确定要删除该课程?"
                               onConfirmModalCancel={this.closeConfirmDrawModal}
                               onConfirmModalOK={this.withDrawClass}
-                ></ConfirmModal>
+                ></ConfirmModal> */}
+
+                <Modal      className="calmModal"
+                            visible={this.state.changeConfirmModalVisible}
+                            title="提示"
+                            onCancel={this.closeConfirmDrawModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.withDrawClass}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmDrawModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                确定要删除该课程?
+                            </div>
+                        </Modal>
                 <Modal className="modal_classDetail" title={
                     <FormattedMessage
                         id='courseInformationOpen'
@@ -1456,7 +1462,7 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-                           <Button onClick={this.classPlayDetailModalHandleCancel}>
+                           <Button className="calmClose" onClick={this.classPlayDetailModalHandleCancel}>
                                <FormattedMessage
                                    id='close'
                                    description='关闭'

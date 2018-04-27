@@ -4871,6 +4871,7 @@ const AntGroupTabComponents = React.createClass({
                 hideAdd
                 ref="personCenterTab"
                 activeKey={this.state.activeKey}
+                animated={false}
                 defaultActiveKey={this.state.defaultActiveKey}
                 transitionName=""  //禁用Tabs的动画效果
             >
@@ -4921,7 +4922,10 @@ const AntGroupTabComponents = React.createClass({
                         <Card>
                             <Tabs activeKey={this.state.mesReadActiveKey} onTabClick={this.onTabClick}>
                                 <TabPane tab="已读列表" key="1">
-                                    <Table className="group_table_u person_group" showHeader={false} scroll={{x: true,}}
+                                    <Table className="group_table_u person_group" 
+                                            showHeader={false} 
+                                            animated={false}
+                                            scroll={{x: true,}}
                                            columns={userGroupsColumns} dataSource={this.state.readMenuMebs}
                                            pagination={false}
                                     />

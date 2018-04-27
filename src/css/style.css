@@ -1865,11 +1865,11 @@ p.user_cont span.name1 {
 }
 
 .queanswer_modol_width {
-    width: 760px !important;
+    width: 800px !important;
 }
 
 .knowledge_width {
-    width: 750px !important;
+    width: 800px !important;
 }
 
 .ant-form-item {
@@ -9545,7 +9545,12 @@ a:active,a:hover{
     max-height: 100%;
 }
 
-.calmNewClass .ant-modal-header {
+
+/* 修改弹出框的样式 ---start--- */
+.calmModal {
+    width: 300px!important;
+}
+.ant-modal-header {
     padding: 0 20px 0 16px;
     height: 42px;
     line-height: 42px;
@@ -9556,25 +9561,74 @@ a:active,a:hover{
     background-color: #F8F8FA;
     border-radius: 2px 2px 0 0;
 }
-.calmNewClass .ant-modal-content .ant-modal-close {
+.ant-modal-content .ant-modal-close {
     top: 12px;
 }
-.calmNewClass .ant-modal-content .ant-modal-close-x {
+
+
+/* 关闭按钮*/
+
+.ant-modal-content .ant-modal-close-x {
+    font-size: 17px;
+    color:#666!important;
+}
+.calmNewClass .ant-modal-content .ant-modal-header .ant-modal-title {
     font-size: 17px;
     color:#333;
+    text-align: center;
 }
+.calmNewClass .ant-modal-content .ant-modal-close-x {
+    display: none;
+}
+.ant-modal-body .isDel,
 .calmNewClass .ant-modal-body {
     font-size: 14px;
-    color:#333;
+    color:#444;
 }
-.calmNewClass .ant-modal-body .class_right .ant-btn{
-    background: #1E9FFF;
+/* .ant-modal-footer .login-form-button, */
+.ant-modal-content .calmSure,
+.ant-modal-content .calmCancle,
+.ant-modal-footer .calmCancle,
+.ant-modal-footer .calmPre,
+.ant-modal-footer .ant-btn{
+    border-radius: 2px;
+    background: transparent;
+}
+
+.ant-modal-footer .calmSure{
+    background: red;
+}
+.ant-modal-content .calmSure {
+    border: 0;
+    color: #fff;
+    background: #ff4234;
+}
+
+.ant-modal-footer .calmPre,
+.calmCancleHover:hover,
+.ant-modal-footer .calmSave,
+.ant-modal-footer .calmClose,
+.ant-modal-content .calmCancle,
+.ant-modal-footer .calmSubmit,
+.ant-modal-footer .ant-btn-primary,
+.ant-modal-body .class_right .ant-btn-primary{
+    color: #fff;
+    background:#5d9af2;
+    border: 0;
     border-radius: 2px;
 }
-.calmNewClass .ant-modal-title {
-    /* display: none; */
+
+.ant-modal-title {
     line-height:42px;
 }
+.isDel .sadFeel {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+/* 修改弹出框的样式 ---end--- */
+
+
+/* 全屏显示视频的样式---start--- */
 .calmVideoBoxWrap {
     height: 100%;
 }
@@ -9583,4 +9637,50 @@ a:active,a:hover{
 }
 .calmVideoBoxWrap .calmVideoBox .video-js {
     height: 100%;
+}
+/* 全屏显示视频的样式---end--- */
+
+
+/* 显示框---start--- */
+/* 音量 */
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal  {
+    position: absolute;
+    left: 88%;
+}
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal .vjs-menu{
+    left: 3em;
+}
+/* 进度条 */
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-progress-control.vjs-control{
+    width: 80%;
+    position: absolute;
+    left: 4%;
+}
+/* 剩余时间 */
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-remaining-time {
+    position: absolute;
+    left: 85%;
+}   
+/* 全凭按钮 */
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-fullscreen-control.vjs-control.vjs-button{
+    position: absolute;
+    left: 95%;
+}
+/* 显示框---end--- */
+
+.startClass {
+    height: 50px;
+    line-height: 50px;
+    padding:0px 8px 0px 20px;
+}
+.startClass .lesson_start {
+    /* border-color: #666;
+    color: #666; */
+    overflow: hidden;
+    float: right;
+    margin: 9px 3px;
+}
+.startClass .closeClass {
+    border-color: red;
+    color:red;
 }

@@ -228,7 +228,6 @@ const SubjectUploadComponent = React.createClass({
      subjectId         ---- 题目的id, 当选中多个题目时，用逗号分隔
      */
     copySubjectsToCloudFile(operateUserId, parentCloudFileId, subjectId) {
-        debugger
         var _this = this;
         var floderId = _this.props.floderId;
         var param = {
@@ -421,7 +420,6 @@ const SubjectUploadComponent = React.createClass({
      * @param e
      */
     saveButtonOnClick(e) {
-        debugger
         var _this = this;
         e.preventDefault();
         var target = e.target;

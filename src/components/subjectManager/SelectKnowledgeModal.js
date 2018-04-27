@@ -249,17 +249,18 @@ class SelectKnowledgeModal extends React.Component {
             onSelectAll: this.onSelectAll
         };
         var buttons = <div>
-            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.saveButtonOnClick}>
-                确定
-            </Button>
+            
             <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.SelectKnowledgeModalHandleCancel}>
                 取消
+            </Button>
+            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.saveButtonOnClick}>
+                确定
             </Button>
         </div>
         return (
             <Modal
                 visible={this.state.isShow}
-                width={440}
+                width={616}
                 title={"选择知识点"}
                 onCancel={this.SelectKnowledgeModalHandleCancel}
                 transitionName=""  //禁用modal的动画效果
