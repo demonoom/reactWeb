@@ -579,7 +579,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * @param pageNo
      */
     listFiles(operateUserId, cloudFileId, queryConditionJson, pageNo) {
-        debugger
         var _this = this;
         _this.setState({totalCount: 0});
         _this.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
@@ -620,7 +619,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * 蚁盘文件夹进入后，通过该函数完成返回
      */
     returnParentAtMoveModal() {
-        debugger
         var _this = this;
         var initPageNo = 1;
         if (_this.state.cloudTasKey == "cloudFile") {

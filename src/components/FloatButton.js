@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import { Modal, message,Transfer } from 'antd';
 import {Dropdown, Menu, Icon} from 'antd';
 import UserPasswordModifyComponents from './UserPasswordModifyComponents';
 import {doWebService} from '../WebServiceHelper';
@@ -10,6 +11,7 @@ import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
 import zh from 'react-intl/locale-data/zh';
 import en from 'react-intl/locale-data/en';
+import { width } from 'window-size';
 
 var floatButton;
 const FloatButton = React.createClass({
@@ -75,11 +77,12 @@ const FloatButton = React.createClass({
     },
 
     showConfirmModal() {
-        floatButton.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({changeConfirmModalVisible:true})
     },
 
     closeConfirmModal() {
-        floatButton.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({changeConfirmModalVisible:false})
+        
     },
 
     render() {
@@ -99,18 +102,34 @@ const FloatButton = React.createClass({
 
             
             <div className="more_div">
-                <ConfirmModal ref="confirmModal"
+                {/* <ConfirmModal ref="confirmModal"
                               title="您确定退出登录么?"
                               onConfirmModalCancel={floatButton.closeConfirmModal}
                               onConfirmModalOK={floatButton.logOut}
                               
-                ></ConfirmModal>
-               
+                ></ConfirmModal> */}
+                        <Modal
+                            visible={floatButton.state.changeConfirmModalVisible}
+                            title="提示"
+                            onCancel={floatButton.closeConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={floatButton.logOut}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={floatButton.closeConfirmModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                您确定退出登录么?
+                            </div>
+                        </Modal>
                 <UserPasswordModifyComponents ref="userPasswordModify"/>
 
                 <Dropdown overlay={menu} trigger={['click']} className='affix_bottom'>
                     <i className="iconfont iconfont_more_bnt">&#xe60e;</i>
                 </Dropdown>
+            
             </div>
 
         );

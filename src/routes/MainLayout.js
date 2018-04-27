@@ -3012,6 +3012,7 @@ const MainLayout = React.createClass({
                                             defaultMessage='教学空间'
                                         />
                                     </div>
+                                    
                                 </Menu.Item>
                                 <Menu.Item key="antGroup" className="padding_menu">
                                     <i className="icon_menu_ios icon_antgroup"></i>
@@ -3198,7 +3199,7 @@ const MainLayout = React.createClass({
                                         <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
                                         onClick={this.addGroupMember}>确定</button>
                             ]}
-                            width={700}
+                            width={800}
                         >
                             <div style={{display: this.state.idea, marginBottom: '14px'}}>
                                 <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}

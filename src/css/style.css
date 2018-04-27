@@ -1865,11 +1865,11 @@ p.user_cont span.name1 {
 }
 
 .queanswer_modol_width {
-    width: 760px !important;
+    width: 800px !important;
 }
 
 .knowledge_width {
-    width: 750px !important;
+    width: 800px !important;
 }
 
 .ant-form-item {
@@ -9575,20 +9575,33 @@ a:active,a:hover{
 }
 /* .ant-modal-footer .login-form-button, */
 .ant-modal-content .calmSure,
+.ant-modal-content .calmCancle,
 .ant-modal-footer .ant-btn{
     border-radius: 2px;
 }
+.ant-modal-content .calmSure {
+    background: #ff4234;
+}
+.ant-modal-content .calmCancle {
+    color: #fff;
+    background:#5d9af2;
+    border: 0;
+}
 .ant-modal-footer .ant-btn-primary,
-.ant-modal-content .calmCancle,
+
 .ant-modal-body .class_right .ant-btn-primary{
     background: #5d9af2;
     border-radius: 2px;
 }
+
 .ant-modal-title {
     /* display: none; */
     line-height:42px;
 }
-
+.isDel .sadFeel {
+    vertical-align: middle;
+    margin-right: 10px;
+}
 
 /* 全屏显示视频的样式 */
 .calmVideoBoxWrap {

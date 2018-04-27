@@ -260,7 +260,7 @@ class SelectKnowledgeModal extends React.Component {
         return (
             <Modal
                 visible={this.state.isShow}
-                width={440}
+                width={616}
                 title={"选择知识点"}
                 onCancel={this.SelectKnowledgeModalHandleCancel}
                 transitionName=""  //禁用modal的动画效果
