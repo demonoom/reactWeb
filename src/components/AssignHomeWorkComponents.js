@@ -455,12 +455,13 @@ const AssignHomeWorkComponents = React.createClass({
                 <Row className="homework_out ant-modal-footer">
                     <Col span={24}>
                  <span>
+                   
+                   <Button type="ghost" htmlType="reset" className="login-form-button" onClick={this.handleCancel}>
+                    取消
+                   </Button>
                    <Button type="primary" htmlType="submit" className="login-form-button class_right"
                            onClick={assignHomeWork.handleSubmit}>
                     保存
-                   </Button>
-                   <Button type="ghost" htmlType="reset" className="login-form-button" onClick={this.handleCancel}>
-                    取消
                    </Button>
                  </span>
                     </Col>

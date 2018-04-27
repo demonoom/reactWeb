@@ -9546,7 +9546,7 @@ a:active,a:hover{
 }
 
 
-/* 修改弹出框的样式 */
+/* 修改弹出框的样式 ---start--- */
 .ant-modal-header {
     padding: 0 20px 0 16px;
     height: 42px;
@@ -9561,10 +9561,12 @@ a:active,a:hover{
 .ant-modal-content .ant-modal-close {
     top: 12px;
 }
-/* 关闭按钮 */
+
+
+/* 关闭按钮*/
 .ant-modal-content .ant-modal-close-x {
     font-size: 17px;
-    color:#333!important;
+    color:#666!important;
 }
 
 .ant-modal-header .ant-modal-title,
@@ -9588,22 +9590,22 @@ a:active,a:hover{
     border: 0;
 }
 .ant-modal-footer .ant-btn-primary,
-
 .ant-modal-body .class_right .ant-btn-primary{
     background: #5d9af2;
     border-radius: 2px;
 }
 
 .ant-modal-title {
-    /* display: none; */
     line-height:42px;
 }
 .isDel .sadFeel {
     vertical-align: middle;
     margin-right: 10px;
 }
+/* 修改弹出框的样式 ---end--- */
 
-/* 全屏显示视频的样式 */
+
+/* 全屏显示视频的样式---start--- */
 .calmVideoBoxWrap {
     height: 100%;
 }
@@ -9613,4 +9615,32 @@ a:active,a:hover{
 .calmVideoBoxWrap .calmVideoBox .video-js {
     height: 100%;
 }
+/* 全屏显示视频的样式---end--- */
 
+
+/* 显示框---start--- */
+/* 音量 */
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal  {
+    position: absolute;
+    left: 85%;
+}
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal .vjs-menu{
+    left: 3em;
+}
+/* 进度条 */
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-progress-control.vjs-control{
+    width: 75%;
+    position: absolute;
+    left: 4%;
+}
+/* 剩余时间 */
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-remaining-time {
+    position: absolute;
+    left: 80%;
+}   
+/* 全凭按钮 */
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-fullscreen-control.vjs-control.vjs-button{
+    position: absolute;
+    left: 95%;
+}
+/* 显示框---end--- */

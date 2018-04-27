@@ -46,7 +46,7 @@ var columns = [{
     className: 'ant-table-selection-smallclass_t class_right time',
 }, {
     title: '操作',
-    className: 'ant-table-selection-smallclass class_right',
+    className: 'ant-table-selection-smallclass class_right operatIcon',
     dataIndex: 'subjectOpt',
 },
 ];
