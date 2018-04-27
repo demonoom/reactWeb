@@ -31,7 +31,10 @@ const LocalClassRoom = React.createClass({
             errorVisible: false,
             closeIconType: 'double-right',
             closeOrOpen: 'open',
-            isClassStatusShow: false
+            isClassStatusShow: false ,
+          /*  maskWrap : [],
+            classRoomUrlDiscuss: []*/
+
         };
     },
 
@@ -60,9 +63,12 @@ const LocalClassRoom = React.createClass({
     },
 
     componentDidUpdate(){
+        var _this = this;
         if(isEmpty(this.state.currentPage)==false){
-            window.frames['ppt_frame'].window.pptCheckPage(this.state.currentPage);
-            this.setState({currentPage:''});
+            setTimeout(function () {
+                window.ppt_frame_localClass.window.pptCheckPage(_this.state.currentPage);
+                _this.setState({currentPage:''});
+            },1000);
         }
     },
 
@@ -239,7 +245,9 @@ const LocalClassRoom = React.createClass({
         this.setState({schduleMaterialsModalIsShow: false});
     },
 
+    //推送
     pushMaterialsToClass(htmlPath,currentPage) {
+        debugger
         // var htmlPath = materials.htmlPath;
         if (isEmpty(htmlPath) == false) {
             sessionStorage.setItem("htmlPath", htmlPath);
@@ -357,8 +365,76 @@ const LocalClassRoom = React.createClass({
         this.setState({clazzStatusModalIsShow: false});
     },
 
+
+/*    /!**
+     * 发送讨论图片到蒙层
+     *!/
+    sendDiscussImgArr(imgArrAll,address){
+        console.log(imgArrAll);
+        console.log(address);
+        var _this= this;
+
+        var imgId = address;
+        var currentImgIndex = imgArrAll.indexOf(imgId); //获取当前图片的下标
+        imgArrAll.splice(currentImgIndex, 1); //删除当前数组中的当前图片地址
+        imgArrAll.unshift(imgId);  //插入当前的图片地址在数组的最前面
+
+
+        var discussImgArr = imgArrAll.join(",");
+
+
+        var url = discussImgArr;
+        //保存到课堂回顾的蚁盘文件id
+        var imgURL = url.replace("60.205.86.217", "www.maaee.com");
+        imgURL = imgURL.replace("http", "https");
+        var imgsUrl = imgURL.substr(0, imgURL.length );
+
+        var vid = this.state.vid;
+        var userId = this.state.userId;
+        var classRoomUrlDiscuss = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+        //var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+
+        var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + imgsUrl + "'}}" + ')');
+        connection.send(protocal);
+
+        //让新版的学生端显示ppt
+        var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
+        connection.send(p1);
+
+        /!*var protocal = eval('(' + "{'command':'handwriting_synchronization','data':{'type':0,'html':'" + imgsUrl + "'}}" + ')');
+        connection.send(protocal);
+
+        //让新版的学生端显示ppt
+        var p1 = eval('(' + "{'command':'handwriting_synchronization','data':{'type':0}}" + ')');
+        connection.send(p1);*!/
+        //将当前推送的图片保存到课堂的资源回顾中
+        //_this.useCloudFileInClass(discussImgArr);
+        _this.state.classRoomUrlDiscuss = classRoomUrlDiscuss;
+        //this.closeAntCloudMaterialsModal();
+
+        var maskWrap = <div className="maskWrap">
+            <span onClick={this.closeMaskCourse} className="closeMaskCourse">X</span>
+            <div className="classroom_draw" >
+                <iframe name="ppt_frame_mask" src={this.state.classRoomUrlDiscuss} style={{width: '100%', height: '100%'}}></iframe>
+            </div>
+        </div>
+        _this.state.maskWrap = maskWrap
+    },
+
+    /!**
+     * 关闭蒙层
+     *!/
+    closeMaskCourse(){
+        var _this =this;
+        window.ppt_frame_mask.window.clearScreen();
+        _this.setState({maskWrap: []});
+    },*/
+
+
+    /**
+     * 发送过滤图片到本地客堂
+     */
     sendFilterCloudFile(selectArr) {
-        debugger
         var cidArray = [];
         if (isEmpty(selectArr)) {
             message.error('请选择图片;')
@@ -394,7 +470,7 @@ const LocalClassRoom = React.createClass({
     },
 
     /**
-     * 获取当前未关闭的课堂
+     * 获取当前未关闭的课堂(本地课堂)
      */
     getDisconnectedClass(){
         var _this = this;
@@ -457,8 +533,8 @@ const LocalClassRoom = React.createClass({
 
         var classIfream = null;
         if (isEmpty(this.state.classRoomUrl) == false) {
-            classIfream = <div className="classroom_draw">
-                <iframe name="ppt_frame" src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe>
+            classIfream = <div className="classroom_draw" >
+                <iframe name="ppt_frame_localClass" id="ppt_frame_localClass" src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe>
             </div>;
         } else {
             classIfream = <div className="classroom_welcome">
@@ -469,6 +545,7 @@ const LocalClassRoom = React.createClass({
         }
         return (
             <div className="local_class flex">
+                {this.state.maskWrap}
                 <div className="flex_auto classroom_left">
 
                     {classIfream}
@@ -499,7 +576,9 @@ const LocalClassRoom = React.createClass({
                 <div className="local_class_right" id="messageDiv">
                     <LocalClassesMessage id="localClassMessageObj" ref="localClassesMessage" ms={ms}
                                          classCode={this.state.classCode}
-                                         classType={this.state.classType}></LocalClassesMessage>
+                                         classType={this.state.classType}
+                                         sendDiscussImgArr={this.sendDiscussImgArr}
+                    ></LocalClassesMessage>
                 </div>
                 <SelectSubjectModal isShow={this.state.subjectInLibModalIsShow} onCancel={this.closeSubjectInLibModal}
                                     pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
