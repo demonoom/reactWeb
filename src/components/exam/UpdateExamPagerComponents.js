@@ -849,13 +849,13 @@ const UpdateExamPagerComponents = React.createClass({
         if (createExamPager.isEmpty(subjectInfoWithSelected) == false && createExamPager.isEmpty(subjectInfoWithSelected.points) == false && subjectInfoWithSelected.points.length > 0) {
             //知识点非空
             pointBtn = <Button value={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
-                               onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                               onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
                 <i id={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
                    className="iconfont iconfont_knowledge pointBtn">&#xe783;</i>所属知识点
             </Button>
         } else {
             pointBtn = <Button value={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
-                               onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                               onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
                 <i id={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
                    className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
             </Button>
@@ -1917,8 +1917,8 @@ const UpdateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <Button type="ghost" className="calmCancle" onClick={createExamPager.analysisModalHandleCancel}>取消</Button>,
-                        <Button type="primary" className="calmSave" onClick={createExamPager.addAnalysisForCurrentSubject}>确定</Button>
+                        <Button type="primary" className="calmSave" onClick={createExamPager.addAnalysisForCurrentSubject}>确定</Button>,
+                        <Button type="ghost" className="calmCancle" onClick={createExamPager.analysisModalHandleCancel}>取消</Button>
                         
                     ]}
                 >

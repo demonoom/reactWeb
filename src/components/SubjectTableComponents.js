@@ -256,12 +256,13 @@ class SUbjectTable extends React.Component {
             target = e.target;
         }
         var subjectIds = target.value;
-        this.setState({"delSubjectId": subjectIds});
-        this.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({"delSubjectId": subjectIds,calmSureDelTitle:true});
+        // this.refs.confirmModal.changeConfirmModalVisible(true);
     }
 
     closeConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({calmSureDelTitle:false})
+        // this.refs.confirmModal.changeConfirmModalVisible(false);
     }
 
     showDelAllSubjectConfirmModal() {
@@ -598,12 +599,28 @@ class SUbjectTable extends React.Component {
         }
         return (
             <div>
-                <ConfirmModal ref="confirmModal"
+                {/* <ConfirmModal ref="confirmModal"
                               title="确定要删除该题目?333"
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.deleteSubject}
-                ></ConfirmModal>
-               
+                ></ConfirmModal> */}
+                <Modal
+                            className="calmModal"
+                            visible={this.state.calmSureDelTitle}
+                            title="提示"
+                            onCancel={this.closeConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.deleteSubject}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                确定要删除该题目?
+                            </div>
+                        </Modal>
 
                 {/* <ConfirmModal ref="delSubjectConfirmModal"
                               title="提示111"

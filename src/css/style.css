@@ -9696,3 +9696,7 @@ a:active,a:hover{
 .calmAddButton {
     margin-left:0;
 }
+
+.calmEnterClass .ant-modal-content .ant-modal-header .ant-modal-title {
+    line-height:21px;
+}

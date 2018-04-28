@@ -280,12 +280,13 @@ class CourseWare extends React.Component {
             target = e.target;
         }
         var materialIds = target.value;
-        this.setState({"delMaterialIds": materialIds});
-        this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(true);
+        this.setState({"delMaterialIds": materialIds,sureDelThisTitle:true});
+        // this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(true);
     }
 
     closeDelScheduleMateriaConfirmModal() {
-        this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(false);
+        this.setState({sureDelThisTitle:false})
+        // this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(false);
     }
 
 
@@ -574,11 +575,28 @@ class CourseWare extends React.Component {
                             </div>
                         </Modal>
 
-                <ConfirmModal ref="delScheduleMateriaConfirmModal"
-                              title="确定要删除该课件?"
+                {/* <ConfirmModal ref="delScheduleMateriaConfirmModal"
+                              title="确定要删除该课件?222"
                               onConfirmModalCancel={this.closeDelScheduleMateriaConfirmModal}
                               onConfirmModalOK={this.deleteScheduleMaterials}
-                ></ConfirmModal>
+                ></ConfirmModal> */}
+                 <Modal
+                            className="calmModal"
+                            visible={this.state.sureDelThisTitle}
+                            title="提示"
+                            onCancel={this.closeDelScheduleMateriaConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.deleteScheduleMaterials}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeDelScheduleMateriaConfirmModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                确定要删除该课件?
+                            </div>
+                        </Modal>
                 <div className="group_cont">
                     <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
                     <Collapse activeKey={this.activeKey} ref="collapse">

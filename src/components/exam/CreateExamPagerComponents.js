@@ -622,7 +622,7 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
                         <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
                     </button>
 					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  className="examination_btn_gray" onClick={createExamPager.showAnalysisModal}>
@@ -665,7 +665,7 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
                         <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
@@ -711,7 +711,7 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}  className="examination_btn_gray">
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}  className="calmBorderRadius examination_btn_gray">
                         <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
@@ -755,7 +755,7 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
                         <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
@@ -1549,8 +1549,8 @@ const CreateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={createExamPager.closeDelAllAnswerCardConfirmModal} >取消</button>,
-                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={createExamPager.deleteAllCardChild}  >确定</button>
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={createExamPager.deleteAllCardChild}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={createExamPager.closeDelAllAnswerCardConfirmModal} >取消</button>
                         
                     ]}
                 >
