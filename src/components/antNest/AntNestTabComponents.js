@@ -1975,9 +1975,9 @@ const AntNestTabComponents = React.createClass({
         } else {
             optionButton = <div className="public—til—blue">
                 <div className="talk_ant_btn1">
-                    <Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button>
-                    <Button value="topic" onClick={antNest.showaddTopicModal} className="antnest_talk">发表话题</Button>
-                    <Button style={{display: antNest.state.homeWorkPublish}} value="homework"
+                    <Button value="talk" onClick={antNest.showaddTopicModal} className="calmBorderRadius antnest_talk">发表说说</Button>
+                    <Button value="topic" onClick={antNest.showaddTopicModal} className="calmBorderRadius antnest_talk">发表话题</Button>
+                    <Button className="calmBorderRadius" style={{display: antNest.state.homeWorkPublish}} value="homework"
                             onClick={antNest.showaddTopicModal}>发布作业</Button>
                 </div>
                 {breadMenuTip}

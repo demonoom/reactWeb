@@ -249,7 +249,7 @@ const TeacherAllSubjects = React.createClass({
             <div className='ant-tabs ant-tabs-top ant-tabs-line8888888'>
                 <div className="public—til—blue">我的题目</div>
                 <ConfirmModal ref="confirmModal"
-                              title="确定要删除该题目?"
+                              title="确定要删除该题目?444"
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.delMySubjects}
                 />

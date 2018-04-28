@@ -1292,7 +1292,7 @@ element.style {
 .ant-btn {
     padding: 4px 8px;
     font-size: 14px !important;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 
 .ant-input {
@@ -9550,6 +9550,10 @@ a:active,a:hover{
 .calmModal {
     width: 300px!important;
 }
+.calmModal .ant-modal-content .isDel .ant-checkbox-wrapper {
+    margin-top:13px;
+    margin-left: 18px;
+}
 .ant-modal-header {
     padding: 0 20px 0 16px;
     height: 42px;
@@ -9589,6 +9593,7 @@ a:active,a:hover{
 .ant-modal-content .calmSure,
 .ant-modal-content .calmCancle,
 .ant-modal-footer .calmCancle,
+.ant-modal-footer .calmCancel,
 .ant-modal-footer .calmPre,
 .ant-modal-footer .ant-btn{
     border-radius: 2px;
@@ -9683,4 +9688,11 @@ a:active,a:hover{
 .startClass .closeClass {
     border-color: red;
     color:red;
+}
+
+.calmBorderRadius {
+    border-radius: 2px;
+}
+.calmAddButton {
+    margin-left:0;
 }

@@ -531,7 +531,7 @@ const DingMessageTabComponents = React.createClass({
         var optionButton;
         optionButton = <div className="public—til—blue">
             <div className="talk_ant_btn1">
-                <Button value="talk" onClick={ding.makeDing} className="antnest_talk">叮一下</Button>
+                <Button value="talk" onClick={ding.makeDing} className="calmBorderRadius antnest_talk">叮一下</Button>
             </div>
             {breadMenuTip}
         </div>;

@@ -420,7 +420,7 @@ class MakeDingModal extends React.Component {
                                 <UploadImgComponents callBackParent={this.getUploadedImgList}
                                                      fileList={this.state.topicImgUrl}/>
                                 <div className="ding_modal_top">
-                                    <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn"
+                                    <button type="primary" htmlType="submit" className="calmBorderRadius ant-btn-primary ant-btn"
                                             onClick={this.sendDing}>发送
                                     </button>
                                     <Select defaultValue="app" style={{width: 200}} onChange={this.handleChange}

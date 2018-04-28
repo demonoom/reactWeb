@@ -215,7 +215,7 @@ const CloudFileUploadComponents = React.createClass({
                 </Row>
                 <Row>
                     <div className="date_tr">
-                        已上传文件列表<Button type="primary" className="add_out add_study"
+                        已上传文件列表<Button type="primary" className="calmBorderRadius add_out add_study"
                                        onClick={this.removeFile}>移除</Button>
                     </div>
                     <div className="le_1">

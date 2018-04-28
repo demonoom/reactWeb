@@ -209,7 +209,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         var progressState = courseWareUpload.state.progressState;
         return (
             <div className="toobar">
-                <Button type="primary" onClick={courseWareUpload.showModal} icon="plus-circle" title="上传课件" className="add_study add_study—a">添加课件</Button>
+                <Button type="primary" onClick={courseWareUpload.showModal} icon="plus-circle" title="上传课件" className="calmBorderRadius add_study add_study—a">添加课件</Button>
                 <Modal
                     visible={courseWareUpload.state.visible}
                     title="上传课件"
@@ -219,11 +219,12 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                            <Button type="primary" htmlType="submit" className="login-form-button" onClick={courseWareUpload.uploadFile}>
-                                保存
-                            </Button>
+                            
                             <Button type="ghost" htmlType="reset" className="login-form-button" onClick={courseWareUpload.handleCancel}>
                                 取消
+                            </Button>
+                            <Button type="primary" htmlType="submit" className="login-form-button" onClick={courseWareUpload.uploadFile}>
+                                保存
                             </Button>
                         </div>
                     ]}

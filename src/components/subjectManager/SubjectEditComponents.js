@@ -580,11 +580,12 @@ const SubjectEditComponents = React.createClass({
     render() {
         //根据当前激活的面板的不同，向页面上渲染不同的保存按钮，用以完成不同类型题目的添加操作
         var buttons = <div>
-            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.editButtonOnClick}>
-                保存
-            </Button>
+           
             <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.handleCancel}>
                 取消
+            </Button>
+            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.editButtonOnClick}>
+                保存
             </Button>
         </div>;
         var answerComponent = null;
@@ -758,7 +759,7 @@ const SubjectEditComponents = React.createClass({
                                         return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
                                     })}
                                 </div>
-                                <Button className="ding_modal_top roe-t-f-left" onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
+                                <Button className="calmBorderRadius ding_modal_top roe-t-f-left" onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
                             </Col>
                         </Row>
 
@@ -788,13 +789,14 @@ const SubjectEditComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                            <Button type="primary" htmlType="submit" className="login-form-button"
-                                    onClick={this.uploadFile}>
-                                发送
-                            </Button>
+                            
                             <Button type="ghost" htmlType="reset" className="login-form-button"
                                     onClick={this.subjectVideoModalHandleCancel}>
                                 取消
+                            </Button>
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                                    onClick={this.uploadFile}>
+                                发送
                             </Button>
                         </div>
                     ]}
@@ -824,13 +826,14 @@ const SubjectEditComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                            <Button type="primary" htmlType="submit" className="login-form-button"
-                                    onClick={this.modifyAnalysisContent}>
-                                确定
-                            </Button>
+                            
                             <Button type="ghost" htmlType="reset" className="login-form-button"
                                     onClick={this.subjectAnalysisModifyModalHandleCancel}>
                                 取消
+                            </Button>
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                                    onClick={this.modifyAnalysisContent}>
+                                确定
                             </Button>
                         </div>
                     ]}

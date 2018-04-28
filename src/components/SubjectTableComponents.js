@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Table, Button, Icon, Popover, message, Checkbox} from 'antd';
+import {Table, Button, Icon, Popover, message, Checkbox,Modal} from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import SubjectEditComponents from '../components/subjectManager/SubjectEditComponents';
 import {doWebService} from '../WebServiceHelper';
@@ -239,12 +239,13 @@ class SUbjectTable extends React.Component {
             target = e.target;
         }
         var subjectIds = target.value;
-        this.setState({"delSubjectId": subjectIds});
-        this.refs.delSubjectConfirmModal.changeConfirmModalVisible(true);
+        this.setState({"delSubjectId": subjectIds,calmDelModal:true});
+        // this.refs.delSubjectConfirmModal.changeConfirmModalVisible(true);
     }
 
     closeDelSubjectConfirmModal() {
-        this.refs.delSubjectConfirmModal.changeConfirmModalVisible(false);
+        this.setState({calmDelModal:false})
+        // this.refs.delSubjectConfirmModal.changeConfirmModalVisible(false);
     }
 
     showConfirmModal(e) {
@@ -544,13 +545,19 @@ class SUbjectTable extends React.Component {
         var subjectTable;
         if (this.state.isOwmer == "Y") {
             if (this.state.optType == "bySchedule") {
-                delBtn = <div className="pl_del"><div><Button type="primary" onClick={this.showdelAllSubjectInScheduleConfirmModal}
+                delBtn = <div className="pl_del"><div>
+                    <Button type="primary" 
+                            className="calmBorderRadius"
+                            onClick={this.showdelAllSubjectInScheduleConfirmModal}
                                       disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
                                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
                 </div></div>;
             } else {
-                delBtn = <div className="pl_del"><div><Button type="primary" onClick={this.showDelAllSubjectConfirmModal}
+                delBtn = <div className="pl_del"><div>
+                    <Button type="primary" 
+                            className="calmBorderRadius"
+                            onClick={this.showDelAllSubjectConfirmModal}
                                       disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
                                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
@@ -578,28 +585,46 @@ class SUbjectTable extends React.Component {
 
         var title;
         if (this.state.optType == "bySchedule") {
-            title = <div>
-                <span>确定要删除选定的题目?</span>
-            </div>;
+            title = <div className="isDel">
+                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要删除题目吗?
+                    </div>
         } else {
-            title = <span>
-                <span className="antnest_talk">确定要删除选定的题目?</span>
-                <Checkbox defaultChecked={false} onChange={this.isDeleteAll}>同步删除备课计划下的题目</Checkbox>
-            </span>;
+            title = <div className="isDel">
+                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要删除题目吗?
+                        <Checkbox defaultChecked={false} onChange={this.isDeleteAll}>同步删除备课计划下的题目</Checkbox>
+                    </div>
         }
-
         return (
             <div>
                 <ConfirmModal ref="confirmModal"
-                              title="确定要删除该题目?"
+                              title="确定要删除该题目?333"
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.deleteSubject}
                 ></ConfirmModal>
-                <ConfirmModal ref="delSubjectConfirmModal"
-                              title={title}
+               
+
+                {/* <ConfirmModal ref="delSubjectConfirmModal"
+                              title="提示111"
                               onConfirmModalCancel={this.closeDelSubjectConfirmModal}
                               onConfirmModalOK={this.delMySubjects}
-                ></ConfirmModal>
+                ></ConfirmModal> */}
+                  <Modal
+                            className="calmModal"
+                            visible={this.state.calmDelModal}
+                            title="提示"
+                            onCancel={this.closeDelSubjectConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.delMySubjects}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeDelSubjectConfirmModal} >取消</button>
+                            ]}
+                        >
+                        {title}
+                            
+                </Modal>
                 <ConfirmModal ref="delAllSubjectConfirmModal"
                               title={title}
                               onConfirmModalCancel={this.closeDelAllSubjectConfirmModal}

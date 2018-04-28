@@ -674,11 +674,12 @@ const SubjectUploadComponent = React.createClass({
      */
     render() {
         var buttons = <div>
-            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.saveButtonOnClick}>
-                保存并继续添加
-            </Button>
+            
             <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.saveButtonOnClick}>
                 保存并返回列表
+            </Button>
+            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.saveButtonOnClick}>
+                保存并继续添加
             </Button>
         </div>;
         //插入音频按钮
@@ -808,7 +809,7 @@ const SubjectUploadComponent = React.createClass({
         return (
             <div className="toobar right_ri ">
                 <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目"
-                        className="add_study add_study-b">添加题目</Button>
+                        className="calmBorderRadius add_study add_study-b">添加题目</Button>
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
@@ -880,7 +881,7 @@ const SubjectUploadComponent = React.createClass({
                                         return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
                                     })}
                                 </div>
-                                <Button className="ding_modal_top"
+                                <Button className="calmBorderRadius ding_modal_top"
                                         onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
                             </Col>
                         </Row>
@@ -898,13 +899,14 @@ const SubjectUploadComponent = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                            <Button type="primary" htmlType="submit" className="login-form-button"
-                                    onClick={this.uploadFile}>
-                                发送
-                            </Button>
+                            
                             <Button type="ghost" htmlType="reset" className="login-form-button"
                                     onClick={this.subjectVideoModalHandleCancel}>
                                 取消
+                            </Button>
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                                    onClick={this.uploadFile}>
+                                发送
                             </Button>
                         </div>
                     ]}
@@ -934,13 +936,14 @@ const SubjectUploadComponent = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                            <Button type="primary" htmlType="submit" className="login-form-button"
-                                    onClick={this.addAnalysisContent}>
-                                确定
-                            </Button>
+                            
                             <Button type="ghost" htmlType="reset" className="login-form-button"
                                     onClick={this.subjectAnalysisModalHandleCancel}>
                                 取消
+                            </Button>
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                                    onClick={this.addAnalysisContent}>
+                                确定
                             </Button>
                         </div>
                     ]}

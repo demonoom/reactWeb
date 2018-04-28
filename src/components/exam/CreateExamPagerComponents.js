@@ -1451,12 +1451,13 @@ const CreateExamPagerComponents = React.createClass({
             target = e.target;
         }
         var selectedSubject = target.value;
-        createExamPager.setState({"selectedSubject":selectedSubject});
-        createExamPager.refs.confirmModal.changeConfirmModalVisible(true);
+        createExamPager.setState({"selectedSubject":selectedSubject,calmDelTitle:true});
+        // createExamPager.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal(){
-        createExamPager.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({calmDelTitle:false})
+        // createExamPager.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     showDelAnswerCardConfirmModal(e){
@@ -1467,12 +1468,13 @@ const CreateExamPagerComponents = React.createClass({
             target = e.target;
         }
         var deleteCardInfo = target.value;
-        createExamPager.setState({"deleteCardInfo":deleteCardInfo});
-        createExamPager.refs.delAnswerCardConfirmModal.changeConfirmModalVisible(true);
+        createExamPager.setState({"deleteCardInfo":deleteCardInfo,calmDelTitleSecond:true});
+        // createExamPager.refs.delAnswerCardConfirmModal.changeConfirmModalVisible(true);
     },
 
     closeDelAnswerCardConfirmModal(){
-        createExamPager.refs.delAnswerCardConfirmModal.changeConfirmModalVisible(false);
+        this.setState({calmDelTitleSecond:false})
+        // createExamPager.refs.delAnswerCardConfirmModal.changeConfirmModalVisible(false);
     },
 
     showDelAllAnswerCardConfirmModal(){
@@ -1487,16 +1489,53 @@ const CreateExamPagerComponents = React.createClass({
     render() {
         return (
             <div className="follow_my">
-                <ConfirmModal ref="confirmModal"
-                              title="确定要删除该题目?"
+                {/* <ConfirmModal ref="confirmModal"
+                              title="确定要删除该题目?111"
                               onConfirmModalCancel={createExamPager.closeConfirmModal}
                               onConfirmModalOK={createExamPager.deleteSubjectContentDiv}
-                ></ConfirmModal>
-                <ConfirmModal ref="delAnswerCardConfirmModal"
-                              title="确定要删除该答题卡?"
+                ></ConfirmModal> */}
+                <Modal
+                    className="calmModal"
+                    visible={createExamPager.state.calmDelTitle}
+                    title="提示"
+                    onCancel={createExamPager.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={createExamPager.deleteSubjectContentDiv}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={createExamPager.closeConfirmModal} >取消</button>
+                        
+                        
+                    ]}
+                >
+                <div className="isDel">
+                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                确定要删除该题目?</div>
+
+                </Modal>
+                {/* <ConfirmModal ref="delAnswerCardConfirmModal"
+                              title="确定要删除该答题卡?111"
                               onConfirmModalCancel={createExamPager.closeDelAnswerCardConfirmModal}
                               onConfirmModalOK={createExamPager.deleteAnswerCard}
-                ></ConfirmModal>
+                ></ConfirmModal> */}
+                 <Modal
+                    className="calmModal"
+                    visible={createExamPager.state.calmDelTitleSecond}
+                    title="提示"
+                    onCancel={createExamPager.closeDelAnswerCardConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={createExamPager.deleteAnswerCard}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={createExamPager.closeDelAnswerCardConfirmModal} >取消</button>
+                        
+                    ]}
+                >
+                <div className="isDel">
+                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                确定要删除该答题卡?</div>
+
+                </Modal>
                 {/* <ConfirmModal ref="delAllAnswerCardConfirmModal"
                               title="确定要清除全部答题卡?1111"
                               onConfirmModalCancel={createExamPager.closeDelAllAnswerCardConfirmModal}
@@ -1510,8 +1549,9 @@ const CreateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="ghost" className="login-form-button examination_btn_white calmSure" onClick={createExamPager.closeDelAllAnswerCardConfirmModal} >取消</button>,
-                        <button type="primary" className="login-form-button examination_btn_blue calmCancle" onClick={createExamPager.deleteAllCardChild}  >确定</button>
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={createExamPager.closeDelAllAnswerCardConfirmModal} >取消</button>,
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={createExamPager.deleteAllCardChild}  >确定</button>
+                        
                     ]}
                 >
                 <div className="isDel">
@@ -1526,8 +1566,9 @@ const CreateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" className="login-form-button examination_btn_blue" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</button>,
-                        <button type="ghost" className="login-form-button examination_btn_white" onClick={createExamPager.analysisModalHandleCancel} >取消</button>
+                        <button type="ghost" className="calmCancel login-form-button examination_btn_white" onClick={createExamPager.analysisModalHandleCancel} >取消</button>,
+                        <button type="primary" className="calmSave login-form-button examination_btn_blue" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</button>
+                        
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -1551,8 +1592,9 @@ const CreateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" className="login-form-button examination_btn_blue" onClick={createExamPager.bindKnowledgeForCurrentSubject}  >确定</button>,
-                        <button type="ghost" className="login-form-button examination_btn_white" onClick={createExamPager.bindKnowledgeModalHandleCancel} >取消</button>
+                        <button type="ghost" className="calmCancel login-form-button examination_btn_white" onClick={createExamPager.bindKnowledgeModalHandleCancel} >取消</button>,
+                        <button type="primary" className="calmSave login-form-button examination_btn_blue" onClick={createExamPager.bindKnowledgeForCurrentSubject}  >确定</button>
+                        
                     ]}
                 >
                     <div className="ant-form-item">
@@ -1690,11 +1732,11 @@ const CreateExamPagerComponents = React.createClass({
                             <span className="text_30"></span>
                         </Col>
                         <Col span={12}>
-                            <button type="primary" className="login-form-button class_right examination_btn_blue"
+                            <button type="primary" className="calmBorderRadius login-form-button class_right examination_btn_blue"
                                     onClick={createExamPager.addAnswerCard}>
                                 添加题目
                             </button>
-                            <button type="ghost" className="login-form-button examination_btn_white" onClick={createExamPager.showDelAllAnswerCardConfirmModal}>
+                            <button type="ghost" className="calmBorderRadius login-form-button examination_btn_white" onClick={createExamPager.showDelAllAnswerCardConfirmModal}>
                                 清除全部
                             </button>
                         </Col>

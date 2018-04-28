@@ -2432,7 +2432,7 @@ pageNo   --- 页码，-1取全部
         var tipTitle;
         if (cloudTable.state.getFileType == "myFile") {
             tipTitle = "我的文件";
-            newButton = <Button value="newDirectory" className="antnest_talk"
+            newButton = <Button value="newDirectory" className="calmBorderRadius antnest_talk"
                                 onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
             if (cloudTable.state.activeKey == '2') {
                 //上传题目
@@ -2443,11 +2443,16 @@ pageNo   --- 页码，-1取全部
                 }
             } else {
                 if (cloudTable.state.currentDirectoryId != -1) {
-                    uploadButton = <Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                    uploadButton = <Button 
+                                        className="calmBorderRadius"
+                                        value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                 }
             }
             delBtn =
-                <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
+                <div className="cloud_tool">
+                    <Button type="primary" 
+                            className="calmBorderRadius"
+                            onClick={cloudTable.showdelAllDirectoryConfirmModal}
                                                     disabled={!hasSelected && cloudTable.state.delBtnReadOnly}
                                                     loading={loading}
                 >批量删除</Button><span className="password_ts"
@@ -2486,9 +2491,12 @@ pageNo   --- 页码，-1取全部
             tipTitle = "群文件";
             if (cloudTable.state.currentDirectoryId != -1) {
                 // 非第一级文件夹
-                newButton = <Button value="newDirectory" className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
+                newButton = <Button value="newDirectory" className="calmBorderRadius antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
                 //使用者只有上传的权限
-                uploadButton = <Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                uploadButton = <Button 
+                                    value="uploadFile" 
+                                    className="calmBorderRadius"
+                                    onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                 /*if(cloudTable.state.currentDirMaxPermission!=3
                  || cloudTable.state.currentDirectoryCreatorId==sessionStorage.getItem("ident")){
                  newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;

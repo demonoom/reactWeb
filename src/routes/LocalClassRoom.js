@@ -595,11 +595,28 @@ const LocalClassRoom = React.createClass({
                                               useMaterialInClass={this.useMaterialInClass}></SelectScheduleMaterialsModal>
                 <SelectAntCloudSubjectsModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal}
                                              pushSubjectToClass={this.pushSubjectToClass}></SelectAntCloudSubjectsModal>
-                <ConfirmModal ref="confirmModal"
+                {/* <ConfirmModal ref="confirmModal"
                               title="确定要下课吗?"
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.disConnectClassRoom}
-                ></ConfirmModal>
+                ></ConfirmModal> */}
+                <Modal
+                            className="calmModal"
+                            visible={this.state.changeConfirmModalVisible}
+                            title="提示"
+                            onCancel={this.closeConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.disConnectClassRoom}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                确定要下课吗?
+                            </div>
+                        </Modal>
 
                 <Modal
                     visible={this.state.errorVisible}
