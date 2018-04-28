@@ -9547,6 +9547,11 @@ a:active,a:hover{
 
 
 /* 修改弹出框的样式 ---start--- */
+
+/* 控制弹出框圆角的样式 */
+.ant-modal-content {
+    border-radius: 2px;
+}
 .calmModal {
     width: 300px!important;
 }
@@ -9700,3 +9705,4 @@ a:active,a:hover{
 .calmEnterClass .ant-modal-content .ant-modal-header .ant-modal-title {
     line-height:21px;
 }
+

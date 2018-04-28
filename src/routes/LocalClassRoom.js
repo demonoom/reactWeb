@@ -327,11 +327,13 @@ const LocalClassRoom = React.createClass({
     },
 
     showConfirmModal(e) {
-        this.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({changeConfirmModalVisible:true})
+        // this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({changeConfirmModalVisible:false})
+        // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     /**
