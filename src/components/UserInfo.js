@@ -238,7 +238,7 @@ const UserInfo = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onCancel={this.closeEditModalHandleCancel}
-                       className="footer_user_introduction"
+                       className="calmModal footer_user_introduction"
                        footer={[
                                <Button type="primary" htmlType="submit" className="login-form-button"
                                        onClick={this.sendIntro}>

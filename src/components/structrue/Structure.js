@@ -906,6 +906,7 @@ const Structure = React.createClass({
                                 className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
                         <span className="schoolgroup_btn_left">
                             <Button
+                                className="calmBorderRadius"
                                 type="primary"
                                 onClick={this.showConfirmModal}
                                 disabled={!hasSelected} className="schoolgroup_btn_red schoolgroup_btn">

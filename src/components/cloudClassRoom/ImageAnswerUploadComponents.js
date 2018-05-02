@@ -122,7 +122,7 @@ const ImageAnswerUploadComponents = React.createClass({
             <div>
                 <Upload {...props}>
                     <Button value={this.state.subjectInfo} disabled={this.state.imgIsUpdateDisable}
-                            onClick={this.showInfo} className="add_study-b">
+                            onClick={this.showInfo} className="calmBorderRadius add_study-b">
                         <Icon type="upload"/>
                         <FormattedMessage
                             id='upload'

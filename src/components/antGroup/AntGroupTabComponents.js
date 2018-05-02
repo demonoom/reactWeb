@@ -5050,15 +5050,16 @@ const AntGroupTabComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
+                            
+                            <Button type="ghost" htmlType="reset" className="login-form-button"
+                                    onClick={antGroup.cloudFileUploadModalHandleCancel}>
+                                取消
+                            </Button>
                             <Button type="primary" htmlType="submit" className="login-form-button"
                                     onClick={antGroup.uploadFile}
                                     disabled={this.state.sendFileButton}
                             >
                                 发送
-                            </Button>
-                            <Button type="ghost" htmlType="reset" className="login-form-button"
-                                    onClick={antGroup.cloudFileUploadModalHandleCancel}>
-                                取消
                             </Button>
                         </div>
                     ]}
