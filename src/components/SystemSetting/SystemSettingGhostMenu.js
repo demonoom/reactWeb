@@ -113,7 +113,7 @@ class SystemSettingGhostMenu extends React.Component {
             });
 
             var newObj = {
-                method: 'openNewLargePage',
+                method: 'openNewPage',
                 url: 'http://192.168.50.139:8091/#/homeWorkUnderstandAnalysisGuide'
             }
 
