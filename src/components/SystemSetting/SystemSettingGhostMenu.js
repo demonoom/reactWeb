@@ -112,7 +112,7 @@ class SystemSettingGhostMenu extends React.Component {
                 liArr.push(lis);
             });
 
-            var newObj = {
+            /*var newObj = {
                 method: 'openNewPage',
                 url: 'http://192.168.50.139:8091/#/homeWorkUnderstandAnalysisGuide'
             }
@@ -125,7 +125,7 @@ class SystemSettingGhostMenu extends React.Component {
                     </li>
                 </ul>
             </li>;
-            liArr.push(newLi);
+            liArr.push(newLi);*/
 
             uls = <li className="ghostMenu_li">
                 <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>
