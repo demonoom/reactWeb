@@ -94,8 +94,8 @@ const LocalClasses = React.createClass({
         var classType = "A";
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
-        window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        //window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        // window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        window.open("http://192.168.50.29:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
         this.setState({courseState: false});
     },
 
@@ -132,7 +132,6 @@ const LocalClasses = React.createClass({
      * 关闭未断开的课堂
      */
     closeDisconnectionClass() {
-        debugger
         var _this = this;
         var param = {
             "method": 'closeVirtureClass',
