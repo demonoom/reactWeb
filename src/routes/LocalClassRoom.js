@@ -15,9 +15,11 @@ import {doWebService} from '../WebServiceHelper';
 
 var connection = null;
 var ms = null;
+var classRoom;
 const LocalClassRoom = React.createClass({
     getInitialState() {
         ms = opener.ms;
+        classRoom = this;
         return {
             vid: '',
             account: '',
@@ -31,9 +33,9 @@ const LocalClassRoom = React.createClass({
             errorVisible: false,
             closeIconType: 'double-right',
             closeOrOpen: 'open',
-            isClassStatusShow: false ,
-          /*  maskWrap : [],
-            classRoomUrlDiscuss: []*/
+            isClassStatusShow: false,
+            /*  maskWrap : [],
+              classRoomUrlDiscuss: []*/
 
         };
     },
@@ -60,17 +62,25 @@ const LocalClassRoom = React.createClass({
 
     componentDidMount() {
         window.__noomSelectPic__ = this.noomSelectPic;
-    },
+        window.addEventListener('beforeunload', classRoom.onWindowClose);
 
-    componentDidUpdate(){
+    },
+  /*  onWindowClose(){  //关闭页面时下课处理
+        var _this=this;
+        _this.disConnectClassRoom();
+    },*/
+
+    componentDidUpdate() {  //组件更新结束后执行
         var _this = this;
-        if(isEmpty(this.state.currentPage)==false){
+        if (isEmpty(this.state.currentPage) == false) {
             setTimeout(function () {
                 window.ppt_frame_localClass.window.pptCheckPage(_this.state.currentPage);
-                _this.setState({currentPage:''});
-            },1000);
+                 //window.document.getElementById("contentFrame").contentWindow.pptCheckPage(_this.state.currentPage);
+                _this.setState({currentPage: ''});
+            }, 1000);
         }
     },
+
 
     noomSelectPic(src, obj) {
         this.setState({sendPicModel: true, pinSrc: src, picFile: obj});
@@ -145,19 +155,19 @@ const LocalClassRoom = React.createClass({
     /**
      * 获取课件，打开ppt，接口
      */
-    getVclassPPTOpenInfo (vid){
+    getVclassPPTOpenInfo(vid) {
         var _this = this;
         var param = {
-            "method":'getVclassPPTOpenInfo',
-            "vid" : vid+""
+            "method": 'getVclassPPTOpenInfo',
+            "vid": vid + ""
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 console.log(ret);
                 var response = ret.response;
                 if (isEmpty(response) == false) {
-                    var url = response.pptUrl.replace("httpss",'https');
-                    _this.pushMaterialsToClass(url,response.currentPage);
+                    var url = response.pptUrl.replace("httpss", 'https');
+                    _this.pushMaterialsToClass(url, response.currentPage);
                 }
             },
             onError: function (error) {
@@ -167,7 +177,6 @@ const LocalClassRoom = React.createClass({
 
 
     },
-
 
 
     /**
@@ -246,26 +255,26 @@ const LocalClassRoom = React.createClass({
     },
 
     //推送
-    pushMaterialsToClass(htmlPath,currentPage) {
-        debugger
+    pushMaterialsToClass(htmlPath, currentPage) {
         // var htmlPath = materials.htmlPath;
         if (isEmpty(htmlPath) == false) {
             sessionStorage.setItem("htmlPath", htmlPath);
             var pptURL = htmlPath.replace("60.205.111.227", "www.maaee.com");
             pptURL = pptURL.replace("60.205.86.217", "www.maaee.com");
-            if(pptURL.indexOf("https")==-1 && pptURL.indexOf("http")!=-1){
+            if (pptURL.indexOf("https") == -1 && pptURL.indexOf("http") != -1) {
                 pptURL = pptURL.replace("http", "https");
             }
             var vid = this.state.vid;
             var userId = this.state.userId;
             var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
+            //var classRoomUrl = "/proxy/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
             var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + pptURL + "'}}" + ')');
             connection.send(protocal);
 
             //让新版的学生端显示ppt
             var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
             connection.send(p1);
-            this.setState({classRoomUrl,currentPage});
+            this.setState({classRoomUrl, currentPage});
             //this.getVclassPPTOpenInfo (vid);
         } else {
             message.error("该文件暂时无法完成推送");
@@ -324,6 +333,8 @@ const LocalClassRoom = React.createClass({
         connection.send(classOverProtocal);
         this.closeConfirmModal();
         window.close();
+        window.opener.location.reload();
+
     },
 
     showConfirmModal(e) {
@@ -366,69 +377,69 @@ const LocalClassRoom = React.createClass({
     },
 
 
-/*    /!**
-     * 发送讨论图片到蒙层
-     *!/
-    sendDiscussImgArr(imgArrAll,address){
-        console.log(imgArrAll);
-        console.log(address);
-        var _this= this;
+    /*    /!**
+         * 发送讨论图片到蒙层
+         *!/
+        sendDiscussImgArr(imgArrAll,address){
+            console.log(imgArrAll);
+            console.log(address);
+            var _this= this;
 
-        var imgId = address;
-        var currentImgIndex = imgArrAll.indexOf(imgId); //获取当前图片的下标
-        imgArrAll.splice(currentImgIndex, 1); //删除当前数组中的当前图片地址
-        imgArrAll.unshift(imgId);  //插入当前的图片地址在数组的最前面
-
-
-        var discussImgArr = imgArrAll.join(",");
+            var imgId = address;
+            var currentImgIndex = imgArrAll.indexOf(imgId); //获取当前图片的下标
+            imgArrAll.splice(currentImgIndex, 1); //删除当前数组中的当前图片地址
+            imgArrAll.unshift(imgId);  //插入当前的图片地址在数组的最前面
 
 
-        var url = discussImgArr;
-        //保存到课堂回顾的蚁盘文件id
-        var imgURL = url.replace("60.205.86.217", "www.maaee.com");
-        imgURL = imgURL.replace("http", "https");
-        var imgsUrl = imgURL.substr(0, imgURL.length );
+            var discussImgArr = imgArrAll.join(",");
 
-        var vid = this.state.vid;
-        var userId = this.state.userId;
-        var classRoomUrlDiscuss = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
-        //var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
 
-        var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + imgsUrl + "'}}" + ')');
-        connection.send(protocal);
+            var url = discussImgArr;
+            //保存到课堂回顾的蚁盘文件id
+            var imgURL = url.replace("60.205.86.217", "www.maaee.com");
+            imgURL = imgURL.replace("http", "https");
+            var imgsUrl = imgURL.substr(0, imgURL.length );
 
-        //让新版的学生端显示ppt
-        var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
-        connection.send(p1);
+            var vid = this.state.vid;
+            var userId = this.state.userId;
+            var classRoomUrlDiscuss = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+            //var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
 
-        /!*var protocal = eval('(' + "{'command':'handwriting_synchronization','data':{'type':0,'html':'" + imgsUrl + "'}}" + ')');
-        connection.send(protocal);
+            var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + imgsUrl + "'}}" + ')');
+            connection.send(protocal);
 
-        //让新版的学生端显示ppt
-        var p1 = eval('(' + "{'command':'handwriting_synchronization','data':{'type':0}}" + ')');
-        connection.send(p1);*!/
-        //将当前推送的图片保存到课堂的资源回顾中
-        //_this.useCloudFileInClass(discussImgArr);
-        _this.state.classRoomUrlDiscuss = classRoomUrlDiscuss;
-        //this.closeAntCloudMaterialsModal();
+            //让新版的学生端显示ppt
+            var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
+            connection.send(p1);
 
-        var maskWrap = <div className="maskWrap">
-            <span onClick={this.closeMaskCourse} className="closeMaskCourse">X</span>
-            <div className="classroom_draw" >
-                <iframe name="ppt_frame_mask" src={this.state.classRoomUrlDiscuss} style={{width: '100%', height: '100%'}}></iframe>
+            /!*var protocal = eval('(' + "{'command':'handwriting_synchronization','data':{'type':0,'html':'" + imgsUrl + "'}}" + ')');
+            connection.send(protocal);
+
+            //让新版的学生端显示ppt
+            var p1 = eval('(' + "{'command':'handwriting_synchronization','data':{'type':0}}" + ')');
+            connection.send(p1);*!/
+            //将当前推送的图片保存到课堂的资源回顾中
+            //_this.useCloudFileInClass(discussImgArr);
+            _this.state.classRoomUrlDiscuss = classRoomUrlDiscuss;
+            //this.closeAntCloudMaterialsModal();
+
+            var maskWrap = <div className="maskWrap">
+                <span onClick={this.closeMaskCourse} className="closeMaskCourse">X</span>
+                <div className="classroom_draw" >
+                    <iframe name="ppt_frame_mask" src={this.state.classRoomUrlDiscuss} style={{width: '100%', height: '100%'}}></iframe>
+                </div>
             </div>
-        </div>
-        _this.state.maskWrap = maskWrap
-    },
+            _this.state.maskWrap = maskWrap
+        },
 
-    /!**
-     * 关闭蒙层
-     *!/
-    closeMaskCourse(){
-        var _this =this;
-        window.ppt_frame_mask.window.clearScreen();
-        _this.setState({maskWrap: []});
-    },*/
+        /!**
+         * 关闭蒙层
+         *!/
+        closeMaskCourse(){
+            var _this =this;
+            window.ppt_frame_mask.window.clearScreen();
+            _this.setState({maskWrap: []});
+        },*/
 
 
     /**
@@ -454,6 +465,9 @@ const LocalClassRoom = React.createClass({
 
         var vid = this.state.vid;
         var userId = this.state.userId;
+
+        //var classRoomUrl = "/proxy/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+
         var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
         //var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
 
@@ -472,7 +486,7 @@ const LocalClassRoom = React.createClass({
     /**
      * 获取当前未关闭的课堂(本地课堂)
      */
-    getDisconnectedClass(){
+    getDisconnectedClass() {
         var _this = this;
         var param = {
             "method": 'getDisconnectedClass',
@@ -527,14 +541,16 @@ const LocalClassRoom = React.createClass({
 
     errorHandleOk() {
         window.close();
+        window.opener.location.reload();
     },
 
     render() {
 
         var classIfream = null;
         if (isEmpty(this.state.classRoomUrl) == false) {
-            classIfream = <div className="classroom_draw" >
-                <iframe name="ppt_frame_localClass" id="ppt_frame_localClass" src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe>
+            classIfream = <div className="classroom_draw">
+                <iframe name="ppt_frame_localClass" id="ppt_frame_localClass" src={this.state.classRoomUrl}
+                        style={{width: '100%', height: '100%'}}></iframe>
             </div>;
         } else {
             classIfream = <div className="classroom_welcome">

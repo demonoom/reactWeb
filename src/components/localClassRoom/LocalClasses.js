@@ -16,6 +16,8 @@ const classRoomColumns = [{
     className: 'class_right right'
 }];
 
+var noomArr = [];  //所有班级的集合
+
 /**
  * 本地课堂组件
  */
@@ -27,9 +29,10 @@ const LocalClasses = React.createClass({
             loginUser: loginUser,
             classRoomList: [],
             courseState: false, //开课状态
-            courseVid : ''  ,     //课程id
-            classId : '',
-            account: ''   //te...
+            courseVid: '',     //课程id
+            classId: '',
+            account: '', //te...
+            noomClassName: ''
         };
     },
 
@@ -39,7 +42,7 @@ const LocalClasses = React.createClass({
 
 
     componentDidMount() {
-        this.getTeacherClasses()
+        this.getTeacherClasses();
     },
 
     getMsObj() {
@@ -61,6 +64,7 @@ const LocalClasses = React.createClass({
                 var classRoomList = [];
                 if (ret.msg == "调用成功" && ret.success == true) {
                     if (isEmpty(response) == false) {
+                        noomArr = response;
                         response.forEach(function (classInfo, i) {
                             var classInfoArray = classInfo.split("#");
                             var classId = classInfoArray[0];
@@ -75,6 +79,7 @@ const LocalClasses = React.createClass({
                             classRoomList.push(obj);
                         })
                         _this.setState({classRoomList});
+                        _this.getDisconnectedClass();
                     }
                 } else {
                     message.error(ret.msg);
@@ -91,12 +96,18 @@ const LocalClasses = React.createClass({
      * @param classId 班级id
      */
     openClass(classId) {
+        var _this = this;
         var classType = "A";
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
-        window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        //window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        this.setState({courseState: false});
+        //window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        setTimeout(function () {
+            _this.getDisconnectedClass();
+            _this.getTeacherClasses();
+        }, 3000);
+
+
     },
 
     /**
@@ -115,10 +126,24 @@ const LocalClasses = React.createClass({
                 if (isEmpty(response) == false) {
                     var vid = response.vid;
                     var classId = response.classCode;
+                    if (isEmpty(noomArr) == false) {
+                        var noomArray;
+                        noomArr.forEach(function (v, i) {
+                            if (v.indexOf(classId) != -1) {
+                                noomArray = v.split('#');
+                            }
+                        })
+                    }
                     var account = response.account
-                    _this.setState({courseState:true, courseVid: vid,classId:classId, account:account});
+                    _this.setState({
+                        courseState: true,
+                        courseVid: vid,
+                        classId: classId,
+                        account: account,
+                        noomClassName: noomArray[1]
+                    });
                 } else {
-                    _this.setState({courseState:false});
+                    _this.setState({courseState: false});
                 }
             },
             onError: function (error) {
@@ -127,12 +152,10 @@ const LocalClasses = React.createClass({
         });
     },
 
-
     /**
      * 关闭未断开的课堂
      */
     closeDisconnectionClass() {
-        debugger
         var _this = this;
         var param = {
             "method": 'closeVirtureClass',
@@ -151,8 +174,6 @@ const LocalClasses = React.createClass({
     },
 
 
-
-
     /**
      * 渲染页面
      * @returns {XML}
@@ -160,10 +181,13 @@ const LocalClasses = React.createClass({
     render() {
 
         var courseState = <div className="startClass">
-            <span>您的课堂已中断,是否继续刚才的课堂?</span>
-            <Button  onClick={this.closeDisconnectionClass} className="lesson_start closeClass ">关闭课堂</Button>
-            <Button  onClick={this.openClass.bind(this,this.state.classId)} className="lesson_start">继续上课</Button>
-            
+            <span>当前 "
+                <span>{this.state.noomClassName}</span>
+                "正在开课
+            </span>
+            <Button onClick={this.closeDisconnectionClass} className="lesson_start closeClass ">关闭课堂</Button>
+            <Button onClick={this.openClass.bind(this, this.state.classId)} className="lesson_start">继续上课</Button>
+
         </div>
         var _this = this;
         return (
