@@ -111,6 +111,22 @@ class SystemSettingGhostMenu extends React.Component {
                 </li>;
                 liArr.push(lis);
             });
+
+            var newObj = {
+                method: 'openNewLargePage',
+                url: 'http://192.168.50.139:8091/#/homeWorkUnderstandAnalysisGuide'
+            }
+
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords(newObj, '作业统计');
+                    }}><img className="icon_system_img"/>作业统计
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
+
             uls = <li className="ghostMenu_li">
                 <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>
                 {liArr}
@@ -129,20 +145,28 @@ class SystemSettingGhostMenu extends React.Component {
             {/*</ul>*/}
 
             {/*<ul className="second">*/}
-                {/*<li onClick={event => {*/}
-                    {/*this.changeMenu(event, 'noomjuese', true)*/}
-                {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>角色*/}
-                {/*</li>*/}
+            {/*<li onClick={event => {*/}
+            {/*this.changeMenu(event, 'noomjuese', true)*/}
+            {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>角色*/}
+            {/*</li>*/}
             {/*</ul>*/}
 
             {/*组织架构*/}
 
+            {/*<ul className="second">
+                <li onClick={event => {
+                    this.changeMenu(event, 'noomStructure', true)
+                }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>组织架构
+                </li>
+            </ul>*/}
+
             {/*<ul className="second">*/}
-                {/*<li onClick={event => {*/}
-                    {/*this.changeMenu(event, 'noomStructure', true)*/}
-                {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>组织架构*/}
-                {/*</li>*/}
+            {/*<li onClick={event => {*/}
+            {/*this.checkWords(event, 'homeWorkAnalysis', true)*/}
+            {/*}}><img className="icon_system_img" src='http://192.168.50.139:8091/#/homeWorkUnderstandAnalysisGuide?userId=23836'/>作1业统计*/}
+            {/*</li>*/}
             {/*</ul>*/}
+
         </li>;
         liArr.push(flowUl);
         arr.push(liArr);
@@ -186,6 +210,7 @@ class SystemSettingGhostMenu extends React.Component {
     }
 
     checkWords(words, name) {
+        debugger
         var _this = this;
         //words就是返回的对象
         if (words.method == 'operateStructure') {
@@ -198,6 +223,9 @@ class SystemSettingGhostMenu extends React.Component {
             _this.changeMenu(event, 'systemFlow', false)
         } else if (words.method == 'operateAttendance') {
             _this.changeMenu(event, 'noomkaoqing', true)
+        } else if (words.method == 'openNewLargePage') {
+            _this.showLargePanel(event, words.url, name);
+            _this.changeMenu(event, 'stop', false)
         } else {
             _this.showpanel(event, words.url, name);
             _this.changeMenu(event, 'stop', false)
@@ -208,6 +236,19 @@ class SystemSettingGhostMenu extends React.Component {
 
     // teachingAdmin panel
     showpanel(event, urls, name) {
+        urls = urls += "?access_user=" + sessionStorage.getItem("ident");
+        this.onMenu(event);
+
+        let param = {
+            mode: 'teachingAdmin',
+            title: name,
+            url: urls,
+        };
+
+        LP.Start(param);
+    }
+
+    showLargePanel(event, urls, name) {
         urls = urls += "?access_user=" + sessionStorage.getItem("ident");
         this.onMenu(event);
 
