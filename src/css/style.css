@@ -8750,7 +8750,7 @@ select.course_n:hover {
 }
 
 .groupTalkSetting {
-    position: fixed;
+    position: absolute;
     top: -38px;
     right: 16px;
     font-size: 20px;
