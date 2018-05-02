@@ -20,6 +20,6 @@ module.exports = {
     'GET /proxy/live3/(.*)': 'http://60.205.86.217:8585/live3/',
     'GET /proxy/upload4/(.*)': 'http://www.maaee.com/upload4/',
     'GET /proxy/upload5/(.*)': 'http://www.maaee.com/upload5/',
-
+    
 
 };
