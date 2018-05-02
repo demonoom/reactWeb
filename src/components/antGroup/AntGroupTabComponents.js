@@ -2607,6 +2607,10 @@ const AntGroupTabComponents = React.createClass({
                     //语音
                     var address = messageOfSingle.attachment.address;
                     messageReturnJson = {messageType: "videoTag", address: address};
+                } else if (messageOfSingle.attachment.type == 3) {
+                    var address = messageOfSingle.attachment.address;
+                    var addressCover = messageOfSingle.attachment.cover;
+                    messageReturnJson = {messageType: "littleAudio", address: address, addressCover: addressCover};
                 } else if (messageOfSingle.attachment.type == 4) {
                     //链接
                     var address = messageOfSingle.attachment.address;
@@ -3179,6 +3183,7 @@ const AntGroupTabComponents = React.createClass({
                     isNewPage = true;
                     var timeSign = 0;   //起始时间标记
                     ret.response.forEach(function (e) {
+                        console.log(e);
                         if (e.command == "message") {
                             var messageOfSinge = e;
                             if (i == ret.response.length - 1) {
@@ -3353,6 +3358,26 @@ const AntGroupTabComponents = React.createClass({
         imgErrorCount++;
     },
 
+    /**
+     * 小视屏播放
+     * @param selectedRowKeys
+     */
+    littleAudioPlay(src) {
+        var videoPlayer = <video id="videoPlayer" width={320} controls={false} autoplay>
+            <source type="video/mp4" src={src}/>
+        </video>;
+        antGroup.setState({videoPlayModel: true, videoPlayer});
+        setTimeout(function () {
+            document.getElementById('videoPlayer').play();
+        }, 300)
+    },
+
+    videoPlayerModalHandleCancel() {
+        var videoPlayer = '';
+        antGroup.setState({videoPlayModel: false, videoPlayer});
+        document.getElementById('videoPlayer').pause();
+    },
+
     render() {
         var groupSetting = 'none';
         if (this.state.messageComeFrom == 'groupMessage') {
@@ -3382,6 +3407,7 @@ const AntGroupTabComponents = React.createClass({
 
             var imgArr = [];
             if (isEmpty(messageList) == false && messageList.length > 0) {
+                // console.log(messageList);
                 for (var i = messageList.length - 1; i >= 0; i--) {
                     //寻找messageList中的图片，动态构建img
                     if (isEmpty(messageList[i]) == false) {
@@ -4524,6 +4550,79 @@ const AntGroupTabComponents = React.createClass({
                                         </div>
                                     </li>;
                                 }
+                            } else if (e.messageReturnJson.messageType == "littleAudio") {
+                                //小视屏
+                                if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
+                                    //我发出的
+                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                        <div className="u-name">
+                                            <span>{fromUser}</span>
+                                            <span className="cart_time">{mesTime}</span>
+                                        </div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <div className="talk_bubble_box">
+                                                <span className="borderballoon_file_p borderballoon_le">
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    <span className="send_img_cont">
+                                                        <Icon
+                                                            onClick={this.littleAudioPlay.bind(this, e.messageReturnJson.address)}
+                                                            className="noom_playIcon noom_cursor" type="play-circle-o"/>
+                                                        <img
+                                                            className="send_img_littleAudio"
+                                                            src={e.messageReturnJson.addressCover + '?' + MIDDLE_IMG}
+                                                            onError={_this.imgOnError.bind(this, e.messageReturnJson.addressCover)}/>
+                                                    </span>
+                                                    <i className="borderballoon_dingcorner_le_no"></i>
+                                                </span>
+                                                <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                     </Dropdown>
+                                                </span>
+                                                <span className="talk_bubble_read"
+                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                            </div>
+                                        </div>
+                                    </li>;
+                                } else {
+                                    //我收到的
+                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                        <div className="u-name">
+                                            <span>{fromUser}</span>
+                                            <span className="cart_time">{mesTime}</span>
+                                        </div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <div className="talk_le_bubble_box">
+                                                <span className="borderballoon_le borderballoon_file_p">
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    <span className="send_img_cont">
+                                                        <Icon
+                                                            onClick={this.littleAudioPlay.bind(this, e.messageReturnJson.address)}
+                                                            className="noom_playIcon noom_cursor" type="play-circle-o"/>
+                                                        <img
+                                                            className="send_img_littleAudio"
+                                                            src={e.messageReturnJson.addressCover + '?' + MIDDLE_IMG}
+                                                            onError={_this.imgOnError.bind(this, e.messageReturnJson.addressCover)}/>
+                                                    </span>
+                                                    <i className="borderballoon_dingcorner_ri_no"></i>
+                                                </span>
+                                                <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>;
+                                }
                             } else if (e.messageReturnJson.messageType == "videoTag") {
                                 //语音
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
@@ -4922,10 +5021,10 @@ const AntGroupTabComponents = React.createClass({
                         <Card>
                             <Tabs activeKey={this.state.mesReadActiveKey} onTabClick={this.onTabClick}>
                                 <TabPane tab="已读列表" key="1">
-                                    <Table className="group_table_u person_group" 
-                                            showHeader={false} 
-                                            animated={false}
-                                            scroll={{x: true,}}
+                                    <Table className="group_table_u person_group"
+                                           showHeader={false}
+                                           animated={false}
+                                           scroll={{x: true,}}
                                            columns={userGroupsColumns} dataSource={this.state.readMenuMebs}
                                            pagination={false}
                                     />
@@ -4951,15 +5050,16 @@ const AntGroupTabComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
+                            
+                            <Button type="ghost" htmlType="reset" className="login-form-button"
+                                    onClick={antGroup.cloudFileUploadModalHandleCancel}>
+                                取消
+                            </Button>
                             <Button type="primary" htmlType="submit" className="login-form-button"
                                     onClick={antGroup.uploadFile}
                                     disabled={this.state.sendFileButton}
                             >
                                 发送
-                            </Button>
-                            <Button type="ghost" htmlType="reset" className="login-form-button"
-                                    onClick={antGroup.cloudFileUploadModalHandleCancel}>
-                                取消
                             </Button>
                         </div>
                     ]}
@@ -5092,6 +5192,16 @@ const AntGroupTabComponents = React.createClass({
                     dingUuid={this.state.dingUuid}
                     dingMsgReturnSuc={this.dingMsgReturnSuc}
                 />
+                <Modal title={null}
+                       visible={antGroup.state.videoPlayModel}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={true} //设置不允许点击蒙层关闭
+                       onCancel={antGroup.videoPlayerModalHandleCancel}
+                       footer={null}
+                       className='noomVideoPlayer'
+                >
+                    {antGroup.state.videoPlayer}
+                </Modal>
             </div>
         );
     },

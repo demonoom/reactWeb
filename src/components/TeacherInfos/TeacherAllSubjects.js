@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Table, Button, Popover, message, Breadcrumb, Icon} from 'antd';
+import {Table, Button, Popover, message, Breadcrumb, Icon,Modal} from 'antd';
 import ConfirmModal from '../ConfirmModal';
 import {getPageSize,isEmpty} from '../../utils/Const';
 import {QUESTION_DETAIL_URL} from '../../utils/Const';
@@ -230,12 +230,13 @@ const TeacherAllSubjects = React.createClass({
             target = e.target;
         }
         var subjectIds = target.value;
-        this.setState({"delSubjectIds": subjectIds});
-        this.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({"delSubjectIds": subjectIds,calmSureDeleteThisTitle:true});
+        // this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal(){
-        this.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({calmSureDeleteThisTitle:false})
+        // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     render() {
@@ -248,11 +249,28 @@ const TeacherAllSubjects = React.createClass({
         return (
             <div className='ant-tabs ant-tabs-top ant-tabs-line8888888'>
                 <div className="public—til—blue">我的题目</div>
-                <ConfirmModal ref="confirmModal"
-                              title="确定要删除该题目?"
+                {/* <ConfirmModal ref="confirmModal"
+                              title="确定要删除该题目?444"
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.delMySubjects}
-                />
+                /> */}
+                <Modal
+                            className="calmModal"
+                            visible={this.state.calmSureDeleteThisTitle}
+                            title="提示"
+                            onCancel={this.closeConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.delMySubjects}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                确定要删除该题目?
+                            </div>
+                        </Modal>
 				<div className="favorite_scroll">
                 <div className='ant-tabs-tabpane ant-tabs-tabpane-active pers_bo_ra'>
                     <SubjectEditComponents ref="subjectEditTabComponents"

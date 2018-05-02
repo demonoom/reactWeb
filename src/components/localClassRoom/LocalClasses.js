@@ -106,8 +106,6 @@ const LocalClasses = React.createClass({
             _this.getDisconnectedClass();
             _this.getTeacherClasses();
         }, 3000);
-
-
     },
 
     /**

@@ -1292,7 +1292,7 @@ const AntMulitiClassComponents = React.createClass({
                
             ];
             var updateButtons = [
-                <Button className="calmPre" onClick={this.changeStep.bind(this, "pre", "update")}>
+                <Button onClick={this.changeStep.bind(this, "pre", "update")}>
                     <FormattedMessage
                         id='back'
                         description='上一步'

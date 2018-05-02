@@ -61,7 +61,7 @@ class SubjectGuideModal extends React.Component{
         return(
             <Modal
                 title="选择题目"
-                className="modal_classroom modal_classroom_select"
+                className="calmEnterClass modal_classroom modal_classroom_select"
                 visible={this.state.isShow}
                 width={300}
                 transitionName=""  //禁用modal的动画效果

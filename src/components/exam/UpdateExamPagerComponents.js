@@ -849,13 +849,13 @@ const UpdateExamPagerComponents = React.createClass({
         if (createExamPager.isEmpty(subjectInfoWithSelected) == false && createExamPager.isEmpty(subjectInfoWithSelected.points) == false && subjectInfoWithSelected.points.length > 0) {
             //知识点非空
             pointBtn = <Button value={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
-                               onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                               onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
                 <i id={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
                    className="iconfont iconfont_knowledge pointBtn">&#xe783;</i>所属知识点
             </Button>
         } else {
             pointBtn = <Button value={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
-                               onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                               onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
                 <i id={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
                    className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
             </Button>
@@ -1896,12 +1896,12 @@ const UpdateExamPagerComponents = React.createClass({
         return (
             <div className="follow_my">
                 <ConfirmModal ref="confirmModal"
-                              title="确定要删除该题目?"
+                              title="确定要删除该题目?222"
                               onConfirmModalCancel={createExamPager.closeConfirmModal}
                               onConfirmModalOK={createExamPager.deleteSubjectContentDiv}
                 ></ConfirmModal>
                 <ConfirmModal ref="delAnswerCardConfirmModal"
-                              title="确定要删除该答题卡?"
+                              title="确定要删除该答题卡?2222"
                               onConfirmModalCancel={createExamPager.closeDelAnswerCardConfirmModal}
                               onConfirmModalOK={createExamPager.deleteAnswerCard}
                 ></ConfirmModal>
@@ -1917,8 +1917,9 @@ const UpdateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <Button type="primary" onClick={createExamPager.addAnalysisForCurrentSubject}>确定</Button>,
-                        <Button type="ghost" onClick={createExamPager.analysisModalHandleCancel}>取消</Button>
+                        <Button type="primary" className="calmSave" onClick={createExamPager.addAnalysisForCurrentSubject}>确定</Button>,
+                        <Button type="ghost" className="calmCancle" onClick={createExamPager.analysisModalHandleCancel}>取消</Button>
+                        
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -1945,10 +1946,11 @@ const UpdateExamPagerComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        transitionName=""  //禁用modal的动画效果
                        footer={[
-                           <button type="primary" htmlType="submit" className="login-form-button examination_btn_blue"
-                                   onClick={createExamPager.bindKnowledgeForCurrentSubject}>确定</button>,
+                          
                            <button type="ghost" htmlType="reset" className="login-form-button examination_btn_white"
-                                   onClick={createExamPager.bindKnowledgeModalHandleCancel}>取消</button>
+                                   onClick={createExamPager.bindKnowledgeModalHandleCancel}>取消</button>,
+                                   <button type="primary" htmlType="submit" className="calmSave login-form-button examination_btn_blue"
+                                   onClick={createExamPager.bindKnowledgeForCurrentSubject}>确定</button>
                        ]}
                 >
                     <Row className="ant-form-item">
@@ -2014,15 +2016,16 @@ const UpdateExamPagerComponents = React.createClass({
                         maskClosable={false} //设置不允许点击蒙层关闭
                         footer={[
                             <div>
-                                <button type="primary" htmlType="submit"
-                                        className="login-form-button examination_btn_blue"
-                                        onClick={createExamPager.uploadFile}>
-                                    保存222
-                                </button>
+                                
                                 <button type="ghost" htmlType="reset"
                                         className="login-form-button examination_btn_white"
                                         onClick={createExamPager.examPagerModalHandleCancel}>
                                     取消
+                                </button>
+                                <button type="primary" htmlType="submit"
+                                        className="login-form-button examination_btn_blue"
+                                        onClick={createExamPager.uploadFile}>
+                                    保存
                                 </button>
                             </div>
                         ]}
@@ -2098,11 +2101,11 @@ const UpdateExamPagerComponents = React.createClass({
                         </Col>
                         <Col span={12}>
                             <button type="primary" htmlType="submit"
-                                    className="login-form-button class_right examination_btn_blue"
+                                    className="calmBorderRadius login-form-button class_right examination_btn_blue"
                                     onClick={createExamPager.addAnswerCard}>
                                 添加题目
                             </button>
-                            <button type="ghost" htmlType="reset" className="login-form-button examination_btn_white"
+                            <button type="ghost" htmlType="reset" className="calmBorderRadius login-form-button examination_btn_white"
                                     onClick={createExamPager.showDelAllAnswerCardConfirmModal}>
                                 清除全部
                             </button>

@@ -246,7 +246,7 @@ const Role = React.createClass({
                                     onClick={this.addRoleMember}>添加成员</Button>
                         </span>
                         <Button disabled={!hasSelected}
-                                className="schoolgroup_btn_red schoolgroup_btn_left schoolgroup_btn"
+                                className="calmBorderRadius schoolgroup_btn_red schoolgroup_btn_left schoolgroup_btn"
                                 onClick={this.showConfirm}>批量删除</Button>
                         <span className="password_ts" style={{marginLeft: 8}}>
                         {hasSelected ? `选中 ${this.state.selectedRowKeys.length} 条记录` : ''}</span>

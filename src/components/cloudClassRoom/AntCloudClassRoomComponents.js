@@ -93,7 +93,7 @@ const AntCloudClassRoomComponents = React.createClass({
         var leftBtn;
         let topButton;
         let createClassBtn = <span className="btn2 talk_ant_btn1">
-            <Button className="ant-btn ant-btn-primary add_study" onClick={this.createClass}>
+            <Button className="calmBorderRadius ant-btn ant-btn-primary add_study" onClick={this.createClass}>
                   <FormattedMessage
                       id='createNewLesson'
                       description='创建新课程'
@@ -102,7 +102,7 @@ const AntCloudClassRoomComponents = React.createClass({
             </Button>
         </span>;
         let teamBtn = <span className="btn2 talk_ant_btn1">
-            <Button className="ant-btn ant-btn-primary add_study series_top_btn2"
+            <Button className="calmBorderRadius ant-btn ant-btn-primary add_study series_top_btn2"
                     onClick={this.createTeam}>
                 <FormattedMessage
                     id='createTeam'
