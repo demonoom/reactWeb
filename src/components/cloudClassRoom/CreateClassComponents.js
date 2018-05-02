@@ -1436,7 +1436,7 @@ const CreateClassComponents = React.createClass({
                                 </div>
                             </Col>
                             <Col span={3} onClick={this.knowledgePointOnclick.bind(this, i)}>
-                                <Button className="ding_modal_top roe-t-f-left"
+                                <Button className="calmBorderRadius ding_modal_top roe-t-f-left"
                                         onClick={this.showSelectKnowledgeModal.bind(this, i)}>选择知识点</Button>
                                 <KnowledgePointModal isShow={this.state.selectKnowledgeModalIsShow}
                                                      initTags={this.state.noomTages[i]}

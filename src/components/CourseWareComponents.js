@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Checkbox, Collapse, Button, Pagination, message} from 'antd';
+import {Checkbox, Collapse, Button, Pagination, message,Modal} from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
@@ -280,12 +280,13 @@ class CourseWare extends React.Component {
             target = e.target;
         }
         var materialIds = target.value;
-        this.setState({"delMaterialIds": materialIds});
-        this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(true);
+        this.setState({"delMaterialIds": materialIds,sureDelThisTitle:true});
+        // this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(true);
     }
 
     closeDelScheduleMateriaConfirmModal() {
-        this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(false);
+        this.setState({sureDelThisTitle:false})
+        // this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(false);
     }
 
 
@@ -332,12 +333,13 @@ class CourseWare extends React.Component {
             target = e.target;
         }
         var materialIds = target.value;
-        _this.setState({"delMaterialIds": materialIds});
-        _this.refs.confirmModal.changeConfirmModalVisible(true);
+        _this.setState({"delMaterialIds": materialIds,changeConfirmModalVisible:true});
+        // _this.refs.confirmModal.changeConfirmModalVisible(true);
     }
 
     closeConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({changeConfirmModalVisible:false})
+        // this.refs.confirmModal.changeConfirmModalVisible(false);
     }
 
     batchDeleteMaterial() {
@@ -543,22 +545,58 @@ class CourseWare extends React.Component {
                 $(this).css("background-color", "");
             }
         });
-        var title = <span>
-            <span className="antnest_talk">确定要删除该课件?</span>
-            <Checkbox onChange={this.isDeleteAll}>同步删除备课计划下的课件</Checkbox>
-        </span>;
+        // var title = <span>
+        //     <span className="antnest_talk">确定要删除该课件?</span>
+        //     <Checkbox onChange={this.isDeleteAll}>同步删除备课计划下的课件</Checkbox>
+        // </span>;
         return (
             <div>
-                <ConfirmModal ref="confirmModal"
+                {/* <ConfirmModal ref="confirmModal"
                               title={title}
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.batchDeleteMaterial}
-                ></ConfirmModal>
-                <ConfirmModal ref="delScheduleMateriaConfirmModal"
-                              title="确定要删除该课件?"
+                ></ConfirmModal> */}
+                <Modal
+                            className="calmModal"
+                            visible={this.state.changeConfirmModalVisible}
+                            title="提示"
+                            onCancel={this.closeConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.batchDeleteMaterial}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                确定要删除该课件?
+                                <Checkbox onChange={this.isDeleteAll}>同步删除备课计划下的课件</Checkbox>
+                            </div>
+                        </Modal>
+
+                {/* <ConfirmModal ref="delScheduleMateriaConfirmModal"
+                              title="确定要删除该课件?222"
                               onConfirmModalCancel={this.closeDelScheduleMateriaConfirmModal}
                               onConfirmModalOK={this.deleteScheduleMaterials}
-                ></ConfirmModal>
+                ></ConfirmModal> */}
+                 <Modal
+                            className="calmModal"
+                            visible={this.state.sureDelThisTitle}
+                            title="提示"
+                            onCancel={this.closeDelScheduleMateriaConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.deleteScheduleMaterials}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeDelScheduleMateriaConfirmModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                确定要删除该课件?
+                            </div>
+                        </Modal>
                 <div className="group_cont">
                     <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
                     <Collapse activeKey={this.activeKey} ref="collapse">

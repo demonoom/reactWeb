@@ -366,7 +366,7 @@ class KnowledgePointModal extends React.Component {
                                     />
                                 </Col>
                                 <Col span={4} className="right_look">
-                                    <Button type="primary" className="roe-t-f-left"
+                                    <Button type="primary" className="calmAddButton calmBorderRadius roe-t-f-left"
                                             onClick={this.addNewTags}>新增</Button>
                                 </Col>
                             </div>

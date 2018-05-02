@@ -2307,7 +2307,10 @@ const PersonCenterComponents = React.createClass({
             </Tabs>;
         } else if (personCenter.state.optType == "getUserChatGroup") {
             var welcomeTitle = "我的群聊";
-            var createChatToolBar = <div className="talk_ant_btn1"><Button onClick={personCenter.showCreateChatGroup}>创建群聊</Button>
+            var createChatToolBar = <div className="talk_ant_btn1">
+                                <Button 
+                                    className="calmBorderRadius"
+                                    onClick={personCenter.showCreateChatGroup}>创建群聊</Button>
             </div>;
             personDate = <div className="myfollow_zb">
                 <div className="public—til—blue">{welcomeTitle}{createChatToolBar}</div>

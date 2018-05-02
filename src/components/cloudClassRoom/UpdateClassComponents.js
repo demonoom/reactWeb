@@ -1802,7 +1802,7 @@ const UpdateClassComponents = React.createClass({
                                     </div>
                                 </Col>
                                 <Col span={3}>
-                                    <Button className="ding_modal_top roe-t-f-left"
+                                    <Button className="calmBorderRadius ding_modal_top roe-t-f-left"
                                             onClick={_this.showSelectKnowledgeModal.bind(_this, i,_this.state.noomTages[i])}>选择知识点</Button>
 
                                 </Col>

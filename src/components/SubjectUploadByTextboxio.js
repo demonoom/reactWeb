@@ -743,57 +743,62 @@ const SubjectUploadTabComponents = React.createClass({
         //根据当前激活的面板的不同，向页面上渲染不同的保存按钮，用以完成不同类型题目的添加操作
         var currentActiveKey = this.state.activeKey;
         var buttons = <div>
-            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
-                保存并继续添加
-            </Button>
+            
             <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
                 保存并返回列表
+            </Button>
+            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
+                保存并继续添加
             </Button>
         </div>;
         //插入音频按钮
         var audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         if (currentActiveKey == "单选题") {
             buttons = <div>
+               
+                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
+                    保存并返回列表
+                </Button>
                 <Button type="primary" htmlType="submit" className="login-form-button"
                         onClick={this.singleHandleSubmit}>
                     保存并继续添加
-                </Button>
-                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
-                    保存并返回列表
                 </Button>
             </div>;
             audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         } else if (currentActiveKey == "多选题") {
             buttons = <div>
+               
+                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit}>
+                    保存并返回列表
+                </Button>
                 <Button type="primary" htmlType="submit" className="login-form-button"
                         onClick={this.MulitiHandleSubmit}>
                     保存并继续添加
-                </Button>
-                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit}>
-                    保存并返回列表
                 </Button>
             </div>;
             audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
         } else if (currentActiveKey == "判断题") {
             buttons = <div>
+                
+                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit}>
+                    保存并返回列表
+                </Button>
                 <Button type="primary" htmlType="submit" className="login-form-button"
                         onClick={this.correctHandleSubmit}>
                     保存并继续添加
-                </Button>
-                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit}>
-                    保存并返回列表
                 </Button>
             </div>;
             audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
         } else if (currentActiveKey == "简答题") {
             buttons = <div>
-                <Button type="primary" htmlType="submit" className="login-form-button"
-                        onClick={this.simpleAnswerHandleSubmit}>
-                    保存并继续添加
-                </Button>
+               
                 <Button type="ghost" htmlType="submit" className="login-form-button"
                         onClick={this.simpleAnswerHandleSubmit}>
                     保存并返回列表
+                </Button>
+                <Button type="primary" htmlType="submit" className="login-form-button"
+                        onClick={this.simpleAnswerHandleSubmit}>
+                    保存并继续添加
                 </Button>
             </div>;
             audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>;
@@ -813,7 +818,7 @@ const SubjectUploadTabComponents = React.createClass({
 
         return (
             <div className="toobar right_ri ">
-                <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目" className="add_study add_study-b">添加题目</Button>
+                <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目" className="calmBorderRadius add_study add_study-b">添加题目</Button>
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
@@ -1029,13 +1034,14 @@ const SubjectUploadTabComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                            <Button type="primary" htmlType="submit" className="login-form-button"
-                                    onClick={this.uploadFile}>
-                                发送
-                            </Button>
+
                             <Button type="ghost" htmlType="reset" className="login-form-button"
                                     onClick={this.subjectVideoModalHandleCancel}>
                                 取消
+                            </Button>
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                                    onClick={this.uploadFile}>
+                                发送
                             </Button>
                         </div>
                     ]}

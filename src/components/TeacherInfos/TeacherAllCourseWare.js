@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Collapse, Button, Pagination, message, Breadcrumb, Icon} from 'antd';
+import {Collapse, Button, Pagination, message, Breadcrumb, Icon,Modal} from 'antd';
 import {isEmpty} from '../../utils/Const';
 import ConfirmModal from '../ConfirmModal';
 import {getPageSize} from '../../utils/Const';
@@ -249,12 +249,13 @@ const TeacherAllCourseWare = React.createClass({
             target = e.target;
         }
         var materialIds = target.value;
-        this.setState({"delMaterialIds": materialIds});
-        this.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({"delMaterialIds": materialIds,calmSureDelThisTitle:true});
+        // this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({calmSureDelThisTitle:false})
+        // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     render: function () {
@@ -269,11 +270,28 @@ const TeacherAllCourseWare = React.createClass({
                 <div className="public—til—blue">我的资源</div>
                 <div className="favorite_scroll">
                     <div className='ant-tabs ant-tabs-top ant-tabs-line'>
-                        <ConfirmModal ref="confirmModal"
+                        {/* <ConfirmModal ref="confirmModal"
                                       title="确定要删除该课件?"
                                       onConfirmModalCancel={this.closeConfirmModal}
                                       onConfirmModalOK={this.batchDeleteMaterial}
-                        />
+                        /> */}
+                        <Modal
+                            className="calmModal"
+                            visible={this.state.calmSureDelThisTitle}
+                            title="提示"
+                            onCancel={this.closeConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.batchDeleteMaterial}  >确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                确定要删除该课件?
+                            </div>
+                        </Modal>
                         <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                         <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
                             <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
