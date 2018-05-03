@@ -192,12 +192,7 @@ const ExamAnalysisComponents = React.createClass({
                     closeExamAnalysisModel={this.closeExamAnalysisModel}
                     addFinish={this.addFinish}
                 />
-                {/* <Confirm
-                    ref="confirm"
-                    title="确定删除?"
-                    onConfirmModalCancel={this.closeConfirmModal}
-                    onConfirmModalOK={this.deletePaperAnalysisTask}
-                /> */}
+               
                 <Modal
                     className="calmModal"
                     visible={this.state.calmSureDelConfirm}
@@ -212,8 +207,8 @@ const ExamAnalysisComponents = React.createClass({
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除3?
-                            </div>
+                        确定删除?
+                    </div>
                 </Modal>
             </div>
         );

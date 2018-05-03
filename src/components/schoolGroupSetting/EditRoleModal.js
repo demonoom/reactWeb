@@ -246,48 +246,44 @@ class AddSubGroupModal extends React.Component {
 
     render() {
         return (
-            <Modal
-                title="编辑角色"
-                visible={this.state.isShow}
-                width={440}
-                transitionName=""  //禁用modal的动画效果
-                closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
-                maskClosable={false} //设置不允许点击蒙层关闭
-                onCancel={this.closeAddSubGroupModal}
-                className="schoolgroup_modal framework_modal"
-                footer={[
-                    <button type="primary" className="ant-btn-primary ant-btn" onClick={this.handleOk}>确定</button>,
-                    <button type="danger" className="ant-btn login-form-button schoolgroup_btn_red" onClick={this.handDel}>删除</button>,
-                    <button type="ghost" className="ant-btn ant-btn-ghost login-form-button" onClick={this.closeAddSubGroupModal}>取消</button>
-                ]}
-            >
-                <div className="modal_register_main">
-                    <Row className="ant_row">
-                        <Col span={6} className="framework_m_l">
-                            <span className="c_from_icon">*</span>角色名称333：
-            </Col>
-                        <Col span={16} className="framework_m_r">
-                            <Input placeholder={this.state.roleName} value={this.state.roleName} onChange={this.subGroupNameChange} />
-                        </Col>
-                    </Row>
-                    <Row className="ant_row">
-                        <Col span={6} className="framework_m_l">
-                            <span className="c_from_icon">*</span>分组到：
-            </Col>
-                        <Col span={16} className="framework_m_r">
-                            <Select value={this.state.papaName} style={{ width: 245 }} onChange={this.parentRoleChange} disabled>
+            <div>
+                <Modal
+                    title="编辑角色"
+                    visible={this.state.isShow}
+                    width={440}
+                    transitionName=""  //禁用modal的动画效果
+                    closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    onCancel={this.closeAddSubGroupModal}
+                    className="schoolgroup_modal framework_modal"
+                    footer={[
+                        <button type="primary" className="ant-btn-primary ant-btn" onClick={this.handleOk}>确定</button>,
+                        <button type="danger" className="ant-btn login-form-button schoolgroup_btn_red" onClick={this.handDel}>删除</button>,
+                        <button type="ghost" className="ant-btn ant-btn-ghost login-form-button" onClick={this.closeAddSubGroupModal}>取消</button>
+                    ]}
+                >
+                    <div className="modal_register_main">
+                        <Row className="ant_row">
+                            <Col span={6} className="framework_m_l">
+                                <span className="c_from_icon">*</span>角色名称333：
+                             </Col>
+                            <Col span={16} className="framework_m_r">
+                                <Input placeholder={this.state.roleName} value={this.state.roleName} onChange={this.subGroupNameChange} />
+                            </Col>
+                        </Row>
+                        <Row className="ant_row">
+                            <Col span={6} className="framework_m_l">
+                                <span className="c_from_icon">*</span>分组到：
+                            </Col>
+                            <Col span={16} className="framework_m_r">
+                                <Select value={this.state.papaName} style={{ width: 245 }} onChange={this.parentRoleChange} disabled>
 
-                            </Select>
-                        </Col>
-                    </Row>
-                </div>
+                                </Select>
+                            </Col>
+                        </Row>
+                    </div>
 
-                {/* <Confim
-              ref="confirm"
-              title="确定删除?"
-              onConfirmModalCancel={this.closeConfirmModal}
-              onConfirmModalOK={this.batchDeleteMemeber}
-          /> */}
+                </Modal>
                 <Modal
                     className="calmModal"
                     visible={this.state.calmSureDelConfirm}
@@ -302,10 +298,10 @@ class AddSubGroupModal extends React.Component {
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除7?
-                            </div>
+                        确定删除?
+                    </div>
                 </Modal>
-            </Modal>
+            </div>
         );
     }
 
