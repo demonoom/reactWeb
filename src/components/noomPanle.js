@@ -180,6 +180,7 @@
         if (!isAddedListener) {
             window.addEventListener('message', function (e) {
                 var data = JSON.parse(e.data);
+                console.log(data);
                 //data.method方式
                 //data.callbackId回调方法名
                 //data.errorbackId错误回调方法名
@@ -243,6 +244,15 @@
                     $(document.body).append(aTag);
                     document.getElementById(`${JSON.parse(data.cloudFile).id}downLoadFile`).click();
                     $(`#${JSON.parse(data.cloudFile).id}downLoadFile`).remove();
+                } else if(data.method == 'openLargeNewPage') {
+                    let param = {
+                        mode: '',
+                        title: '',
+                        url: data.url,
+                    };
+
+                    LP.Start(param);
+                    return
                 }
             });
             isAddedListener = true;

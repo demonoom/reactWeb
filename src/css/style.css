@@ -105,9 +105,11 @@ i, cite, em, var, address, dfn {
     .little-layout-aside-r-show {
         height: 596px !important
     }
-    .little-layout-aside-r-show_ant{
-        height:100% !important;
+
+    .little-layout-aside-r-show_ant {
+        height: 100% !important;
     }
+
     .gz_title_flex, .gz_title_flex + div {
         width: 876px !important;
     }
@@ -157,8 +159,9 @@ i, cite, em, var, address, dfn {
     .little-layout-aside-r-show {
         height: 557px !important
     }
-    .little-layout-aside-r-show_ant{
-        height:100% !important;
+
+    .little-layout-aside-r-show_ant {
+        height: 100% !important;
     }
 
     .little-layout-aside-r-show .content {
@@ -1292,7 +1295,7 @@ element.style {
 .ant-btn {
     padding: 4px 8px;
     font-size: 14px !important;
-    border-radius: 2px;
+    border-radius: 4px;
 }
 
 .ant-input {
@@ -3120,7 +3123,7 @@ a.topics:hover {
     margin-left: 12px;
     font-size: 14px;
     color: #2896fb;
-    cursor:pointer
+    cursor: pointer
 }
 
 .share_font:hover {
@@ -7690,6 +7693,31 @@ select.course_n:hover {
     padding: 5px;
 }
 
+.send_img_littleAudio {
+    max-width: 230px !important;
+    border-radius: 4px;
+    height: auto !important;
+    padding: 5px;
+}
+
+.noomVideoPlayer {
+    max-width: 353px;
+    height: auto;
+}
+
+.noomVideoPlayer .ant-modal-close-x {
+    display: none;
+}
+
+.noom_playIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 40px;
+    transform: translate(-50%, -50%);
+    color: #fff;
+}
+
 .file_link_img_t {
     line-height: 38px;
 }
@@ -8722,7 +8750,7 @@ select.course_n:hover {
 }
 
 .groupTalkSetting {
-    position: fixed;
+    position: absolute;
     top: -38px;
     right: 16px;
     font-size: 20px;
@@ -9151,9 +9179,11 @@ select.course_n:hover {
     width: 100%;
     align-content: flex-start;
 }
-ul.chosenBox{
-    height:100%;
+
+ul.chosenBox {
+    height: 100%;
 }
+
 .selectTab ul {
     height: calc(100% - 65px);
 }
@@ -9321,7 +9351,7 @@ ul.chosenBox{
     font-weight: normal;
     cursor: pointer;
     position: absolute;
-    top:5px;
+    top: 5px;
     left: 5px;
     z-index: 1;
 }
@@ -9346,13 +9376,15 @@ ul.chosenBox{
 /*background: #fff !important;*/
 /*color: #5d9af2 !important;*/
 /*}*/
-.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab{
-    border-radius: 6px 0 0 6px ;
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+    border-radius: 6px 0 0 6px;
     margin-right: 0;
 }
-.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:last-child{
+
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:last-child {
     border-radius: 0 6px 6px 0;
 }
+
 .select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
     font-size: 14px;
     height: 28px;
@@ -9391,10 +9423,10 @@ ul.chosenBox{
 
 .select_img_modal .ant-tabs {
     color: #fff;
-    padding:0;
+    padding: 0;
 }
 
-.select_img_modal .ant-tabs-nav, .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-nav-container{
+.select_img_modal .ant-tabs-nav, .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-nav-container {
     height: 42px;
 }
 
@@ -9409,15 +9441,19 @@ ul.chosenBox{
     background-color: #F8F8F8;
     border-radius: 2px 2px 0 0;
 }
+
 .select_img_modal .ant-tabs-nav-container {
     margin-bottom: -2px;
 }
-.select_img_modal .more_classroom{
-    top:-30px
+
+.select_img_modal .more_classroom {
+    top: -30px
 }
-.select_img_modal .clearfix > div:first-child{
+
+.select_img_modal .clearfix > div:first-child {
     height: calc(100% - 28px);
 }
+
 .check_img_footer {
     position: fixed;
     bottom: -7px;
@@ -9491,13 +9527,13 @@ ul.chosenBox{
 
 .noom_downloadLive_span {
     display: inline-block;
-    padding:8px 0 12px 0;
+    padding: 8px 0 12px 0;
     width: 90%;
 }
 
 .noom_downloadLive_title {
     font-size: 14px;
-    color:#4f4f4f;
+    color: #4f4f4f;
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -9513,52 +9549,51 @@ ul.chosenBox{
     position: relative;
     border-bottom: 1px dashed #f3f3f3;
 }
-.noom_downloadLive_cont{
+
+.noom_downloadLive_cont {
     color: #888
 }
-.noom_downloadLive_i{
+
+.noom_downloadLive_i {
     font-size: 20px;
 }
-.btn_font{
+
+.btn_font {
     color: #2fa9ff;
     background: transparent;
     border: none;
     letter-spacing: -1.5px;
 }
-.btn_font:hover{
-    color:#40a9ff;
+
+.btn_font:hover {
+    color: #40a9ff;
     background: transparent;
 }
+
 .btn_font:active {
-    color:#096dd9;
+    color: #096dd9;
     background: transparent;
 }
-a:active,a:hover{
-    outline:0;
-    text-decoration:none
+
+a:active, a:hover {
+    outline: 0;
+    text-decoration: none
 }
-.clound_img{
+
+.clound_img {
     text-align: center;
 }
-.clound_img img{
+
+.clound_img img {
     max-width: 100%;
     max-height: 100%;
 }
 
-
 /* 修改弹出框的样式 ---start--- */
-
-/* 控制弹出框圆角的样式 */
-.ant-modal-content {
-    border-radius: 2px;
-}
 .calmModal {
-    width: 300px!important;
+    width: 300px !important;
 }
-.calmModal .ant-modal-content .isDel .ant-checkbox-wrapper {
-    margin-top:13px;
-    margin-left: 18px;
-}
+
 .ant-modal-header {
     padding: 0 20px 0 16px;
     height: 42px;
@@ -9570,44 +9605,48 @@ a:active,a:hover{
     background-color: #F8F8FA;
     border-radius: 2px 2px 0 0;
 }
+
 .ant-modal-content .ant-modal-close {
     top: 12px;
 }
-
 
 /* 关闭按钮*/
 
 .ant-modal-content .ant-modal-close-x {
     font-size: 17px;
-    color:#666!important;
+    color: #666 !important;
 }
+
 .calmNewClass .ant-modal-content .ant-modal-header .ant-modal-title {
     font-size: 17px;
-    color:#333;
+    color: #333;
     text-align: center;
 }
+
 .calmNewClass .ant-modal-content .ant-modal-close-x {
     display: none;
 }
+
 .ant-modal-body .isDel,
 .calmNewClass .ant-modal-body {
     font-size: 14px;
-    color:#444;
+    color: #444;
 }
+
 /* .ant-modal-footer .login-form-button, */
 .ant-modal-content .calmSure,
 .ant-modal-content .calmCancle,
 .ant-modal-footer .calmCancle,
-.ant-modal-footer .calmCancel,
 .ant-modal-footer .calmPre,
-.ant-modal-footer .ant-btn{
+.ant-modal-footer .ant-btn {
     border-radius: 2px;
     background: transparent;
 }
 
-.ant-modal-footer .calmSure{
+.ant-modal-footer .calmSure {
     background: red;
 }
+
 .ant-modal-content .calmSure {
     border: 0;
     color: #fff;
@@ -9621,68 +9660,77 @@ a:active,a:hover{
 .ant-modal-content .calmCancle,
 .ant-modal-footer .calmSubmit,
 .ant-modal-footer .ant-btn-primary,
-.ant-modal-body .class_right .ant-btn-primary{
+.ant-modal-body .class_right .ant-btn-primary {
     color: #fff;
-    background:#5d9af2;
+    background: #5d9af2;
     border: 0;
     border-radius: 2px;
 }
 
 .ant-modal-title {
-    line-height:42px;
+    line-height: 42px;
 }
+
 .isDel .sadFeel {
     vertical-align: middle;
     margin-right: 10px;
 }
-/* 修改弹出框的样式 ---end--- */
 
+/* 修改弹出框的样式 ---end--- */
 
 /* 全屏显示视频的样式---start--- */
 .calmVideoBoxWrap {
     height: 100%;
 }
+
 .calmVideoBoxWrap .calmVideoBox {
     height: 100%;
 }
+
 .calmVideoBoxWrap .calmVideoBox .video-js {
     height: 100%;
 }
-/* 全屏显示视频的样式---end--- */
 
+/* 全屏显示视频的样式---end--- */
 
 /* 显示框---start--- */
 /* 音量 */
-.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal  {
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal {
     position: absolute;
     left: 88%;
 }
-.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal .vjs-menu{
+
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal .vjs-menu {
     left: 3em;
 }
+
 /* 进度条 */
-.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-progress-control.vjs-control{
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-progress-control.vjs-control {
     width: 80%;
     position: absolute;
     left: 4%;
 }
+
 /* 剩余时间 */
 .calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-remaining-time {
     position: absolute;
     left: 85%;
-}   
+}
+
 /* 全凭按钮 */
-.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-fullscreen-control.vjs-control.vjs-button{
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-fullscreen-control.vjs-control.vjs-button {
     position: absolute;
     left: 95%;
 }
+
 /* 显示框---end--- */
 
 .startClass {
     height: 50px;
     line-height: 50px;
-    padding:0px 8px 0px 20px;
+    padding: 0px 8px 0px 20px;
 }
+
 .startClass .lesson_start {
     /* border-color: #666;
     color: #666; */
@@ -9690,19 +9738,10 @@ a:active,a:hover{
     float: right;
     margin: 9px 3px;
 }
+
 .startClass .closeClass {
     border-color: red;
-    color:red;
+    color: red;
 }
 
-.calmBorderRadius {
-    border-radius: 2px;
-}
-.calmAddButton {
-    margin-left:0;
-}
-
-.calmEnterClass .ant-modal-content .ant-modal-header .ant-modal-title {
-    line-height:21px;
-}
 

@@ -1174,6 +1174,7 @@
 
     littlePanle.prototype.GetLP = function (obj, oldArray) {
 
+
         globalSrc = obj.url;
         globalTitle = obj.title
 
