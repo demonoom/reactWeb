@@ -15,9 +15,11 @@ import {doWebService} from '../WebServiceHelper';
 
 var connection = null;
 var ms = null;
+var classRoom;
 const LocalClassRoom = React.createClass({
     getInitialState() {
         ms = opener.ms;
+        classRoom = this;
         return {
             vid: '',
             account: '',
@@ -60,17 +62,31 @@ const LocalClassRoom = React.createClass({
 
     componentDidMount() {
         window.__noomSelectPic__ = this.noomSelectPic;
-    },
+        window.addEventListener('beforeunload', classRoom.onWindowClose);
 
-    componentDidUpdate() {
+    },
+  /*  onWindowClose(){  //关闭页面时下课处理
+        var _this=this;
+        _this.disConnectClassRoom();
+    },*/
+
+
+    componentDidUpdate() {  //组件更新结束后执行
+
         var _this = this;
         if (isEmpty(this.state.currentPage) == false) {
             setTimeout(function () {
                 window.ppt_frame_localClass.window.pptCheckPage(_this.state.currentPage);
-                _this.setState({currentPage:''});
-            },1000);
+                 //window.document.getElementById("contentFrame").contentWindow.pptCheckPage(_this.state.currentPage);
+                _this.setState({currentPage: ''});
+            }, 1000);
         }
     },
+
+    componentWillUnmount(){
+        this.setState({currentPage: ''});
+    },
+
 
     noomSelectPic(src, obj) {
         this.setState({sendPicModel: true, pinSrc: src, picFile: obj});
@@ -136,6 +152,7 @@ const LocalClassRoom = React.createClass({
         };
         //连接登入课堂
         connection.connect(loginPro);
+        window.opener.localClassConnection = connection;
         /*var htmlPath = sessionStorage.getItem("htmlPath");
         if (isEmpty(htmlPath) == false) {
             this.pushMaterialsToClass(htmlPath, 'currentPage');
@@ -256,7 +273,7 @@ const LocalClassRoom = React.createClass({
             }
             var vid = this.state.vid;
             var userId = this.state.userId;
-            var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
+            //var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
             var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + pptURL + "'}}" + ')');
             connection.send(protocal);
 
@@ -264,9 +281,10 @@ const LocalClassRoom = React.createClass({
             var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
             connection.send(p1);
 
-            pptURL = pptURL.replace("www.maaee.com", "192.168.50.29:8090/proxy");
+            pptURL = pptURL.replace("www.maaee.com", "192.168.50.186:8090/proxy");
             pptURL = pptURL.replace("https", "http");
-            classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
+            var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
+
             this.setState({classRoomUrl, currentPage});
             //this.getVclassPPTOpenInfo (vid);
         } else {
@@ -326,6 +344,8 @@ const LocalClassRoom = React.createClass({
         connection.send(classOverProtocal);
         this.closeConfirmModal();
         window.close();
+        window.opener.location.reload();
+
     },
 
     showConfirmModal(e) {
@@ -458,6 +478,9 @@ const LocalClassRoom = React.createClass({
 
         var vid = this.state.vid;
         var userId = this.state.userId;
+
+        //var classRoomUrl = "/proxy/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
+
         var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
         //var classRoomUrl = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + imgsUrl;
 
@@ -531,6 +554,7 @@ const LocalClassRoom = React.createClass({
 
     errorHandleOk() {
         window.close();
+        window.opener.location.reload();
     },
 
     render() {
@@ -540,9 +564,7 @@ const LocalClassRoom = React.createClass({
 
             var src = '/proxy' + this.state.classRoomUrl.substr(this.state.classRoomUrl.indexOf('www.maaee.com') + 13, this.state.classRoomUrl.length - 1);
             classIfream = <div className="classroom_draw">
-                {/*var classRoomUrl = "/proxy/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;*/}
-                <iframe name="ppt_frame_localClass" id="ppt_frame_localClass" src={src}
-                        style={{width: '100%', height: '100%'}}></iframe>
+                <iframe name="ppt_frame_localClass" id="ppt_frame_localClass" src={src} style={{width: '100%', height: '100%'}}></iframe>
             </div>;
         } else {
             classIfream = <div className="classroom_welcome">
