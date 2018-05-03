@@ -977,7 +977,6 @@ html, body, #root {
 }
 
 .ant-collapse-header {
-    font-weight: bold;
     color: #3a54a4 !important;
 }
 
@@ -2211,7 +2210,7 @@ a {
 .ant-table-thead > tr > th {
     color: #333;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .popup_i_icon {
@@ -5223,7 +5222,8 @@ a.color_gary_f, .color_gary_f {
     line-height: 46px;
     text-align: center;
     color: #0078e4;
-    position: relative
+    position: relative;
+    font-weight: normal;
 }
 
 .lesson_start {
@@ -9730,4 +9730,30 @@ a:active,a:hover{
 .calmEnterClass .ant-modal-content .ant-modal-header .ant-modal-title {
     line-height:21px;
 }
-
+.localclass_close,
+.localclass_close:hover{
+    border: 0;
+    color: #fff;
+    background: #f73d0c;
+}
+.localclass_continue,
+.localclass_continue:hover{
+    border: 0;
+    color: #fff;
+    background: #5091fe;
+}
+.localclass_btn{
+    margin: 10px 3px 0 3px;
+    overflow: hidden;
+    min-width: 72px;
+}
+.localclass_bg{
+    background: #fff6d0;
+}
+.localclass_font{
+    font-size: 14px;
+    color: #3672ed;
+}
+.localclass_operation{
+    width: 72px;
+}

@@ -281,7 +281,7 @@ const LocalClassRoom = React.createClass({
             var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
             connection.send(p1);
 
-            pptURL = pptURL.replace("www.maaee.com", "192.168.50.186:8090/proxy");
+            pptURL = pptURL.replace("www.maaee.com", "192.168.50.163:8090/proxy");
             pptURL = pptURL.replace("https", "http");
             var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
 
