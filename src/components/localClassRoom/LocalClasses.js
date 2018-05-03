@@ -73,8 +73,14 @@ const LocalClasses = React.createClass({
                             var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
                                                           className="lesson_start">开课</Button></div>;
                             if(isEmpty(_this.state.courseState)==false && _this.state.courseState == true){
+                                if(classId == _this.state.classId){
+                                    openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
+                                                              className="localclass_btn" disabled>正在开课</Button></div>;
+                                }
+                                else{
                                 openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                                                          className="lesson_start" disabled>开课</Button></div>;
+                                                          className="localclass_btn" disabled>开课</Button></div>;
+                                }
                             }
 
                             var obj = {
@@ -100,7 +106,7 @@ const LocalClasses = React.createClass({
     /**
      * 根据是否存在开课的课堂,来决定是否重建班级列表
      */
-    rebuildClassRoomList(isHaveDisconnectionClass){
+    rebuildClassRoomList(isHaveDisconnection){
         var _this = this;
         var classRoomList = [];
         noomArr.forEach(function (classInfo, i) {
@@ -108,10 +114,16 @@ const LocalClasses = React.createClass({
             var classId = classInfoArray[0];
             var className = classInfoArray[1];
             var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                                          className="lesson_start">开课</Button></div>;
-            if(isHaveDisconnectionClass == true){
-                openButton = <div><Button disabled onClick={_this.openClass.bind(_this, classId)}
-                                          className="lesson_start">开课</Button></div>;
+                                          className="localclass_continue localclass_btn">开课</Button></div>;
+            if(isHaveDisconnection == true){
+                if(classId == _this.state.classId){
+                    openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
+                                              className="localclass_btn" disabled>正在开课</Button></div>;
+                }
+                else{
+                openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
+                                          className="localclass_btn" disabled>开课</Button></div>;
+                }
             }
 
             var obj = {
@@ -134,7 +146,7 @@ const LocalClasses = React.createClass({
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
         //localClassRoomWindow = window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        localClassRoomWindow = window.open("http://192.168.50.186:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        localClassRoomWindow = window.open("http://192.168.50.163:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
         setTimeout(function () {
             _this.getDisconnectedClass();
             _this.getTeacherClasses();
@@ -253,14 +265,13 @@ const LocalClasses = React.createClass({
      */
     render() {
 
-        var courseState = <div className="startClass">
-            <span>当前
-                <span>" {this.state.noomClassName} "</span>
+        var courseState = <div className="startClass localclass_bg">
+            <span className="localclass_font">当前
+                <span>  " {this.state.noomClassName} "  </span>
                  正在开课
             </span>
-            <Button onClick={this.showConfirmModal} className="lesson_start closeClass ">关闭课堂</Button>
-            <Button onClick={this.openClass.bind(this, this.state.classId)} className="lesson_start">继续上课</Button>
-
+            <Button onClick={this.openClass.bind(this, this.state.classId)} className="localclass_continue right_ri localclass_btn">继续上课</Button>
+            <Button onClick={this.showConfirmModal} className="localclass_close right_ri localclass_btn">关闭课堂</Button>
         </div>
         var _this = this;
         return (

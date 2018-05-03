@@ -485,8 +485,8 @@ const AssignHomeWorkComponents = React.createClass({
                                                                   pagination={false}
                                                                   scroll={{y: 300}}/></Col>
                         <Col span={17} className="col17_le 17_hei ant-form">
-                            <div className="17_hei1">
-                                <Table className="17_hei2" rowSelection={subjectRowSelection} columns={subjectColumns}
+                            <div className="hei1_17">
+                                <Table className="hei2_17" rowSelection={subjectRowSelection} columns={subjectColumns}
                                        dataSource={subjectData} pagination={{
                                     total: assignHomeWork.state.totalSubjectCount,
                                     pageSize: getPageSize(),
