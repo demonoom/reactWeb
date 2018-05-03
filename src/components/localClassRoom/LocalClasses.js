@@ -17,7 +17,7 @@ const classRoomColumns = [{
 }];
 
 var noomArr = [];  //所有班级的集合
-var localClassRoomWindow=null;
+var localClassRoomWindow = null;
 /**
  * 本地课堂组件
  */
@@ -72,14 +72,14 @@ const LocalClasses = React.createClass({
                             var className = classInfoArray[1];
                             var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
                                                           className="lesson_start">开课</Button></div>;
-                            if(isEmpty(_this.state.courseState)==false && _this.state.courseState == true){
-                                if(classId == _this.state.classId){
+                            if (isEmpty(_this.state.courseState) == false && _this.state.courseState == true) {
+                                if (classId == _this.state.classId) {
                                     openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
                                                               className="localclass_btn" disabled>正在开课</Button></div>;
                                 }
-                                else{
-                                openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                                                          className="localclass_btn" disabled>开课</Button></div>;
+                                else {
+                                    openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
+                                                              className="localclass_btn" disabled>开课</Button></div>;
                                 }
                             }
 
@@ -106,7 +106,7 @@ const LocalClasses = React.createClass({
     /**
      * 根据是否存在开课的课堂,来决定是否重建班级列表
      */
-    rebuildClassRoomList(isHaveDisconnection){
+    rebuildClassRoomList(isHaveDisconnection) {
         var _this = this;
         var classRoomList = [];
         noomArr.forEach(function (classInfo, i) {
@@ -115,14 +115,14 @@ const LocalClasses = React.createClass({
             var className = classInfoArray[1];
             var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
                                           className="localclass_continue localclass_btn">开课</Button></div>;
-            if(isHaveDisconnection == true){
-                if(classId == _this.state.classId){
+            if (isHaveDisconnection == true) {
+                if (classId == _this.state.classId) {
                     openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
                                               className="localclass_btn" disabled>正在开课</Button></div>;
                 }
-                else{
-                openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                                          className="localclass_btn" disabled>开课</Button></div>;
+                else {
+                    openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
+                                              className="localclass_btn" disabled>开课</Button></div>;
                 }
             }
 
@@ -145,12 +145,25 @@ const LocalClasses = React.createClass({
         var classType = "A";
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
-        //localClassRoomWindow = window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        localClassRoomWindow = window.open("http://192.168.50.163:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        setTimeout(function () {
+        localClassRoomWindow = window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        //localClassRoomWindow = window.open("http://192.168.50.186:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+
+        var a = 0;
+        var timer = setInterval(function () {
             _this.getDisconnectedClass();
             _this.getTeacherClasses();
-        }, 3000);
+            a += 5;
+            console.log(a);
+            if (a == 15) {
+                clearInterval(timer);
+            }
+        }, 3000)
+
+
+        /* setTimeout(function () {
+             _this.getDisconnectedClass();
+             _this.getTeacherClasses();
+         }, 3000);*/
     },
 
     /**
@@ -208,7 +221,7 @@ const LocalClasses = React.createClass({
             'command': 'classOver'
         };
         var localClassConnection = window.localClassConnection;
-        if(isEmpty(localClassConnection)==false){
+        if (isEmpty(localClassConnection) == false) {
             window.localClassConnection.send(classOverProtocal);
             window.localClassConnection = null;
         }
@@ -227,7 +240,7 @@ const LocalClasses = React.createClass({
                 message.error(error);
             }
         });
-        if(isEmpty(localClassRoomWindow)==false){
+        if (isEmpty(localClassRoomWindow) == false) {
             localClassRoomWindow.close();
         }
         _this.setState({courseState: false});
@@ -239,23 +252,23 @@ const LocalClasses = React.createClass({
      * 点击关闭课堂弹出确认modal
      */
     showConfirmModal(e) {
-        this.setState({changeConfirmModalVisible:true})
+        this.setState({changeConfirmModalVisible: true})
     },
 
     /**
      * 关闭下课弹窗modal
      */
     closeConfirmModal() {
-        this.setState({changeConfirmModalVisible:false})
+        this.setState({changeConfirmModalVisible: false})
     },
 
     /**
      * 确认下课弹窗modal
      */
-    disConnectClassRoom(){
+    disConnectClassRoom() {
         var _this = this;
         _this.closeDisconnectionClass();
-        this.setState({changeConfirmModalVisible:false})
+        this.setState({changeConfirmModalVisible: false})
 
     },
 
@@ -270,7 +283,8 @@ const LocalClasses = React.createClass({
                 <span>  " {this.state.noomClassName} "  </span>
                  正在开课
             </span>
-            <Button onClick={this.openClass.bind(this, this.state.classId)} className="localclass_continue right_ri localclass_btn">继续上课</Button>
+            <Button onClick={this.openClass.bind(this, this.state.classId)}
+                    className="localclass_continue right_ri localclass_btn">继续上课</Button>
             <Button onClick={this.showConfirmModal} className="localclass_close right_ri localclass_btn">关闭课堂</Button>
         </div>
         var _this = this;
@@ -291,12 +305,14 @@ const LocalClasses = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.disConnectClassRoom}  >确定</button>,
-                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                onClick={this.disConnectClassRoom}>确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                onClick={this.closeConfirmModal}>取消</button>
                     ]}
                 >
                     <div className="isDel">
-                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")}/>
                         确定要下课吗?
                     </div>
                 </Modal>

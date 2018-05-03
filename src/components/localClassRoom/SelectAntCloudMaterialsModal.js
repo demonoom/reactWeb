@@ -668,12 +668,12 @@ class SelectAntCloudMaterialsModal extends React.Component {
             if (fileType == "ppt" || fileType == "pptx") {
                 this.props.useCloudFileInClass(cid);
                 //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
-                this.props.pushMaterialsToClass(fileObj.htmlPath);
+                this.props.pushMaterialsToClass(fileObj.htmlPath,'',true);
                 this.SelectAntCloudMaterialsModalHandleCancel();
             } else if (fileType == "pdf" || fileType == "doc" || fileType == "docx") {
                 //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
                 this.props.useCloudFileInClass(cid);
-                this.props.pushMaterialsToClass(fileObj.pdfPath);
+                this.props.pushMaterialsToClass(fileObj.pdfPath,'',true);
                 this.SelectAntCloudMaterialsModalHandleCancel();
             } else {
                 message.error("暂不支持打开该文件");
