@@ -83,6 +83,10 @@ const LocalClassRoom = React.createClass({
         }
     },
 
+    componentWillUnmount(){
+        this.setState({currentPage: ''});
+    },
+
 
     noomSelectPic(src, obj) {
         this.setState({sendPicModel: true, pinSrc: src, picFile: obj});
@@ -148,6 +152,7 @@ const LocalClassRoom = React.createClass({
         };
         //连接登入课堂
         connection.connect(loginPro);
+        window.opener.localClassConnection = connection;
         /*var htmlPath = sessionStorage.getItem("htmlPath");
         if (isEmpty(htmlPath) == false) {
             this.pushMaterialsToClass(htmlPath, 'currentPage');

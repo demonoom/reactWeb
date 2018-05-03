@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
 import {LOCAL_CLASS_ROOM_URL} from '../../utils/Const';
-import {Button, message, Table} from 'antd';
+import {Button, message, Table, Modal} from 'antd';
 import {doWebService} from '../../WebServiceHelper'
 
 const classRoomColumns = [{
@@ -17,7 +17,7 @@ const classRoomColumns = [{
 }];
 
 var noomArr = [];  //所有班级的集合
-
+var localClassRoomWindow=null;
 /**
  * 本地课堂组件
  */
@@ -32,7 +32,8 @@ const LocalClasses = React.createClass({
             courseVid: '',     //课程id
             classId: '',
             account: '', //te...
-            noomClassName: ''
+            noomClassName: '',
+            changeConfirmModalVisible: false   //关闭弹窗确认modal
         };
     },
 
@@ -70,7 +71,12 @@ const LocalClasses = React.createClass({
                             var classId = classInfoArray[0];
                             var className = classInfoArray[1];
                             var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                                                          className="lesson_start">开课</Button></div>
+                                                          className="lesson_start">开课</Button></div>;
+                            if(isEmpty(_this.state.courseState)==false && _this.state.courseState == true){
+                                openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
+                                                          className="lesson_start" disabled>开课</Button></div>;
+                            }
+
                             var obj = {
                                 key: classId,
                                 className: className,
@@ -92,6 +98,33 @@ const LocalClasses = React.createClass({
     },
 
     /**
+     * 根据是否存在开课的课堂,来决定是否重建班级列表
+     */
+    rebuildClassRoomList(isHaveDisconnectionClass){
+        var _this = this;
+        var classRoomList = [];
+        noomArr.forEach(function (classInfo, i) {
+            var classInfoArray = classInfo.split("#");
+            var classId = classInfoArray[0];
+            var className = classInfoArray[1];
+            var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
+                                          className="lesson_start">开课</Button></div>;
+            if(isHaveDisconnectionClass == true){
+                openButton = <div><Button disabled onClick={_this.openClass.bind(_this, classId)}
+                                          className="lesson_start">开课</Button></div>;
+            }
+
+            var obj = {
+                key: classId,
+                className: className,
+                action: openButton
+            }
+            classRoomList.push(obj);
+        })
+        _this.setState({classRoomList});
+    },
+
+    /**
      * 开启本地课堂
      * @param classId 班级id
      */
@@ -100,8 +133,8 @@ const LocalClasses = React.createClass({
         var classType = "A";
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
-        //window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        window.open("http://192.168.50.186:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        //localClassRoomWindow = window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        localClassRoomWindow = window.open("http://192.168.50.186:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
         setTimeout(function () {
             _this.getDisconnectedClass();
             _this.getTeacherClasses();
@@ -121,6 +154,7 @@ const LocalClasses = React.createClass({
             onResponse: function (ret) {
                 console.log(ret);
                 var response = ret.response;
+                var isHaveDisconnection = false;
                 if (isEmpty(response) == false) {
                     var vid = response.vid;
                     var classId = response.classCode;
@@ -140,9 +174,12 @@ const LocalClasses = React.createClass({
                         account: account,
                         noomClassName: noomArray[1]
                     });
+                    isHaveDisconnection = true;
                 } else {
+                    isHaveDisconnection = false;
                     _this.setState({courseState: false});
                 }
+                _this.rebuildClassRoomList(isHaveDisconnection);
             },
             onError: function (error) {
                 message.error(error);
@@ -155,6 +192,15 @@ const LocalClasses = React.createClass({
      */
     closeDisconnectionClass() {
         var _this = this;
+        var classOverProtocal = {
+            'command': 'classOver'
+        };
+        var localClassConnection = window.localClassConnection;
+        if(isEmpty(localClassConnection)==false){
+            window.localClassConnection.send(classOverProtocal);
+            window.localClassConnection = null;
+        }
+
         var param = {
             "method": 'closeVirtureClass',
             "userId": _this.state.loginUser.colUid,
@@ -169,8 +215,37 @@ const LocalClasses = React.createClass({
                 message.error(error);
             }
         });
+        if(isEmpty(localClassRoomWindow)==false){
+            localClassRoomWindow.close();
+        }
+        _this.setState({courseState: false});
+        var isHaveDisconnectedClass = false;
+        _this.rebuildClassRoomList(isHaveDisconnectedClass);
     },
 
+    /**
+     * 点击关闭课堂弹出确认modal
+     */
+    showConfirmModal(e) {
+        this.setState({changeConfirmModalVisible:true})
+    },
+
+    /**
+     * 关闭下课弹窗modal
+     */
+    closeConfirmModal() {
+        this.setState({changeConfirmModalVisible:false})
+    },
+
+    /**
+     * 确认下课弹窗modal
+     */
+    disConnectClassRoom(){
+        var _this = this;
+        _this.closeDisconnectionClass();
+        this.setState({changeConfirmModalVisible:false})
+
+    },
 
     /**
      * 渲染页面
@@ -179,11 +254,11 @@ const LocalClasses = React.createClass({
     render() {
 
         var courseState = <div className="startClass">
-            <span>当前 "
-                <span>{this.state.noomClassName}</span>
-                "正在开课
+            <span>当前
+                <span>" {this.state.noomClassName} "</span>
+                 正在开课
             </span>
-            <Button onClick={this.closeDisconnectionClass} className="lesson_start closeClass ">关闭课堂</Button>
+            <Button onClick={this.showConfirmModal} className="lesson_start closeClass ">关闭课堂</Button>
             <Button onClick={this.openClass.bind(this, this.state.classId)} className="lesson_start">继续上课</Button>
 
         </div>
@@ -196,6 +271,25 @@ const LocalClasses = React.createClass({
                 <div>
                     {this.state.courseState == true ? courseState : ''}
                 </div>
+
+                <Modal
+                    className="calmModal"
+                    visible={this.state.changeConfirmModalVisible}
+                    title="提示"
+                    onCancel={this.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.disConnectClassRoom}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要下课吗?
+                    </div>
+                </Modal>
+
                 <div className="localclass_scroll">
                     <Table columns={classRoomColumns}
                            dataSource={this.state.classRoomList}
