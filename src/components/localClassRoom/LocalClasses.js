@@ -101,7 +101,7 @@ const LocalClasses = React.createClass({
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
         //window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        window.open("http://192.168.50.186:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
         setTimeout(function () {
             _this.getDisconnectedClass();
             _this.getTeacherClasses();

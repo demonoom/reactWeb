@@ -268,7 +268,7 @@ const LocalClassRoom = React.createClass({
             }
             var vid = this.state.vid;
             var userId = this.state.userId;
-            var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
+            //var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
             var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + pptURL + "'}}" + ')');
             connection.send(protocal);
 
@@ -276,9 +276,9 @@ const LocalClassRoom = React.createClass({
             var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
             connection.send(p1);
 
-            pptURL = pptURL.replace("www.maaee.com", "192.168.50.29:8090/proxy");
+            pptURL = pptURL.replace("www.maaee.com", "192.168.50.186:8090/proxy");
             pptURL = pptURL.replace("https", "http");
-            classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
+            var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
 
             this.setState({classRoomUrl, currentPage});
             //this.getVclassPPTOpenInfo (vid);
