@@ -9620,6 +9620,7 @@ a:active,a:hover{
     color:#444;
 }
 /* .ant-modal-footer .login-form-button, */
+
 .ant-modal-content .calmSure,
 .ant-modal-content .calmCancle,
 .ant-modal-footer .calmCancle,
@@ -9717,11 +9718,6 @@ a:active,a:hover{
 }
 .startClass .closeClass {
     border-color: red;
-<<<<<<< HEAD
-    color: red;
-}
-
-=======
     color:red;
 }
 
@@ -9735,5 +9731,4 @@ a:active,a:hover{
 .calmEnterClass .ant-modal-content .ant-modal-header .ant-modal-title {
     line-height:21px;
 }
->>>>>>> 303bddbc21575b94e96602ec00a8acc335b5986b
 

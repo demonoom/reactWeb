@@ -284,7 +284,7 @@ class AddSubGroupModal extends React.Component {
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除4?
+                        确定删除6?
                             </div>
                 </Modal>
       </Modal>

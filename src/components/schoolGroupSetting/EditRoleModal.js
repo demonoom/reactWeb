@@ -264,7 +264,7 @@ class AddSubGroupModal extends React.Component {
                 <div className="modal_register_main">
                     <Row className="ant_row">
                         <Col span={6} className="framework_m_l">
-                            <span className="c_from_icon">*</span>角色名称：
+                            <span className="c_from_icon">*</span>角色名称333：
             </Col>
                         <Col span={16} className="framework_m_r">
                             <Input placeholder={this.state.roleName} value={this.state.roleName} onChange={this.subGroupNameChange} />
@@ -302,7 +302,7 @@ class AddSubGroupModal extends React.Component {
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除5?
+                        确定删除7?
                             </div>
                 </Modal>
             </Modal>

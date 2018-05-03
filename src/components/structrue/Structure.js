@@ -984,7 +984,7 @@ const Structure = React.createClass({
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除7?
+                        确定删除?
                             </div>
                 </Modal>
                 {/* <ConfirmModal
@@ -1007,7 +1007,7 @@ const Structure = React.createClass({
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除8?
+                        确定删除?
                             </div>
                 </Modal>
                 {/*更改用户所属部门 modal*/}

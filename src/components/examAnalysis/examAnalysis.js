@@ -212,7 +212,7 @@ const ExamAnalysisComponents = React.createClass({
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除1?
+                        确定删除3?
                             </div>
                 </Modal>
             </div>

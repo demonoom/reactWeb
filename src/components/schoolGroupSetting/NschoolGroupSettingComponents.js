@@ -603,7 +603,7 @@ const NschoolGroupSettingComponents = React.createClass({
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除6?
+                        确定删除8?
                             </div>
                 </Modal>
                 <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow}

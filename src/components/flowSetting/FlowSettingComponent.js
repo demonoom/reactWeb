@@ -505,18 +505,23 @@ const FlowSettingComponent = React.createClass({
         var saveButtons;
         if (isEmpty(this.state.stepDirect) || this.state.stepDirect == "pre") {
             saveButtons = [
-                <Button onClick={this.changeStep.bind(this, "next")}>下一步</Button>,
-                <Button onClick={this.createNewFlowModalHandleCancel}>关闭</Button>
+                <button type="button" className="login-form-button examination_btn_white calmCancel" onClick={this.changeStep.bind(this, "next")} >下一步</button>,
+                <button type="primary" className="login-form-button examination_btn_blue calmCancle" onClick={this.createNewFlowModalHandleCancel}  >关闭</button>
+                // <Button onClick={this.changeStep.bind(this, "next")}>下一步</Button>,
+                // <Button onClick={this.createNewFlowModalHandleCancel}>关闭</Button>
             ];
         } else if (this.state.stepDirect == "next") {
             saveButtons = [
-                <Button onClick={this.changeStep.bind(this, "pre")}>上一步</Button>,
-                <Button onClick={this.saveFlow.bind(this, "save")}>提交</Button>,
-                <Button onClick={this.createNewFlowModalHandleCancel}>关闭</Button>
+                <button type="button" className="login-form-button examination_btn_white calmCancel" onClick={this.changeStep.bind(this, "pre")} >上一步</button>,
+                <button type="primary" className="login-form-button examination_btn_blue calmCancle" onClick={this.saveFlow.bind(this, "save")}  >提交</button>
+                // <Button onClick={this.changeStep.bind(this, "pre")}>上一步</Button>,
+                // <Button onClick={this.saveFlow.bind(this, "save")}>提交</Button>,
+                // <Button onClick={this.createNewFlowModalHandleCancel}>关闭2</Button>
             ];
         }
-
-        var detailButton =  <Button onClick={this.detailFlowModalHandleCancel}>关闭</Button>;
+        var detailButton =  <button type="primary" className="login-form-button examination_btn_blue calmCancle" onClick={this.detailFlowModalHandleCancel}  >关闭</button>
+        
+        //  <Button onClick={this.detailFlowModalHandleCancel}>关闭3</Button>;
 
         var mainContent = <Collapse bordered={false} defaultActiveKey={this.state.openCollapseKey}
                                     activeKey={this.state.openCollapseKey}>
@@ -595,12 +600,14 @@ const FlowSettingComponent = React.createClass({
                        width="440px"
                        className="schoolgroup_modal"
                        footer={[
-                           <Button type="primary" htmlType="submit" className="login-form-button"
-                                   onClick={this.editFlowGroup}>确定</Button>,
-                           <Button type="primary" htmlType="submit" className="login-form-button"
-                                   onClick={this.deleteFlowGroup}>删除</Button>,
-                           <Button type="ghost" htmlType="reset" className="login-form-button"
-                                   onClick={this.editFlowGroupModalHandleCancel}>取消</Button>
+                        <button type="ghost" className="login-form-button examination_btn_white calmSure" onClick={this.deleteFlowGroup} >删除</button>,
+                        <button type="primary" className="login-form-button examination_btn_blue calmCancle" onClick={this.editFlowGroup}  >确定</button>
+                        //    <Button type="button" htmlType="submit" className="calmDelete login-form-button"
+                        //            onClick={this.deleteFlowGroup}>删除</Button>,
+                        //            <Button type="primary" htmlType="submit" className="login-form-button"
+                        //            onClick={this.editFlowGroup}>确定</Button>
+                        //    <Button type="ghost" htmlType="reset" className="login-form-button"
+                        //            onClick={this.editFlowGroupModalHandleCancel}>取消</Button>
                        ]}
                 >
                     <div className="modal_register_main">
