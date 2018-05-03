@@ -280,7 +280,7 @@ class SelectScheduleMaterialsModal extends React.Component {
                                scroll={{y: 300, x: 'hidden'}}/>
                     </Col>
                     <Col className="col17_le 17_hei ant-form modal_flex_1">
-                        <div className="17_hei1">
+                        <div className="hei1_17">
                             <Table className="modal_classroom_push_right" columns={materialsColumns}
                                    dataSource={materialsData}
                                    showHeader={false}

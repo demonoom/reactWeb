@@ -977,7 +977,6 @@ html, body, #root {
 }
 
 .ant-collapse-header {
-    font-weight: bold;
     color: #3a54a4 !important;
 }
 
@@ -1775,7 +1774,6 @@ p.user_cont {
     padding: 8px 0;
     width: 100%;
     float: left
-
 }
 
 p.user_introduction {
@@ -1876,14 +1874,10 @@ p.user_cont span.name1 {
     font-size: 14px;
     margin-bottom: 16px !important;
 }
-
-.17
-_hei1 {
+.hei1_17 {
     height: 98%;
 }
-
-.17
-_hei2 > table {
+.hei2_17 > table {
     padding: 3px 8px !important;
 }
 
@@ -2211,7 +2205,7 @@ a {
 .ant-table-thead > tr > th {
     color: #333;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .popup_i_icon {
@@ -2620,7 +2614,6 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     background-color: #2db7f5;
     border-color: #2db7f5;
     border-radius: 6px;
-    border: none;
     outline: none;
     cursor: pointer
 }
@@ -2633,7 +2626,6 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     color: #666;
     background-color: #fff;
     border-radius: 6px;
-    border: none;
     outline: none;
     cursor: pointer;
     border: 1px solid #d9d9d9;
@@ -3803,7 +3795,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     font-size: 14px;
     line-height: 24px;
     margin-left: 0;
-    word-break: break-word;
+    word-break: break-all;
     white-space: pre-wrap;
 }
 
@@ -3824,7 +3816,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     font-size: 14px;
     line-height: 24px;
     margin-left: 0;
-    word-break: break-word;
+    word-break: break-all;
     white-space: pre-wrap;
 }
 
@@ -4386,7 +4378,6 @@ a.color_gary_f, .color_gary_f {
         position: relative; /* 设置子元素为相对定位，可让子元素不继承Alpha值 */
     }
 }
-
 .live_orange {
     background: #7fbefb;
 }
@@ -5223,7 +5214,8 @@ a.color_gary_f, .color_gary_f {
     line-height: 46px;
     text-align: center;
     color: #0078e4;
-    position: relative
+    position: relative;
+    font-weight: normal;
 }
 
 .lesson_start {
@@ -9717,14 +9709,8 @@ a:active,a:hover{
 }
 .startClass .closeClass {
     border-color: red;
-<<<<<<< HEAD
     color: red;
 }
-
-=======
-    color:red;
-}
-
 .calmBorderRadius {
     border-radius: 2px;
 }
@@ -9735,5 +9721,30 @@ a:active,a:hover{
 .calmEnterClass .ant-modal-content .ant-modal-header .ant-modal-title {
     line-height:21px;
 }
->>>>>>> 303bddbc21575b94e96602ec00a8acc335b5986b
-
+.localclass_close,
+.localclass_close:hover{
+    border: 0;
+    color: #fff;
+    background: #f73d0c;
+}
+.localclass_continue,
+.localclass_continue:hover{
+    border: 0;
+    color: #fff;
+    background: #5091fe;
+}
+.localclass_btn{
+    margin: 10px 3px 0 3px;
+    overflow: hidden;
+    min-width: 72px;
+}
+.localclass_bg{
+    background: #fff6d0;
+}
+.localclass_font{
+    font-size: 14px;
+    color: #3672ed;
+}
+.localclass_operation{
+    width: 72px;
+}
