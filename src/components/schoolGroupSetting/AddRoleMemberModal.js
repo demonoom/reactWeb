@@ -371,8 +371,9 @@ class AddRoleMemberModal extends React.Component {
             transitionName=""  //禁用modal的动画效果
             maskClosable={false} //设置不允许点击蒙层关闭
             footer={[
-              <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.addGroupMember}  >确定</button>,
-              <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.AddRoleMemberModalHandleCancel} >取消</button>
+              <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.AddRoleMemberModalHandleCancel} >取消</button>,
+              <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.addGroupMember}  >确定</button>
+              
             ]}
         >
           <Row className="ant-form-item">

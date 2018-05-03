@@ -1,7 +1,7 @@
-import React, {PropTypes} from 'react';
-import {Table, Icon, Button, Breadcrumb, message} from 'antd';
-import {doWebService} from '../../WebServiceHelper';
-import {isEmpty} from '../../utils/utils';
+import React, { PropTypes } from 'react';
+import { Table, Icon, Button, Breadcrumb, message } from 'antd';
+import { doWebService } from '../../WebServiceHelper';
+import { isEmpty } from '../../utils/utils';
 import SchoolSettingModal from './SchoolSettingModal';
 import AddSubGroupModal from './AddSubGroupModal';
 import AddGroupMemberModal from './AddGroupMemberModal';
@@ -54,16 +54,16 @@ const NschoolGroupSettingComponents = React.createClass({
         var rootStructure = this.props.rootStructure;
         var currentObj = null;
 
-        if(isEmpty(structuresObjArray)==false && structuresObjArray.length > 0 ){
+        if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 0) {
             currentObj = structuresObjArray[0];
             structureId = currentObj.id;
-            structuresObjArray.splice(1,structuresObjArray.length);
+            structuresObjArray.splice(1, structuresObjArray.length);
         }
 
-        if(isEmpty(rootStructure)==false){
-            this.setState({"currentStructureId":structureId,"currentObj":rootStructure});
-        }else{
-            this.setState({"currentStructureId":structureId,"currentObj":currentObj});
+        if (isEmpty(rootStructure) == false) {
+            this.setState({ "currentStructureId": structureId, "currentObj": rootStructure });
+        } else {
+            this.setState({ "currentStructureId": structureId, "currentObj": currentObj });
         }
         this.changeStructureData(structureId);
     },
@@ -76,10 +76,10 @@ const NschoolGroupSettingComponents = React.createClass({
         subGroupMemberList.splice(0);
         var structureId = nextProps.structureId;
         var rootStructure = nextProps.rootStructure;
-        if(isEmpty(rootStructure)==false){
-            this.setState({structureId});
-        }else{
-            this.setState({structureId});
+        if (isEmpty(rootStructure) == false) {
+            this.setState({ structureId });
+        } else {
+            this.setState({ structureId });
         }
 
         this.changeStructureData(structureId);
@@ -92,17 +92,17 @@ const NschoolGroupSettingComponents = React.createClass({
             //currentObj = structuresObjArray[0];
         }
         var rootStructure = this.props.rootStructure;
-        if(isEmpty(rootStructure)==false){
-            this.setState({"structureId":structureId});
-        }else{
-            this.setState({"structureId":structureId});
+        if (isEmpty(rootStructure) == false) {
+            this.setState({ "structureId": structureId });
+        } else {
+            this.setState({ "structureId": structureId });
         }
 
         // 获取子部门
         this.listStructures(structureId);
         // 根据部门id获取部门成员
         this.getStrcutureMembers(structureId, defaultPageNo);
-        this.setState({structureId, structuresObjArray});
+        this.setState({ structureId, structuresObjArray });
     },
 
 
@@ -126,13 +126,13 @@ const NschoolGroupSettingComponents = React.createClass({
                 if (isEmpty(response) == false) {
                     response.forEach(function (subGroup) {
                         var subGroupName = <div className="first_indent"
-                                                onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
+                            onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
                             <span className="antnest_name affix_bottom_tc name_max3 dold_text">{subGroup.name}</span>
                             <span className="schoolgroup_people name_max_last">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                         </div>;
                         var opt = <div className="knowledge_ri">
                             <Button className="sg_btn_del" icon="delete"
-                                    onClick={_this.removeGroup.bind(_this, subGroup.id)}></Button>
+                                onClick={_this.removeGroup.bind(_this, subGroup.id)}></Button>
                             {/*<Button className="sg_btn_del" icon="delete" onClick={_this.showConfirmModal1.bind(_this,subGroup.id)}></Button>*/}
                         </div>
                         subGroupList.push({
@@ -143,7 +143,7 @@ const NschoolGroupSettingComponents = React.createClass({
                     });
                 }
                 // _this.getStructureById(structureId);
-                _this.setState({subGroupList});
+                _this.setState({ subGroupList });
             },
             onError: function (error) {
                 message.error(error);
@@ -162,7 +162,7 @@ const NschoolGroupSettingComponents = React.createClass({
      */
     removeGroup(structureId) {
         this.showConfirmModal1();
-        this.setState({removeGroupId: structureId});
+        this.setState({ removeGroupId: structureId });
     },
 
     batchDeleteMemeber1() {
@@ -184,7 +184,7 @@ const NschoolGroupSettingComponents = React.createClass({
                 _this.closeConfirmModal1();
                 var root;
                 root = structuresObjArray[0].id;
-                if(root == _this.state.parentGroup.id){
+                if (root == _this.state.parentGroup.id) {
                     _this.props.addSubGroupComplete();
                 }
             },
@@ -215,7 +215,7 @@ const NschoolGroupSettingComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parentGroup = ret.response;
-                _this.setState({structureIdByNoom:parentGroup.id});
+                _this.setState({ structureIdByNoom: parentGroup.id });
                 if (isEmpty(parentGroup) == false) {
                     var isExit = _this.checkStructureIsExitAtArray(parentGroup);
                     if (isExit == false) {
@@ -223,7 +223,7 @@ const NschoolGroupSettingComponents = React.createClass({
                         structuresObjArray.push(parentGroup);
                     }
                 }
-                _this.setState({parentGroup});
+                _this.setState({ parentGroup });
 
             },
             onError: function (error) {
@@ -253,7 +253,7 @@ const NschoolGroupSettingComponents = React.createClass({
         let _this = this;
         var structureId = structureId + '';
 
-        if(structureId.indexOf(',') !== -1) {
+        if (structureId.indexOf(',') !== -1) {
             var structureIdArr = structureId.split(',');
             structureId = structureIdArr[0];
         }
@@ -278,7 +278,7 @@ const NschoolGroupSettingComponents = React.createClass({
                     });
                 }
                 var pager = ret.pager;
-                _this.setState({subGroupMemberList, totalMember: pager.rsCount, selectedRowKeys:[]});//selectedRowKeys设置成[]可以清除默认勾选
+                _this.setState({ subGroupMemberList, totalMember: pager.rsCount, selectedRowKeys: [] });//selectedRowKeys设置成[]可以清除默认勾选
             },
             onError: function (error) {
                 message.error(error);
@@ -319,7 +319,7 @@ const NschoolGroupSettingComponents = React.createClass({
             addSubGroupModalIsShow: false,
             addGroupMemberModalIsShow: false,
             "groupSettingModalIsShow": false,
-            memberPageNo:defaultMemberPageNo
+            memberPageNo: defaultMemberPageNo
         });
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId, memberPageNo);
@@ -353,34 +353,34 @@ const NschoolGroupSettingComponents = React.createClass({
             }
         }
         var defaultMemberPageNo = 1;
-        this.setState({"structureId":structureId, structuresObjArray,"memberPageNo":defaultMemberPageNo});
+        this.setState({ "structureId": structureId, structuresObjArray, "memberPageNo": defaultMemberPageNo });
     },
 
     /**
      * 添加子部门
      */
     addSubGroup() {
-        this.setState({"addSubGroupModalIsShow": true});
+        this.setState({ "addSubGroupModalIsShow": true });
     },
 
     /**
      * 添加部门人员
      */
     addGroupMemeber() {
-        this.setState({"addGroupMemberModalIsShow": true});
+        this.setState({ "addGroupMemberModalIsShow": true });
     },
 
     /**
      * 部门设置
      */
     groupSetting() {
-        this.setState({"groupSettingModalIsShow": true});
+        this.setState({ "groupSettingModalIsShow": true });
     },
     /**
      * 学校设置
      */
     schoolSetting() {
-        this.setState({schoolSettingModalIsShow: true});
+        this.setState({ schoolSettingModalIsShow: true });
     },
 
     /**
@@ -428,7 +428,7 @@ const NschoolGroupSettingComponents = React.createClass({
                     subGroupMemberList.splice(0);
                     _this.listStructures(_this.state.structureId);
                     _this.getStrcutureMembers(_this.state.structureId, _this.state.memberPageNo);
-                    _this.setState({selectedRowKeys: []});
+                    _this.setState({ selectedRowKeys: [] });
                     _this.closeConfirmModal();
                 }
             },
@@ -452,24 +452,28 @@ const NschoolGroupSettingComponents = React.createClass({
         var _this = this;
         var root;
         root = structuresObjArray[0].id;
-        if(root == key){
+        if (root == key) {
             _this.props.addSubGroupComplete();
         }
         this.changeStructureData(this.state.structureId);
     },
 
     showConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({ calmSureDelConfirm: true })
+        // this.refs.confirmModal.changeConfirmModalVisible(true);
     },
     showConfirmModal1() {
-        this.refs.confirmModal1.changeConfirmModalVisible(true);
+        this.setState({ calmSureDelConfirm1: true })
+        // this.refs.confirmModal1.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({ calmSureDelConfirm: false })
+        // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
     closeConfirmModal1() {
-        this.refs.confirmModal1.changeConfirmModalVisible(false);
+        this.setState({ calmSureDelConfirm1: false })
+        // this.refs.confirmModal1.changeConfirmModalVisible(false);
     },
 
     /**
@@ -500,10 +504,10 @@ const NschoolGroupSettingComponents = React.createClass({
             settingButton = null;
         } else if (_this.state.structureId == _this.state.currentObj.id) {
             settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
-                                    onClick={this.schoolSetting}>设置</Button>
+                onClick={this.schoolSetting}>设置</Button>
         } else {
             settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
-                                    onClick={this.groupSetting}>部门设置</Button>;
+                onClick={this.groupSetting}>部门设置</Button>;
         }
         return (
             <div className="schoolgroup">
@@ -521,20 +525,20 @@ const NschoolGroupSettingComponents = React.createClass({
                     <span>下级部门</span>
                     <span>
                         <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
-                                onClick={this.addSubGroup}>添加子部门</Button>
+                            onClick={this.addSubGroup}>添加子部门</Button>
                     </span>
                 </div>
                 <div>
                     <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList}
-                           className="schoolgroup_table"
-                           pagination={false}/>
+                        className="schoolgroup_table"
+                        pagination={false} />
                 </div>
                 <div className="schoolgroup_title">
                     <i className="iconfont schoolgroup_i ">&#xe61b;</i>
                     <span>部门人员</span>
                     <span>
                         <Button onClick={this.addGroupMemeber}
-                                className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
+                            className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
                         <span className="schoolgroup_btn_left">
                             <Button
                                 className="calmBorderRadius"
@@ -543,7 +547,7 @@ const NschoolGroupSettingComponents = React.createClass({
                                 disabled={!hasSelected} className="schoolgroup_btn_red schoolgroup_btn">
                                 批量删除
                             </Button>
-                            <span className="password_ts" style={{marginLeft: 8}}>
+                            <span className="password_ts" style={{ marginLeft: 8 }}>
                                 {hasSelected ? `选中 ${_this.state.selectedRowKeys.length} 条记录` : ''}
                             </span>
                         </span>
@@ -551,40 +555,74 @@ const NschoolGroupSettingComponents = React.createClass({
                 </div>
                 <div>
                     <Table rowSelection={rowSelection} columns={memberColumns}
-                           pagination={false} dataSource={this.state.subGroupMemberList}
-                           className="schoolgroup_table1 schoolgroup_table_department"/>
+                        pagination={false} dataSource={this.state.subGroupMemberList}
+                        className="schoolgroup_table1 schoolgroup_table_department" />
                     <div className="schoolgroup_operate schoolgroup_more">
                         <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
                     </div>
                 </div>
-                <ConfirmModal ref="confirmModal"
+                {/* <ConfirmModal ref="confirmModal"
                               title="确定要删除选中的部门员工?"
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.batchDeleteMemeber}
-                ></ConfirmModal>
-                <ConfirmModal
+                ></ConfirmModal> */}
+                <Modal
+                    className="calmModal"
+                    visible={this.state.calmSureDelConfirm}
+                    title="提示"
+                    onCancel={this.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.batchDeleteMemeber}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要删除选中的部门员工?
+                            </div>
+                </Modal>
+                {/* <ConfirmModal
                     ref="confirmModal1"
                     title="确定删除?"
                     onConfirmModalCancel={this.closeConfirmModal1}
                     onConfirmModalOK={this.batchDeleteMemeber1}
-                />
+                /> */}
+                <Modal
+                    className="calmModal"
+                    visible={this.state.calmSureDelConfirm1}
+                    title="提示"
+                    onCancel={this.closeConfirmModal1}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.batchDeleteMemeber1}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal1} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定删除6?
+                            </div>
+                </Modal>
                 <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow}
-                                    rootStructure={this.state.currentObj}
-                                    onCancel={this.initModalStatus}></SchoolSettingModal>
+                    rootStructure={this.state.currentObj}
+                    onCancel={this.initModalStatus}></SchoolSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow}
-                                  parentGroup={this.state.parentGroup}
-                                  callbackParent={this.listStructures}
-                                  onCancel={this.initModalStatus}
-                                  addSubGroupComplete={this.addSubGroupComplete}
+                    parentGroup={this.state.parentGroup}
+                    callbackParent={this.listStructures}
+                    onCancel={this.initModalStatus}
+                    addSubGroupComplete={this.addSubGroupComplete}
                 ></AddSubGroupModal>
                 <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow}
-                                     parentGroup={this.state.parentGroup}
-                                     callbackParent={this.listStructureAndMembers}
-                                     onCancel={this.initModalStatus}
-                                     addedUserData={this.state.subGroupMemberList}
+                    parentGroup={this.state.parentGroup}
+                    callbackParent={this.listStructureAndMembers}
+                    onCancel={this.initModalStatus}
+                    addedUserData={this.state.subGroupMemberList}
                 ></AddGroupMemberModal>
                 <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup}
-                                   onCancel={this.initModalStatus}></GroupSettingModal>
+                    onCancel={this.initModalStatus}></GroupSettingModal>
             </div>
         );
     }

@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import {
     Card,
     Button,
@@ -18,10 +18,10 @@ import {
 } from 'antd';
 import Favorites from '../Favorites';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
-import {doWebService} from '../../WebServiceHelper';
-import {isEmpty} from '../../utils/Const';
-import {getLocalTime} from '../../utils/utils';
-import {getPageSize} from '../../utils/Const';
+import { doWebService } from '../../WebServiceHelper';
+import { isEmpty } from '../../utils/Const';
+import { getLocalTime } from '../../utils/utils';
+import { getPageSize } from '../../utils/Const';
 import ConfirmModal from '../ConfirmModal';
 
 const TabPane = Tabs.TabPane;
@@ -216,7 +216,7 @@ const PersonCenterComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var isFollow = ret.response;
-                personCenter.setState({"isFollow": isFollow});
+                personCenter.setState({ "isFollow": isFollow });
             },
             onError: function (error) {
                 message.error(error);
@@ -234,13 +234,13 @@ const PersonCenterComponents = React.createClass({
      * 学生的提问
      */
     studentAsk() {
-        personCenter.setState({"optType": "turnToAsk", "activeKey": "我发起过的提问"});
+        personCenter.setState({ "optType": "turnToAsk", "activeKey": "我发起过的提问" });
     },
     /**
      * 学生的学习轨迹
      */
     studentStudyTrack() {
-        personCenter.setState({"optType": "turnStudyTrack", "activeKey": "studyTrack"});
+        personCenter.setState({ "optType": "turnStudyTrack", "activeKey": "studyTrack" });
     },
     /**
      * 关注联系人
@@ -255,7 +255,7 @@ const PersonCenterComponents = React.createClass({
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("关注成功");
-                    personCenter.setState({"isFollow": true});
+                    personCenter.setState({ "isFollow": true });
                 } else {
                     message.error(ret.msg);
                 }
@@ -279,7 +279,7 @@ const PersonCenterComponents = React.createClass({
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("取消关注成功");
-                    personCenter.setState({"isFollow": false});
+                    personCenter.setState({ "isFollow": false });
                 } else {
                     message.error(ret.msg);
                 }
@@ -320,9 +320,9 @@ const PersonCenterComponents = React.createClass({
                         };
                         followsUserArray.push(userJson);
                         var followsCard = <Card key={followUser.colUid} id={followUser} className="focus"
-                                                onClick={personCenter.getPersonalCenterData.bind(personCenter, followUser.colUid)}>
+                            onClick={personCenter.getPersonalCenterData.bind(personCenter, followUser.colUid)}>
                             <a target="_blank" className="attention_img">
-                                <img alt={userName + '头像'} width="100%" src={e.user.avatar}/></a>
+                                <img alt={userName + '头像'} width="100%" src={e.user.avatar} /></a>
                             <div className="custom-card focus_2">
                                 <div className="focus_1">
                                     <span className="antnest_name focus_3">{e.user.userName}</span>
@@ -382,17 +382,17 @@ const PersonCenterComponents = React.createClass({
                 data.splice(0);
                 var response = ret.response;
                 if (response == null || response.length == 0) {
-                    personCenter.setState({totalCount: 0});
+                    personCenter.setState({ totalCount: 0 });
                 } else {
                     response.forEach(function (e) {
                         var key = e.id;
                         var name = e.user.userName;
                         var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
                         var content = <Popover placement="rightTop"
-                                               content={<article id='contentHtml' className='content Popover_width'
-                                                                 dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
+                            content={<article id='contentHtml' className='content Popover_width'
+                                dangerouslySetInnerHTML={{ __html: popOverContent }}></article>}>
                             <article id='contentHtml' className='content'
-                                     dangerouslySetInnerHTML={{__html: e.content}}></article>
+                                dangerouslySetInnerHTML={{ __html: e.content }}></article>
                         </Popover>;
                         var subjectType = e.typeName;
                         var subjectScore = e.score;
@@ -401,7 +401,7 @@ const PersonCenterComponents = React.createClass({
                         }
                         var answer = e.answer;
                         var subjectOpt = <div><Button type="" value={e.id} onClick={personCenter.showModal}
-                                                      icon="export" title="使用" className="score3_i"></Button></div>;
+                            icon="export" title="使用" className="score3_i"></Button></div>;
                         data.push({
                             key: key,
                             name: name,
@@ -535,33 +535,33 @@ const PersonCenterComponents = React.createClass({
 
     buildKonwledgePanels: function (courseWareList) {
         if (courseWareList.length == 0) {
-            coursePanelChildren = <img className="noDataTipImg" src={require('../images/noDataTipImg.png')}/>;
+            coursePanelChildren = <img className="noDataTipImg" src={require('../images/noDataTipImg.png')} />;
         } else {
             coursePanelChildren = courseWareList.map((e, i) => {
                 var eysOnButton;
                 var delButton;
                 if (e[9] != null && e[9] != "") {
-                    eysOnButton = <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                    eysOnButton = <Button icon="eye-o" style={{ float: 'right' }} onClick={event => {
                         this.viewMateria(event, e[9], e[1])
-                    }}/>
+                    }} />
                 }
                 return <Panel header={<span><span type="" className={e[8]}></span><span
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
-					<div className="bnt2_tex">
-                         <span className="bai"><span className="col1">知识点：{e[6]}</span></span>
-                         <span className="col1">创建人：{e[2]}</span>
-                         <span className="col1">上传时间：{e[7]}</span>
-                         <span className="col1">点赞次数：{e[11]}</span>
-                      </div>
+                        <div className="bnt2_tex">
+                            <span className="bai"><span className="col1">知识点：{e[6]}</span></span>
+                            <span className="col1">创建人：{e[2]}</span>
+                            <span className="col1">上传时间：{e[7]}</span>
+                            <span className="col1">点赞次数：{e[11]}</span>
+                        </div>
 
-                            <div className="bnt2_right">
-                                <a href={e[3]} target="_blank" title="下载" download={e[3]}
-                                   style={{float: 'right'}}><Button icon="download"/></a>
-                                <Button style={{float: 'right'}} type="" icon="export" title="使用" value={e[0]}
-                                        onClick={personCenter.showUseKnowledgeModal}></Button>
-                                {eysOnButton}
-                            </div>
+                        <div className="bnt2_right">
+                            <a href={e[3]} target="_blank" title="下载" download={e[3]}
+                                style={{ float: 'right' }}><Button icon="download" /></a>
+                            <Button style={{ float: 'right' }} type="" icon="export" title="使用" value={e[0]}
+                                onClick={personCenter.showUseKnowledgeModal}></Button>
+                            {eysOnButton}
+                        </div>
 
                     </pre>
                 </Panel>
@@ -616,13 +616,13 @@ const PersonCenterComponents = React.createClass({
                         if (user.colUid == sessionStorage.getItem("ident")) {
                             //如果是当前用户，可以删除自己的直播课
                             delButton = <Button icon="delete" className="right_ri star_del"
-                                                onClick={personCenter.showDeleteLiveVideosConfirmModal.bind(personCenter, id)}></Button>
+                                onClick={personCenter.showDeleteLiveVideosConfirmModal.bind(personCenter, id)}></Button>
                         }
                         var liveCard = <Card className="live">
                             <p className="h3">{title}</p>
                             <div className="live_img" id={id}
-                                 onClick={personCenter.confirmVideoPwd.bind(personCenter, e)}>
-                                <img className="attention_img" width="100%" src={cover}/>
+                                onClick={personCenter.confirmVideoPwd.bind(personCenter, e)}>
+                                <img className="attention_img" width="100%" src={cover} />
                                 <div className="live_green"><span>{schoolName}</span></div>
                             </div>
                             <div className="custom-card">
@@ -660,7 +660,7 @@ const PersonCenterComponents = React.createClass({
     },
 
     showDeleteLiveVideosConfirmModal(id) {
-        personCenter.setState({"delLiveVideoIds": id});
+        personCenter.setState({ "delLiveVideoIds": id });
         personCenter.refs.deleteLiveVideosConfirmModal.changeConfirmModalVisible(true);
     },
 
@@ -679,7 +679,7 @@ const PersonCenterComponents = React.createClass({
             let _this = this;
             Modal.confirm({
                 title: '请输入密码',
-                content: <Input id="tmppwd"/>,
+                content: <Input id="tmppwd" />,
                 okText: '确定',
                 cancelText: '取消',
                 onOk: personCenter.videoPwdModalHandleOk.bind(_this, password, obj),
@@ -733,7 +733,7 @@ const PersonCenterComponents = React.createClass({
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
-        let obj = {title: tit, url: url, width: '380px'}
+        let obj = { title: tit, url: url, width: '380px' }
         this.showpanle(obj)
     },
 
@@ -750,9 +750,9 @@ const PersonCenterComponents = React.createClass({
         var urlType = target.value;
 
         if (isEmpty(urlType) == false && urlType == "level") {
-            personCenter.setState({"optType": "getScoreOrLevelPage", "activeKey": "userScores", "urlType": urlType});
+            personCenter.setState({ "optType": "getScoreOrLevelPage", "activeKey": "userScores", "urlType": urlType });
         } else {
-            personCenter.setState({"optType": "scoreDetail", "activeKey": "platformRulePage"});
+            personCenter.setState({ "optType": "scoreDetail", "activeKey": "platformRulePage" });
         }
     },
 
@@ -761,7 +761,7 @@ const PersonCenterComponents = React.createClass({
      * @param e
      */
     turnToScoreDetailPage() {
-        personCenter.setState({"optType": "getScoreOrLevelPage", "activeKey": "userScores", "urlType": "score"});
+        personCenter.setState({ "optType": "getScoreOrLevelPage", "activeKey": "userScores", "urlType": "score" });
     },
 
     /**
@@ -769,15 +769,15 @@ const PersonCenterComponents = React.createClass({
      * @param key
      */
     platformRulePageChange(key) {
-        personCenter.setState({"optType": "scoreDetail", "activeKey": key});
+        personCenter.setState({ "optType": "scoreDetail", "activeKey": key });
     },
 
     returnPersonCenter() {
-        personCenter.setState({"optType": 'userDetail'});
+        personCenter.setState({ "optType": 'userDetail' });
     },
 
     returnToChatGroupMessagePage() {
-        personCenter.setState({"optType": 'getUserChatGroup'});
+        personCenter.setState({ "optType": 'getUserChatGroup' });
     },
 
     onSubjectPageChange(page) {
@@ -829,7 +829,7 @@ const PersonCenterComponents = React.createClass({
                     var defaultPageNo = 1;
                     _this.getStrcutureMembers(parentGroup.id, defaultPageNo);
                     _this.modalListStruct(parentGroup.id);
-                    _this.setState({structureId: parentGroup.id});
+                    _this.setState({ structureId: parentGroup.id });
                 }
                 if (isEmpty(parentGroup) == false) {
                     var isExit = _this.checkStructureIsExitAtArray(parentGroup);
@@ -840,7 +840,7 @@ const PersonCenterComponents = React.createClass({
                     }
                 }
 
-                _this.setState({parentGroup, structuresObjArray, owner});
+                _this.setState({ parentGroup, structuresObjArray, owner });
             },
 
             onError: function (error) {
@@ -867,7 +867,7 @@ const PersonCenterComponents = React.createClass({
      */
     returnParent() {
         if (personCenter.state.optType == "userDetail") {
-            personCenter.setState({"optType": "getGroupMenu"});
+            personCenter.setState({ "optType": "getGroupMenu" });
         }
 
     },
@@ -894,7 +894,7 @@ const PersonCenterComponents = React.createClass({
                 if (isEmpty(response) == false) {
                     response.forEach(function (subGroup) {
                         var subGroupName = <div className="first_indent"
-                                                onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
+                            onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
                             <span className="antnest_name affix_bottom_tc name_max3 dold_text">{subGroup.name}</span>
                         </div>
                         subGroupList.push({
@@ -904,7 +904,7 @@ const PersonCenterComponents = React.createClass({
 
                     });
                 }
-                _this.setState({subGroupList, "optType": "getGroupMenu"});
+                _this.setState({ subGroupList, "optType": "getGroupMenu" });
             },
             onError: function (error) {
                 message.error(error);
@@ -993,10 +993,10 @@ const PersonCenterComponents = React.createClass({
                 var pageCount = pager.pageCount;
                 if (pageCount == pageNo) {
                     var wordSrc = '无更多数据';
-                    _this.setState({wordSrc});
+                    _this.setState({ wordSrc });
 
                 }
-                _this.setState({subGroupMemberList, totalMember: pager.rsCount});
+                _this.setState({ subGroupMemberList, totalMember: pager.rsCount });
             },
             onError: function (error) {
                 message.error(error);
@@ -1024,7 +1024,7 @@ const PersonCenterComponents = React.createClass({
         subGroupMemberList.splice(0);
         this.getStrcutureMembers(structureId, defaultPageNo);
         var defaultMemberPageNo = 1;
-        this.setState({"structureId": structureId, structuresObjArray, "memberPageNo": defaultMemberPageNo});
+        this.setState({ "structureId": structureId, structuresObjArray, "memberPageNo": defaultMemberPageNo });
     },
 
 
@@ -1076,38 +1076,38 @@ const PersonCenterComponents = React.createClass({
                             }
                         }
                         var imgTag = <div className="maaee_group_face"
-                                          onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
+                            onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
                         switch (groupMemebersPhoto.length) {
                             case 1:
                                 imgTag = <div className="maaee_group_face1"
-                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
+                                    onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 2:
                                 imgTag = <div className="maaee_group_face2"
-                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
+                                    onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 3:
                                 imgTag = <div className="maaee_group_face3"
-                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
+                                    onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 4:
                                 imgTag = <div className="maaee_group_face"
-                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
+                                    onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
                                 break;
                         }
                         var groupName = chatGroupName;
                         var groupSet = <Button icon="setting"
-                                               onClick={personCenter.setChatGroup.bind(personCenter, e)}></Button>;
+                            onClick={personCenter.setChatGroup.bind(personCenter, e)}></Button>;
                         // var groupType = <span>部门群</span>;
                         if (type == 1) {
                             //部门群
                             var groupNameTag = <span><a className="font_gray_666"
-                                                        onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupName}</a><span
-                                className="noomGroupType">部门</span></span>;
+                                onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupName}</a><span
+                                    className="noomGroupType">部门</span></span>;
                         } else {
                             //普通群
                             var groupNameTag = <a className="font_gray_666"
-                                                  onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupName}</a>;
+                                onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupName}</a>;
                         }
                         var chatGroupJson = {
                             key: chatGroupId,
@@ -1119,10 +1119,10 @@ const PersonCenterComponents = React.createClass({
                         };
                         charGroupArray.push(chatGroupJson);
                     });
-                    personCenter.setState({"userGroupsData": charGroupArray});
+                    personCenter.setState({ "userGroupsData": charGroupArray });
                 }
                 var pager = ret.pager;
-                personCenter.setState({"optType": "getUserChatGroup", "totalChatGroupCount": parseInt(pager.rsCount)});
+                personCenter.setState({ "optType": "getUserChatGroup", "totalChatGroupCount": parseInt(pager.rsCount) });
             },
             onError: function (error) {
                 message.error(error);
@@ -1205,7 +1205,7 @@ const PersonCenterComponents = React.createClass({
                         mockData.push(data);
                     }
                 });
-                personCenter.setState({mockData, targetKeys});
+                personCenter.setState({ mockData, targetKeys });
             },
             onError: function (error) {
                 message.error(error);
@@ -1239,7 +1239,7 @@ const PersonCenterComponents = React.createClass({
                         memberData.push(data);
                     }
                 });
-                personCenter.setState({memberData, memberTargetKeys});
+                personCenter.setState({ memberData, memberTargetKeys });
             },
             onError: function (error) {
                 message.error(error);
@@ -1248,7 +1248,7 @@ const PersonCenterComponents = React.createClass({
     },
 
     createChatGroupModalHandleCancel() {
-        personCenter.setState({"createChatGroupModalVisible": false, "updateGroupId": ''});
+        personCenter.setState({ "createChatGroupModalVisible": false, "updateGroupId": '' });
     },
     /**
      * 获取页面数据，创建聊天群组
@@ -1296,11 +1296,11 @@ const PersonCenterComponents = React.createClass({
                 }
             });
         }
-        personCenter.setState({"createChatGroupModalVisible": false, "updateGroupId": '', "chatGroupTitle": ''});
+        personCenter.setState({ "createChatGroupModalVisible": false, "updateGroupId": '', "chatGroupTitle": '' });
     },
 
     transferHandleChange(targetKeys) {
-        personCenter.setState({targetKeys});
+        personCenter.setState({ targetKeys });
     },
 
     chatGroupTitleOnChange(e) {
@@ -1311,7 +1311,7 @@ const PersonCenterComponents = React.createClass({
             target = e.target;
         }
         var chatGroupTitle = target.value;
-        personCenter.setState({"chatGroupTitle": chatGroupTitle});
+        personCenter.setState({ "chatGroupTitle": chatGroupTitle });
     },
 
     /**
@@ -1341,7 +1341,7 @@ const PersonCenterComponents = React.createClass({
      */
     onGroupUserTableSelectChange(selectedRowKeys) {
         var selectedRowKeysStr = selectedRowKeys.join(",");
-        this.setState({selectedRowKeys, selectedRowKeysStr});
+        this.setState({ selectedRowKeys, selectedRowKeysStr });
     },
 
     /**
@@ -1386,7 +1386,7 @@ const PersonCenterComponents = React.createClass({
         var memberIdsArray = [];
         memberIdsArray.push(memberIds);
         currentMemberArray = personCenter.array_diff(currentMemberArray, memberIdsArray);
-        personCenter.setState({"currentMemberArray": currentMemberArray});
+        personCenter.setState({ "currentMemberArray": currentMemberArray });
     },
 
     array_diff(a, b) {
@@ -1412,15 +1412,16 @@ const PersonCenterComponents = React.createClass({
             target = e.target;
         }
         var memberIds = target.value;
-        personCenter.setState({"delMemberIds": memberIds});
-        personCenter.refs.confirmModal.changeConfirmModalVisible(true);
+        personCenter.setState({ "delMemberIds": memberIds, calmRemoveMembers: true });
+        // personCenter.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     /**
      * 关闭移出群聊按钮对应的confirm窗口
      */
     closeConfirmModal() {
-        personCenter.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({ calmRemoveMembers: false })
+        // personCenter.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -1428,20 +1429,20 @@ const PersonCenterComponents = React.createClass({
      */
     showAddMembersModal() {
         personCenter.getNotMemberUser();
-        personCenter.setState({"addGroupMemberModalVisible": true});
+        personCenter.setState({ "addGroupMemberModalVisible": true });
     },
     /**
      * 关闭添加群成员Modal窗口
      */
     addGroupMemberModalHandleCancel() {
-        personCenter.setState({"addGroupMemberModalVisible": false});
+        personCenter.setState({ "addGroupMemberModalVisible": false });
     },
     /**
      * 添加群成员的Tranfer组件内容改变事件
      * @param targetKeys
      */
     addMemberTransferHandleChange(targetKeys) {
-        personCenter.setState({"memberTargetKeys": targetKeys});
+        personCenter.setState({ "memberTargetKeys": targetKeys });
     },
     /**
      * 添加群成员
@@ -1466,7 +1467,7 @@ const PersonCenterComponents = React.createClass({
                 }
                 var currentMemberArray = personCenter.state.currentMemberArray;
                 currentMemberArray = currentMemberArray.concat(memberTargetkeys);
-                personCenter.setState({"addGroupMemberModalVisible": false, "currentMemberArray": currentMemberArray});
+                personCenter.setState({ "addGroupMemberModalVisible": false, "currentMemberArray": currentMemberArray });
                 personCenter.getUserChatGroup();
             },
             onError: function (error) {
@@ -1556,7 +1557,7 @@ const PersonCenterComponents = React.createClass({
     showUpdateChatGroupNameModal() {
         var currentGroupObj = personCenter.state.currentGroupObj;
         var updateChatGroupTitle = currentGroupObj.name;
-        personCenter.setState({"updateChatGroupNameModalVisible": true, "updateChatGroupTitle": updateChatGroupTitle});
+        personCenter.setState({ "updateChatGroupNameModalVisible": true, "updateChatGroupTitle": updateChatGroupTitle });
     },
 
     /**
@@ -1570,8 +1571,8 @@ const PersonCenterComponents = React.createClass({
             var radioSon = <Radio style={radioStyle} value={v.key}>{v.groupUser}</Radio>;
             array.push(radioSon);
         });
-        this.setState({radioSon: array});
-        this.setState({mainTransferModalVisible: true});
+        this.setState({ radioSon: array });
+        this.setState({ mainTransferModalVisible: true });
     },
 
     mainTransferOnChange(e) {
@@ -1599,7 +1600,7 @@ const PersonCenterComponents = React.createClass({
                     _this.mainTransferModalHandleCancel();
                     var obj = _this.state.currentGroupObj;
                     obj.owner.colUid = newOwnerId;
-                    _this.setState({currentGroupObj: obj});
+                    _this.setState({ currentGroupObj: obj });
                     //重新刷新页面
                 } else {
                     message.error(ret.msg);
@@ -1612,15 +1613,15 @@ const PersonCenterComponents = React.createClass({
     },
 
     mainTransferModalHandleCancel() {
-        this.setState({mainTransferModalVisible: false});
-        this.setState({radioValue: 1});
+        this.setState({ mainTransferModalVisible: false });
+        this.setState({ radioValue: 1 });
     },
 
     /**
      * 关闭修改群名称的窗口
      */
     updateChatGroupNameModalHandleCancel() {
-        personCenter.setState({"updateChatGroupNameModalVisible": false});
+        personCenter.setState({ "updateChatGroupNameModalVisible": false });
     },
 
     /**
@@ -1645,7 +1646,7 @@ const PersonCenterComponents = React.createClass({
                         message.success("聊天群组修改失败");
                     }
                     personCenter.getUserChatGroup();
-                    personCenter.setState({"updateChatGroupNameModalVisible": false});
+                    personCenter.setState({ "updateChatGroupNameModalVisible": false });
                 },
                 onError: function (error) {
                     message.error(error);
@@ -1665,18 +1666,20 @@ const PersonCenterComponents = React.createClass({
             target = e.target;
         }
         var updateChatGroupTitle = target.value;
-        personCenter.setState({"updateChatGroupTitle": updateChatGroupTitle});
+        personCenter.setState({ "updateChatGroupTitle": updateChatGroupTitle });
     },
 
     /**
      * 关闭解散群聊按钮对应的confirm窗口
      */
     closeDissolutionChatGroupConfirmModal() {
-        personCenter.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(false);
+        this.setState({ calmBreakGroup: false })
+        // personCenter.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(false);
     },
 
     closeExitChatGroupConfirmModal() {
-        personCenter.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
+        this.setState({calmExitGroup:false})
+        // personCenter.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -1691,21 +1694,22 @@ const PersonCenterComponents = React.createClass({
             target = e.target;
         }
         var memberIds = target.value;
-        personCenter.setState({"delMemberIds": memberIds});
-        personCenter.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(true);
+        personCenter.setState({ "delMemberIds": memberIds,calmExitGroup:true });
+        // personCenter.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(true);
     },
 
     showDissolutionChatGroupConfirmModal() {
-        personCenter.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
+        this.setState({ calmBreakGroup: true })
+        // personCenter.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
     },
 
     render() {
         var _this = this;
         var userPhotoTag;
         var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button
-            onClick={personCenter.returnPersonCenter}><Icon type="left"/></Button></div>;
+            onClick={personCenter.returnPersonCenter}><Icon type="left" /></Button></div>;
         var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button
-            onClick={personCenter.returnToChatGroupMessagePage}><Icon type="left"/></Button></div>;
+            onClick={personCenter.returnToChatGroupMessagePage}><Icon type="left" /></Button></div>;
 
         //构建蚁群中的组织架构部分的面包屑组件
         var breadcrumbItemObjArray = [];
@@ -1726,7 +1730,7 @@ const PersonCenterComponents = React.createClass({
             var userName = user.userName;
             if (isEmpty(user.avatar) == false) {
                 userPhotoTag = <div className="person_user_bg2">
-                    <img src={user.avatar} className="person_user"/><br/>
+                    <img src={user.avatar} className="person_user" /><br />
                     <div className="white_16 date_tr">{userName}</div>
                 </div>;
             }
@@ -1740,26 +1744,26 @@ const PersonCenterComponents = React.createClass({
                 }
                 userLinkCard = <div title={userName + '的个人名片'} className="person_container">
                     <Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk}
-                            className="person_cor">
+                        className="person_cor">
                         <div>提问</div>
                     </Button>
                     <Button value={user.colUid} icon="area-chart" onClick={personCenter.studentStudyTrack}
-                            className="person_cor">
+                        className="person_cor">
                         <div>学习轨迹</div>
                     </Button>
                     <Button value={user.colUid} icon="star-o" onClick={personCenter.getUserFavorite}
-                            className="person_cor">
+                        className="person_cor">
                         <div>收藏</div>
                     </Button>
                     <Button value={user.colUid} icon="heart-o"
-                            onClick={personCenter.getMyFollows.bind(personCenter, user.colUid)}
-                            className="person_cor">
+                        onClick={personCenter.getMyFollows.bind(personCenter, user.colUid)}
+                        className="person_cor">
                         <div>关注</div>
                     </Button>
                 </div>;
                 userInfoCard =
                     <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai new_center_user"
-                          style={{margintop: '15px'}}>
+                        style={{ margintop: '15px' }}>
                         <Row className="person_13">
                             <p className="user_cont">
                                 <span className="user_til_name">学校：</span>
@@ -1782,19 +1786,19 @@ const PersonCenterComponents = React.createClass({
                 userLinkCard = <div title={userName + '的个人名片'} className="person_container ">
 
                     <Button value={user.colUid} icon="play-circle-o" className="person_cor"
-                            onClick={personCenter.getLiveInfo.bind(personCenter, user.colUid)}>
+                        onClick={personCenter.getLiveInfo.bind(personCenter, user.colUid)}>
                         <div>直播</div>
                     </Button>
                     <Button value={user.colUid} icon="area-chart" className="person_cor"
-                            onClick={personCenter.getMyCourseWares}>
+                        onClick={personCenter.getMyCourseWares}>
                         <div>资源</div>
                     </Button>
                     <Button value={user.colUid} icon="star-o" className="person_cor"
-                            onClick={personCenter.getMySubjects}>
+                        onClick={personCenter.getMySubjects}>
                         <div>题库</div>
                     </Button>
                     <Button value={user.colUid} icon="heart-o" className="person_cor"
-                            onClick={personCenter.getMyFollows.bind(personCenter, user.colUid)}>
+                        onClick={personCenter.getMyFollows.bind(personCenter, user.colUid)}>
                         <div>关注</div>
                     </Button>
                 </div>;
@@ -1830,19 +1834,19 @@ const PersonCenterComponents = React.createClass({
                 if (personCenter.state.isFollow == false) {
                     followButton =
                         <Button onClick={personCenter.followUser}
-                                className="persono_btn_gray">关注</Button>;
+                            className="persono_btn_gray">关注</Button>;
                 } else {
                     followButton =
                         <Button onClick={personCenter.unfollowUser}
-                                className="persono_btn_gray_old">取消关注</Button>;
+                            className="persono_btn_gray_old">取消关注</Button>;
                 }
             }
             //如果个人中心显示的用户并不是当前用户的联系人，则不能显示发消息按钮
             // if (personCenter.state.isExist) {
             sendMessageButton = <Button value={personCenter.state.userInfo.user.colUid}
 
-                                        onClick={personCenter.sendMessage}
-                                        className="antnest_talk  persono_btn_blue">发消息</Button>;
+                onClick={personCenter.sendMessage}
+                className="antnest_talk  persono_btn_blue">发消息</Button>;
             // }
         }
 
@@ -1851,7 +1855,7 @@ const PersonCenterComponents = React.createClass({
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
             var leftIcon = null;
             if (isEmpty(personCenter.state.comFrom) == false && personCenter.state.comFrom == "structureUser") {
-                leftIcon = <Icon type="left" onClick={personCenter.returnParent}/>;
+                leftIcon = <Icon type="left" onClick={personCenter.returnParent} />;
             }
 
             personDate = <div className="group_cont new_center_user_top">
@@ -1865,15 +1869,15 @@ const PersonCenterComponents = React.createClass({
 
                             <div className="person_btn">
                                 <Button className="antnest_talk antnest_icon_radius" value="score"
-                                        onClick={personCenter.turnToPlatformRulePage}><span>{personCenter.state.userInfo.score}</span>积分</Button>
+                                    onClick={personCenter.turnToPlatformRulePage}><span>{personCenter.state.userInfo.score}</span>积分</Button>
                                 <span className="bor_ri_line"></span>
                                 <Button className="antnest_icon_blue_radius" value="level"
-                                        onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.level.name}</Button>
+                                    onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.level.name}</Button>
                             </div>
                             <span className="person_btn_ri">
-                     {sendMessageButton}
+                                {sendMessageButton}
                                 {followButton}
-					 </span>
+                            </span>
 
                         </div>
                     </div>
@@ -1896,7 +1900,7 @@ const PersonCenterComponents = React.createClass({
                 </div>
                 <div className="class_right">
                     <Button onClick={personCenter.turnToScoreDetailPage}
-                            className="yellow_btn">{personCenter.state.userInfo.score}积分</Button>
+                        className="yellow_btn">{personCenter.state.userInfo.score}积分</Button>
                 </div>
                 <div className="integral_line"></div>
             </div>;
@@ -1906,196 +1910,196 @@ const PersonCenterComponents = React.createClass({
                 upgradeRaiders = <ul className="topics_le integral integral_scroll">
                     <li className="til">课中</li>
                     <li>
-                        <span><Icon type="minus-circle"/>逃课一次</span>
+                        <span><Icon type="minus-circle" />逃课一次</span>
                         <span className="right_ri">-10积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>课堂练习答错一题</span>
+                        <span><Icon type="plus-circle" />课堂练习答错一题</span>
                         <span className="right_ri">＋1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>课堂练习答对一题</span>
+                        <span><Icon type="plus-circle" />课堂练习答对一题</span>
                         <span className="right_ri">＋3积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>被送花一次</span>
+                        <span><Icon type="plus-circle" />被送花一次</span>
                         <span className="right_ri">＋5积分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle"/>被批评一次</span>
+                        <span><Icon type="minus-circle" />被批评一次</span>
                         <span className="right_ri">-3积分</span>
                     </li>
 
                     <li className="til">课下</li>
                     <li>
-                        <span><Icon type="plus-circle"/>评论教师话题说说（>10字/条）</span>
+                        <span><Icon type="plus-circle" />评论教师话题说说（>10字/条）</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>发布蚁巢内容被老师点赞一次</span>
+                        <span><Icon type="plus-circle" />发布蚁巢内容被老师点赞一次</span>
                         <span className="right_ri">＋1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>课后作业答错一次</span>
+                        <span><Icon type="plus-circle" />课后作业答错一次</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>课后作业答对一次</span>
+                        <span><Icon type="plus-circle" />课后作业答对一次</span>
                         <span className="right_ri">+3积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>看微课一个（≥70%）</span>
+                        <span><Icon type="plus-circle" />看微课一个（≥70%）</span>
                         <span className="right_ri">+2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>看PPT一个（≥70%）</span>
+                        <span><Icon type="plus-circle" />看PPT一个（≥70%）</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>提问获教师解答（16蚁币/个）</span>
+                        <span><Icon type="plus-circle" />提问获教师解答（16蚁币/个）</span>
                         <span className="right_ri">+50积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>表扬一次（≤2/科/天）</span>
+                        <span><Icon type="plus-circle" />表扬一次（≤2/科/天）</span>
                         <span className="right_ri">+10积分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle"/>批评一次（≤2/科/天）</span>
+                        <span><Icon type="minus-circle" />批评一次（≤2/科/天）</span>
                         <span className="right_ri">-3积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>自主做题错一题（3个/科/天）</span>
+                        <span><Icon type="plus-circle" />自主做题错一题（3个/科/天）</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>自主做题对一题（3个/科/天）</span>
+                        <span><Icon type="plus-circle" />自主做题对一题（3个/科/天）</span>
                         <span className="right_ri">+难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>用装备做错一题（3蚁币/个）</span>
+                        <span><Icon type="plus-circle" />用装备做错一题（3蚁币/个）</span>
                         <span className="right_ri">+2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>用装备做对一题（同上）</span>
+                        <span><Icon type="plus-circle" />用装备做对一题（同上）</span>
                         <span className="right_ri">难度分＊2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>装备换题错一题（1蚁币/个）</span>
+                        <span><Icon type="plus-circle" />装备换题错一题（1蚁币/个）</span>
                         <span className="right_ri">+2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>装备换题对一题（同上）</span>
+                        <span><Icon type="plus-circle" />装备换题对一题（同上）</span>
                         <span className="right_ri">难度分＊2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>翻倍道具做题（3蚁币/个）</span>
+                        <span><Icon type="plus-circle" />翻倍道具做题（3蚁币/个）</span>
                         <span className="right_ri">总分翻倍</span>
                     </li>
 
                     <li className="til">技能</li>
                     <li>
-                        <span><Icon type="plus-circle"/>每个技能使用一次</span>
+                        <span><Icon type="plus-circle" />每个技能使用一次</span>
                         <span className="right_ri">+2积分</span>
                     </li>
 
                     <li className="til">斗转星移（1次/人/天）</li>
                     <li>
-                        <span><Icon type="plus-circle"/>使用装备不做题(1蚁币/个)</span>
+                        <span><Icon type="plus-circle" />使用装备不做题(1蚁币/个)</span>
                         <span className="right_ri">不扣分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle"/>不用装备不做题</span>
+                        <span><Icon type="minus-circle" />不用装备不做题</span>
                         <span className="right_ri">-2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle"/>不用装备做错一题</span>
+                        <span><Icon type="minus-circle" />不用装备做错一题</span>
                         <span className="right_ri">-1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>不用装备做对一题</span>
+                        <span><Icon type="plus-circle" />不用装备做对一题</span>
                         <span className="right_ri">+难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>不用装备做对一题，发起人得</span>
+                        <span><Icon type="plus-circle" />不用装备做对一题，发起人得</span>
                         <span className="right_ri">+难度分</span>
                     </li>
 
                     <li className="til">决斗（2蚁币/次）</li>
                     <li>
-                        <span><Icon type="minus-circle"/>发起人不做题</span>
+                        <span><Icon type="minus-circle" />发起人不做题</span>
                         <span className="right_ri">-使用技能所得积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>对手使用防守装备不做题</span>
+                        <span><Icon type="plus-circle" />对手使用防守装备不做题</span>
                         <span className="right_ri">不扣分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle"/>对手不使用防守装备不做题</span>
+                        <span><Icon type="minus-circle" />对手不使用防守装备不做题</span>
                         <span className="right_ri">-2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle"/>对手不使用防守装备且做错</span>
+                        <span><Icon type="minus-circle" />对手不使用防守装备且做错</span>
                         <span className="right_ri">-1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>发起人做对，对手错，发起人</span>
+                        <span><Icon type="plus-circle" />发起人做对，对手错，发起人</span>
                         <span className="right_ri">＋2倍难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>发起人做错，对手对，发起人</span>
+                        <span><Icon type="plus-circle" />发起人做错，对手对，发起人</span>
                         <span className="right_ri">＋0积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>发起人做错，对手对，对手</span>
+                        <span><Icon type="plus-circle" />发起人做错，对手对，对手</span>
                         <span className="right_ri">＋难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>两人都做对</span>
+                        <span><Icon type="plus-circle" />两人都做对</span>
                         <span className="right_ri">＋难度分/人</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>两人都做错，发起人</span>
+                        <span><Icon type="plus-circle" />两人都做错，发起人</span>
                         <span className="right_ri">＋0积分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle"/>两人都做错，对手，发起人</span>
+                        <span><Icon type="minus-circle" />两人都做错，对手，发起人</span>
                         <span className="right_ri">-1积分</span>
                     </li>
                     <li className="til">万箭齐发</li>
                     <li>
-                        <span><Icon type="minus-circle"/>发起人不做题</span>
+                        <span><Icon type="minus-circle" />发起人不做题</span>
                         <span className="right_ri">-使用技能所得积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>对手使用防守装备不做题</span>
+                        <span><Icon type="plus-circle" />对手使用防守装备不做题</span>
                         <span className="right_ri">不扣分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle"/>对手不使用防守装备不做题</span>
+                        <span><Icon type="minus-circle" />对手不使用防守装备不做题</span>
                         <span className="right_ri">-2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle"/>对手不使用防守装备且做错</span>
+                        <span><Icon type="minus-circle" />对手不使用防守装备且做错</span>
                         <span className="right_ri">-1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>全班正确率&lt;30%,对手对</span>
+                        <span><Icon type="plus-circle" />全班正确率&lt;30%,对手对</span>
                         <span className="right_ri">难度分+平摊扣分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>全班正确率&lt;30%，发起人</span>
+                        <span><Icon type="plus-circle" />全班正确率&lt;30%，发起人</span>
                         <span className="right_ri">＋5倍难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>全班正确率&lt;30%，发起人</span>
+                        <span><Icon type="plus-circle" />全班正确率&lt;30%，发起人</span>
                         <span className="right_ri">＋5倍难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>全班正确率>30%，对手对</span>
+                        <span><Icon type="plus-circle" />全班正确率>30%，对手对</span>
                         <span className="right_ri">＋难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>正确率>30%，发起人对</span>
+                        <span><Icon type="plus-circle" />正确率>30%，发起人对</span>
                         <span className="right_ri">难度分＋扣分</span>
                     </li>
 
@@ -2104,55 +2108,55 @@ const PersonCenterComponents = React.createClass({
                 upgradeRaiders = <ul className="topics_le integral ">
                     <li className="til">升级攻略</li>
                     <li>
-                        <span><Icon type="plus-circle"/>上传教案,每一个</span>
+                        <span><Icon type="plus-circle" />上传教案,每一个</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>课外使用课件</span>
+                        <span><Icon type="plus-circle" />课外使用课件</span>
                         <span className="right_ri">+10积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>发布话题,分享教学资源,每一条</span>
+                        <span><Icon type="plus-circle" />发布话题,分享教学资源,每一条</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>学生参与此话题,并评论</span>
+                        <span><Icon type="plus-circle" />学生参与此话题,并评论</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>上传微课,每一个</span>
+                        <span><Icon type="plus-circle" />上传微课,每一个</span>
                         <span className="right_ri">+2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>微课校内点击</span>
+                        <span><Icon type="plus-circle" />微课校内点击</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>微课校外点击</span>
+                        <span><Icon type="plus-circle" />微课校外点击</span>
                         <span className="right_ri">+10积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>上传题目,每一个</span>
+                        <span><Icon type="plus-circle" />上传题目,每一个</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>校内使用此题,每次</span>
+                        <span><Icon type="plus-circle" />校内使用此题,每次</span>
                         <span className="right_ri">+5积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>校外使用此题,每次</span>
+                        <span><Icon type="plus-circle" />校外使用此题,每次</span>
                         <span className="right_ri">+3积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>课后布置作业,每题</span>
+                        <span><Icon type="plus-circle" />课后布置作业,每题</span>
                         <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>开课一次</span>
+                        <span><Icon type="plus-circle" />开课一次</span>
                         <span className="right_ri">+50积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle"/>在线解决学生提问</span>
+                        <span><Icon type="plus-circle" />在线解决学生提问</span>
                         <span className="right_ri">+20积分</span>
                     </li>
                 </ul>;
@@ -2170,15 +2174,15 @@ const PersonCenterComponents = React.createClass({
                 <TabPane tab="平台规则" key="platformRulePage">
                     <ul className="topics_le integral integral_scroll">
                         <li className="til">禁言</li>
-                        <li><Icon type="plus-circle"/>课前蚁巢刷屏、发布不良话题或评论</li>
-                        <li><Icon type="plus-circle"/>视频开课弹幕刷屏或无关言论、老师可关闭弹幕</li>
+                        <li><Icon type="plus-circle" />课前蚁巢刷屏、发布不良话题或评论</li>
+                        <li><Icon type="plus-circle" />视频开课弹幕刷屏或无关言论、老师可关闭弹幕</li>
                         <li className="til">视频开课被踢出课堂</li>
-                        <li><Icon type="plus-circle"/>视频开课中公屏或弹幕刷屏或发布不良言论、多次警告无效、可踢出课堂</li>
+                        <li><Icon type="plus-circle" />视频开课中公屏或弹幕刷屏或发布不良言论、多次警告无效、可踢出课堂</li>
                         <li className="til">封号</li>
-                        <li><Icon type="plus-circle"/>被踢出课堂或禁言1次、封号3天</li>
-                        <li><Icon type="plus-circle"/>连续被踢出课堂或禁言>=2次、封号1个周</li>
-                        <li><Icon type="plus-circle"/>连续被踢出课堂或禁言>=5次、封号1个月</li>
-                        <li><Icon type="plus-circle"/>在校期间出现严重警告、违纪、盗号、不服从老师管理、故意损坏小蚂蚁设备(平板、充电柜、无线AP)等封号1个月</li>
+                        <li><Icon type="plus-circle" />被踢出课堂或禁言1次、封号3天</li>
+                        <li><Icon type="plus-circle" />连续被踢出课堂或禁言>=2次、封号1个周</li>
+                        <li><Icon type="plus-circle" />连续被踢出课堂或禁言>=5次、封号1个月</li>
+                        <li><Icon type="plus-circle" />在校期间出现严重警告、违纪、盗号、不服从老师管理、故意损坏小蚂蚁设备(平板、充电柜、无线AP)等封号1个月</li>
                     </ul>
                 </TabPane>
                 <TabPane tab="升级攻略" key="upgradeRaiders">
@@ -2231,7 +2235,7 @@ const PersonCenterComponents = React.createClass({
                 <div
                     className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName + '的收藏'}</div>
                 <Favorites userid={personCenter.state.studentId} breadcrumbVisible={false}
-                           onPreview={this.props.onPreview}></Favorites>
+                    onPreview={this.props.onPreview}></Favorites>
             </div>
         } else if (personCenter.state.optType == "getMyFollows") {
             var welcomeTitle = personCenter.state.userInfo.user.userName + "的关注";
@@ -2255,11 +2259,11 @@ const PersonCenterComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela ">
                     <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc'
-                         style={{'overflow': 'auto'}}>
+                        style={{ 'overflow': 'auto' }}>
                         {personCenter.state.userLiveData}
                     </div>
                     <Pagination total={personCenter.state.totalLiveCount} pageSize={getPageSize()}
-                                current={personCenter.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
+                        current={personCenter.state.currentLivePage} onChange={this.onLiveInfoPageChange} />
                 </TabPane>
             </Tabs>;
         } else if (personCenter.state.optType == "getUserCourseWares") {
@@ -2281,8 +2285,8 @@ const PersonCenterComponents = React.createClass({
                             </Collapse>
                         </div>
                         <Pagination total={personCenter.state.totalCourseWareCount} pageSize={getPageSize()}
-                                    current={personCenter.state.currentCourseWarePage}
-                                    onChange={this.onCourseWareChange}/>
+                            current={personCenter.state.currentCourseWarePage}
+                            onChange={this.onCourseWareChange} />
                     </div>
                 </TabPane>
             </Tabs>;
@@ -2302,26 +2306,26 @@ const PersonCenterComponents = React.createClass({
                         total: personCenter.state.totalSubjectCount,
                         pageSize: getPageSize(),
                         onChange: personCenter.onSubjectPageChange
-                    }} scroll={{y: 400}}/>
+                    }} scroll={{ y: 400 }} />
                 </TabPane>
             </Tabs>;
         } else if (personCenter.state.optType == "getUserChatGroup") {
             var welcomeTitle = "我的群聊";
             var createChatToolBar = <div className="talk_ant_btn1">
-                                <Button 
-                                    className="calmBorderRadius"
-                                    onClick={personCenter.showCreateChatGroup}>创建群聊</Button>
+                <Button
+                    className="calmBorderRadius"
+                    onClick={personCenter.showCreateChatGroup}>创建群聊</Button>
             </div>;
             personDate = <div className="myfollow_zb">
                 <div className="public—til—blue">{welcomeTitle}{createChatToolBar}</div>
                 <div className="favorite_scroll">
                     <ul className="group_table">
-                        <Table className="group_table_u" showHeader={false} scroll={{x: true,}}
-                               columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{
-                            total: personCenter.state.totalChatGroupCount,
-                            pageSize: getPageSize(),
-                            onChange: personCenter.onChatGroupPageChange
-                        }}/>
+                        <Table className="group_table_u" showHeader={false} scroll={{ x: true, }}
+                            columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{
+                                total: personCenter.state.totalChatGroupCount,
+                                pageSize: getPageSize(),
+                                onChange: personCenter.onChatGroupPageChange
+                            }} />
                     </ul>
                 </div>
             </div>;
@@ -2344,16 +2348,16 @@ const PersonCenterComponents = React.createClass({
                     {/*获取组织架构的所有部门*/}
                     <div className="up_table_height">
                         <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList}
-                               className="schoolgroup_table"
-                               pagination={false}/>
+                            className="schoolgroup_table"
+                            pagination={false} />
                     </div>
                     {/*获取组织架构的部门下的人*/}
                     <div className="down_table_height">
                         <Table columns={memberColumns}
-                               pagination={false} dataSource={this.state.subGroupMemberList}
-                               className="schoolgroup_table1 schoolgroup_table_department"
-                               onRowClick={this.onRowClick}
-                               scroll={{y: 240}}
+                            pagination={false} dataSource={this.state.subGroupMemberList}
+                            className="schoolgroup_table1 schoolgroup_table_department"
+                            onRowClick={this.onRowClick}
+                            scroll={{ y: 240 }}
 
                         />
                         <div className="schoolgroup_operate schoolgroup_more">
@@ -2365,20 +2369,20 @@ const PersonCenterComponents = React.createClass({
         }
         else if (personCenter.state.optType == "showGroupInfo") {
             var welcomeTitle = "群设置";
-            const {loading, selectedRowKeys} = this.state;
+            const { loading, selectedRowKeys } = this.state;
             var topButton;
             var dissolutionChatGroupButton;
             if (personCenter.state.currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
                 //我是群主
                 topButton = <span className="right_ri">
                     <Button type="primary" onClick={this.mainTransfer}
-                            loading={loading}
+                        loading={loading}
                     >群主转让</Button>
                     <span className="toobar"><Button type="primary" onClick={this.showUpdateChatGroupNameModal}
-                                                     loading={loading}
+                        loading={loading}
                     >修改群名称</Button></span>
                     <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
-                                                     loading={loading}
+                        loading={loading}
                     >添加群成员</Button></span>
                 </span>;
                 dissolutionChatGroupButton =
@@ -2401,7 +2405,7 @@ const PersonCenterComponents = React.createClass({
                     var liTag = <div className="group_fr">
                         <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
                         <Button value={memberId} onClick={personCenter.showConfirmModal} className="group_del"><Icon
-                            type="close-circle-o"/></Button>
+                            type="close-circle-o" /></Button>
                     </div>;
                     memberLiTag.push(liTag);
                 });
@@ -2418,10 +2422,10 @@ const PersonCenterComponents = React.createClass({
                     } else {
                         //老师
                         topButton = <span className="right_ri">
-                    <Button type="primary" onClick={this.showAddMembersModal}
-                            loading={loading}
-                    >添加群成员</Button>
-                    </span>;
+                            <Button type="primary" onClick={this.showAddMembersModal}
+                                loading={loading}
+                            >添加群成员</Button>
+                        </span>;
                     }
                 }
 
@@ -2449,7 +2453,7 @@ const PersonCenterComponents = React.createClass({
                 <div className="favorite_scroll del_out">
                     <ul className="integral_top">
                         <span className="integral_face"><img src={personCenter.state.currentGroupObj.owner.avatar}
-                                                             className="person_user"/></span>
+                            className="person_user" /></span>
                         <div className="class_right color_gary_f">{personCenter.state.currentGroupObj.name}</div>
                         <div className="integral_line"></div>
                     </ul>
@@ -2461,7 +2465,7 @@ const PersonCenterComponents = React.createClass({
                         </li>
                         <li className="color_gary_f">群聊名称：{personCenter.state.currentGroupObj.name}</li>
                         <li className="btm"><Button onClick={personCenter.showExitChatGroupConfirmModal}
-                                                    className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}
+                            className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}
                         </li>
                     </ul>
                 </div>
@@ -2477,24 +2481,24 @@ const PersonCenterComponents = React.createClass({
         return (
             <div>
                 <Modal className="modol_width"
-                       visible={personCenter.state.updateChatGroupNameModalVisible}
-                       title="修改群名称"
-                       onCancel={personCenter.updateChatGroupNameModalHandleCancel}
-                       transitionName=""  //禁用modal的动画效果
-                       maskClosable={false} //设置不允许点击蒙层关闭
-                       footer={[
-                           <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                   onClick={personCenter.updateChatGroupName}>确定</button>,
-                           <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                   onClick={personCenter.updateChatGroupNameModalHandleCancel}>取消</button>
-                       ]}
+                    visible={personCenter.state.updateChatGroupNameModalVisible}
+                    title="修改群名称"
+                    onCancel={personCenter.updateChatGroupNameModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[
+                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                            onClick={personCenter.updateChatGroupName}>确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                            onClick={personCenter.updateChatGroupNameModalHandleCancel}>取消</button>
+                    ]}
                 >
                     <Row className="ant-form-item">
                         <Col span={6} className="right_look">群名称：</Col>
                         <Col span={14}>
                             <Input value={personCenter.state.updateChatGroupTitle}
-                                   defaultValue={personCenter.state.updateChatGroupTitle}
-                                   onChange={personCenter.updateChatGroupTitleOnChange}/>
+                                defaultValue={personCenter.state.updateChatGroupTitle}
+                                onChange={personCenter.updateChatGroupTitleOnChange} />
                         </Col>
                     </Row>
                 </Modal>
@@ -2507,9 +2511,9 @@ const PersonCenterComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
                         <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                onClick={personCenter.addGroupMember}>确定</button>,
+                            onClick={personCenter.addGroupMember}>确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                onClick={personCenter.addGroupMemberModalHandleCancel}>取消</button>
+                            onClick={personCenter.addGroupMemberModalHandleCancel}>取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -2531,18 +2535,70 @@ const PersonCenterComponents = React.createClass({
                     </Row>
                 </Modal>
 
-                <ConfirmModal ref="confirmModal"
+                {/* <ConfirmModal ref="confirmModal"
                               title="确定要移除选中的群成员?"
                               onConfirmModalCancel={personCenter.closeConfirmModal}
-                              onConfirmModalOK={personCenter.deleteSelectedMember}/>
-                <ConfirmModal ref="dissolutionChatGroupConfirmModal"
-                              title="确定要解散该群组?"
-                              onConfirmModalCancel={personCenter.closeDissolutionChatGroupConfirmModal}
-                              onConfirmModalOK={personCenter.dissolutionChatGroup}/>
-                <ConfirmModal ref="exitChatGroupConfirmModal"
-                              title="确定要退出该群组?"
-                              onConfirmModalCancel={personCenter.closeExitChatGroupConfirmModal}
-                              onConfirmModalOK={personCenter.exitChatGroup}/>
+                              onConfirmModalOK={personCenter.deleteSelectedMember}/> */}
+
+                <Modal
+                    className="calmModal"
+                    visible={floatButton.state.calmRemoveMembers}
+                    title="提示"
+                    onCancel={personCenter.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={personCenter.deleteSelectedMember}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={personCenter.closeConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要移除选中的群成员?
+                            </div>
+                </Modal>
+                {/* <ConfirmModal ref="dissolutionChatGroupConfirmModal"
+                    title="确定要解散该群组?"
+                    onConfirmModalCancel={personCenter.closeDissolutionChatGroupConfirmModal}
+                    onConfirmModalOK={personCenter.dissolutionChatGroup} /> */}
+                <Modal
+                    className="calmModal"
+                    visible={floatButton.state.calmBreakGroup}
+                    title="提示"
+                    onCancel={personCenter.closeDissolutionChatGroupConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={personCenter.dissolutionChatGroup}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={personCenter.closeDissolutionChatGroupConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要解散该群组?
+                            </div>
+                </Modal>
+                {/* <ConfirmModal ref="exitChatGroupConfirmModal"
+                    title="确定要退出该群组?"
+                    onConfirmModalCancel={personCenter.closeExitChatGroupConfirmModal}
+                    onConfirmModalOK={personCenter.exitChatGroup} /> */}
+                <Modal
+                    className="calmModal"
+                    visible={floatButton.state.calmExitGroup}
+                    title="提示"
+                    onCancel={personCenter.closeExitChatGroupConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={personCenter.exitChatGroup}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={personCenter.closeExitChatGroupConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要退出该群组?
+                            </div>
+                </Modal>
 
                 <Modal
                     visible={personCenter.state.createChatGroupModalVisible}
@@ -2552,16 +2608,16 @@ const PersonCenterComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
                         <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn"
-                                onClick={personCenter.createChatGroup}>确定</button>,
+                            onClick={personCenter.createChatGroup}>确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                onClick={personCenter.createChatGroupModalHandleCancel}>取消</button>
+                            onClick={personCenter.createChatGroupModalHandleCancel}>取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
                         <span>
                             <Input placeholder="请输入群名称" value={personCenter.state.chatGroupTitle}
-                                   defaultValue={personCenter.state.chatGroupTitle}
-                                   onChange={personCenter.chatGroupTitleOnChange}/>
+                                defaultValue={personCenter.state.chatGroupTitle}
+                                onChange={personCenter.chatGroupTitleOnChange} />
                         </span>
                     </Row>
                     <Row className="ant-form-item">
@@ -2584,17 +2640,17 @@ const PersonCenterComponents = React.createClass({
 
                 </Modal>
                 <Modal className="person_change_right"
-                       visible={personCenter.state.mainTransferModalVisible}
-                       title="转移群主"
-                       onCancel={personCenter.mainTransferModalHandleCancel}
-                       transitionName=""  //禁用modal的动画效果
-                       maskClosable={false} //设置不允许点击蒙层关闭
-                       footer={[
-                           <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                   onClick={personCenter.mainTransferForSure}>确定</button>,
-                           <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                   onClick={personCenter.mainTransferModalHandleCancel}>取消</button>
-                       ]}
+                    visible={personCenter.state.mainTransferModalVisible}
+                    title="转移群主"
+                    onCancel={personCenter.mainTransferModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[
+                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                            onClick={personCenter.mainTransferForSure}>确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                            onClick={personCenter.mainTransferModalHandleCancel}>取消</button>
+                    ]}
                 >
                     <Row className="ant-form-item">
                         <Col span={24}>
@@ -2605,7 +2661,7 @@ const PersonCenterComponents = React.createClass({
                     </Row>
                 </Modal>
 
-                <UseKnowledgeComponents ref="useKnowledgeComponents"/>
+                <UseKnowledgeComponents ref="useKnowledgeComponents" />
                 {personDate}
             </div>
         );

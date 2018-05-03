@@ -711,29 +711,34 @@ const Structure = React.createClass({
      * 批量删除
      */
     showConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({calmSureDelGroupMember:true})
+        // this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     /**
      * 删除子部门
      */
     showConfirmModalIcon() {
-        this.refs.confirmModalIcon.changeConfirmModalVisible(true);
+        this.setState({calmSureDelConfirm:true})
+        // this.refs.confirmModalIcon.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({calmSureDelGroupMember:false})
+        // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     closeConfirmModalIcon() {
-        this.refs.confirmModalIcon.changeConfirmModalVisible(false);
+        this.setState({calmSureDelConfirm:false})
+        // this.refs.confirmModalIcon.changeConfirmModalVisible(false);
     },
 
     /**
      * 删除部门员工model隐藏
      */
     closeConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({calmSureDelGroupMember:false})
+        // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -960,18 +965,51 @@ const Structure = React.createClass({
                                    callBackChangeMsg={this.callBackChangeMsg}
                 ></GroupSettingModal>
 
-                <ConfirmModal ref="confirmModal"
+                {/* <ConfirmModal ref="confirmModal"
                               title="确定要删除选中的部门员工?"
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.batchDeleteMemeber}
-                ></ConfirmModal>
-
-                <ConfirmModal
+                ></ConfirmModal> */}
+                <Modal
+                    className="calmModal"
+                    visible={this.state.calmSureDelGroupMember}
+                    title="提示"
+                    onCancel={this.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.batchDeleteMemeber}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定删除7?
+                            </div>
+                </Modal>
+                {/* <ConfirmModal
                     ref="confirmModalIcon"
                     title="确定删除?"
                     onConfirmModalCancel={this.closeConfirmModalIcon}
                     onConfirmModalOK={this.batchDeleteGroup}
-                />
+                /> */}
+                 <Modal
+                    className="calmModal"
+                    visible={this.state.calmSureDelConfirm}
+                    title="提示"
+                    onCancel={this.closeConfirmModalIcon}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.batchDeleteGroup}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModalIcon} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定删除8?
+                            </div>
+                </Modal>
                 {/*更改用户所属部门 modal*/}
                 <Modal
                     visible={this.state.moveMemberStructureModalVisible}
