@@ -216,39 +216,6 @@ const Role = React.createClass({
 
     showConfirm() {
         this.setState({changeConfirmModalVisible:true})
-        // var _this = this;
-        // confirm({
-        //     title: '确定删除11?',
-        //     onOk() {
-        //         var selectedMem = _this.state.selectedRowKeys;
-        //         var userIds = '';
-        //         selectedMem.forEach(function (v, i) {
-        //             userIds += v + ',';
-        //         })
-
-        //         var param = {
-        //             "method": 'deleteStructureRoleUsers',
-        //             "operateUid": _this.state.loginUser.colUid,
-        //             "roleId": _this.state.roleId,
-        //             "userIds": userIds.substr(0, userIds.length - 1)
-        //         };
-        //         doWebService(JSON.stringify(param), {
-        //             onResponse: function (ret) {
-        //                 if (ret.success == true && ret.msg == "调用成功") {
-        //                     message.success("删除成功");
-        //                     _this.ajaxData(_this.state.roleId);
-        //                 }
-        //             },
-        //             onError: function (error) {
-        //                 message.error(error);
-        //             }
-        //         });
-        //     },
-        //     onCancel() {
-        //         console.log('Cancel');
-        //     },
-        // })
-
     },
 
     /**
@@ -324,7 +291,7 @@ const Role = React.createClass({
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
                         确定删除?
-                            </div>
+                    </div>
                 </Modal>
             </div>
         );
