@@ -1,10 +1,10 @@
 /**
  * Created by devnote on 17-4-17.
  */
-import React, { PropTypes } from 'react';
-import { Modal, Icon, Input, Button, Row, Col, message, Select } from 'antd';
-import { doWebService } from '../../WebServiceHelper';
-import { isEmpty } from '../../utils/utils';
+import React, {PropTypes} from 'react';
+import {Modal, Icon, Input, Button, Row, Col, message, Select} from 'antd';
+import {doWebService} from '../../WebServiceHelper';
+import {isEmpty} from '../../utils/utils';
 import Confirm from '../ConfirmModal';
 
 var calmThis;
@@ -36,7 +36,7 @@ class AddSubGroupModal extends React.Component {
     componentDidMount() {
         var _this = this;
         var isShow = _this.props.isShow;
-        this.setState({ isShow });
+        this.setState({isShow});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -48,10 +48,10 @@ class AddSubGroupModal extends React.Component {
             parentGroupName = parentGroup.name;
             parentId = parentGroup.id;
         }
-        this.setState({ isShow, parentGroup, parentGroupName, parentId });
-        this.setState({ roleName: nextProps.roleName });
-        this.setState({ roleId: nextProps.delRoleGroupId });
-        this.setState({ subGroupName: nextProps.delRoleGroupName });
+        this.setState({isShow, parentGroup, parentGroupName, parentId});
+        this.setState({roleName: nextProps.roleName});
+        this.setState({roleId: nextProps.delRoleGroupId});
+        this.setState({subGroupName: nextProps.delRoleGroupName});
     }
 
     /**
@@ -85,7 +85,7 @@ class AddSubGroupModal extends React.Component {
      * 关闭学校设置窗口
      */
     closeAddSubGroupModal() {
-        this.setState({ "isShow": false });
+        this.setState({"isShow": false});
         this.props.closeModel();
     }
 
@@ -97,10 +97,9 @@ class AddSubGroupModal extends React.Component {
     }
 
     batchDeleteMemeber() {
-        // this.refs.confirm.changeConfirmModalVisible(false);
         let _this = this;
-        _this.setState({ calmSureDelConfirm: false })
-        
+        _this.setState({calmSureDelConfirm: false})
+
         var delRoleId = _this.state.roleId;
         var param = {
             "method": 'deleteStructureRole',
@@ -133,16 +132,12 @@ class AddSubGroupModal extends React.Component {
     }
 
     showConfirmModal() {
-        this.setState({ calmSureDelConfirm: true })
-        // this.refs.confirm.changeConfirmModalVisible(true);
+        this.setState({calmSureDelConfirm: true})
     }
 
     closeConfirmModal() {
         // debugger
-        this.setState({calmSureDelConfirm:false})
-        // console.log(this.state.calmSureDelConfirm);
-        // this.state.calmSureDelConfirm = false;
-        // this.refs.confirm.changeConfirmModalVisible(false);
+        this.setState({calmSureDelConfirm: false})
     }
 
     subGroupNameChange(e) {
@@ -153,7 +148,7 @@ class AddSubGroupModal extends React.Component {
             target = e.target;
         }
         var subGroupName = target.value;
-        this.setState({ subGroupName });
+        this.setState({subGroupName});
     }
 
     parentRoleChange(e) {
@@ -164,41 +159,12 @@ class AddSubGroupModal extends React.Component {
             target = e.target;
         }
         var parentRoleId = e;
-        this.setState({ parentRoleId });
+        this.setState({parentRoleId});
     }
 
     render() {
         return (
-            <Modal
-                title="编辑角色组"
-                visible={this.state.isShow}
-                width={440}
-                transitionName=""  //禁用modal的动画效果
-                closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
-                maskClosable={false} //设置不允许点击蒙层关闭
-                onCancel={this.closeAddSubGroupModal}
-                className="schoolgroup_modal"
-                footer={[
-                    <button type="danger" className="ant-btn login-form-button" onClick={this.handDel}>删除</button>,
-                    <button type="primary" className="ant-btn-primary ant-btn" onClick={this.handleOk}>确定</button>
-                ]}
-            >
-                <div className="modal_register_main">
-                    <Row className="ant_row">
-                        <Col span={6}>
-                            角色组名称：
-                        </Col>
-                        <Col span={18}>
-                            <Input value={this.state.subGroupName} onChange={this.subGroupNameChange} />
-                        </Col>
-                    </Row>
-                </div>
-                {/* <Confirm
-                    ref="confirm"
-                    title="确定删除?"
-                    onConfirmModalCancel={this.closeConfirmModal}
-                    onConfirmModalOK={this.batchDeleteMemeber}
-                /> */}
+            <div>
                 <Modal
                     className="calmModal"
                     visible={this.state.calmSureDelConfirm}
@@ -207,16 +173,44 @@ class AddSubGroupModal extends React.Component {
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.batchDeleteMemeber}  >确定</button>,
-                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                onClick={this.batchDeleteMemeber}>确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                onClick={this.closeConfirmModal}>取消</button>
                     ]}
                 >
                     <div className="isDel">
-                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")}/>
                         确定删除2?
-                            </div>
+                    </div>
                 </Modal>
-            </Modal>
+
+                <Modal
+                    title="编辑角色组"
+                    visible={this.state.isShow}
+                    width={440}
+                    transitionName=""  //禁用modal的动画效果
+                    closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    onCancel={this.closeAddSubGroupModal}
+                    className="schoolgroup_modal"
+                    footer={[
+                        <button type="danger" className="ant-btn login-form-button" onClick={this.handDel}>删除</button>,
+                        <button type="primary" className="ant-btn-primary ant-btn" onClick={this.handleOk}>确定</button>
+                    ]}
+                >
+                    <div className="modal_register_main">
+                        <Row className="ant_row">
+                            <Col span={6}>
+                                角色组名称：
+                            </Col>
+                            <Col span={18}>
+                                <Input value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+            </div>
         );
     }
 
