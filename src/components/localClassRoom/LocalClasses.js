@@ -106,7 +106,7 @@ const LocalClasses = React.createClass({
     /**
      * 根据是否存在开课的课堂,来决定是否重建班级列表
      */
-    rebuildClassRoomList(isHaveDisconnectionClass){
+    rebuildClassRoomList(isHaveDisconnection){
         var _this = this;
         var classRoomList = [];
         noomArr.forEach(function (classInfo, i) {
@@ -115,7 +115,7 @@ const LocalClasses = React.createClass({
             var className = classInfoArray[1];
             var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
                                           className="localclass_continue localclass_btn">开课</Button></div>;
-            if(isHaveDisconnectionClass == true){
+            if(isHaveDisconnection == true){
                 if(classId == _this.state.classId){
                     openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
                                               className="localclass_btn" disabled>正在开课</Button></div>;

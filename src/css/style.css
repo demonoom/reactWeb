@@ -1774,7 +1774,6 @@ p.user_cont {
     padding: 8px 0;
     width: 100%;
     float: left
-
 }
 
 p.user_introduction {
@@ -1875,14 +1874,10 @@ p.user_cont span.name1 {
     font-size: 14px;
     margin-bottom: 16px !important;
 }
-
-.17
-_hei1 {
+.hei1_17 {
     height: 98%;
 }
-
-.17
-_hei2 > table {
+.hei2_17 > table {
     padding: 3px 8px !important;
 }
 
@@ -2619,7 +2614,6 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     background-color: #2db7f5;
     border-color: #2db7f5;
     border-radius: 6px;
-    border: none;
     outline: none;
     cursor: pointer
 }
@@ -2632,7 +2626,6 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     color: #666;
     background-color: #fff;
     border-radius: 6px;
-    border: none;
     outline: none;
     cursor: pointer;
     border: 1px solid #d9d9d9;
@@ -3802,7 +3795,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     font-size: 14px;
     line-height: 24px;
     margin-left: 0;
-    word-break: break-word;
+    word-break: break-all;
     white-space: pre-wrap;
 }
 
@@ -3823,7 +3816,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     font-size: 14px;
     line-height: 24px;
     margin-left: 0;
-    word-break: break-word;
+    word-break: break-all;
     white-space: pre-wrap;
 }
 
@@ -9717,9 +9710,8 @@ a:active,a:hover{
 }
 .startClass .closeClass {
     border-color: red;
-    color:red;
+    color: red;
 }
-
 .calmBorderRadius {
     border-radius: 2px;
 }

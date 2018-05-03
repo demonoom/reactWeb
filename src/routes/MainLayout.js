@@ -1317,14 +1317,16 @@ const MainLayout = React.createClass({
      * 解散该群
      */
     showDissolutionChatGroupConfirmModal() {
-        this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
+        this.setState({calmBreakGroup:true})
+        // this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
     },
 
     /**
      * 关闭解散群聊按钮对应的confirm窗口
      */
     closeDissolutionChatGroupConfirmModal() {
-        this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(false);
+        this.setState({calmBreakGroup:false})
+        // this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -1405,15 +1407,16 @@ const MainLayout = React.createClass({
             target = e.target;
         }
         var memberIds = target.value;
-        this.setState({"delMemberIds": memberIds});
-        this.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({"delMemberIds": memberIds,calmBreakGroup:true});
+        // this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     /**
      * 关闭移出群聊按钮对应的confirm窗口
      */
     closeConfirmModal() {
-        this.refs.confirmModal.changeConfirmModalVisible(false);
+        this.setState({calmBreakGroup:false})
+        // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -1438,12 +1441,13 @@ const MainLayout = React.createClass({
             target = e.target;
         }
         var memberIds = target.value;
-        this.setState({"delMemberIds": memberIds});
-        this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(true);
+        this.setState({"delMemberIds": memberIds,calmExitGroup:true});
+        // this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(true);
     },
 
     closeExitChatGroupConfirmModal() {
-        this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
+        this.setState({calmExitGroup:false})
+        // this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -3344,7 +3348,7 @@ const MainLayout = React.createClass({
                             </div>
                         </Modal>
 
-                        <ConfirmModal ref="dissolutionChatGroupConfirmModal"
+                        {/* <ConfirmModal ref="dissolutionChatGroupConfirmModal"
                                       title="确定要解散该群组?"
                                       onConfirmModalCancel={this.closeDissolutionChatGroupConfirmModal}
                                       onConfirmModalOK={this.dissolutionChatGroup}/>
@@ -3355,7 +3359,58 @@ const MainLayout = React.createClass({
                         <ConfirmModal ref="confirmModal"
                                       title="确定要移除选中的群成员?"
                                       onConfirmModalCancel={this.closeConfirmModal}
-                                      onConfirmModalOK={this.deleteSelectedMember}/>
+                                      onConfirmModalOK={this.deleteSelectedMember}/> */}
+                                      <Modal
+                    className="calmModal"
+                    visible={this.state.calmRemoveMembers}
+                    title="提示"
+                    onCancel={this.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.deleteSelectedMember}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要移除选中的群成员?
+                            </div>
+                </Modal>
+                <Modal
+                    className="calmModal"
+                    visible={this.state.calmBreakGroup}
+                    title="提示"
+                    onCancel={this.closeDissolutionChatGroupConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.dissolutionChatGroup}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeDissolutionChatGroupConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要解散该群组?
+                            </div>
+                </Modal>
+                <Modal
+                    className="calmModal"
+                    visible={this.state.calmExitGroup}
+                    title="提示"
+                    onCancel={this.closeExitChatGroupConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.deleteSelectedMember}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeExitChatGroupConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定要退出该群组?
+                            </div>
+                </Modal>
                     </div>
                 </IntlProvider>
             </LocaleProvider>

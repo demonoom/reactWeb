@@ -124,7 +124,8 @@ class AddSubGroupModal extends React.Component {
   }
 
     batchDeleteMemeber() {
-        this.refs.confirm.changeConfirmModalVisible(false);
+        this.setState({calmSureDelConfirm:false})
+        // this.refs.confirm.changeConfirmModalVisible(false);
         let _this = this;
         var param = {
             "method": 'deleteStructureRole',
@@ -159,11 +160,13 @@ class AddSubGroupModal extends React.Component {
   }
 
     showConfirmModal(){
-        this.refs.confirm.changeConfirmModalVisible(true);
+        this.setState({calmSureDelConfirm:true})
+        // this.refs.confirm.changeConfirmModalVisible(true);
     }
 
     closeConfirmModal() {
-        this.refs.confirm.changeConfirmModalVisible(false);
+        this.setState({calmSureDelConfirm:false})
+        // this.refs.confirm.changeConfirmModalVisible(false);
     }
 
   subGroupNameChange(e){
@@ -261,12 +264,29 @@ class AddSubGroupModal extends React.Component {
             </Col>
           </Row>
         </div>
-          <Confirm
+          {/* <Confirm
               ref="confirm"
               title="确定删除?"
               onConfirmModalCancel={this.closeConfirmModal}
               onConfirmModalOK={this.batchDeleteMemeber}
-          />
+          /> */}
+          <Modal
+                    className="calmModal"
+                    visible={this.state.calmSureDelConfirm}
+                    title="提示"
+                    onCancel={this.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.batchDeleteMemeber}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定删除4?
+                            </div>
+                </Modal>
       </Modal>
     );
   }

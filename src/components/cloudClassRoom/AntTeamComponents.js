@@ -1170,8 +1170,8 @@ const AntTeamComponents = React.createClass({
                     title={
                         <FormattedMessage
                             id='createTeam'
-                            description='创建团队11'
-                            defaultMessage='创建团队11'
+                            description='创建团队'
+                            defaultMessage='创建团队'
                         />
                     }
                     onCancel={this.createTeamModalHandleCancel}
