@@ -3,7 +3,7 @@ import {Card, Radio, Row, Col, Button, Icon, message, Steps, Modal, Form, Pagina
 import {doWebService_CloudClassRoom, TEACH_LIVE_URL} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime, formatYMD, formatHM, formatNoSecond} from '../../utils/utils';
-import {isEmpty, cutString,getLocalFromLanguage,isToday} from '../../utils/utils';
+import {isEmpty, cutString, getLocalFromLanguage, isToday} from '../../utils/utils';
 import ConfirmModal from '../ConfirmModal';
 import CreateClassComponents from './CreateClassComponents';
 import UpdateClassComponents from './UpdateClassComponents';
@@ -95,11 +95,11 @@ const AntMulitiClassComponents = React.createClass({
                     var cardObj = <Card className="noDataTipImg">
                         <div>
                             <Icon type="frown-o"/><span>&nbsp;&nbsp;
-                          <FormattedMessage
-                              id='noata'
-                              description='暂无数据'
-                              defaultMessage='暂无数据'
-                          />
+                            <FormattedMessage
+                                id='noata'
+                                description='暂无数据'
+                                defaultMessage='暂无数据'
+                            />
                         </span>
                         </div>
                     </Card>;
@@ -162,20 +162,20 @@ const AntMulitiClassComponents = React.createClass({
         var optButtons;
         var isSeries = row.isSeries;
         var endTime;
-        var editButtonTip='编辑';
+        var editButtonTip = '编辑';
         var detailsButtonTip = '详情';
         var deletedButtonTip = '删除';
         var livingCourseButtonTip = '直播';
         var publishButtonTip = '发布';
         var lan = localStorage.getItem("language");
         if (lan == "zh-CN") {
-            editButtonTip='编辑';
+            editButtonTip = '编辑';
             detailsButtonTip = '详情';
             deletedButtonTip = '删除';
             livingCourseButtonTip = '直播';
             publishButtonTip = '发布';
-        }else{
-            editButtonTip='edit';
+        } else {
+            editButtonTip = 'edit';
             detailsButtonTip = 'details';
             deletedButtonTip = 'deleted';
             livingCourseButtonTip = 'liveingCourse';
@@ -191,10 +191,10 @@ const AntMulitiClassComponents = React.createClass({
                        defaultMessage='结束时间'
                    />
             </span>
-                <span className="series_gray_ri" style={{marginLeft:10}}>{endTime}</span></Col>;
+                <span className="series_gray_ri" style={{marginLeft: 10}}>{endTime}</span></Col>;
         }
         var isTestSpan = null;
-        if(isEmpty(row.test)===false && row.test === "test"){
+        if (isEmpty(row.test) === false && row.test === "test") {
             isTestSpan = <span className="series_recall upexam_float margin_left ">
                 <FormattedMessage
                     id='testLessonTip'
@@ -361,7 +361,7 @@ const AntMulitiClassComponents = React.createClass({
                                     description='HoursInTotal'
                                     defaultMessage='共{num}课时'
                                     values={
-                                        {num:videoNum}
+                                        {num: videoNum}
                                     }
                                 />
                             </span></Col>
@@ -372,7 +372,7 @@ const AntMulitiClassComponents = React.createClass({
                                    defaultMessage='授课老师'
                                />
                             </span>
-                                <span className="series_gray_ri" style={{marginLeft:10}} >{userSpanArray}</span></Col>
+                                <span className="series_gray_ri" style={{marginLeft: 10}}>{userSpanArray}</span></Col>
                             <Col span={24}><span className="series_gray_le">
                                       <FormattedMessage
                                           id='creatTime'
@@ -380,17 +380,17 @@ const AntMulitiClassComponents = React.createClass({
                                           defaultMessage='创课时间'
                                       />
                             </span>
-                                <span className="series_gray_ri" style={{marginLeft:10}}>{createTime}
+                                <span className="series_gray_ri" style={{marginLeft: 10}}>{createTime}
                         </span></Col>
                             <Col span={24}><span className="series_gray_le">
                                 {/*知识点：*/}
-                                   <FormattedMessage
-                                       id='knowledgePoint'
-                                       description='知识点'
-                                       defaultMessage='知识点'
-                                   />
+                                <FormattedMessage
+                                    id='knowledgePoint'
+                                    description='知识点'
+                                    defaultMessage='知识点'
+                                />
                             </span>
-                                <span className="series_gray_ri" style={{marginLeft:10}}>{newNameTotal}</span>
+                                <span className="series_gray_ri" style={{marginLeft: 10}}>{newNameTotal}</span>
                             </Col>
                             <Col span={24}><span className="series_gray_le">
                                  <FormattedMessage
@@ -399,7 +399,7 @@ const AntMulitiClassComponents = React.createClass({
                                      defaultMessage='课程概述'
                                  />
                             </span>
-                                <span className="series_gray_ri" style={{marginLeft:10}}>{content}</span></Col>
+                                <span className="series_gray_ri" style={{marginLeft: 10}}>{content}</span></Col>
                         </Row>
                     </Col>
                     <Col span={2}>
@@ -414,7 +414,7 @@ const AntMulitiClassComponents = React.createClass({
             var cardObj = <Card key={id}>
                 <Row>
                     <Col span={4} className="clound_img">
-                        <img alt="example"  src={image}/>
+                        <img alt="example" src={image}/>
                     </Col>
                     <Col span={18}>
                         <Row className="details_cont">
@@ -435,38 +435,38 @@ const AntMulitiClassComponents = React.createClass({
                                     description='HoursInTotal'
                                     defaultMessage='共{num}课时'
                                     values={
-                                        {num:videoNum}
+                                        {num: videoNum}
                                     }
                                 />
                             </span></Col>
                             <Col span={24}><span className="series_gray_le">
                                 {/*主讲老师：*/}
-                             <FormattedMessage
-                                 id='teacher'
-                                 description='授课老师'
-                                 defaultMessage='授课老师'
-                             />
+                                <FormattedMessage
+                                    id='teacher'
+                                    description='授课老师'
+                                    defaultMessage='授课老师'
+                                />
                             </span>
-                                <span className="series_gray_ri" style={{marginLeft:10}}>{userSpanArray}</span></Col>
+                                <span className="series_gray_ri" style={{marginLeft: 10}}>{userSpanArray}</span></Col>
                             <Col span={24}><span className="series_gray_le">
                                 {/*开始时间：*/}
-                              <FormattedMessage
-                                  id='creatTime'
-                                  description='创课时间'
-                                  defaultMessage='创课时间'
-                              />
+                                <FormattedMessage
+                                    id='creatTime'
+                                    description='创课时间'
+                                    defaultMessage='创课时间'
+                                />
                             </span>
-                                <span className="series_gray_ri" style={{marginLeft:10}}>{firstLiveTime}</span></Col>
+                                <span className="series_gray_ri" style={{marginLeft: 10}}>{firstLiveTime}</span></Col>
                             {endTime}
                             <Col span={24}><span className="series_gray_le">
                                 {/*课程概述：*/}
-                             <FormattedMessage
-                                 id='courseDescription'
-                                 description='课程概述'
-                                 defaultMessage='课程概述'
-                             />
+                                <FormattedMessage
+                                    id='courseDescription'
+                                    description='课程概述'
+                                    defaultMessage='课程概述'
+                                />
                             </span>
-                                <span className="series_gray_ri" style={{marginLeft:10}}>{content}</span></Col>
+                                <span className="series_gray_ri" style={{marginLeft: 10}}>{content}</span></Col>
                         </Row>
                     </Col>
                     <Col span={2}>
@@ -561,7 +561,7 @@ const AntMulitiClassComponents = React.createClass({
         }
 
         var isTestSpan = null;
-        if(isEmpty(classObj.test)===false && classObj.test === "test"){
+        if (isEmpty(classObj.test) === false && classObj.test === "test") {
             isTestSpan = <Col span={3} className="series_recall right_ri">
                 <FormattedMessage
                     id='testLessonTip'
@@ -593,7 +593,7 @@ const AntMulitiClassComponents = React.createClass({
                                         description='HoursInTotal'
                                         defaultMessage='共{num}课时'
                                         values={
-                                            {num:classObj.videoNum}
+                                            {num: classObj.videoNum}
                                         }
                                     />
                                 </span>
@@ -666,7 +666,7 @@ const AntMulitiClassComponents = React.createClass({
             var classDetailPanel = <Card>
                 <Row>
                     <Col span={24} className="clound_img">
-                        <img alt="example"  src={classObj.image}/>
+                        <img alt="example" src={classObj.image}/>
                     </Col>
                     <Col span={24}>
                         <Row className="modal_cloud_info">
@@ -684,7 +684,7 @@ const AntMulitiClassComponents = React.createClass({
                                         description='HoursInTotal'
                                         defaultMessage='共{num}课时'
                                         values={
-                                            {num:classObj.videoNum}
+                                            {num: classObj.videoNum}
                                         }
                                     />
                                 </span>
@@ -806,7 +806,7 @@ const AntMulitiClassComponents = React.createClass({
      */
 
     showConfirmDrwaModal(classId) {
-        this.setState({classId, isDisabled: true,changeConfirmModalVisible:true});
+        this.setState({classId, isDisabled: true, changeConfirmModalVisible: true});
         // this.refs.confirmDrawModal.changeConfirmModalVisible(true);
     },
 
@@ -881,18 +881,17 @@ const AntMulitiClassComponents = React.createClass({
             "id": liveObj.id,
         };
         var isCurrentDay = isToday(originTime);
-        var min=rightTime.getMinutes();
-        rightTime.setMinutes(min+5);
-        console.log(rightTime.toLocaleString());
+        var min = rightTime.getMinutes();
+        rightTime.setMinutes(min - 5);
         if (originTime > Date.parse(rightTime)) {
             message.warning('未到开课时间');
             return;
-        }else if(isCurrentDay===false){
-            message.warning('授课时间已过，请修正后再重新开课，谢谢！',6);
+        } else if (isCurrentDay === false) {
+            message.warning('授课时间已过，请修正后再重新开课，谢谢！', 6);
             return;
         }
-        var localLanguage=getLocalFromLanguage();
-        if(localLanguage=="zh"){
+        var localLanguage = getLocalFromLanguage();
+        if (localLanguage == "zh") {
             localLanguage = "zh-CN";
         }
         //在执行ajax请求前，打开一个空白的新窗口
@@ -904,7 +903,7 @@ const AntMulitiClassComponents = React.createClass({
                 if (isEmpty(videoStatus) == false && videoStatus == 3) {
                     _this.setState({"tipModalVisible": true});
                     var courseId = liveObj.courseId;
-                    _this.setState({'classPlayDetailModalVisible':false});
+                    _this.setState({'classPlayDetailModalVisible': false});
                     _this.getClassPlayDetail(courseId);
                     newTab.close();
                     return;
@@ -956,7 +955,8 @@ const AntMulitiClassComponents = React.createClass({
                 var userId = cloudClassRoomUser.colUid;
                 var videoLiTagArray = [];
                 var startTime = formatYMD(classObj.startTime);
-                var originTime = classObj.startTime;
+                var originTime = classObj.videos[0].liveTime;
+                console.log(classObj);
                 //获取当前时间 时间戳
                 var rightTime = Date.parse(new Date());
                 var isSerises = classObj.isSeries
@@ -1103,7 +1103,7 @@ const AntMulitiClassComponents = React.createClass({
                         </Row>
                     </Card>;
                 }
-                if (originTime > rightTime) {
+                if ((classObj.videos.length == 1) && originTime > (rightTime - 300)) {
                     _this.setState({classPlayDetailModalVisible: false, classDetailPanel});
                     message.warning('未到开课时间');
                 } else {
@@ -1218,19 +1218,19 @@ const AntMulitiClassComponents = React.createClass({
      */
     closeConfirmPushModal() {
         this.setState({"classId": ''});
-        
+
         this.refs.confirmPushModal.changeConfirmModalVisible(false);
     },
     /**
      * 关闭删除操作确认Modal
      */
     closeConfirmDrawModal() {
-        this.setState({"classId": '',changeConfirmModalVisible:false});
+        this.setState({"classId": '', changeConfirmModalVisible: false});
         // this.refs.confirmDrawModal.changeConfirmModalVisible(false);
     },
 
-    tipModalHandleCancel(){
-        this.setState({"tipModalVisible":false,"classDetailModalVisible":false});
+    tipModalHandleCancel() {
+        this.setState({"tipModalVisible": false, "classDetailModalVisible": false});
         this.getCourseList(this.state.currentPage);
     },
     /**
@@ -1275,7 +1275,7 @@ const AntMulitiClassComponents = React.createClass({
             ];
         } else if (this.state.stepDirect == "next") {
             saveButtons = [
-                <Button  onClick={this.changeStep.bind(this, "pre", "save")}>
+                <Button onClick={this.changeStep.bind(this, "pre", "save")}>
                     <FormattedMessage
                         id='back'
                         description='上一步'
@@ -1289,7 +1289,7 @@ const AntMulitiClassComponents = React.createClass({
                         defaultMessage='提交'
                     />
                 </Button>
-               
+
             ];
             var updateButtons = [
                 <Button onClick={this.changeStep.bind(this, "pre", "update")}>
@@ -1306,7 +1306,7 @@ const AntMulitiClassComponents = React.createClass({
                         defaultMessage='提交'
                     />
                 </Button>
-               
+
             ];
         }
 
@@ -1379,7 +1379,8 @@ const AntMulitiClassComponents = React.createClass({
                        width={800}
                 >
                     <div className="space">
-                        <CreateClassComponents ref="createClassComponent" isSeries={this.state.isSeries} courseClass={this.state.courseClass}
+                        <CreateClassComponents ref="createClassComponent" isSeries={this.state.isSeries}
+                                               courseClass={this.state.courseClass}
                                                onSaveOk={this.courseAddOk}></CreateClassComponents>
                     </div>
                 </Modal>
@@ -1435,22 +1436,24 @@ const AntMulitiClassComponents = React.createClass({
                               onConfirmModalOK={this.withDrawClass}
                 ></ConfirmModal> */}
 
-                <Modal      className="calmModal"
-                            visible={this.state.changeConfirmModalVisible}
-                            title="提示"
-                            onCancel={this.closeConfirmDrawModal}
-                            maskClosable={false} //设置不允许点击蒙层关闭
-                            transitionName=""  //禁用modal的动画效果
-                            footer={[
-                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.withDrawClass}  >确定</button>,
-                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmDrawModal} >取消</button>
-                            ]}
-                        >
-                            <div className="isDel">
-                                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                                确定要删除该课程?
-                            </div>
-                        </Modal>
+                <Modal className="calmModal"
+                       visible={this.state.changeConfirmModalVisible}
+                       title="提示"
+                       onCancel={this.closeConfirmDrawModal}
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       transitionName=""  //禁用modal的动画效果
+                       footer={[
+                           <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                   onClick={this.withDrawClass}>确定</button>,
+                           <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                   onClick={this.closeConfirmDrawModal}>取消</button>
+                       ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                        确定要删除该课程?
+                    </div>
+                </Modal>
                 <Modal className="modal_classDetail" title={
                     <FormattedMessage
                         id='courseInformationOpen'

@@ -74,7 +74,7 @@ const zh_CN = {
     publishImmediately: "立即发布",
     Classtime: "授课时间",
     Coursestate: "开课状态",
-    LessonNum: "第{ num }课时",
+    LessonNum: "{ num }",
     creatTime: "创课时间",
     knowledgePoint: "知识点",
     endTime: '结束时间',
