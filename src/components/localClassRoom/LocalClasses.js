@@ -145,19 +145,19 @@ const LocalClasses = React.createClass({
         var classType = "A";
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
-        localClassRoomWindow = window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        //localClassRoomWindow = window.open("http://192.168.50.186:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        //localClassRoomWindow = window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        localClassRoomWindow = window.open("http://192.168.50.186:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
 
-        var a = 0;
+        var refreshTime = 0;
         var timer = setInterval(function () {
             _this.getDisconnectedClass();
             _this.getTeacherClasses();
-            a += 5;
+            refreshTime += 5;
             console.log(a);
-            if (a == 15) {
+            if (refreshTime == 15) {
                 clearInterval(timer);
             }
-        }, 3000)
+        }, 5000)
 
 
         /* setTimeout(function () {
