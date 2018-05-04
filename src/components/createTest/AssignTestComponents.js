@@ -367,7 +367,7 @@ const AssignTestComponents = React.createClass({
         });
     },
 
-    //进入布置试卷页面时,获取试卷列表
+    //进入  页面时,获取试卷列表
     getExamPagerList(pageNo) {
 
         var _this = this;
