@@ -1826,8 +1826,8 @@ const UpdateClassComponents = React.createClass({
                         <Col span={4}>
                             <FormattedMessage
                                 id='scheduleSetting'
-                                description='设置课表111'
-                                defaultMessage='设置课表111'
+                                description='设置课表'
+                                defaultMessage='设置课表11'
                             />
                         </Col>
                         <Col span={20}>
@@ -1835,7 +1835,7 @@ const UpdateClassComponents = React.createClass({
                                 <Col span={3} className="add_left">
                                     <FormattedMessage
                                         id='content'
-                                        description='课时22'
+                                        description='课时'
                                         defaultMessage='课时22'
                                     />
                                 </Col>

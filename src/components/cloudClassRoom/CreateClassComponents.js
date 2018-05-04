@@ -1666,8 +1666,8 @@ const CreateClassComponents = React.createClass({
                                 <Col span={2} className="add_left">
                                     <FormattedMessage
                                         id='content'
-                                        description='课时3'
-                                        defaultMessage='课时4'
+                                        description='课时'
+                                        defaultMessage='课时'
                                     />
                                 </Col>
                                 <Col span={6} className="calmClassName">
