@@ -1749,8 +1749,8 @@ const UpdateClassComponents = React.createClass({
                         var videoName = lessonJson.videoName;
                         var InputObj = <Input id={lessonJson.squence} value={videoName}
                                               onChange={_this.lessonTitleOnChange} className="noom_input"/>;
-                        var lessonRowObj = <Row>
-                            <Col span={3}>
+                        var lessonRowObj = <Row className="calmContentRow">
+                            <Col span={3} className="calmClassPT">
                                 <FormattedMessage
                                     id='LessonNum'
                                     description='LessonNum'
@@ -1761,7 +1761,7 @@ const UpdateClassComponents = React.createClass({
                                 />
                             </Col>
                             {/*{lessonJson.videoNameObj}*/}
-                            <Col span={8}>{InputObj}</Col>
+                            <Col span={6}>{InputObj}</Col>
                             <Col span={4} className="class_right"> {lessonJson.teacherObj}</Col>
                             {/*{lessonJson.timeObj}*/}
 
@@ -1769,7 +1769,7 @@ const UpdateClassComponents = React.createClass({
 
                             </Col>
                             {lessonJson.uploadList}
-                            <Col span={2}>
+                            <Col span={2} className="calmClassName">
                                 <Button icon="delete" className="create_upload_btn"
                                     // disabled={deleteDisable}
                                         onClick={this.removeLesson.bind(this, lessonJson.squence, i)}></Button>
@@ -1827,19 +1827,19 @@ const UpdateClassComponents = React.createClass({
                             <FormattedMessage
                                 id='scheduleSetting'
                                 description='设置课表'
-                                defaultMessage='设置课表11'
+                                defaultMessage='设置课表'
                             />
                         </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={3} className="add_left">
+                                <Col span={3} className="add_left calmClassTime">
                                     <FormattedMessage
                                         id='content'
                                         description='课时'
-                                        defaultMessage='课时22'
+                                        defaultMessage='课时'
                                     />
                                 </Col>
-                                <Col span={8} className="calmContent">
+                                <Col span={6} className="calmClassName">
                                     <FormattedMessage
                                         id='name'
                                         description='名称'
@@ -1919,7 +1919,7 @@ const UpdateClassComponents = React.createClass({
                             />
                         </Col>;
                         var lessonRowObj = <Row className="calmContentRow">
-                            <Col span={2} className="calmClassPT">
+                            <Col span={3} className="calmClassPT">
                                 <FormattedMessage
                                     id='LessonNum'
                                     description='LessonNum'

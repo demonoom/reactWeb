@@ -9770,9 +9770,15 @@ a:active,a:hover{
     box-sizing: border-box;
 }
 .calmContentRow .ant-col-2 {
-    line-height:25px;
+    line-height:28px;
 }
+.calmContentRow .ant-col-3,
+.calmContentRow .ant-col-6,
 .calmContentRow .ant-col-4 {
+    line-height: 28px;
+}
+.ant-upload-list-item.ant-upload-list-item-undefined{
+    height:28px;
     line-height: 28px;
 }
 /* 编辑课程样式---end--- */
