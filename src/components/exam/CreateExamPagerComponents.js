@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Modal, message,Transfer } from 'antd';
-import {  Input,  Cascader, Row, Col, Checkbox, Progress,Button } from 'antd';
+import {  Input,  Cascader, Row, Col, Checkbox, Progress,Button} from 'antd';
 import { Card , Radio} from 'antd';
 import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';

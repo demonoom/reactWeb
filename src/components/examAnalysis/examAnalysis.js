@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { isEmpty } from '../../utils/utils';
-import { Button, message, Table } from 'antd';
+import { Button, message, Table,Modal} from 'antd';
 import { doWebService } from '../../WebServiceHelper'
 import ExamUpLoadModel from './examUpLoadModel'
 import Confirm from '../ConfirmModal'
