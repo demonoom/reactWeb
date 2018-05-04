@@ -335,6 +335,14 @@ const UpdateClassComponents = React.createClass({
                     LessionIsUpdateDisable = true;
                     teamDisabled = true;
                 }
+                var courseState = '';
+                if (videoStatus == 3) {
+                    courseState = '已开课'
+                } else if (videoStatus == 2) {
+                    courseState = '正在开课'
+                } else {
+                    courseState = '未开课'
+                }
                 var weiClassName = {
                     name: video.remark,
                     uid: i
@@ -428,6 +436,7 @@ const UpdateClassComponents = React.createClass({
                     uploadList,
                     //Tags,
                     currentLessionIsUpdateDisable,
+                    courseState,
                     deleteDisable: true,
                     videoStatus,
                     'delete': video.delete,
@@ -1886,6 +1895,7 @@ const UpdateClassComponents = React.createClass({
                 if (typeof(this.state.lessonArray) != "undefined") {
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
+                        console.log(lessonJson);
                         var deleteDisable = lessonJson.deleteDisable;
                         var videoNameObj = lessonJson.videoNameObj;
                         var videoName = lessonJson.videoName;
@@ -1922,6 +1932,7 @@ const UpdateClassComponents = React.createClass({
                             <Col span={8}>{InputObj}</Col>
                             <Col span={4}> {lessonJson.teacherObj}</Col>
                             {timeObj}
+                            <Col>{lessonJson.courseState}</Col>
                             <Col span={4}>
                                 <Button icon="delete" className="create_upload_btn"
                                     // disabled={deleteDisable}
