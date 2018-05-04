@@ -278,7 +278,7 @@ const LocalClassRoom = React.createClass({
             }
             /*跨域地址切换*/
             //pptURL = pptURL.replace("www.maaee.com", "jiaoxue.maaee.com:8989/proxy");
-            pptURL = pptURL.replace("www.maaee.com", "192.168.50.186:8090/proxy");
+            pptURL = pptURL.replace("www.maaee.com", "192.168.50.29:8090/proxy");
 
             pptURL = pptURL.replace("https", "http");
             var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;

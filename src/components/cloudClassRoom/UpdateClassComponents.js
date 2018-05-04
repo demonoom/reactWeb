@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {
     Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Steps,
-    Input, Select, Radio, DatePicker, Checkbox, message, Upload,Tag
+    Input, Select, Radio, DatePicker, Checkbox, message, Upload, Tag
 } from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty, formatYMD, getLocalTime} from '../../utils/utils';
@@ -65,8 +65,8 @@ const UpdateClassComponents = React.createClass({
             tags: [],
             noomTages: [],
             isTestClass: false,//默认测试课勾选状态
-            test: cloudClassRoomUser.test ,//获取当前用户的test ""为不是 test是测试用户
-            selectKnowledgeModalIsShow:false   //修改 知识点弹框
+            test: cloudClassRoomUser.test,//获取当前用户的test ""为不是 test是测试用户
+            selectKnowledgeModalIsShow: false   //修改 知识点弹框
 
         };
     },
@@ -92,7 +92,7 @@ const UpdateClassComponents = React.createClass({
             fileList.push(fileJson);
         }
         this.getAllClass();
-        if(this.state.stepNum==0){
+        if (this.state.stepNum == 0) {
             this.getAllSubject(updateClassObj.courseClassId);
         }
         // this.findTeamByUserId();
@@ -134,7 +134,7 @@ const UpdateClassComponents = React.createClass({
      * 修改题目时，可以直接删除已选的知识点
      * @param removedTag
      */
-    removeSelectedTags(removedTag,removeIndex) {
+    removeSelectedTags(removedTag, removeIndex) {
         var tags = this.state.tags;
         for (var i = 0; i < tags.length; i++) {
             if (tags[i].key == removedTag.key) {
@@ -147,7 +147,7 @@ const UpdateClassComponents = React.createClass({
                 noomTag.splice(i, 1);
             }
         }
-        this.setState({initTags:noomTag});
+        this.setState({initTags: noomTag});
     },
 
     /**
@@ -200,7 +200,7 @@ const UpdateClassComponents = React.createClass({
         var isTeam;
         var isSeriesDisabled;
         var teamDisabled;
-        var tagNoomArray =[];
+        var tagNoomArray = [];
         if (publishType == 1) {
             //团队发布
             isTeam = 2;
@@ -350,7 +350,7 @@ const UpdateClassComponents = React.createClass({
                 var remark = video.remark;
                 var id = video.id;
                 var liveTime = video.liveTime;
-                var videoJson = {squence, name, url, remark, videoStatus, id, 'delete': video.delete,liveTime};
+                var videoJson = {squence, name, url, remark, videoStatus, id, 'delete': video.delete, liveTime};
                 _this.buildVideosArray(videoJson, "title");
                 lessonNum += 1;
                 var liveTime = getLocalTime(video.liveTime);
@@ -417,7 +417,7 @@ const UpdateClassComponents = React.createClass({
                 tagNoomObj.map((tagObj, index) => {
                     var tagKey = tagObj.knowledgeId;
                     var tagName = tagObj.knowledgeInfo['knowledgeName'];
-                    var tagJson = {'key':tagKey,'name':tagName};
+                    var tagJson = {'key': tagKey, 'name': tagName};
                     initTagsArray.push(tagJson);
                 })
                 var lessonJson = {
@@ -439,9 +439,9 @@ const UpdateClassComponents = React.createClass({
                 tagNoomArray.push(initTagsArray);
                 _this.setState({lessonArray});
             })
-            _this.setState({'noomTages':tagNoomArray})
+            _this.setState({'noomTages': tagNoomArray})
         }
-        if(isEmpty(isSeries)==false){
+        if (isEmpty(isSeries) == false) {
             _this.getAllClass();
         }
         _this.getAllSubject(courseClass);
@@ -506,7 +506,7 @@ const UpdateClassComponents = React.createClass({
     getAllSubject(courseClass) {
         var _this = this;
         var methodName = "findCourseSubject";
-        if(isEmpty(courseClass)==false && courseClass=='29'){
+        if (isEmpty(courseClass) == false && courseClass == '29') {
             methodName = "findRealLessonSubject";
         }
         var param = {
@@ -538,7 +538,7 @@ const UpdateClassComponents = React.createClass({
 
     updateCourse() {
         var _this = this;
-        if(isEmpty(courseInfoJson.isSeries)){
+        if (isEmpty(courseInfoJson.isSeries)) {
             //如果是实景课，isSeries设置为1
             courseInfoJson.isSeries = "1";
         }
@@ -633,7 +633,6 @@ const UpdateClassComponents = React.createClass({
      * @param value
      */
     courseSelectOnChange(value) {
-        // console.log(`selected ${value}`);
         this.setState({defaultSubjectSelected: value});
         courseInfoJson.courseTypeId = value;
     },
@@ -642,7 +641,6 @@ const UpdateClassComponents = React.createClass({
      * @param value
      */
     classLevelSelectOnChange(value) {
-        // console.log(`selected ${value}`);
         this.setState({courseClass: value});
         // courseInfoJson.courseClass = value;
 
@@ -652,7 +650,6 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     classTypeOnChange(e) {
-        // console.log('radio checked', e.target.value);
         var isTeam = e.target.value;
         var isSeriesDisabled;
         var teamDisabled;
@@ -678,7 +675,6 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     classIsFreeOnChange(e) {
-        // console.log('radio checked', e.target.value);
         var isFree = e.target.value;
 
         var moneyInputDisable = true;
@@ -729,7 +725,6 @@ const UpdateClassComponents = React.createClass({
      * @param value
      */
     courseTypeSelectOnChange(value) {
-        // console.log(`courseTypeSelectOnChange ${value}`);
         courseInfoJson.isSeries = value;
         this.setState({isSeries: value});
     },
@@ -739,7 +734,6 @@ const UpdateClassComponents = React.createClass({
      * @param value
      */
     teamSelectOnChange(value) {
-        // console.log(`teamSelectOnChange selected ${value}`);
         //团队授课时,发布者为团队id
         courseInfoJson.publisherId = value;
         this.getTeamUserOptions(value);
@@ -833,7 +827,6 @@ const UpdateClassComponents = React.createClass({
      * @param dateString
      */
     classTimeOnChange(date, dateString) {
-        // console.log(date, dateString);
         var startTime = dateString[0];
         var endTime = dateString[1];
         var startTimestamp = new Date(startTime).valueOf();
@@ -944,7 +937,7 @@ const UpdateClassComponents = React.createClass({
             videoNameObj,
             uploadList,
             videoStatus,
-             //Tags,
+            //Tags,
             'delete': false,
             "squence": lessonNum
         };
@@ -971,9 +964,9 @@ const UpdateClassComponents = React.createClass({
         return maxSequence;
     },
 
-    lessonTimeOnChange(squence,value, dateString) {
+    lessonTimeOnChange(squence, value, dateString) {
         var liveTime = dateString;
-        var videoJson = {squence, liveTime,videoStatus: 1, 'delete': false};
+        var videoJson = {squence, liveTime, videoStatus: 1, 'delete': false};
         this.buildVideosArray(videoJson);
         lessonArray.forEach(function (lessonJson) {
             var squenceInArray = lessonJson.squence;
@@ -994,7 +987,7 @@ const UpdateClassComponents = React.createClass({
     },
 
     lessonTimeOnOk(value) {
-        // console.log('onOk: ', value);
+
     },
     /**
      * 删除章节时，回调的函数
@@ -1034,8 +1027,8 @@ const UpdateClassComponents = React.createClass({
         var videoNumBeforeRemove = this.state.videoNum;
         var newVideoNum = parseInt(videoNumBeforeRemove) - 1;
         courseInfoJson.videoNum = newVideoNum;
-        var index = removeSequence -1;
-        this.state.noomTages.splice(index,1);
+        var index = removeSequence - 1;
+        this.state.noomTages.splice(index, 1);
         this.setState({lessonArray, "videoNum": newVideoNum});
 
     },
@@ -1117,7 +1110,6 @@ const UpdateClassComponents = React.createClass({
             } else {
                 var time = '';
             }
-            // console.log("teacher" + teacher + "\t" + time);
             if (this.state.isWeiClass) {
                 videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
                 videoJson.userID = teacher;
@@ -1144,7 +1136,7 @@ const UpdateClassComponents = React.createClass({
             }
             var knowledgeVideosArray = [];
             var tagJsonArray = this.state.noomTages[i];
-            if(isEmpty(tagJsonArray)==false){
+            if (isEmpty(tagJsonArray) == false) {
                 tagJsonArray.forEach(function (tagObj) {
                     var key = tagObj.key;
                     var name = tagObj.name;
@@ -1191,7 +1183,6 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     publishClassAtNow(e) {
-        // console.log(`checked = ${e.target.checked}`);
         // 是否发布　１已发布　２未发布
 
         if (e.target.checked) {
@@ -1259,7 +1250,6 @@ const UpdateClassComponents = React.createClass({
             target = e.target;
         }
         var videoNum = target.value;
-        // console.log("classTimes:" + videoNum);
         courseInfoJson.videoNum = videoNum;
         this.setState({videoNum});
     },
@@ -1349,7 +1339,7 @@ const UpdateClassComponents = React.createClass({
     },
 
     teamTeacherSelectOnChange(value) {
-        // console.log(value);
+
     },
 
     isWeiClass(e) {
@@ -1379,7 +1369,6 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     weiClassUpload(e, index) {
-        // console.log('上传完成的回调');
         courseInfoJson.videos.forEach(function (v, i) {
             if (v.squence == index) {
                 v.url = e.response;
@@ -1394,8 +1383,6 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     beforeUploadBack(e) {
-        // console.log(e);
-        // console.log('微课上传之前的回调');
 
         var weiClassName = {
             name: e.name,
@@ -1424,9 +1411,9 @@ const UpdateClassComponents = React.createClass({
     /*
     知识点modal 框
      */
-    showSelectKnowledgeModal(t,tagNoomObj){
+    showSelectKnowledgeModal(t, tagNoomObj) {
         this.refs.knowledgePointModal.rememberId(t);
-        this.setState({selectKnowledgeModalIsShow:true,"initTags":tagNoomObj})
+        this.setState({selectKnowledgeModalIsShow: true, "initTags": tagNoomObj})
     },
 
     /**
@@ -1438,8 +1425,8 @@ const UpdateClassComponents = React.createClass({
         //在这里决定往哪个数组的tags push tag
         var _this = this;
         _this.setState({"selectKnowledgeModalIsShow": false});
-        if(i!="closeBtn"){
-            if(isEmpty(this.state.noomTages)==false){
+        if (i != "closeBtn") {
+            if (isEmpty(this.state.noomTages) == false) {
                 _this.state.noomTages[i].splice(0);
             }
             if (isEmpty(tags) == false) {
@@ -1496,7 +1483,7 @@ const UpdateClassComponents = React.createClass({
             nextButton = <Button onClick={this.changeStep.bind(this, "next")}>下一步</Button>;
             var classRow = null;
             var subjectTitle = "课程分类";
-            if(isEmpty(this.state.courseClass)==false && this.state.courseClass != "29"){
+            if (isEmpty(this.state.courseClass) == false && this.state.courseClass != "29") {
                 classRow = <Row>
                     <Col span={4}>
                         <FormattedMessage
@@ -1638,8 +1625,8 @@ const UpdateClassComponents = React.createClass({
                                 />
                             </Radio>
                             {/*<Row style={{width: 420}}>*/}
-                                {/*<Col span={24} style={{marginLeft: 22}}>选择课程类型：{this.state.isSeriesStr}</Col>*/}
-                                {/*<Col span={16}>
+                            {/*<Col span={24} style={{marginLeft: 22}}>选择课程类型：{this.state.isSeriesStr}</Col>*/}
+                            {/*<Col span={16}>
 									<Select defaultValue={this.state.isSeries} value={this.state.isSeries} style={{ width: 120 }} disabled={this.state.isSeriesDisabled} onChange={this.courseTypeSelectOnChange}>
 										<Option value="1">系列课</Option>
 										<Option value="2">单节课</Option>
@@ -1758,7 +1745,7 @@ const UpdateClassComponents = React.createClass({
                                 <FormattedMessage
                                     id='LessonNum'
                                     description='LessonNum'
-                                    defaultMessage='第{ num }课时'
+                                    defaultMessage='{ num }'
                                     values={
                                         {num: lessonJson.lessonNum}
                                     }
@@ -1789,11 +1776,11 @@ const UpdateClassComponents = React.createClass({
                                             const isLongTag = tagObj.length > 20;
                                             var tagKey = tagObj.key;
                                             var tagName = tagObj.name;
-                                            var tagJson = {'key':tagKey,'name':tagName};
-                                            var noomIndex = parseInt(lessonJson.squence)-1;
+                                            var tagJson = {'key': tagKey, 'name': tagName};
+                                            var noomIndex = parseInt(lessonJson.squence) - 1;
                                             const tagElem = (
                                                 <Tag key={tagKey} closable={index !== -1}
-                                                     afterClose={() => _this.removeSelectedTags(tagJson,noomIndex)}>
+                                                     afterClose={() => _this.removeSelectedTags(tagJson, noomIndex)}>
                                                     {isLongTag ? `${tagName.slice(0, 20)}...` : tagName}
                                                 </Tag>
                                             );
@@ -1803,7 +1790,7 @@ const UpdateClassComponents = React.createClass({
                                 </Col>
                                 <Col span={3}>
                                     <Button className="calmBorderRadius ding_modal_top roe-t-f-left"
-                                            onClick={_this.showSelectKnowledgeModal.bind(_this, i,_this.state.noomTages[i])}>选择知识点</Button>
+                                            onClick={_this.showSelectKnowledgeModal.bind(_this, i, _this.state.noomTages[i])}>选择知识点</Button>
 
                                 </Col>
                             </Row>
@@ -1839,8 +1826,8 @@ const UpdateClassComponents = React.createClass({
                                 <Col span={3} className="add_left">
                                     <FormattedMessage
                                         id='content'
-                                        description='目录'
-                                        defaultMessage='目录'
+                                        description='课时'
+                                        defaultMessage='课时'
                                     />
                                 </Col>
                                 <Col span={8}>
@@ -1874,8 +1861,8 @@ const UpdateClassComponents = React.createClass({
                                             className="add_DIR add_study-b">
                                         <FormattedMessage
                                             id='add'
-                                            description='添加目录'
-                                            defaultMessage='添加目录'
+                                            description='添加课时'
+                                            defaultMessage='添加课时'
                                         />
                                     </Button>
                                 </Col>
@@ -1906,7 +1893,7 @@ const UpdateClassComponents = React.createClass({
                         var InputObj = <Input id={lessonJson.squence} value={videoName}
                                               onChange={_this.lessonTitleOnChange} className="noom_input"/>;
                         var liveTime = lessonJson.liveTime;
-                        if(isEmpty(liveTime)){
+                        if (isEmpty(liveTime)) {
                             liveTime = getLocalTime(new Date().valueOf());
                         }
                         var timeObj = <Col span={4}>
@@ -1916,8 +1903,9 @@ const UpdateClassComponents = React.createClass({
                                 showTime
                                 format="YYYY-MM-DD HH:mm:ss"
                                 placeholder="Select Time"
-                                onChange={_this.lessonTimeOnChange.bind(_this,lessonJson.squence)}
+                                onChange={_this.lessonTimeOnChange.bind(_this, lessonJson.squence)}
                                 onOk={_this.lessonTimeOnOk}
+                                disabled={lessonJson.currentLessionIsUpdateDisable}
                             />
                         </Col>;
                         var lessonRowObj = <Row>
@@ -1925,7 +1913,7 @@ const UpdateClassComponents = React.createClass({
                                 <FormattedMessage
                                     id='LessonNum'
                                     description='LessonNum'
-                                    defaultMessage='第{ num }课时'
+                                    defaultMessage='{ num }'
                                     values={
                                         {num: lessonJson.lessonNum}
                                     }
@@ -1970,8 +1958,8 @@ const UpdateClassComponents = React.createClass({
                                 <Col span={4} className="add_left">
                                     <FormattedMessage
                                         id='content'
-                                        description='目录'
-                                        defaultMessage='目录'
+                                        description='课时'
+                                        defaultMessage='课时'
                                     />
                                 </Col>
                                 <Col span={8}>
@@ -1997,6 +1985,13 @@ const UpdateClassComponents = React.createClass({
                                 </Col>
                                 <Col span={4}>
                                     <FormattedMessage
+                                        id='Coursestate'
+                                        description='开课状态'
+                                        defaultMessage='开课状态'
+                                    />
+                                </Col>
+                                <Col span={4}>
+                                    <FormattedMessage
                                         id='delete'
                                         description='操作'
                                         defaultMessage='操作'
@@ -2010,8 +2005,8 @@ const UpdateClassComponents = React.createClass({
                                             className="add_DIR add_study-b">
                                         <FormattedMessage
                                             id='add'
-                                            description='添加目录'
-                                            defaultMessage='添加目录'
+                                            description='添加课时'
+                                            defaultMessage='添加课时'
                                         />
                                     </Button>
                                 </Col>
