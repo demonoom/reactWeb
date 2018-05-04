@@ -1832,14 +1832,14 @@ const UpdateClassComponents = React.createClass({
                         </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={3} className="add_left calmClassTime">
+                                <Col span={3} className="add_left">
                                     <FormattedMessage
                                         id='content'
                                         description='课时'
                                         defaultMessage='课时'
                                     />
                                 </Col>
-                                <Col span={8} className="calmClassName">
+                                <Col span={8} className="calmContent">
                                     <FormattedMessage
                                         id='name'
                                         description='名称'
@@ -1918,7 +1918,7 @@ const UpdateClassComponents = React.createClass({
                                 disabled={lessonJson.currentLessionIsUpdateDisable}
                             />
                         </Col>;
-                        var lessonRowObj = <Row>
+                        var lessonRowObj = <Row className="calmContentRow">
                             <Col span={4} className="add_left">
                                 <FormattedMessage
                                     id='LessonNum'
@@ -1929,10 +1929,10 @@ const UpdateClassComponents = React.createClass({
                                     }
                                 />
                             </Col>
-                            <Col span={8}>{InputObj}</Col>
+                            <Col className="calmClassContent" span={8}>{InputObj}</Col>
                             <Col span={4}> {lessonJson.teacherObj}</Col>
                             {timeObj}
-                            <Col>{lessonJson.courseState}</Col>
+                            <Col span={4}>{lessonJson.courseState}</Col>
                             <Col span={4}>
                                 <Button icon="delete" className="create_upload_btn"
                                     // disabled={deleteDisable}

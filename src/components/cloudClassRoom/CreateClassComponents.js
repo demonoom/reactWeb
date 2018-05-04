@@ -1663,7 +1663,7 @@ const CreateClassComponents = React.createClass({
                         </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={4} className="add_left">
+                                <Col span={4} className="add_left calmTextIndent">
                                     <FormattedMessage
                                         id='content'
                                         description='课时'
