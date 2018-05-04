@@ -1919,7 +1919,7 @@ const UpdateClassComponents = React.createClass({
                             />
                         </Col>;
                         var lessonRowObj = <Row className="calmContentRow">
-                            <Col span={3} className="calmClassPT">
+                            <Col span={2} className="calmClassPT">
                                 <FormattedMessage
                                     id='LessonNum'
                                     description='LessonNum'
