@@ -1817,20 +1817,20 @@ const UpdateClassComponents = React.createClass({
                         <Col span={4}>
                             <FormattedMessage
                                 id='scheduleSetting'
-                                description='设置课表'
-                                defaultMessage='设置课表'
+                                description='设置课表111'
+                                defaultMessage='设置课表111'
                             />
                         </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={3} className="add_left">
+                                <Col span={3} className="add_left calmClassTime">
                                     <FormattedMessage
                                         id='content'
                                         description='课时'
                                         defaultMessage='课时'
                                     />
                                 </Col>
-                                <Col span={8}>
+                                <Col span={8} className="calmClassName">
                                     <FormattedMessage
                                         id='name'
                                         description='名称'
@@ -1955,14 +1955,14 @@ const UpdateClassComponents = React.createClass({
                         </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={4} className="add_left">
+                                <Col span={4} className="add_left calmClassTime">
                                     <FormattedMessage
                                         id='content'
                                         description='课时'
                                         defaultMessage='课时'
                                     />
                                 </Col>
-                                <Col span={8}>
+                                <Col span={8} className="calmClassName">
                                     <FormattedMessage
                                         id='name'
                                         description='名称'

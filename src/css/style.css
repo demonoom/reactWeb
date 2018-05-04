@@ -9750,3 +9750,11 @@ a:active,a:hover{
 .localclass_operation{
     width: 72px;
 }
+
+/* 编辑课程样式---start--- */
+.calmClassTime,
+.calmClassName {
+    width:96px;
+}
+
+/* 编辑课程样式---end--- */
