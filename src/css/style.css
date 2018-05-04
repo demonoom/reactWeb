@@ -9752,18 +9752,27 @@ a:active,a:hover{
 }
 
 /* 编辑课程样式---start--- */
-.calmClassTime,
+/* .calmClassTime,
 .calmClassName {
     width:96px;
+} */
+.calmClassName {
+    text-align: center;
+}
+.calmClassPT {
+    padding-left: 7px;
 }
 .ant-col-8.calmClassContent{
     width: 95px;
 }
 .calmContentRow {
-    padding: 8px;
+    padding:2px 9px 2px 12px;
     box-sizing: border-box;
 }
-.calmTextIndent {
-    text-indent: 2em;
+.calmContentRow .ant-col-2 {
+    line-height:25px;
+}
+.calmContentRow .ant-col-4 {
+    line-height: 28px;
 }
 /* 编辑课程样式---end--- */

@@ -1835,8 +1835,8 @@ const UpdateClassComponents = React.createClass({
                                 <Col span={3} className="add_left">
                                     <FormattedMessage
                                         id='content'
-                                        description='课时'
-                                        defaultMessage='课时'
+                                        description='课时22'
+                                        defaultMessage='课时22'
                                     />
                                 </Col>
                                 <Col span={8} className="calmContent">
@@ -1919,7 +1919,7 @@ const UpdateClassComponents = React.createClass({
                             />
                         </Col>;
                         var lessonRowObj = <Row className="calmContentRow">
-                            <Col span={4} className="add_left">
+                            <Col span={2} className="calmClassPT">
                                 <FormattedMessage
                                     id='LessonNum'
                                     description='LessonNum'
@@ -1929,7 +1929,7 @@ const UpdateClassComponents = React.createClass({
                                     }
                                 />
                             </Col>
-                            <Col className="calmClassContent" span={8}>{InputObj}</Col>
+                            <Col className="calmClassContent" span={6}>{InputObj}</Col>
                             <Col span={4}> {lessonJson.teacherObj}</Col>
                             {timeObj}
                             <Col span={4}>{lessonJson.courseState}</Col>
@@ -1966,14 +1966,14 @@ const UpdateClassComponents = React.createClass({
                         </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={4} className="add_left calmClassTime">
+                                <Col span={2} className="add_left calmClassTime">
                                     <FormattedMessage
                                         id='content'
                                         description='课时'
                                         defaultMessage='课时'
                                     />
                                 </Col>
-                                <Col span={8} className="calmClassName">
+                                <Col span={6} className="calmClassName">
                                     <FormattedMessage
                                         id='name'
                                         description='名称'

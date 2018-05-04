@@ -1611,8 +1611,8 @@ const CreateClassComponents = React.createClass({
                                               onChange={_this.lessonTitleOnChange} className="noom_input"/>;
 
 
-                        var lessonRowObj = <Row>
-                            <Col span={4} className="add_left">
+                        var lessonRowObj = <Row className="calmContentRow">
+                            <Col span={2} className="calmClassPT">
                                 {/*第{lessonJson.lessonNum}课时*/}
                                 <FormattedMessage
                                     id='LessonNum'
@@ -1625,7 +1625,7 @@ const CreateClassComponents = React.createClass({
                             </Col>
 
 
-                            <Col span={8}>{InputObj}</Col>
+                            <Col span={6} className="calmClassContent">{InputObj}</Col>
                             <Col span={4}>{lessonJson.teacherObj}</Col>
                             <Col span={4}>
                                 <Col span={24}>
@@ -1663,14 +1663,14 @@ const CreateClassComponents = React.createClass({
                         </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={4} className="add_left calmTextIndent">
+                                <Col span={2} className="add_left">
                                     <FormattedMessage
                                         id='content'
-                                        description='课时'
-                                        defaultMessage='课时'
+                                        description='课时3'
+                                        defaultMessage='课时4'
                                     />
                                 </Col>
-                                <Col span={8}>
+                                <Col span={6} className="calmClassName">
                                     <FormattedMessage
                                         id='name'
                                         description='名称'
@@ -1684,7 +1684,7 @@ const CreateClassComponents = React.createClass({
                                         defaultMessage='授课老师'
                                     />
                                 </Col>
-                                <Col span={4}>
+                                <Col span={4} className="calmClassName">
                                     <FormattedMessage
                                         id='Classtime'
                                         description='授课时间'
