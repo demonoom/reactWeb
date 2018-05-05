@@ -883,13 +883,13 @@ const AntMulitiClassComponents = React.createClass({
         var isCurrentDay = isToday(originTime);
         var min = rightTime.getMinutes();
         rightTime.setMinutes(min - 5);
-        if (originTime > Date.parse(rightTime)) {
-            message.warning('未到开课时间');
-            return;
-        } else if (isCurrentDay === false) {
-            message.warning('授课时间已过，请修正后再重新开课，谢谢！', 6);
-            return;
-        }
+        // if (originTime > Date.parse(rightTime)) {
+        //     message.warning('未到开课时间');
+        //     return;
+        // } else if (isCurrentDay === false) {
+        //     message.warning('授课时间已过，请修正后再重新开课，谢谢！', 6);
+        //     return;
+        // }
         var localLanguage = getLocalFromLanguage();
         if (localLanguage == "zh") {
             localLanguage = "zh-CN";
@@ -1103,12 +1103,12 @@ const AntMulitiClassComponents = React.createClass({
                         </Row>
                     </Card>;
                 }
-                if ((classObj.videos.length == 1) && originTime > (rightTime - 300)) {
-                    _this.setState({classPlayDetailModalVisible: false, classDetailPanel});
-                    message.warning('未到开课时间');
-                } else {
+                // if ((classObj.videos.length == 1) && originTime > (rightTime - 300)) {
+                //     _this.setState({classPlayDetailModalVisible: false, classDetailPanel});
+                //     message.warning('未到开课时间');
+                // } else {
                     _this.setState({classPlayDetailModalVisible: true, classDetailPanel});
-                }
+                // }
             },
             onError: function (error) {
                 message.error(error);
