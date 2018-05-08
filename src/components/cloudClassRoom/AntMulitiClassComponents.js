@@ -925,7 +925,7 @@ const AntMulitiClassComponents = React.createClass({
                     title = liveObj.name;
                 }
                 // requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title+"/"+localLanguage;
-                requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title;
+                requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title+"?title="+title;
                 //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
                 newTab.location.href = requestUrl;
             },
