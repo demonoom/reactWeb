@@ -924,6 +924,12 @@ const AntMulitiClassComponents = React.createClass({
                     targetId = liveObj.id;
                     title = liveObj.name;
                 }
+                // var specialCharsArray=['\'','\\\\','/','_'];
+                var specialCharsArray=['\'','\\','/','_','"','’'];
+                specialCharsArray.forEach(function (specialChar) {
+                    // var regExp = new RegExp(specialChar);
+                    title = title.replace(specialChar,'');
+                })
                 // requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title+"/"+localLanguage;
                 requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title+"?title="+title;
                 //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
