@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
-import { isEmpty } from '../../utils/utils';
-import { Button, message, Table } from 'antd';
-import { doWebService } from '../../WebServiceHelper'
+import React, {PropTypes} from 'react';
+import {isEmpty} from '../../utils/utils';
+import {Button, message, Table, Modal} from 'antd';
+import {doWebService} from '../../WebServiceHelper'
 import ExamUpLoadModel from './examUpLoadModel'
 import Confirm from '../ConfirmModal'
 
@@ -43,7 +43,7 @@ const ExamAnalysisComponents = React.createClass({
                             }
                             arr.push(obj);
                         })
-                        _this.setState({ scoreData: arr });
+                        _this.setState({scoreData: arr});
                     }
                 } else {
                     message.error(ret.msg);
@@ -59,14 +59,14 @@ const ExamAnalysisComponents = React.createClass({
      * 成绩单上传
      */
     examUpLoad() {
-        this.setState({ examUpLoadModelIsShow: true });
+        this.setState({examUpLoadModelIsShow: true});
     },
 
     /**
      * model关闭
      */
     closeExamAnalysisModel() {
-        this.setState({ examUpLoadModelIsShow: false });
+        this.setState({examUpLoadModelIsShow: false});
     },
 
     /**
@@ -90,7 +90,7 @@ const ExamAnalysisComponents = React.createClass({
      * @param record
      */
     delScore(record) {
-        this.setState({ delRec: record });   //要删除的班次的对象
+        this.setState({delRec: record});   //要删除的班次的对象
         this.showConfirmModal();
     },
 
@@ -99,7 +99,7 @@ const ExamAnalysisComponents = React.createClass({
      */
     deletePaperAnalysisTask() {
         var num = this.state.delRec.key;
-        this.setState({ calmSureDelConfirm: false })
+        this.setState({calmSureDelConfirm: false})
         // this.refs.confirm.changeConfirmModalVisible(false);
         var _this = this;
         //1.调用接口
@@ -118,7 +118,7 @@ const ExamAnalysisComponents = React.createClass({
                             return
                         }
                     });
-                    _this.setState({ scoreData: arr });
+                    _this.setState({scoreData: arr});
                     message.success('删除成功');
                 } else {
                     message.error(ret.msg);
@@ -134,7 +134,7 @@ const ExamAnalysisComponents = React.createClass({
      * Confirm打开
      */
     showConfirmModal() {
-        this.setState({ calmSureDelConfirm: true })
+        this.setState({calmSureDelConfirm: true})
         // this.refs.confirm.changeConfirmModalVisible(true);
     },
 
@@ -142,7 +142,7 @@ const ExamAnalysisComponents = React.createClass({
      * Confirm关闭
      */
     closeConfirmModal() {
-        this.setState({ calmSureDelConfirm: false })
+        this.setState({calmSureDelConfirm: false})
         // this.refs.confirm.changeConfirmModalVisible(false);
     },
 
@@ -168,9 +168,9 @@ const ExamAnalysisComponents = React.createClass({
             render: (text, record) => (
                 <span>
                     <Button type="button" className="score3_i" icon="area-chart"
-                        onClick={_this.analysis.bind(this, record)}></Button>
+                            onClick={_this.analysis.bind(this, record)}></Button>
                     <Button type="button" icon="delete"
-                        onClick={_this.delScore.bind(this, record)}></Button>
+                            onClick={_this.delScore.bind(this, record)}></Button>
                 </span>
             ),
         }];
@@ -184,20 +184,15 @@ const ExamAnalysisComponents = React.createClass({
                 </div>
                 <div className="exam_analysis">
                     <Table columns={columns}
-                        dataSource={this.state.scoreData}
-                        pagination={false} />
+                           dataSource={this.state.scoreData}
+                           pagination={false}/>
                 </div>
                 <ExamUpLoadModel
                     isShow={this.state.examUpLoadModelIsShow}
                     closeExamAnalysisModel={this.closeExamAnalysisModel}
                     addFinish={this.addFinish}
                 />
-                {/* <Confirm
-                    ref="confirm"
-                    title="确定删除?"
-                    onConfirmModalCancel={this.closeConfirmModal}
-                    onConfirmModalOK={this.deletePaperAnalysisTask}
-                /> */}
+
                 <Modal
                     className="calmModal"
                     visible={this.state.calmSureDelConfirm}
@@ -206,14 +201,16 @@ const ExamAnalysisComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.deletePaperAnalysisTask}  >确定</button>,
-                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                onClick={this.deletePaperAnalysisTask}>确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                onClick={this.closeConfirmModal}>取消</button>
                     ]}
                 >
                     <div className="isDel">
-                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除1?
-                            </div>
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                        确定删除?
+                    </div>
                 </Modal>
             </div>
         );

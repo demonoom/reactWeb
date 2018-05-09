@@ -6,7 +6,7 @@ import {
 import moment from 'moment';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import WeiClassUploadComponents from './WeiClassUploadComponents';
-import {isEmpty, getLocalTime,isDateTime,getLocalFromLanguage} from '../../utils/utils';
+import {isEmpty, getLocalTime, isDateTime, getLocalFromLanguage} from '../../utils/utils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 // import SelectKnowledgeModal from '../subjectManager/SelectKnowledgeModal';
 import KnowledgePointModal from './KnowledgePointModal';
@@ -67,13 +67,13 @@ const CreateClassComponents = React.createClass({
         this.findTeamByUserId();
         var isSeries = this.props.isSeries;
         var courseClass = this.props.courseClass;
-        if(isEmpty(courseClass)==false && courseClass == "29"){
+        if (isEmpty(courseClass) == false && courseClass == "29") {
             isSeries = "";
-        }else{
+        } else {
             isSeries = "1";
         }
         this.getAllSubject(isSeries);
-        this.setState({isSeries,courseClass});
+        this.setState({isSeries, courseClass});
         if (isSeries == "1") {
             isSeriesStr = "系列课";
         } else {
@@ -92,9 +92,9 @@ const CreateClassComponents = React.createClass({
         var isTestClass = this.state.isTestClass;
         var isSeries = nextProps.isSeries;
         var courseClass = nextProps.courseClass;
-        if(isEmpty(courseClass)==false && courseClass == "29"){
+        if (isEmpty(courseClass) == false && courseClass == "29") {
             isSeries = "";
-        }else{
+        } else {
             isSeries = "1";
         }
         //isWeiClass为true，代表是微课
@@ -113,7 +113,7 @@ const CreateClassComponents = React.createClass({
         //     showCourse = 0
         // }
         var stepDirect = nextProps.stepDirect;
-        this.setState({stepDirect, isSeries,courseClass});
+        this.setState({stepDirect, isSeries, courseClass});
         if (isSeries == "1" || isSeries == "3") {
             isSeriesStr = "系列课";
         } else {
@@ -179,7 +179,7 @@ const CreateClassComponents = React.createClass({
             isWeiClass: false,
             isShowClass: false,
             isTestClass: false,//默认测试课选中状态
-            noomTages:[]
+            noomTages: []
         });
 
         // this.getAllTeam();
@@ -607,7 +607,7 @@ const CreateClassComponents = React.createClass({
                         <FormattedMessage
                             id='LessonNum'
                             description='LessonNum'
-                            defaultMessage='第{ num }课时'
+                            defaultMessage=' { num }'
                             values={
                                 {num: lessonJson.lessonNum}
                             }
@@ -680,8 +680,8 @@ const CreateClassComponents = React.createClass({
         var videoNumBeforeRemove = this.state.videoNum;
         var newVideoNum = parseInt(videoNumBeforeRemove) - 1;
         courseInfoJson.videoNum = newVideoNum;
-        var index = removeSequence -1;
-        this.state.noomTages.splice(index,1);
+        var index = removeSequence - 1;
+        this.state.noomTages.splice(index, 1);
         this.setState({lessonArray, "videoNum": newVideoNum});
 
     },
@@ -778,7 +778,7 @@ const CreateClassComponents = React.createClass({
             videoJson.liveTime = new Date(time).valueOf();
             var knowledgeVideosArray = [];
             var tagJsonArray = this.state.noomTages[i];
-            if(isEmpty(tagJsonArray)==false){
+            if (isEmpty(tagJsonArray) == false) {
                 tagJsonArray.forEach(function (tagObj) {
                     var key = tagObj.key;
                     var name = tagObj.name;
@@ -1069,8 +1069,8 @@ const CreateClassComponents = React.createClass({
         //在这里决定往哪个数组的tags push tag
         var _this = this;
         _this.setState({"selectKnowledgeModalIsShow": false});
-        if(i!="closeBtn"){
-            if(isEmpty(this.state.noomTages)==false){
+        if (i != "closeBtn") {
+            if (isEmpty(this.state.noomTages) == false) {
                 _this.state.noomTages[i].splice(0);
             }
             if (isEmpty(tags) == false) {
@@ -1082,16 +1082,15 @@ const CreateClassComponents = React.createClass({
     },
 
 
-
     /**
      * 新增题目时，可以直接删除已选的知识点
      * @param removedTag
      */
-    handleClose(removedTag,removeIndex) {
+    handleClose(removedTag, removeIndex) {
         var _this = this;
         var tags = _this.state.tags;
         _this.setState({"selectKnowledgeModalIsShow": false});
-        if(removeIndex!="closeBtn"){
+        if (removeIndex != "closeBtn") {
             for (var i = 0; i < tags.length; i++) {
                 if (tags[i].key == removedTag.key) {
                     tags.splice(i, 1);
@@ -1310,11 +1309,11 @@ const CreateClassComponents = React.createClass({
 								</Col>*/}
                             {/*</Row>*/}
                             <Radio style={radioStyle} value={2}>
-                                   <FormattedMessage
-                                id='teamOfTeachers'
-                                description='团队授课'
-                                defaultMessage='团队授课'
-                            />
+                                <FormattedMessage
+                                    id='teamOfTeachers'
+                                    description='团队授课'
+                                    defaultMessage='团队授课'
+                                />
                                 <Row>
                                     <Col span={6} style={{marginLeft: 22}}>
                                         <FormattedMessage
@@ -1427,7 +1426,7 @@ const CreateClassComponents = React.createClass({
                                         const isLongTag = tag.length > 20;
                                         const tagElem = (
                                             <Tag key={tag.key} closable={index !== -1}
-                                                 afterClose={() => this.handleClose(tag,i-1)}>
+                                                 afterClose={() => this.handleClose(tag, i - 1)}>
                                                 {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
                                             </Tag>
                                         );
@@ -1455,7 +1454,7 @@ const CreateClassComponents = React.createClass({
                                 <FormattedMessage
                                     id='LessonNum'
                                     description='LessonNum'
-                                    defaultMessage='第{ num }课时'
+                                    defaultMessage=' { num }'
                                     values={
                                         {num: lessonJson.lessonNum}
                                     }
@@ -1496,7 +1495,7 @@ const CreateClassComponents = React.createClass({
                                 description='总&nbsp;&nbsp;课&nbsp;&nbsp;时'
                                 defaultMessage='总&nbsp;&nbsp;课&nbsp;&nbsp;时'
                             />
-                           </Col>
+                        </Col>
                         <Col span={20}>
                             <Input value={this.state.videoNum} disabled={true} onChange={this.classTimesOnChange}/>
                         </Col>
@@ -1514,8 +1513,8 @@ const CreateClassComponents = React.createClass({
                                 <Col span={3} className="add_left">
                                     <FormattedMessage
                                         id='content'
-                                        description='目录'
-                                        defaultMessage='目录'
+                                        description='课时'
+                                        defaultMessage='课时'
                                     />
                                 </Col>
                                 <Col span={8}>
@@ -1548,8 +1547,8 @@ const CreateClassComponents = React.createClass({
                                             className="add_DIR add_study-b">
                                         <FormattedMessage
                                             id='add'
-                                            description='添加目录'
-                                            defaultMessage='添加目录'
+                                            description='添加课时'
+                                            defaultMessage='添加课时'
                                         />
                                     </Button>
                                 </Col>
@@ -1586,7 +1585,7 @@ const CreateClassComponents = React.createClass({
                         }
 
                         var datePicker = null;
-                        if (isEmpty(liveTime) || isDateTime(getLocalTime(liveTime))==false) {
+                        if (isEmpty(liveTime) || isDateTime(getLocalTime(liveTime)) == false) {
                             datePicker = <DatePicker
                                 //defaultValue={moment(liveTime, dateFormat)}
                                 //value={moment(liveTime, dateFormat)}
@@ -1612,13 +1611,13 @@ const CreateClassComponents = React.createClass({
                                               onChange={_this.lessonTitleOnChange} className="noom_input"/>;
 
 
-                        var lessonRowObj = <Row>
-                            <Col span={4} className="add_left">
+                        var lessonRowObj = <Row className="calmContentRow">
+                            <Col span={2} className="calmClassPT">
                                 {/*第{lessonJson.lessonNum}课时*/}
                                 <FormattedMessage
                                     id='LessonNum'
                                     description='LessonNum'
-                                    defaultMessage='第{ num }课时'
+                                    defaultMessage=' { num }'
                                     values={
                                         {num: lessonJson.lessonNum}
                                     }
@@ -1626,7 +1625,7 @@ const CreateClassComponents = React.createClass({
                             </Col>
 
 
-                            <Col span={8}>{InputObj}</Col>
+                            <Col span={6} className="calmClassContent">{InputObj}</Col>
                             <Col span={4}>{lessonJson.teacherObj}</Col>
                             <Col span={4}>
                                 <Col span={24}>
@@ -1664,14 +1663,14 @@ const CreateClassComponents = React.createClass({
                         </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={4} className="add_left">
+                                <Col span={2} className="add_left">
                                     <FormattedMessage
                                         id='content'
-                                        description='目录'
-                                        defaultMessage='目录'
+                                        description='课时'
+                                        defaultMessage='课时'
                                     />
                                 </Col>
-                                <Col span={8}>
+                                <Col span={6} className="calmClassName">
                                     <FormattedMessage
                                         id='name'
                                         description='名称'
@@ -1685,7 +1684,7 @@ const CreateClassComponents = React.createClass({
                                         defaultMessage='授课老师'
                                     />
                                 </Col>
-                                <Col span={4}>
+                                <Col span={4} className="calmClassName">
                                     <FormattedMessage
                                         id='Classtime'
                                         description='授课时间'
@@ -1707,8 +1706,8 @@ const CreateClassComponents = React.createClass({
                                             className="add_DIR add_study-b">
                                         <FormattedMessage
                                             id='add'
-                                            description='添加目录'
-                                            defaultMessage='添加目录'
+                                            description='添加课时'
+                                            defaultMessage='添加课时'
                                         />
                                     </Button>
                                 </Col>
@@ -1735,16 +1734,16 @@ const CreateClassComponents = React.createClass({
                 <div className="modal_steps">
                     <Steps current={this.state.stepNum}>
                         <Step title={<FormattedMessage
-                                  id='courseInformation'
-                                  description='课程信息'
-                                  defaultMessage='课程信息'
-                              />}
+                            id='courseInformation'
+                            description='课程信息'
+                            defaultMessage='课程信息'
+                        />}
                               icon={<Icon type="credit-card"/>}/>
                         <Step title={<FormattedMessage
-                                  id='schedule'
-                                  description='设置课表'
-                                  defaultMessage='设置课表'
-                              />}
+                            id='schedule'
+                            description='设置课表'
+                            defaultMessage='设置课表'
+                        />}
                               icon={<Icon type="smile-o"/>}/>
                     </Steps>
                 </div>

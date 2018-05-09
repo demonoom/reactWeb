@@ -2542,7 +2542,7 @@ const PersonCenterComponents = React.createClass({
 
                 <Modal
                     className="calmModal"
-                    visible={floatButton.state.calmRemoveMembers}
+                    visible={personCenter.state.calmRemoveMembers}
                     title="提示"
                     onCancel={personCenter.closeConfirmModal}
                     maskClosable={false} //设置不允许点击蒙层关闭
@@ -2563,7 +2563,7 @@ const PersonCenterComponents = React.createClass({
                     onConfirmModalOK={personCenter.dissolutionChatGroup} /> */}
                 <Modal
                     className="calmModal"
-                    visible={floatButton.state.calmBreakGroup}
+                    visible={personCenter.state.calmBreakGroup}
                     title="提示"
                     onCancel={personCenter.closeDissolutionChatGroupConfirmModal}
                     maskClosable={false} //设置不允许点击蒙层关闭
@@ -2584,7 +2584,7 @@ const PersonCenterComponents = React.createClass({
                     onConfirmModalOK={personCenter.exitChatGroup} /> */}
                 <Modal
                     className="calmModal"
-                    visible={floatButton.state.calmExitGroup}
+                    visible={personCenter.state.calmExitGroup}
                     title="提示"
                     onCancel={personCenter.closeExitChatGroupConfirmModal}
                     maskClosable={false} //设置不允许点击蒙层关闭

@@ -561,11 +561,6 @@ const NschoolGroupSettingComponents = React.createClass({
                         <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
                     </div>
                 </div>
-                {/* <ConfirmModal ref="confirmModal"
-                              title="确定要删除选中的部门员工?"
-                              onConfirmModalCancel={this.closeConfirmModal}
-                              onConfirmModalOK={this.batchDeleteMemeber}
-                ></ConfirmModal> */}
                 <Modal
                     className="calmModal"
                     visible={this.state.calmSureDelConfirm}
@@ -583,12 +578,6 @@ const NschoolGroupSettingComponents = React.createClass({
                         确定要删除选中的部门员工?
                             </div>
                 </Modal>
-                {/* <ConfirmModal
-                    ref="confirmModal1"
-                    title="确定删除?"
-                    onConfirmModalCancel={this.closeConfirmModal1}
-                    onConfirmModalOK={this.batchDeleteMemeber1}
-                /> */}
                 <Modal
                     className="calmModal"
                     visible={this.state.calmSureDelConfirm1}
@@ -603,7 +592,7 @@ const NschoolGroupSettingComponents = React.createClass({
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除6?
+                        确定删除?
                             </div>
                 </Modal>
                 <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow}

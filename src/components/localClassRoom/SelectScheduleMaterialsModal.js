@@ -200,12 +200,12 @@ class SelectScheduleMaterialsModal extends React.Component {
         if (fileType == "ppt" || fileType == "pptx") {
             this.props.useMaterialInClass(materialId);
             //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
-            this.props.pushMaterialsToClass(record.htmlPath);
+            this.props.pushMaterialsToClass(record.htmlPath,'',true);
         }
         else if (fileType == "pdf") {
             //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
             this.props.useMaterialInClass(materialId);
-            this.props.pushMaterialsToClass(fileObj.pdfPath);
+            this.props.pushMaterialsToClass(fileObj.pdfPath,'',true);
         }
         this.SelectScheduleMaterialsModalHandleCancel();
 

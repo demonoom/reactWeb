@@ -965,11 +965,6 @@ const Structure = React.createClass({
                                    callBackChangeMsg={this.callBackChangeMsg}
                 ></GroupSettingModal>
 
-                {/* <ConfirmModal ref="confirmModal"
-                              title="确定要删除选中的部门员工?"
-                              onConfirmModalCancel={this.closeConfirmModal}
-                              onConfirmModalOK={this.batchDeleteMemeber}
-                ></ConfirmModal> */}
                 <Modal
                     className="calmModal"
                     visible={this.state.calmSureDelGroupMember}
@@ -984,15 +979,9 @@ const Structure = React.createClass({
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除7?
+                        确定删除?
                             </div>
                 </Modal>
-                {/* <ConfirmModal
-                    ref="confirmModalIcon"
-                    title="确定删除?"
-                    onConfirmModalCancel={this.closeConfirmModalIcon}
-                    onConfirmModalOK={this.batchDeleteGroup}
-                /> */}
                  <Modal
                     className="calmModal"
                     visible={this.state.calmSureDelConfirm}
@@ -1007,8 +996,8 @@ const Structure = React.createClass({
                 >
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定删除8?
-                            </div>
+                        确定删除?
+                    </div>
                 </Modal>
                 {/*更改用户所属部门 modal*/}
                 <Modal

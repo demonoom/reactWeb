@@ -63,27 +63,21 @@ const LocalClassRoom = React.createClass({
     componentDidMount() {
         window.__noomSelectPic__ = this.noomSelectPic;
         window.addEventListener('beforeunload', classRoom.onWindowClose);
-
     },
-  /*  onWindowClose(){  //关闭页面时下课处理
-        var _this=this;
-        _this.disConnectClassRoom();
-    },*/
 
 
     componentDidUpdate() {  //组件更新结束后执行
-
         var _this = this;
         if (isEmpty(this.state.currentPage) == false) {
             setTimeout(function () {
                 window.ppt_frame_localClass.window.pptCheckPage(_this.state.currentPage);
-                 //window.document.getElementById("contentFrame").contentWindow.pptCheckPage(_this.state.currentPage);
+                //window.document.getElementById("contentFrame").contentWindow.pptCheckPage(_this.state.currentPage);
                 _this.setState({currentPage: ''});
             }, 1000);
         }
     },
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.setState({currentPage: ''});
     },
 
@@ -174,7 +168,7 @@ const LocalClassRoom = React.createClass({
                 var response = ret.response;
                 if (isEmpty(response) == false) {
                     var url = response.pptUrl.replace("httpss", 'https');
-                    _this.pushMaterialsToClass(url, response.currentPage);
+                    _this.pushMaterialsToClass(url, response.currentPage,false);
                 }
             },
             onError: function (error) {
@@ -262,7 +256,7 @@ const LocalClassRoom = React.createClass({
     },
 
     //推送
-    pushMaterialsToClass(htmlPath, currentPage) {
+    pushMaterialsToClass(htmlPath, currentPage,notifyStudent) {
         // var htmlPath = materials.htmlPath;
         if (isEmpty(htmlPath) == false) {
             sessionStorage.setItem("htmlPath", htmlPath);
@@ -273,20 +267,23 @@ const LocalClassRoom = React.createClass({
             }
             var vid = this.state.vid;
             var userId = this.state.userId;
-            //var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
-            var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + pptURL + "'}}" + ')');
-            connection.send(protocal);
+            if(notifyStudent){
+                // var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
+                var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'" + pptURL + "'}}" + ')');
+                connection.send(protocal);
 
-            //让新版的学生端显示ppt
-            var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
-            connection.send(p1);
+                // 让新版的学生端显示ppt
+                var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
+                connection.send(p1);
+            }
+            /*跨域地址切换*/
+            pptURL = pptURL.replace("www.maaee.com", "jiaoxue.maaee.com:8989/proxy");
+            //pptURL = pptURL.replace("www.maaee.com", "192.168.50.186:8090/proxy");
 
-            pptURL = pptURL.replace("www.maaee.com", "192.168.50.163:8090/proxy");
             pptURL = pptURL.replace("https", "http");
             var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid=" + vid + "&userId=" + userId + "&role=manager&ppt=" + pptURL;
 
             this.setState({classRoomUrl, currentPage});
-            //this.getVclassPPTOpenInfo (vid);
         } else {
             message.error("该文件暂时无法完成推送");
         }
@@ -349,12 +346,12 @@ const LocalClassRoom = React.createClass({
     },
 
     showConfirmModal(e) {
-        this.setState({changeConfirmModalVisible:true})
+        this.setState({changeConfirmModalVisible: true})
         // this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal() {
-        this.setState({changeConfirmModalVisible:false})
+        this.setState({changeConfirmModalVisible: false})
         // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
@@ -564,7 +561,8 @@ const LocalClassRoom = React.createClass({
 
             var src = '/proxy' + this.state.classRoomUrl.substr(this.state.classRoomUrl.indexOf('www.maaee.com') + 13, this.state.classRoomUrl.length - 1);
             classIfream = <div className="classroom_draw">
-                <iframe name="ppt_frame_localClass" id="ppt_frame_localClass" src={src} style={{width: '100%', height: '100%'}}></iframe>
+                <iframe name="ppt_frame_localClass" id="ppt_frame_localClass" src={src}
+                        style={{width: '100%', height: '100%'}}></iframe>
             </div>;
         } else {
             classIfream = <div className="classroom_welcome">
@@ -631,22 +629,24 @@ const LocalClassRoom = React.createClass({
                               onConfirmModalOK={this.disConnectClassRoom}
                 ></ConfirmModal> */}
                 <Modal
-                            className="calmModal"
-                            visible={this.state.changeConfirmModalVisible}
-                            title="提示"
-                            onCancel={this.closeConfirmModal}
-                            maskClosable={false} //设置不允许点击蒙层关闭
-                            transitionName=""  //禁用modal的动画效果
-                            footer={[
-                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.disConnectClassRoom}  >确定</button>,
-                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
-                            ]}
-                        >
-                            <div className="isDel">
-                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
-                                确定要下课吗?
-                            </div>
-                        </Modal>
+                    className="calmModal"
+                    visible={this.state.changeConfirmModalVisible}
+                    title="提示"
+                    onCancel={this.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                onClick={this.disConnectClassRoom}>确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                onClick={this.closeConfirmModal}>取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                        确定要下课吗?
+                    </div>
+                </Modal>
 
                 <Modal
                     visible={this.state.errorVisible}

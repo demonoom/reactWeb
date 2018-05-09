@@ -1317,7 +1317,7 @@ const MainLayout = React.createClass({
      * 解散该群
      */
     showDissolutionChatGroupConfirmModal() {
-        this.setState({calmBreakGroup:true})
+        this.setState({calmBreakGroup: true})
         // this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
     },
 
@@ -1325,7 +1325,7 @@ const MainLayout = React.createClass({
      * 关闭解散群聊按钮对应的confirm窗口
      */
     closeDissolutionChatGroupConfirmModal() {
-        this.setState({calmBreakGroup:false})
+        this.setState({calmBreakGroup: false})
         // this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(false);
     },
 
@@ -1407,7 +1407,7 @@ const MainLayout = React.createClass({
             target = e.target;
         }
         var memberIds = target.value;
-        this.setState({"delMemberIds": memberIds,calmBreakGroup:true});
+        this.setState({"delMemberIds": memberIds, calmBreakGroup: true});
         // this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
@@ -1415,7 +1415,7 @@ const MainLayout = React.createClass({
      * 关闭移出群聊按钮对应的confirm窗口
      */
     closeConfirmModal() {
-        this.setState({calmBreakGroup:false})
+        this.setState({calmBreakGroup: false})
         // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
@@ -1441,12 +1441,12 @@ const MainLayout = React.createClass({
             target = e.target;
         }
         var memberIds = target.value;
-        this.setState({"delMemberIds": memberIds,calmExitGroup:true});
+        this.setState({"delMemberIds": memberIds, calmExitGroup: true});
         // this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(true);
     },
 
     closeExitChatGroupConfirmModal() {
-        this.setState({calmExitGroup:false})
+        this.setState({calmExitGroup: false})
         // this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
     },
 
@@ -3016,7 +3016,7 @@ const MainLayout = React.createClass({
                                             defaultMessage='教学空间'
                                         />
                                     </div>
-                                    
+
                                 </Menu.Item>
                                 <Menu.Item key="antGroup" className="padding_menu">
                                     <i className="icon_menu_ios icon_antgroup"></i>
@@ -3144,11 +3144,11 @@ const MainLayout = React.createClass({
                                transitionName=""  //禁用modal的动画效果
                                maskClosable={false} //设置不允许点击蒙层关闭
                                footer={[
-                                   
+
                                    <button type="ghost" htmlType="reset"
                                            className="ant-btn ant-btn-ghost login-form-button"
                                            onClick={this.mainTransferModalHandleCancel}>取消</button>,
-                                           <button type="primary" htmlType="submit"
+                                   <button type="primary" htmlType="submit"
                                            className="ant-btn ant-btn-primary ant-btn-lg"
                                            onClick={this.mainTransferForSure}>确定</button>
                                ]}
@@ -3169,11 +3169,11 @@ const MainLayout = React.createClass({
                                transitionName=""  //禁用modal的动画效果
                                maskClosable={false} //设置不允许点击蒙层关闭
                                footer={[
-                                  
+
                                    <button type="ghost" htmlType="reset"
                                            className="ant-btn ant-btn-ghost login-form-button"
                                            onClick={this.updateChatGroupNameModalHandleCancel}>取消</button>,
-                                           <button type="primary" htmlType="submit"
+                                   <button type="primary" htmlType="submit"
                                            className="ant-btn ant-btn-primary ant-btn-lg"
                                            onClick={this.updateChatGroupName}>确定</button>
                                ]}
@@ -3196,11 +3196,11 @@ const MainLayout = React.createClass({
                             maskClosable={false} //设置不允许点击蒙层关闭
                             className="add_member"
                             footer={[
-                                
+
                                 <button type="ghost" htmlType="reset"
                                         className="ant-btn ant-btn-ghost login-form-button"
                                         onClick={this.addDeGroupMemberModalHandleCancel}>取消</button>,
-                                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
                                         onClick={this.addGroupMember}>确定</button>
                             ]}
                             width={800}
@@ -3329,11 +3329,11 @@ const MainLayout = React.createClass({
                             maskClosable={false} //设置不允许点击蒙层关闭
                             className="add_member"
                             footer={[
-                               
+
                                 <button type="ghost" htmlType="reset"
                                         className="ant-btn ant-btn-ghost login-form-button"
                                         onClick={this.shareToAntNestModalHandleCancel}>取消</button>,
-                                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
                                         onClick={this.shareToAntNest}>确定</button>
                             ]}
                             width={616}
@@ -3360,57 +3360,63 @@ const MainLayout = React.createClass({
                                       title="确定要移除选中的群成员?"
                                       onConfirmModalCancel={this.closeConfirmModal}
                                       onConfirmModalOK={this.deleteSelectedMember}/> */}
-                                      <Modal
-                    className="calmModal"
-                    visible={this.state.calmRemoveMembers}
-                    title="提示"
-                    onCancel={this.closeConfirmModal}
-                    maskClosable={false} //设置不允许点击蒙层关闭
-                    transitionName=""  //禁用modal的动画效果
-                    footer={[
-                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.deleteSelectedMember}  >确定</button>,
-                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
-                    ]}
-                >
-                    <div className="isDel">
-                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定要移除选中的群成员?
+                        <Modal
+                            className="calmModal"
+                            visible={this.state.calmRemoveMembers}
+                            title="提示"
+                            onCancel={this.closeConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                        onClick={this.deleteSelectedMember}>确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                        onClick={this.closeConfirmModal}>取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                                确定要移除选中的群成员?
                             </div>
-                </Modal>
-                <Modal
-                    className="calmModal"
-                    visible={this.state.calmBreakGroup}
-                    title="提示"
-                    onCancel={this.closeDissolutionChatGroupConfirmModal}
-                    maskClosable={false} //设置不允许点击蒙层关闭
-                    transitionName=""  //禁用modal的动画效果
-                    footer={[
-                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.dissolutionChatGroup}  >确定</button>,
-                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeDissolutionChatGroupConfirmModal} >取消</button>
-                    ]}
-                >
-                    <div className="isDel">
-                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定要解散该群组?
+                        </Modal>
+                        <Modal
+                            className="calmModal"
+                            visible={this.state.calmBreakGroup}
+                            title="提示"
+                            onCancel={this.closeDissolutionChatGroupConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                        onClick={this.dissolutionChatGroup}>确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                        onClick={this.closeDissolutionChatGroupConfirmModal}>取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                                确定要解散该群组?
                             </div>
-                </Modal>
-                <Modal
-                    className="calmModal"
-                    visible={this.state.calmExitGroup}
-                    title="提示"
-                    onCancel={this.closeExitChatGroupConfirmModal}
-                    maskClosable={false} //设置不允许点击蒙层关闭
-                    transitionName=""  //禁用modal的动画效果
-                    footer={[
-                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.deleteSelectedMember}  >确定</button>,
-                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeExitChatGroupConfirmModal} >取消</button>
-                    ]}
-                >
-                    <div className="isDel">
-                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
-                        确定要退出该群组?
+                        </Modal>
+                        <Modal
+                            className="calmModal"
+                            visible={this.state.calmExitGroup}
+                            title="提示"
+                            onCancel={this.closeExitChatGroupConfirmModal}
+                            maskClosable={false} //设置不允许点击蒙层关闭
+                            transitionName=""  //禁用modal的动画效果
+                            footer={[
+                                <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                        onClick={this.deleteSelectedMember}>确定</button>,
+                                <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                        onClick={this.closeExitChatGroupConfirmModal}>取消</button>
+                            ]}
+                        >
+                            <div className="isDel">
+                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                                确定要退出该群组?
                             </div>
-                </Modal>
+                        </Modal>
                     </div>
                 </IntlProvider>
             </LocaleProvider>

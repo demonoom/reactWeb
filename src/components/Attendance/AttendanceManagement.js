@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
 import {
     Button, Table, Icon, Row, Col,
-    Input, Select, Checkbox, message, Tag, Tooltip
+    Input, Select, Checkbox, message, Tag, Tooltip, Modal
 } from 'antd';
 import ChangeShiftModel from './ChangeShiftModel'
 import ChooseMemberModal from './ChooseMemberModal'
@@ -170,7 +170,7 @@ const AttendanceManagement = React.createClass({
      */
     delAttData() {
         var num = this.state.delAtt.key;
-        this.setState({calmSureDelConfirm:false})
+        this.setState({calmSureDelConfirm: false})
         // this.refs.confirm.changeConfirmModalVisible(false);
         var _this = this;
         //1.调用接口
@@ -390,7 +390,7 @@ const AttendanceManagement = React.createClass({
      * Confirm打开
      */
     showConfirmModal() {
-        this.setState({calmSureDelConfirm:true})
+        this.setState({calmSureDelConfirm: true})
         // this.refs.confirm.changeConfirmModalVisible(true);
     },
 
@@ -398,7 +398,7 @@ const AttendanceManagement = React.createClass({
      * Confirm关闭
      */
     closeConfirmModal() {
-        this.setState({calmSureDelConfirm:false})
+        this.setState({calmSureDelConfirm: false})
         // this.refs.confirm.changeConfirmModalVisible(false);
     },
 
@@ -1225,29 +1225,25 @@ const AttendanceManagement = React.createClass({
                     addGroupMember={this.addGroupMember}
                     ref="chooseMemberModal"
                 />
-                {/* <Confirm
-                    ref="confirm"
-                    title="确定删除?"
-                    onConfirmModalCancel={this.closeConfirmModal}
-                    onConfirmModalOK={this.delAttData}
-                /> */}
                 <Modal
-                            className="calmModal"
-                            visible={this.state.calmSureDelConfirm}
-                            title="提示"
-                            onCancel={this.closeConfirmModal}
-                            maskClosable={false} //设置不允许点击蒙层关闭
-                            transitionName=""  //禁用modal的动画效果
-                            footer={[
-                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.delAttData}  >确定</button>,
-                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
-                            ]}
-                        >
-                            <div className="isDel">
-                                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                                确定删除?
-                            </div>
-                        </Modal>
+                    className="calmModal"
+                    visible={this.state.calmSureDelConfirm}
+                    title="提示"
+                    onCancel={this.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                onClick={this.delAttData}>确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                onClick={this.closeConfirmModal}>取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                        确定删除?
+                    </div>
+                </Modal>
             </div>
         );
     }

@@ -1,8 +1,8 @@
-import React, {PropTypes} from 'react';
-import {isEmpty} from '../../utils/utils';
-import {Button, Table, message} from 'antd';
+import React, { PropTypes } from 'react';
+import { isEmpty } from '../../utils/utils';
+import { Button, Table, message } from 'antd';
 import AddShiftModel from './AddShiftModel';
-import {doWebService} from '../../WebServiceHelper'
+import { doWebService } from '../../WebServiceHelper'
 import Confirm from '../ConfirmModal'
 
 const ShiftManagement = React.createClass({
@@ -49,7 +49,7 @@ const ShiftManagement = React.createClass({
                     };
                     arr.push(shift);
                 }
-                _this.setState({shiftData: arr})
+                _this.setState({ shiftData: arr })
             },
             onError: function (error) {
                 message.error(error);
@@ -61,21 +61,21 @@ const ShiftManagement = React.createClass({
      * 新增班次的回调
      */
     addShift() {
-        this.setState({addShiftModalIsShow: true});
+        this.setState({ addShiftModalIsShow: true });
     },
 
     /**
      * model关闭之后将addShiftModalIsShow重置
      */
     closeModel() {
-        this.setState({addShiftModalIsShow: false});
+        this.setState({ addShiftModalIsShow: false });
     },
 
     /**
      * 删除班次的回调
      */
     delShift(record) {
-        this.setState({delRec: record});   //要删除的班次的对象
+        this.setState({ delRec: record });   //要删除的班次的对象
         this.showConfirmModal();
     },
 
@@ -83,7 +83,7 @@ const ShiftManagement = React.createClass({
      * Confirm打开
      */
     showConfirmModal() {
-        this.setState({calmSureDelConfirm:true})
+        this.setState({ calmSureDelConfirm: true })
         // this.refs.confirm.changeConfirmModalVisible(true);
     },
 
@@ -91,7 +91,7 @@ const ShiftManagement = React.createClass({
      * Confirm关闭
      */
     closeConfirmModal() {
-        this.setState({calmSureDelConfirm:false})
+        this.setState({ calmSureDelConfirm: false })
         // this.refs.confirm.changeConfirmModalVisible(false);
     },
 
@@ -100,7 +100,7 @@ const ShiftManagement = React.createClass({
      */
     delShiftData() {
         var num = this.state.delRec.key;
-        this.setState({calmSureDelConfirm:false})
+        this.setState({ calmSureDelConfirm: false })
         // this.refs.confirm.changeConfirmModalVisible(false);
         var _this = this;
         //1.调用接口
@@ -119,7 +119,7 @@ const ShiftManagement = React.createClass({
                             return
                         }
                     })
-                    _this.setState({shiftData: arr});
+                    _this.setState({ shiftData: arr });
                     message.success('删除成功');
                 } else {
                     message.error(ret.msg);
@@ -177,8 +177,6 @@ const ShiftManagement = React.createClass({
             className: 'ant-table-selection-smallclass checking_in_operate class_right',
             render: (text, record) => (
                 <span>
-                    {/*<Button type="button" className="score3_i" icon="edit"*/}
-                            {/*onClick={_this.editShift.bind(this, record)}></Button>*/}
                     <Button type="button" icon="delete" onClick={_this.delShift.bind(this, record)}></Button>
                 </span>
             ),
@@ -187,12 +185,12 @@ const ShiftManagement = React.createClass({
         return (
             <div className="group_cont">
                 <div className="public—til—blue">考勤详情</div>
-                <div className="favorite_scroll" style={{overflow: "auto"}}>
+                <div className="favorite_scroll" style={{ overflow: "auto" }}>
                     <div className="checking_add_box group_cont">
                         <Button type="primary" icon="plus" onClick={this.addShift}>新增班次</Button>
                         <Table className="checking_in_box cloud_box upexam_to_ma" columns={columns}
-                               dataSource={this.state.shiftData}
-                               pagination={false}/>
+                            dataSource={this.state.shiftData}
+                            pagination={false} />
                         {/*新增班次model*/}
                         <AddShiftModel
                             isShow={this.state.addShiftModalIsShow}
@@ -201,29 +199,23 @@ const ShiftManagement = React.createClass({
                         />
                     </div>
                 </div>
-                {/* <Confirm
-                    ref="confirm"
-                    title="确定删除?"
-                    onConfirmModalCancel={this.closeConfirmModal}
-                    onConfirmModalOK={this.delShiftData}
-                /> */}
-                 <Modal
-                            className="calmModal"
-                            visible={this.state.calmSureDelConfirm}
-                            title="提示"
-                            onCancel={this.closeConfirmModal}
-                            maskClosable={false} //设置不允许点击蒙层关闭
-                            transitionName=""  //禁用modal的动画效果
-                            footer={[
-                                <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.delShiftData}  >确定</button>,
-                                <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
-                            ]}
-                        >
-                            <div className="isDel">
-                                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
-                                确定删除?
+                <Modal
+                    className="calmModal"
+                    visible={this.state.calmSureDelConfirm}
+                    title="提示"
+                    onCancel={this.closeConfirmModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure" onClick={this.delShiftData}  >确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle" onClick={this.closeConfirmModal} >取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        确定删除?
                             </div>
-                        </Modal>
+                </Modal>
             </div>
         );
     }
