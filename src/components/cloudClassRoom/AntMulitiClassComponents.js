@@ -671,8 +671,8 @@ const AntMulitiClassComponents = React.createClass({
                     <Col span={24}>
                         <Row className="modal_cloud_info">
                             <Row className="upexam_botom_ma">
-                                <Col span={18} className="font_gray_33">{classObj.courseName}</Col>
-                                <Col span={3} className="series_recall right_ri">{isPublishStr}</Col>
+                                <Col span={16} className="font_gray_33">{classObj.courseName}</Col>
+                                <Col span={3} className="series_recall right_ri margin_left">{isPublishStr}</Col>
                                 {isTestSpan}
                             </Row>
                             <Col span={24} className="price ant-form-item">
@@ -983,7 +983,7 @@ const AntMulitiClassComponents = React.createClass({
                                                          title='直播'
                                                          onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
                                 }else{
-                                    playButton = <img alt="表情回顾" src={require('../images/emotionAnalysis.png')}
+                                    playButton = <img title="表情回顾" src={require('../images/emotionAnalysis.png')}
                                                       onClick={_this.reviewEmotions.bind(_this, video, "mulitiClass")}/>;
                                 }
                             }
@@ -993,7 +993,7 @@ const AntMulitiClassComponents = React.createClass({
                                 <span className="name">{video.name}</span>
                                 <span className="cont">{video.user.userName}</span>
                                 <span className="time1"></span>
-                                <span className="cont3">
+                                <span className="cont3" style={{'text-align':'right'}}>
                             {playButton}
                     </span>
                             </li>;
@@ -1032,7 +1032,7 @@ const AntMulitiClassComponents = React.createClass({
                                                         />
                                                     </span>
                                                     <span className="cont"></span>
-                                                    <span className="cont3">操作</span>
+                                                    <span className="cont3" style={{'text-align':'right'}}>操作</span>
                                                 </div>
                                             </li>
                                             {videoLiTagArray}
@@ -1052,7 +1052,7 @@ const AntMulitiClassComponents = React.createClass({
                                     playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播"
                                                          onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
                                 }else{
-                                    playButton = <img alt="表情回顾"
+                                    playButton = <img title="表情回顾"
                                                       src={require('../images/emotionAnalysis.png')}
                                                       onClick={_this.reviewEmotions.bind(_this, video, "mulitiClass")}/>;
                                 }
@@ -1062,7 +1062,7 @@ const AntMulitiClassComponents = React.createClass({
                                 <span className="name">{video.name}</span>
                                 <span className="cont">{video.user.userName}</span>
                                 <span className="time1">{liveTimeStr}</span>
-                                <span className="cont3">
+                                <span className="cont3"   style={{'text-align':'right'}}>
                             {playButton}
                     </span>
                             </li>;
@@ -1109,7 +1109,7 @@ const AntMulitiClassComponents = React.createClass({
                                                     defaultMessage='授课时间'
                                                 />
                                             </span>
-                                                    <span className="cont3">
+                                                    <span className="cont3" style={{'text-align':'right'}}>
                                                 <FormattedMessage
                                                     id='Operate'
                                                     description='操作'
