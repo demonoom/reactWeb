@@ -881,15 +881,13 @@ const AntMulitiClassComponents = React.createClass({
             "id": liveObj.id,
         };
         var isCurrentDay = isToday(originTime);
-        var min = rightTime.getMinutes();
-        rightTime.setMinutes(min - 5);
-        // if (originTime > Date.parse(rightTime)) {
-        //     message.warning('未到开课时间');
-        //     return;
-        // } else if (isCurrentDay === false) {
-        //     message.warning('授课时间已过，请修正后再重新开课，谢谢！', 6);
-        //     return;
-        // }
+        if ((originTime - 300000) > Date.parse(rightTime)) {
+            message.warning('未到开课时间');
+            return;
+        } else if (isCurrentDay === false) {
+            message.warning('授课时间已过，请修正后再重新开课，谢谢！', 4);
+            return;
+        }
         var localLanguage = getLocalFromLanguage();
         if (localLanguage == "zh") {
             localLanguage = "zh-CN";
@@ -925,13 +923,13 @@ const AntMulitiClassComponents = React.createClass({
                     title = liveObj.name;
                 }
                 // var specialCharsArray=['\'','\\\\','/','_'];
-                var specialCharsArray=['\'','\\','/','_','"','’'];
+                var specialCharsArray = ['\'', '\\', '/', '_', '"', '’'];
                 specialCharsArray.forEach(function (specialChar) {
                     // var regExp = new RegExp(specialChar);
-                    title = title.replace(specialChar,'');
+                    title = title.replace(specialChar, '');
                 })
                 // requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title+"/"+localLanguage;
-                requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title+"?title="+title;
+                requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title + "?title=" + title;
                 //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
                 newTab.location.href = requestUrl;
             },
@@ -962,7 +960,6 @@ const AntMulitiClassComponents = React.createClass({
                 var videoLiTagArray = [];
                 var startTime = formatYMD(classObj.startTime);
                 var originTime = classObj.videos[0].liveTime;
-                console.log(classObj);
                 //获取当前时间 时间戳
                 var rightTime = Date.parse(new Date());
                 var isSerises = classObj.isSeries
@@ -1109,12 +1106,12 @@ const AntMulitiClassComponents = React.createClass({
                         </Row>
                     </Card>;
                 }
-                // if ((classObj.videos.length == 1) && originTime > (rightTime - 300)) {
-                //     _this.setState({classPlayDetailModalVisible: false, classDetailPanel});
-                //     message.warning('未到开课时间');
-                // } else {
+                if ((classObj.videos.length == 1) && ((originTime - 300000) > rightTime)) {
+                    _this.setState({classPlayDetailModalVisible: false, classDetailPanel});
+                    message.warning('未到开课时间');
+                } else {
                     _this.setState({classPlayDetailModalVisible: true, classDetailPanel});
-                // }
+                }
             },
             onError: function (error) {
                 message.error(error);
