@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Card, Radio, Row, Col, Button, Icon, message, Steps, Modal, Form, Pagination, Select, Input} from 'antd';
-import {doWebService_CloudClassRoom, TEACH_LIVE_URL} from '../../utils/CloudClassRoomURLUtils';
+import {doWebService_CloudClassRoom, TEACH_LIVE_URL,FACE_EMOTIONS_URL} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime, formatYMD, formatHM, formatNoSecond} from '../../utils/utils';
 import {isEmpty, cutString, getLocalFromLanguage, isToday} from '../../utils/utils';
@@ -942,6 +942,14 @@ const AntMulitiClassComponents = React.createClass({
         });
     },
 
+    reviewEmotions(liveObj, liveType){
+        var newTab = window.open('about:blank');
+        var requestUrl = FACE_EMOTIONS_URL;
+        requestUrl += "?vid="+liveObj.virtual_classId;
+        //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
+        newTab.location.href = requestUrl;
+    },
+
     /*
     已发布课程点击播放
      */
@@ -972,11 +980,17 @@ const AntMulitiClassComponents = React.createClass({
                         videosArray.forEach(function (video) {
                             //播放按钮
                             var playButton;
-                            if (video.userID == userId && video.videoStatus != "3") {
-                                playButton = <Button icon="play-circle-o" className="exam-particulars_title"
-                                                     title='直播'
-                                                     onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
+                            if (video.userID == userId) {
+                                if(video.videoStatus != "3"){
+                                    playButton = <Button icon="play-circle-o" className="exam-particulars_title"
+                                                         title='直播'
+                                                         onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
+                                }else{
+                                    playButton = <img alt="表情回顾" src={require('../images/emotionAnalysis.png')}
+                                                      onClick={_this.reviewEmotions.bind(_this, video, "mulitiClass")}/>;
+                                }
                             }
+
                             var liveTimeStr = formatNoSecond(video.liveTime);
                             var videoLi = <li className="course_section_info">
                                 <span className="name">{video.name}</span>
@@ -1036,9 +1050,15 @@ const AntMulitiClassComponents = React.createClass({
                         videosArray.forEach(function (video) {
                             //播放按钮
                             var playButton;
-                            if (video.userID == userId && video.videoStatus != "3") {
-                                playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播"
-                                                     onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
+                            if (video.userID == userId) {
+                                if(video.videoStatus != "3"){
+                                    playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播"
+                                                         onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
+                                }else{
+                                    playButton = <img alt="表情回顾"
+                                                      src={require('../images/emotionAnalysis.png')}
+                                                      onClick={_this.reviewEmotions.bind(_this, video, "mulitiClass")}/>;
+                                }
                             }
                             var liveTimeStr = formatNoSecond(video.liveTime);
                             var videoLi = <li className="course_section_info">
