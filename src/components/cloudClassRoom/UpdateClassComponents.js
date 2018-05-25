@@ -329,7 +329,7 @@ const UpdateClassComponents = React.createClass({
                 // var currentLessionIsUpdateDisable=false;
                 //1.未直播2.直播中3.结束
                 var currentLessionIsUpdateDisable = false;
-                if (videoStatus == 2 || videoStatus == 3) {
+                if (videoStatus == 3) {
                     isDisable = true;
                     currentLessionIsUpdateDisable = true;
                     LessionIsUpdateDisable = true;
