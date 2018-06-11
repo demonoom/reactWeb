@@ -198,23 +198,25 @@ const BindCoordinates = React.createClass({
         var arr = [];
         if (isEmpty(_this.state.classRoomArr) == false) {
             _this.state.classRoomArr.forEach(function (v) {
-                if (isEmpty(v.location) == false) {
-                    arr.push(
-                        {
-                            id: v.location.id,
-                            roomId: v.id,
-                            x: v.value.split('-')[0],
-                            y: v.value.split('-')[1],
-                        }
-                    )
-                } else {
-                    arr.push(
-                        {
-                            roomId: v.id,
-                            x: v.value.split('-')[0],
-                            y: v.value.split('-')[1],
-                        }
-                    )
+                if (isEmpty(v.value) == false) {
+                    if (isEmpty(v.location) == false) {
+                        arr.push(
+                            {
+                                id: v.location.id,
+                                roomId: v.id,
+                                x: v.value.split('-')[0],
+                                y: v.value.split('-')[1],
+                            }
+                        )
+                    } else {
+                        arr.push(
+                            {
+                                roomId: v.id,
+                                x: v.value.split('-')[0],
+                                y: v.value.split('-')[1],
+                            }
+                        )
+                    }
                 }
             })
         }
@@ -227,8 +229,11 @@ const BindCoordinates = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret);
                 if (ret.msg == '调用成功' && ret.success == true) {
                     message.success('成功')
+                } else {
+                    // message.fail(ret.msg)
                 }
             },
             onError: function (error) {
