@@ -222,7 +222,6 @@ const AntCloudTableComponents = React.createClass({
 
     //点击导航时，进入的我的文件列表
     getUserRootCloudFiles: function (userId, pageNo, optSrc, flag) {
-        debugger
         var _this = this;
         data = [];
         _this.setState({currentDirectoryId: -1, totalCount: 0});
@@ -234,7 +233,6 @@ const AntCloudTableComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                debugger
                 if (response) {
                     if (isEmpty(optSrc) == false && optSrc == "mainTable") {
                         cloudTable.buildTableDataByResponse(ret);
@@ -261,7 +259,6 @@ const AntCloudTableComponents = React.createClass({
 
     //点击导航时，获取用户的根群文件夹
     getUserChatGroupRootCloudFiles: function (userId, pageNo, optSrc) {
-        debugger
         data = [];
         cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
         var param = {
@@ -272,7 +269,6 @@ const AntCloudTableComponents = React.createClass({
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 var response = ret.response;
                 if (response) {
                     if (optSrc == 'mainTable') {
@@ -563,7 +559,6 @@ const AntCloudTableComponents = React.createClass({
      * @param pageNo
      */
     listFiles: function (operateUserId, cloudFileId, queryConditionJson, pageNo, optSrc) {
-        debugger
         data = [];
         cloudTable.setState({totalCount: 0});
         var param = {
@@ -575,7 +570,6 @@ const AntCloudTableComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 var response = ret.response;
                 console.log("ss" + optSrc)
                 if (response) {
@@ -729,7 +723,6 @@ pageNo   --- 页码，-1取全部
      * @param ret
      */
     buildTableDataByResponse(ret) {
-        debugger
         var _this = this;
         var i = 0;
         var cloudFileArray = [];
@@ -864,7 +857,6 @@ pageNo   --- 页码，-1取全部
      * 蚁盘中，如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
     intoDirectoryInner(directoryObj, optSrc) {
-        debugger
         var initPageNo = 1;
         var queryConditionJson = "";
         this.buildPageNoMap(this.state.currentDirectoryId, this.state.currentPage);
@@ -1166,7 +1158,6 @@ pageNo   --- 页码，-1取全部
      * @param pageNo
      */
     pageOnChange(pageNo) {
-        debugger
         var getFileType = cloudTable.state.getFileType;
         if (getFileType == "myFile") {
             if (this.state.activeKey == "1") {
@@ -1216,7 +1207,6 @@ pageNo   --- 页码，-1取全部
      * @param pageNo
      */
     pageOnChangeModal(pageNo) {
-        debugger
         var getFileType = cloudTable.state.getFileType;
         if (getFileType == "myFile") {
             if (this.state.activeKey == "1") {
@@ -1266,7 +1256,6 @@ pageNo   --- 页码，-1取全部
      * @param pageNo
      */
     pageOnChangeForCopyModal(pageNo) {
-        debugger
         var getFileType = cloudTable.state.getFileType;
         //判断是否是第一层文件夹
         if (this.state.currentDirectoryId != -1) {
@@ -1352,7 +1341,6 @@ pageNo   --- 页码，-1取全部
 
     //点击保存按钮，向蚁盘指定文件夹上传文件
     uploadFile() {
-        debugger
         var formDataArr = [];
         cloudTable.state.disabledFlag = "false";
         if (uploadFileList.length == 0) {
@@ -1441,7 +1429,6 @@ pageNo   --- 页码，-1取全部
      * 向指定文件夹上传文件
      */
     createCloudFile(fileUrl, fileObj) {
-        debugger
         var param = {
             "method": 'createCloudFile',
             "operateUserId": cloudTable.state.ident,
@@ -1452,7 +1439,6 @@ pageNo   --- 页码，-1取全部
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
                     var initPageNo = 1;
                     var queryConditionJson = "";
@@ -1489,7 +1475,6 @@ pageNo   --- 页码，-1取全部
      * 返回上级目录
      */
     returnParent() {
-        debugger
         var pageNoMap = this.state.pageNoMap;
         // var initPageNo = 1;
         var currentPageNo = 1;
@@ -1616,7 +1601,6 @@ pageNo   --- 页码，-1取全部
      * 点击确定按钮，保存文件到指定目录   点击 父亲
      */
     saveFileToLocalDir(parentCloudFileId) {
-        debugger
         var _this = this;
         //1.请求用户的私人网盘用数据构建model的table
         var id = JSON.parse(sessionStorage.getItem("loginUser")).colUid;
@@ -1628,7 +1612,6 @@ pageNo   --- 页码，-1取全部
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
                     var initPageNo = 1;
                     var queryConditionJson = "";
@@ -1772,7 +1755,6 @@ pageNo   --- 页码，-1取全部
      * 完成文件向目标文件夹的移动
      */
     moveCloudFiles(fromCloudFileIds, toCloudFileId) {
-        debugger
         var param = {
             "method": 'moveCloudFiles',
             "operateUserId": cloudTable.state.ident,
@@ -1781,7 +1763,6 @@ pageNo   --- 页码，-1取全部
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 if (ret.success == true && ret.msg == "调用成功" && ret.response == true) {
                     var initPageNo = 1;
                     var queryConditionJson = "";

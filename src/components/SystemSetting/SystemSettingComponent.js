@@ -13,6 +13,7 @@ import Role from '../../components/role/Role';
 import RoleSettingComponents from '../../components/role/RoleSettingComponents';
 import Structure from '../../components/structrue/Structure'
 import StructureSettingComponents from '../../components/structrue/StructureSettingComponents'
+import BindCoordinates from '../../components/BindCoordinates/BindCoordinates'
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -170,6 +171,7 @@ class SystemSettingComponent extends React.Component {
     delStructure(id) {
         this.refs.structureSettingComponents.delStructure(id);
     }
+
     callBackChangeMsg(id, name) {
         this.refs.structureSettingComponents.callBackChangeMsg(id, name)
     }
@@ -256,7 +258,11 @@ class SystemSettingComponent extends React.Component {
                     callBackChangeMsg={this.callBackChangeMsg}
                     ref="structure"
                     passstructureIdToLeft={this.passstructureIdToLeft}
-                />
+                />;
+                break;
+            case 'BindCoordinates':
+                this.tabComponent = <BindCoordinates/>;
+                break;
         }
 
 
