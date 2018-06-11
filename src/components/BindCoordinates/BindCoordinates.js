@@ -22,10 +22,10 @@ const BindCoordinates = React.createClass({
         this.getSchoolMapBySchoolId()
         canvas = document.getElementById('schoolMap');
         context = canvas.getContext('2d');
-        canvas.width = 620;
-        canvas.height = 580;
+        canvas.width = 520;
+        canvas.height = 500;
         context.font = '900 20px 微软雅黑'
-        context.fillStyle = '#ff0002'
+        context.fillStyle = '#ffff00'
     },
 
     componentDidUpdate() {
@@ -173,9 +173,11 @@ const BindCoordinates = React.createClass({
             this.state.classRoomArr.forEach(function (v, i) {
                 var clazzInp = <div key={i} className="bindCoordinates_list"
                                     onClick={_this.clazzOnFocus.bind(this, v, i)}>
-                    <span className="bindCoordinates_name focus_3">{(i + 1) + '、' + v.name}</span>
-                    <span>X:{_this.state.classRoomArr[i].value.split('-')[0]}</span>
-                    <span>Y:{_this.state.classRoomArr[i].value.split('-')[1]}</span>
+                    <span className="bindCoordinates_name focus_3"><span>{(i + 1) }</span><span className="bindCoordinates_t_l bindCoordinates_t_select">{v.name}</span></span>
+                    <div className="bindCoordinates_xy">
+                        <div>X:{_this.state.classRoomArr[i].value.split('-')[0]}</div>
+                        <div>Y:{_this.state.classRoomArr[i].value.split('-')[1]}</div>
+                    </div>
                 </div>
                 arr.push(clazzInp);
             })
@@ -239,16 +241,20 @@ const BindCoordinates = React.createClass({
         return (
             <div className="bindCoordinates">
                 <div className="public—til—blue">请先点击教室名称,然后在地图中点击对应位置</div>
-                <canvas
-                    style={this.state.sectionStyle}
-                    id='schoolMap'
-                />
-                <div className="bindCoordinates_t">
-                    <span>教室名称:</span>
-                    <span>坐标值:</span>
-                    {this.state.clazzArr}
-                </div>
+                <div className="favorite_scroll bindCoordinates_cont">
+                    <canvas
+                        style={this.state.sectionStyle}
+                        id='schoolMap'
+                    />
+                    <div className="bindCoordinates_t">
+                        <div className="bindCoordinates_t_list">
+                            <span className="bindCoordinates_t_name">教室名称</span>
+                            <span className="bindCoordinates_t_xy">坐标值</span>
+                        </div>
+                        {this.state.clazzArr}
+                    </div>
                 <Button type="primary" className="bindCoordinates_btn" onClick={this.bindRoomLocation}>保存</Button>
+                </div>
             </div>
         );
     }

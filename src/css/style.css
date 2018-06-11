@@ -9787,29 +9787,38 @@ a:active,a:hover{
 
 /* 绑定教室坐标start */
     .bindCoordinates{
-        text-align: center;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden;
     }
     .bindCoordinates canvas{
-        margin: 30px 0;
+        margin: 10px 0 0 0;
         background: #272a46;
-        border: 20px solid #272a46;
+        border: 10px solid #272a46;
+        display: inline-block;
+        width: calc(100% - 240px);
+        height: calc(100% - 10px);
+    }
+    .bindCoordinates_cont{
+        position: relative;
     }
     .bindCoordinates_t{
-        text-align: left;
-        padding: 0 20px;
+        padding: 0 ;
         background: #fff;
+        display: inline-block;
+        width: 240px;
+        height: calc(100% - 54px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: absolute;
+        top: 0;
+        right: 0;
     }
     .bindCoordinates_list{
-        padding: 12px 0;
+        padding: 5px 10px;
         border-bottom: 1px solid #eee;
-        min-height: 53px;
-        line-height: 28px;
     }
     .bindCoordinates_input{
         width: 150px;
-        margin-left: 20px;
+        margin-left: 18px;
     }
     .bindCoordinates_input:focus {
         outline: none !important;
@@ -9817,12 +9826,54 @@ a:active,a:hover{
         background: #edf9ff;
     }
     .bindCoordinates_name{
-        max-width: calc(100% - 180px);
-        float: left;
+        max-width: calc(100% - 90px);
+        color: #333;
+        font-size: 14px;
+        line-height: 40px;
     }
     .bindCoordinates_btn{
-        min-width: 70px;
-        margin: 15px 0;
+        min-width: 100px;
+        height:34px;
+        line-height: 34px;
+        margin: 10px 0;
+        position: absolute;
+        bottom: 0;
+        right: 70px;
+        padding: 0;
+        background: #3672ed;
+        border: none;
+    }
+    .bindCoordinates_btn:hover, .bindCoordinates_btn:focus{
+        background:#497ef0
+    }
+    .bindCoordinates_xy{
+        display: inline-block;
+        width: 90px;
+        float: right;
+        color: #666;
+        font-size: 12px;
+        line-height: 20px;
+    }
+    .bindCoordinates_t_name{
+        max-width: calc(100% - 90px);
+        padding-left: 18px;
+    }
+    .bindCoordinates_t_xy{
+        display: inline-block;
+        width: 90px;
+        float: right;
+    }
+    .bindCoordinates_t_list{
+        border-bottom: none;
+        padding: 15px 10px 5px 10px;
+        color: #666;
+        font-size: 14px;
+    }
+    .bindCoordinates_t_l{
+        margin-left: 10px;
+    }
+    .bindCoordinates_t_select{
+        color: #497ef0;
     }
 
 /* 绑定教室坐标end */
