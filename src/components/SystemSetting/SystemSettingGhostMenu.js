@@ -94,10 +94,16 @@ class SystemSettingGhostMenu extends React.Component {
      * @param data
      */
     buildTab(data) {
+        console.log(this.state.ident);
         let _this = this;
         var liArr = [];
         var uls = '';
         var arr = [];
+
+        var loginFlag = true
+        if (this.state.ident == 23836 || this.state.ident == 54208) {
+            loginFlag = false
+        }
 
         for (var i = 0; i < data.length; i++) {
             data[i].tabItems.forEach(function (v) {
@@ -153,12 +159,12 @@ class SystemSettingGhostMenu extends React.Component {
 
             {/*组织架构*/}
 
-            {/*<ul className="second">
+            <ul className="second" style={{display: !loginFlag ? 'block' : 'none'}}>
                 <li onClick={event => {
                     this.changeMenu(event, 'BindCoordinates', false)
                 }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>绑定教室坐标
                 </li>
-            </ul>*/}
+            </ul>
 
             {/*<ul className="second">*/}
             {/*<li onClick={event => {*/}
