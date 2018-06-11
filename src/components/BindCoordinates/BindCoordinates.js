@@ -25,7 +25,7 @@ const BindCoordinates = React.createClass({
         canvas.width = 620;
         canvas.height = 580;
         context.font = '900 20px 微软雅黑'
-        context.fillStyle = 'red'
+        context.fillStyle = '#ff0002'
     },
 
     componentDidUpdate() {
@@ -171,9 +171,9 @@ const BindCoordinates = React.createClass({
         var _this = this;
         if (isEmpty(this.state.classRoomArr) == false) {
             this.state.classRoomArr.forEach(function (v, i) {
-                var clazzInp = <div key={i}>
-                    <span>{(i + 1) + '.' + v.name}</span>
-                    <Input placeholder="Basic usage" value={_this.state.classRoomArr[i].value}
+                var clazzInp = <div key={i} className="bindCoordinates_list">
+                    <span className="bindCoordinates_name focus_3">{(i + 1) + '、' + v.name}</span>
+                    <Input className="bindCoordinates_input" placeholder="Basic usage" value={_this.state.classRoomArr[i].value}
                            onFocus={_this.clazzOnFocus.bind(this, v, i)}/>
                 </div>
                 arr.push(clazzInp);
@@ -236,15 +236,15 @@ const BindCoordinates = React.createClass({
     render() {
 
         return (
-            <div style={{overflow: 'auto'}}>
+            <div className="bindCoordinates">
                 <canvas
                     style={this.state.sectionStyle}
                     id='schoolMap'
                 />
-                <div>
+                <div className="bindCoordinates_t">
                     {this.state.clazzArr}
                 </div>
-                <Button type="primary" onClick={this.bindRoomLocation}>确定</Button>
+                <Button type="primary" className="bindCoordinates_btn" onClick={this.bindRoomLocation}>确定</Button>
             </div>
         );
     }

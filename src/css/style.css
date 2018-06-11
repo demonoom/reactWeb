@@ -3525,11 +3525,11 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_jiaoxue {
-    background-position: 0 -198px;
+    background-position: 0 -200px;
 }
 
 .ant-menu-item-selected .icon_jiaoxue {
-    background-position: 0 -250px;
+    background-position: 0 -249px;
 }
 
 .icon_antgroup {
@@ -3557,7 +3557,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_cloud {
-    background-position: 0 -596px;
+    background-position: 0 -600px;
 }
 
 .ant-menu-item-selected .icon_cloud {
@@ -3565,7 +3565,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_schoolGroup {
-    background-position: 0 -695px;
+    background-position: 0 -700px;
 }
 
 .ant-menu-item-selected .icon_schoolGroup {
@@ -3573,7 +3573,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_antdisk {
-    background-position: 0 -796px;
+    background-position: 0 -800px;
 }
 
 .ant-menu-item-selected .icon_antdisk {
@@ -3581,7 +3581,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_ding {
-    background-position: 0 -996px;
+    background-position: 0 -1000px;
 }
 
 .ant-menu-item-selected .icon_ding {
@@ -9782,3 +9782,47 @@ a:active,a:hover{
     line-height: 28px;
 }
 /* 编辑课程样式---end--- */
+
+
+
+/* 绑定教室坐标start */
+    .bindCoordinates{
+        text-align: center;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    .bindCoordinates canvas{
+        margin: 30px 0;
+        background: #272a46;
+        border: 20px solid #272a46;
+    }
+    .bindCoordinates_t{
+        text-align: left;
+        padding: 0 20px;
+        background: #fff;
+    }
+    .bindCoordinates_list{
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        min-height: 53px;
+        line-height: 28px;
+    }
+    .bindCoordinates_input{
+        width: 150px;
+        margin-left: 20px;
+    }
+    .bindCoordinates_input:focus {
+        outline: none !important;
+        border:1px solid #2db7f5;
+        background: #edf9ff;
+    }
+    .bindCoordinates_name{
+        max-width: calc(100% - 180px);
+        float: left;
+    }
+    .bindCoordinates_btn{
+        min-width: 70px;
+        margin: 15px 0;
+    }
+
+/* 绑定教室坐标end */
