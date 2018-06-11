@@ -22,8 +22,8 @@ const BindCoordinates = React.createClass({
         this.getSchoolMapBySchoolId()
         canvas = document.getElementById('schoolMap');
         context = canvas.getContext('2d');
-        canvas.width = 520;
-        canvas.height = 500;
+        canvas.width = document.getElementsByClassName('bindCoordinates_cont')[0].offsetWidth - 260;
+        canvas.height = document.getElementsByClassName('bindCoordinates_cont')[0].offsetHeight - 30;
         context.font = '900 20px 微软雅黑'
         context.fillStyle = '#ffff00'
     },
@@ -70,7 +70,11 @@ const BindCoordinates = React.createClass({
      * @param data
      * @param index
      */
-    clazzOnFocus(data, index) {
+    clazzOnFocus(data, index, e) {
+        for (var i = 0; i < document.getElementsByClassName('bindCoordinates_t_l').length; i++) {
+            document.getElementsByClassName('bindCoordinates_t_l')[i].className = 'bindCoordinates_t_l'
+        }
+        e.target.className = 'bindCoordinates_t_l bindCoordinates_t_select'
         schoolMap.setState({imgPointIndex: index + 1});
     },
 
@@ -171,14 +175,15 @@ const BindCoordinates = React.createClass({
         var _this = this;
         if (isEmpty(this.state.classRoomArr) == false) {
             this.state.classRoomArr.forEach(function (v, i) {
-                var clazzInp = <div key={i} className="bindCoordinates_list"
-                                    onClick={_this.clazzOnFocus.bind(this, v, i)}>
-                    <span className="bindCoordinates_name focus_3"><span>{(i + 1) }</span><span className="bindCoordinates_t_l bindCoordinates_t_select">{v.name}</span></span>
+                var clazzInp = <div key={i} className="bindCoordinates_list noom_cursor">
+                    <span className="bindCoordinates_name focus_3"><span>{(i + 1)}</span><span
+                        className="bindCoordinates_t_l"
+                        onClick={_this.clazzOnFocus.bind(this, v, i)}>{v.name}</span></span>
                     <div className="bindCoordinates_xy">
                         <div>X:{_this.state.classRoomArr[i].value.split('-')[0]}</div>
                         <div>Y:{_this.state.classRoomArr[i].value.split('-')[1]}</div>
                     </div>
-                </div>
+                </div>;
                 arr.push(clazzInp);
             })
         }
@@ -253,7 +258,7 @@ const BindCoordinates = React.createClass({
                         </div>
                         {this.state.clazzArr}
                     </div>
-                <Button type="primary" className="bindCoordinates_btn" onClick={this.bindRoomLocation}>保存</Button>
+                    <Button type="primary" className="bindCoordinates_btn" onClick={this.bindRoomLocation}>保存</Button>
                 </div>
             </div>
         );

@@ -153,12 +153,12 @@ class SystemSettingGhostMenu extends React.Component {
 
             {/*组织架构*/}
 
-            <ul className="second">
+            {/*<ul className="second">
                 <li onClick={event => {
                     this.changeMenu(event, 'BindCoordinates', false)
                 }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>绑定教室坐标
                 </li>
-            </ul>
+            </ul>*/}
 
             {/*<ul className="second">*/}
             {/*<li onClick={event => {*/}
