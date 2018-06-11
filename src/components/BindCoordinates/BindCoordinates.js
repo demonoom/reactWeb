@@ -24,6 +24,8 @@ const BindCoordinates = React.createClass({
         context = canvas.getContext('2d');
         canvas.width = 620;
         canvas.height = 580;
+        context.font = '900 20px 微软雅黑'
+        context.fillStyle = 'red'
     },
 
     componentDidUpdate() {
@@ -39,9 +41,28 @@ const BindCoordinates = React.createClass({
             message.error('请先选一个教室', 2)
             return
         }
-        context.fillText(this.state.imgPointIndex, e.offsetX, e.offsetY)
-        this.state.classRoomArr[this.state.imgPointIndex - 1].value = e.offsetX + '.' + e.offsetY;
+        //1.清除画布
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        //2.改变this.state.classRoomArr调用buildClassRoomList
+        this.state.classRoomArr[this.state.imgPointIndex - 1].value = (e.offsetX / canvas.width).toFixed(6) + '-' + (e.offsetY / canvas.height).toFixed(6);
         this.buildClassRoomList()
+        //3.根据this.state.classRoomArr重新描点
+        // context.fillText(this.state.imgPointIndex, e.offsetX, e.offsetY)
+        this.drawPointAgain(this.state.classRoomArr)
+    },
+
+    /**
+     * 二次描点
+     * @param data
+     */
+    drawPointAgain(data) {
+        if (isEmpty(data) == false) {
+            data.forEach(function (v, i) {
+                if (isEmpty(v.value) == false) {
+                    context.fillText(i + 1, v.value.split('-')[0] * canvas.width, v.value.split('-')[1] * canvas.height)
+                }
+            })
+        }
     },
 
     /**
@@ -95,12 +116,27 @@ const BindCoordinates = React.createClass({
             onResponse: function (ret) {
                 if (ret.msg == '调用成功' && ret.success == true) {
                     _this.makeClassRoomList(ret.response)
+                    _this.drawPoint(ret.response)
                 }
             },
             onError: function (error) {
                 message.error(error);
             }
         });
+    },
+
+    /**
+     * 初始化描点
+     * @param data
+     */
+    drawPoint(data) {
+        if (isEmpty(data) == false) {
+            data.forEach(function (v, i) {
+                if (isEmpty(v.location) == false) {
+                    context.fillText(i + 1, v.location.x * canvas.width, v.location.y * canvas.height)
+                }
+            })
+        }
     },
 
     /**
@@ -133,7 +169,6 @@ const BindCoordinates = React.createClass({
     buildClassRoomList() {
         var arr = [];
         var _this = this;
-        console.log(this.state.classRoomArr);
         if (isEmpty(this.state.classRoomArr) == false) {
             this.state.classRoomArr.forEach(function (v, i) {
                 var clazzInp = <div key={i}>
@@ -160,16 +195,16 @@ const BindCoordinates = React.createClass({
                         {
                             id: v.location.id,
                             roomId: v.id,
-                            x: (v.value.split('.')[0] / canvas.width).toFixed(6),
-                            y: (v.value.split('.')[1] / canvas.height).toFixed(6),
+                            x: v.value.split('-')[0],
+                            y: v.value.split('-')[1],
                         }
                     )
                 } else {
                     arr.push(
                         {
                             roomId: v.id,
-                            x: (v.value.split('.')[0] / canvas.width).toFixed(6),
-                            y: (v.value.split('.')[1] / canvas.height).toFixed(6),
+                            x: v.value.split('-')[0],
+                            y: v.value.split('-')[1],
                         }
                     )
                 }
