@@ -171,10 +171,11 @@ const BindCoordinates = React.createClass({
         var _this = this;
         if (isEmpty(this.state.classRoomArr) == false) {
             this.state.classRoomArr.forEach(function (v, i) {
-                var clazzInp = <div key={i} className="bindCoordinates_list">
+                var clazzInp = <div key={i} className="bindCoordinates_list"
+                                    onClick={_this.clazzOnFocus.bind(this, v, i)}>
                     <span className="bindCoordinates_name focus_3">{(i + 1) + '、' + v.name}</span>
-                    <Input className="bindCoordinates_input" placeholder="Basic usage" value={_this.state.classRoomArr[i].value}
-                           onFocus={_this.clazzOnFocus.bind(this, v, i)}/>
+                    <span>X:{_this.state.classRoomArr[i].value.split('-')[0]}</span>
+                    <span>Y:{_this.state.classRoomArr[i].value.split('-')[1]}</span>
                 </div>
                 arr.push(clazzInp);
             })
@@ -237,14 +238,17 @@ const BindCoordinates = React.createClass({
 
         return (
             <div className="bindCoordinates">
+                <div className="public—til—blue">请先点击教室名称,然后在地图中点击对应位置</div>
                 <canvas
                     style={this.state.sectionStyle}
                     id='schoolMap'
                 />
                 <div className="bindCoordinates_t">
+                    <span>教室名称:</span>
+                    <span>坐标值:</span>
                     {this.state.clazzArr}
                 </div>
-                <Button type="primary" className="bindCoordinates_btn" onClick={this.bindRoomLocation}>确定</Button>
+                <Button type="primary" className="bindCoordinates_btn" onClick={this.bindRoomLocation}>保存</Button>
             </div>
         );
     }
