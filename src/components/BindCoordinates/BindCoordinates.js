@@ -87,7 +87,7 @@ const BindCoordinates = React.createClass({
     /**
      * 查看学校绑定的所有地图
      */
-    getSchoolMapBySchoolId(isShow) {
+    getSchoolMapBySchoolId(falg) {
         var _this = this;
         var param = {
             "method": 'getSchoolMapBySchoolId',
@@ -103,8 +103,12 @@ const BindCoordinates = React.createClass({
                             backgroundImage: `url(${ret.response.path})`,
                         };
                         _this.setState({sectionStyle});
+                    } else {
+                        message.error('学校没有平面图，请上传平面图', 2)
                     }
-                    _this.viewClassRoomPage(isShow)
+                    if (falg) {
+                        _this.viewClassRoomPage()
+                    }
                     //查看当前时间的教室人数热点图
                 }
             },
@@ -117,7 +121,7 @@ const BindCoordinates = React.createClass({
     /**
      * 获取初始数据
      */
-    viewClassRoomPage(isShow) {
+    viewClassRoomPage() {
         var _this = this;
         var param = {
             "method": 'viewClassRoomPage',
@@ -127,7 +131,7 @@ const BindCoordinates = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == '调用成功' && ret.success == true) {
-                    _this.makeClassRoomList(ret.response, isShow)
+                    _this.makeClassRoomList(ret.response)
                     _this.drawPoint(ret.response)
                 }
             },
@@ -155,7 +159,7 @@ const BindCoordinates = React.createClass({
      * 初始化数据列表
      * @param data
      */
-    makeClassRoomList(data, isShow) {
+    makeClassRoomList(data) {
         var arr = []
         if (isEmpty(data) == false) {
             data.forEach(function (v, i) {
@@ -172,13 +176,13 @@ const BindCoordinates = React.createClass({
             })
         }
         this.setState({classRoomArr: arr});
-        this.buildClassRoomList(isShow)
+        this.buildClassRoomList()
     },
 
     /**
      * 构建渲染列表
      */
-    buildClassRoomList(isShow) {
+    buildClassRoomList() {
         var arr = [];
         var _this = this;
         if (isEmpty(this.state.classRoomArr) == false) {
@@ -265,7 +269,7 @@ const BindCoordinates = React.createClass({
      */
     changeConfirmModalVisible(isShow) {
         this.setState({isShow})
-        this.getSchoolMapBySchoolId(isShow)
+        this.getSchoolMapBySchoolId(true)
         canvas = document.getElementById('schoolMap');
         context = canvas.getContext('2d');
         canvas.width = document.getElementsByClassName('bindCoordinates_cont')[0].offsetWidth - 260;
@@ -300,12 +304,13 @@ const BindCoordinates = React.createClass({
             "adminId": this.state.loginUser.colUid,
             "mapURL": imgUrl,
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 console.log(ret);
                 if (ret.msg == '调用成功' && ret.success == true) {
-
+                    //刷新地图
+                    _this.getSchoolMapBySchoolId(false)
+                    //清空打点
                 }
             },
             onError: function (error) {
