@@ -334,7 +334,7 @@ const BindCoordinates = React.createClass({
         return (
             <Modal
                 visible={this.state.isShow}
-                title="批量编辑教室坐标(请先点击教室名称,然后在地图中点击对应位置)"
+                title="批量编辑教室坐标"
                 width="860px"
                 onCancel={this.closebindCoordinatesModel}
                 transitionName=""  //禁用modal的动画效果
@@ -345,6 +345,7 @@ const BindCoordinates = React.createClass({
                             onClick={this.bindRoomLocation}>保存</button>
                 ]}
             >
+                <span className="bindTitlehint">（请先点击教室名称,然后在地图中点击对应位置）</span>
                 <div className="bindCoordinates" style={{height: 450}}>
                     {/*<div className="public—til—blue">请先点击教室名称,然后在地图中点击对应位置</div>*/}
                     <div className="favorite_scroll bindCoordinates_cont">

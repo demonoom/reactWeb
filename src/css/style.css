@@ -9842,7 +9842,7 @@ a:active, a:hover {
 }
 
 .bindCoordinates canvas {
-    margin: 10px 0 0 0;
+    margin: 0;
     background: #272a46;
     border: 10px solid #272a46;
     /*display: inline-block;*/
@@ -9859,7 +9859,7 @@ a:active, a:hover {
     background: #fff;
     display: inline-block;
     width: 240px;
-    height: calc(100% - 54px);
+    height: calc(100% - 10px);
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
@@ -9884,10 +9884,11 @@ a:active, a:hover {
 }
 
 .bindCoordinates_name {
-    max-width: calc(100% - 90px);
+    max-width: calc(100% - 95px);
     color: #333;
     font-size: 14px;
     line-height: 40px;
+    display: inline-block;
 }
 
 .bindCoordinates_btn {
@@ -9929,7 +9930,7 @@ a:active, a:hover {
 
 .bindCoordinates_t_list {
     border-bottom: none;
-    padding: 15px 10px 5px 10px;
+    padding: 5px 10px 5px 10px;
     color: #666;
     font-size: 14px;
 }
@@ -9941,5 +9942,11 @@ a:active, a:hover {
 .bindCoordinates_t_select {
     color: #497ef0;
 }
-
+.bindTitlehint{
+    position: absolute;
+    top: 10px;
+    left: 127px;
+    font-size: 14px;
+    color: #666;
+}
 /* 绑定教室坐标end */
