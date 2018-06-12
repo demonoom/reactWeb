@@ -1,7 +1,8 @@
 import React, {PropTypes} from 'react';
-import {Input, message, Button} from 'antd';
+import {message, Button, Modal} from 'antd';
 import {isEmpty} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
+import UploadImgComponents from './UploadImgComponents'
 
 var schoolMap;
 var canvas;
@@ -15,21 +16,19 @@ const BindCoordinates = React.createClass({
         return {
             loginUser: loginUser,
             classRoomArr: [],
+            isShow: false,
+            topicImgUrl: [],     //说说/话题上传的图片路径,
         };
     },
 
     componentDidMount() {
-        this.getSchoolMapBySchoolId()
-        canvas = document.getElementById('schoolMap');
-        context = canvas.getContext('2d');
-        canvas.width = document.getElementsByClassName('bindCoordinates_cont')[0].offsetWidth - 260;
-        canvas.height = document.getElementsByClassName('bindCoordinates_cont')[0].offsetHeight - 30;
-        context.font = '900 20px 微软雅黑'
-        context.fillStyle = '#ffff00'
+
     },
 
     componentDidUpdate() {
-        document.getElementById("schoolMap").addEventListener('click', schoolMap.simulateClick);
+        if (isEmpty(document.getElementById("schoolMap")) == false) {
+            document.getElementById("schoolMap").addEventListener('click', schoolMap.simulateClick);
+        }
     },
 
     /**
@@ -39,6 +38,10 @@ const BindCoordinates = React.createClass({
     simulateClick(e) {
         if (isEmpty(this.state.imgPointIndex)) {
             message.error('请先选一个教室', 2)
+            return
+        }
+        if (isEmpty(schoolMap.state.sectionStyle)) {
+            message.error('学校没有平面图，请上传平面图', 2)
             return
         }
         //1.清除画布
@@ -76,12 +79,15 @@ const BindCoordinates = React.createClass({
         }
         e.target.className = 'bindCoordinates_t_l bindCoordinates_t_select'
         schoolMap.setState({imgPointIndex: index + 1});
+        if (isEmpty(schoolMap.state.sectionStyle)) {
+            message.error('学校没有平面图，请上传平面图', 2)
+        }
     },
 
     /**
      * 查看学校绑定的所有地图
      */
-    getSchoolMapBySchoolId() {
+    getSchoolMapBySchoolId(isShow) {
         var _this = this;
         var param = {
             "method": 'getSchoolMapBySchoolId',
@@ -91,12 +97,14 @@ const BindCoordinates = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == '调用成功' && ret.success == true) {
-                    var sectionStyle = {
-                        backgroundSize: "100% 100%",
-                        backgroundImage: `url(${ret.response.path})`,
-                    };
-                    _this.setState({sectionStyle});
-                    _this.viewClassRoomPage()
+                    if (isEmpty(ret.response) == false) {
+                        var sectionStyle = {
+                            backgroundSize: "100% 100%",
+                            backgroundImage: `url(${ret.response.path})`,
+                        };
+                        _this.setState({sectionStyle});
+                    }
+                    _this.viewClassRoomPage(isShow)
                     //查看当前时间的教室人数热点图
                 }
             },
@@ -109,7 +117,7 @@ const BindCoordinates = React.createClass({
     /**
      * 获取初始数据
      */
-    viewClassRoomPage() {
+    viewClassRoomPage(isShow) {
         var _this = this;
         var param = {
             "method": 'viewClassRoomPage',
@@ -119,7 +127,7 @@ const BindCoordinates = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == '调用成功' && ret.success == true) {
-                    _this.makeClassRoomList(ret.response)
+                    _this.makeClassRoomList(ret.response, isShow)
                     _this.drawPoint(ret.response)
                 }
             },
@@ -147,7 +155,7 @@ const BindCoordinates = React.createClass({
      * 初始化数据列表
      * @param data
      */
-    makeClassRoomList(data) {
+    makeClassRoomList(data, isShow) {
         var arr = []
         if (isEmpty(data) == false) {
             data.forEach(function (v, i) {
@@ -164,13 +172,13 @@ const BindCoordinates = React.createClass({
             })
         }
         this.setState({classRoomArr: arr});
-        this.buildClassRoomList()
+        this.buildClassRoomList(isShow)
     },
 
     /**
      * 构建渲染列表
      */
-    buildClassRoomList() {
+    buildClassRoomList(isShow) {
         var arr = [];
         var _this = this;
         if (isEmpty(this.state.classRoomArr) == false) {
@@ -232,6 +240,7 @@ const BindCoordinates = React.createClass({
                 console.log(ret);
                 if (ret.msg == '调用成功' && ret.success == true) {
                     message.success('成功')
+                    _this.setState({isShow: false})
                 } else {
                     // message.fail(ret.msg)
                 }
@@ -242,31 +251,121 @@ const BindCoordinates = React.createClass({
         });
     },
 
+    closebindCoordinatesModel() {
+        this.setState({isShow: false})
+        this.setState({topicImgUrl: []})
+    },
+
+    /**
+     * 设置窗口的显示和关闭
+     * 将isShow=true向下传递,最终会设置
+     * isShow必须一开始就设置为true将dom进行渲染,否则无法找到canvas
+     * @param isShow
+     * @param content
+     */
+    changeConfirmModalVisible(isShow) {
+        this.setState({isShow})
+        this.getSchoolMapBySchoolId(isShow)
+        canvas = document.getElementById('schoolMap');
+        context = canvas.getContext('2d');
+        canvas.width = document.getElementsByClassName('bindCoordinates_cont')[0].offsetWidth - 260;
+        canvas.height = document.getElementsByClassName('bindCoordinates_cont')[0].offsetHeight - 30;
+        context.font = '900 20px 微软雅黑'
+        context.fillStyle = '#ffff00'
+    },
+
+    /*获取上传图片信息*/
+    getUploadedImgList(file, isRemoved) {
+        var _this = this;
+        this.removeImgViewStyle(); //移除图片上传组件的pointerEvents样式属性
+        var imgUrl = file.response;
+        if (isEmpty(isRemoved) == false && isRemoved == "removed") {
+            for (var i = 0; i < this.state.topicImgUrl.length; i++) {
+                if (this.state.topicImgUrl[i] == imgUrl) {
+                    this.state.topicImgUrl.splice(i, 1);
+                }
+            }
+        } else {
+            this.state.topicImgUrl.push(imgUrl);
+        }
+        if (isEmpty(imgUrl) == false) {
+            _this.uploadImg(imgUrl)
+        }
+    },
+
+    uploadImg(imgUrl) {
+        var _this = this;
+        var param = {
+            "method": 'bindSchoolMap',
+            "adminId": this.state.loginUser.colUid,
+            "mapURL": imgUrl,
+        };
+        console.log(param);
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                if (ret.msg == '调用成功' && ret.success == true) {
+
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 移除图片上传组件的pointerEvents样式属性
+     * 原值为none时，会导致无法点击预览
+     */
+    removeImgViewStyle() {
+        var imgViewObjArray = $("a[rel='noopener noreferrer']");
+        for (var i = 0; i < imgViewObjArray.length; i++) {
+            var imgViewObj = imgViewObjArray[i];
+            imgViewObj.style.pointerEvents = "";
+        }
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
      */
     render() {
-
         return (
-            <div className="bindCoordinates">
-                <div className="public—til—blue">请先点击教室名称,然后在地图中点击对应位置</div>
-                <div className="favorite_scroll bindCoordinates_cont">
-                    <canvas
-                        style={this.state.sectionStyle}
-                        id='schoolMap'
-                    />
-                    <div className="bindCoordinates_t">
-                        <div className="bindCoordinates_t_list">
-                            <span className="bindCoordinates_t_name">教室名称</span>
-                            <span className="bindCoordinates_t_xy">坐标值</span>
+            <Modal
+                visible={this.state.isShow}
+                title="批量编辑教室坐标(请先点击教室名称,然后在地图中点击对应位置)"
+                width="860px"
+                onCancel={this.closebindCoordinatesModel}
+                transitionName=""  //禁用modal的动画效果
+                closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
+                maskClosable={false} //设置不允许点击蒙层关闭
+                footer={[
+                    <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                            onClick={this.bindRoomLocation}>保存</button>
+                ]}
+            >
+                <div className="bindCoordinates" style={{height: 450}}>
+                    {/*<div className="public—til—blue">请先点击教室名称,然后在地图中点击对应位置</div>*/}
+                    <div className="favorite_scroll bindCoordinates_cont">
+                        <canvas
+                            style={this.state.sectionStyle}
+                            id='schoolMap'
+                        />
+                        <div className="bindCoordinates_t">
+                            <div className="bindCoordinates_t_list">
+                                <span className="bindCoordinates_t_name">教室名称</span>
+                                <span className="bindCoordinates_t_xy">坐标值</span>
+                            </div>
+                            {this.state.clazzArr}
                         </div>
-                        {this.state.clazzArr}
+                        <UploadImgComponents callBackParent={this.getUploadedImgList}
+                                             fileList={this.state.topicImgUrl}/>
                     </div>
-                    <Button type="primary" className="bindCoordinates_btn" onClick={this.bindRoomLocation}>保存</Button>
                 </div>
-            </div>
-        );
+            </Modal>
+
+        )
     }
 });
 

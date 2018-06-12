@@ -43,8 +43,8 @@ import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGho
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
 import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 import SendPicModel from '../components/antGroup/SendPicModel'
-import ConfirmModal from '../components/ConfirmModal';
 import {isEmpty, showLargeImg, setLocalLanaguage, getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
+import BindCoordinates from '../components/BindCoordinates/BindCoordinates'
 //国际化
 import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
@@ -189,6 +189,7 @@ const MainLayout = React.createClass({
         // window.__toWhichCharObj__ = this.toWhichCharObj;
         window.__noomSelectPic__ = this.noomSelectPic;
         window.__noomShareMbile__ = this.noomShareMbile;
+        window.__bindCoordinates__ = this.bindCoordinates;
     },
 
     componentWillMount() {
@@ -233,6 +234,13 @@ const MainLayout = React.createClass({
         // this.getStructureUsers();
         // this.getRecentContents();
         // this.setState({shareModalVisible: true});
+    },
+
+    /**
+     * 打点功能进行显示
+     */
+    bindCoordinates() {
+        this.refs.bindCoordinatesModel.changeConfirmModalVisible(true)
     },
 
     /**
@@ -1408,7 +1416,6 @@ const MainLayout = React.createClass({
         }
         var memberIds = target.value;
         this.setState({"delMemberIds": memberIds, calmBreakGroup: true});
-        // this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     /**
@@ -1416,7 +1423,6 @@ const MainLayout = React.createClass({
      */
     closeConfirmModal() {
         this.setState({calmBreakGroup: false})
-        // this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -1773,158 +1779,6 @@ const MainLayout = React.createClass({
         });
         this.addDeGroupMemberModalHandleCancel();
     },
-
-    /**
-     * 分享文件点击OK
-     */
-    /*getsharekey() {
-        var nowThinking = this.state.nowThinking;
-        var shareSrc = this.state.shareSrc;
-        var shareTitle = this.state.shareTitle;
-        var _this = this;
-        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-        var createTime = (new Date()).valueOf();
-        var messageToPer = 1;//根据接收者是群组还是个人来决定
-        var messageToGrp = 4;
-        var checkedConcatOptions = this.state.checkedConcatOptions;   //好友id数组
-        var checkedGroupOptions = this.state.checkedGroupOptions;   //群组id数组
-        var checkedsSructureOptions = this.state.checkedsSructureOptions;  //组织架构id数组
-        var checkedRecentConnectOptions = this.state.checkedRecentConnectOptions;  //最近联系人id 既包括群组(%结尾)又有个人数组
-        var searchShareUsersOptions = this.state.searchShareUsersOptions;
-
-        if (typeof(nowThinking) == 'undefined') {
-            nowThinking = '这是一个云盘分享的文件'
-        }
-
-        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true && isEmpty(checkedRecentConnectOptions) == true && isEmpty(searchShareUsersOptions) == true) {
-            message.error('请选择转发好友或群组');
-            return false
-        }
-
-        //链接消息
-        var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
-        var attachment = {
-            "address": shareSrc,
-            "createTime": createTime,
-            "playing": false,
-            "type": 4,
-            "user": loginUser,
-            "cover": cover,
-            "content": shareTitle,
-        };
-
-        if (isEmpty(checkedRecentConnectOptions) == false) {
-            checkedRecentConnectOptions.forEach(function (e) {
-                var mes = e + '';
-                if (mes.indexOf('%') == -1) {
-                    //个人
-                    var uuid = _this.createUUID();
-                    var messageJson = {
-                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
-                        "toId": e, "command": "message", "hostId": loginUser.colUid,
-                        "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
-                    };
-                    var commandJson = {"command": "message", "data": {"message": messageJson}};
-                    ms.send(commandJson);
-                } else {
-                    //群组
-                    var toId = e.slice(0, e.length - 1)
-                    var uuid = _this.createUUID();
-                    var messageJson = {
-                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
-                        "toId": toId, "command": "message", "hostId": loginUser.colUid,
-                        "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
-                    };
-                    var commandJson = {"command": "message", "data": {"message": messageJson}};
-                    ms.send(commandJson);
-                }
-            });
-        }
-
-        if (isEmpty(searchShareUsersOptions) == false) {
-            searchShareUsersOptions.forEach(function (e) {
-                var mes = e + '';
-                if (mes.indexOf('%') == -1) {
-                    //个人
-                    var uuid = _this.createUUID();
-                    var messageJson = {
-                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
-                        "toId": e, "command": "message", "hostId": loginUser.colUid,
-                        "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
-                    };
-                    var commandJson = {"command": "message", "data": {"message": messageJson}};
-                    ms.send(commandJson);
-                } else {
-                    //群组
-                    var toId = e.slice(0, e.length - 1)
-                    var uuid = _this.createUUID();
-                    var messageJson = {
-                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
-                        "toId": toId, "command": "message", "hostId": loginUser.colUid,
-                        "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
-                    };
-                    var commandJson = {"command": "message", "data": {"message": messageJson}};
-                    ms.send(commandJson);
-                }
-            });
-        }
-
-        if (isEmpty(checkedGroupOptions) == false) {
-            checkedGroupOptions.forEach(function (e) {
-                var uuid = _this.createUUID();
-                var messageJson = {
-                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
-                    "toId": e, "command": "message", "hostId": loginUser.colUid,
-                    "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
-                };
-                var commandJson = {"command": "message", "data": {"message": messageJson}};
-                ms.send(commandJson);
-            });
-        }
-
-        if (isEmpty(checkedConcatOptions) == false) {
-            checkedConcatOptions.forEach(function (e) {
-                var uuid = _this.createUUID();
-                var messageJson = {
-                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
-                    "toId": e, "command": "message", "hostId": loginUser.colUid,
-                    "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
-                };
-                var commandJson = {"command": "message", "data": {"message": messageJson}};
-                ms.send(commandJson);
-            });
-        }
-
-        if (isEmpty(checkedsSructureOptions) == false) {
-            checkedsSructureOptions.forEach(function (e) {
-                var uuid = _this.createUUID();
-                var messageJson = {
-                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
-                    "toId": e, "command": "message", "hostId": loginUser.colUid,
-                    "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
-                };
-                var commandJson = {"command": "message", "data": {"message": messageJson}};
-                ms.send(commandJson);
-            });
-        }
-        _this.shareModalHandleCancel();
-    },*/
-
-    /**
-     * 关闭分享文件model
-     */
-    /*shareModalHandleCancel() {
-        this.setState({
-            shareModalVisible: false,
-            "checkedGroupOptions": [],
-            "checkedConcatOptions": [],
-            "checkedsSructureOptions": [],
-            "checkedRecentConnectOptions": [],
-            "searchShareUsersOptions": [],
-            RMsgActiveKey: ['2'],
-            searchWords: ''
-        });
-    },*/
 
     toWhichCharObj() {
         if (delLastClick) {
@@ -3348,18 +3202,6 @@ const MainLayout = React.createClass({
                             </div>
                         </Modal>
 
-                        {/* <ConfirmModal ref="dissolutionChatGroupConfirmModal"
-                                      title="确定要解散该群组?"
-                                      onConfirmModalCancel={this.closeDissolutionChatGroupConfirmModal}
-                                      onConfirmModalOK={this.dissolutionChatGroup}/>
-                        <ConfirmModal ref="exitChatGroupConfirmModal"
-                                      title="确定要退出该群组?"
-                                      onConfirmModalCancel={this.closeExitChatGroupConfirmModal}
-                                      onConfirmModalOK={this.exitChatGroup}/>
-                        <ConfirmModal ref="confirmModal"
-                                      title="确定要移除选中的群成员?"
-                                      onConfirmModalCancel={this.closeConfirmModal}
-                                      onConfirmModalOK={this.deleteSelectedMember}/> */}
                         <Modal
                             className="calmModal"
                             visible={this.state.calmRemoveMembers}
@@ -3417,6 +3259,10 @@ const MainLayout = React.createClass({
                                 确定要退出该群组?
                             </div>
                         </Modal>
+
+                        <BindCoordinates
+                            ref='bindCoordinatesModel'
+                        />
                     </div>
                 </IntlProvider>
             </LocaleProvider>

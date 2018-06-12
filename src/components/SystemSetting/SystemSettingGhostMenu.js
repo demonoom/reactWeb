@@ -100,11 +100,6 @@ class SystemSettingGhostMenu extends React.Component {
         var uls = '';
         var arr = [];
 
-        var loginFlag = true
-        if (this.state.ident == 23836 || this.state.ident == 54208) {
-            loginFlag = false
-        }
-
         for (var i = 0; i < data.length; i++) {
             data[i].tabItems.forEach(function (v) {
                 console.log(v);
@@ -118,20 +113,20 @@ class SystemSettingGhostMenu extends React.Component {
                 liArr.push(lis);
             });
 
-            /*var newObj = {
+            var newObj = {
                 method: 'openNewPage',
-                url: 'http://192.168.50.139:8091/#/homeWorkUnderstandAnalysisGuide'
+                url: 'http://192.168.50.29:8091/#/classCardHomePageDoor'
             }
 
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
-                        _this.checkWords(newObj, '作业统计');
-                    }}><img className="icon_system_img"/>作业统计
+                        _this.checkWords(newObj, '班牌编辑');
+                    }}><img className="icon_system_img"/>班牌编辑
                     </li>
                 </ul>
             </li>;
-            liArr.push(newLi);*/
+            liArr.push(newLi);
 
             uls = <li className="ghostMenu_li">
                 <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>
@@ -159,17 +154,10 @@ class SystemSettingGhostMenu extends React.Component {
 
             {/*组织架构*/}
 
-            <ul className="second" style={{display: !loginFlag ? 'block' : 'none'}}>
-                <li onClick={event => {
-                    this.changeMenu(event, 'BindCoordinates', false)
-                }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>绑定教室坐标
-                </li>
-            </ul>
-
-            {/*<ul className="second">*/}
+            {/*<ul className="second" style={{display: !loginFlag ? 'block' : 'none'}}>*/}
             {/*<li onClick={event => {*/}
-            {/*this.checkWords(event, 'homeWorkAnalysis', true)*/}
-            {/*}}><img className="icon_system_img" src='http://192.168.50.139:8091/#/homeWorkUnderstandAnalysisGuide?userId=23836'/>作1业统计*/}
+            {/*this.changeMenu(event, 'BindCoordinates', false)*/}
+            {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>绑定教室坐标*/}
             {/*</li>*/}
             {/*</ul>*/}
 
