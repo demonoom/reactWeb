@@ -272,13 +272,8 @@ const BindCoordinates = React.createClass({
         canvas = document.getElementById('schoolMap');
         context = canvas.getContext('2d');
         canvas.width = document.getElementsByClassName('bindCoordinates_cont')[0].offsetWidth - 240;
-<<<<<<< HEAD
         canvas.height = document.getElementsByClassName('bindCoordinates_cont')[0].offsetHeight - 37;
         context.font = '400 20px 微软雅黑'
-=======
-        canvas.height = document.getElementsByClassName('bindCoordinates_cont')[0].offsetHeight - 10;
-        context.font = '900 20px 微软雅黑'
->>>>>>> 2f001ef556a752522b3a6ebb994c4a7645b48a25
         context.fillStyle = '#ffff00'
     },
 
