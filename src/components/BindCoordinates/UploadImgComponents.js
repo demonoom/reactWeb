@@ -51,6 +51,7 @@ const UploadImgComponents = React.createClass({
             beforeUpload(file) {
                 var currentFileList = antUpload.state.fileList;
                 if (isEmpty(currentFileList) == false && currentFileList.length >= 1) {
+                    console.log(currentFileList);
                     message.error('最多只能上传1张图片', 5);
                     return false;
                 }
