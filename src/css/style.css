@@ -9954,6 +9954,7 @@ a:active, a:hover {
 .updateText{
     color: #333;
     font-size: 14px;
+    line-height: 26px;
 }
 .bottom-B-11{
     margin-bottom: 11px;
