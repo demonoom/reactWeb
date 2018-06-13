@@ -9843,12 +9843,15 @@ a:active, a:hover {
 .bindCoordinates {
     overflow: hidden;
 }
+.bindCoordinates .favorite_scroll{
+    height: 100%;
+}
 
 .bindCoordinates canvas {
     margin: 0;
     /*display: inline-block;*/
-    width: calc(100% - 240px);
-    height: calc(100% - 10px);
+   /* width: calc(100% - 240px);
+    height: calc(100% - 37px);*/
 }
 
 .bindCoordinates_cont {
@@ -9860,7 +9863,7 @@ a:active, a:hover {
     background: #fff;
     display: inline-block;
     width: 240px;
-    height: calc(100% - 10px);
+    height: calc(100% - 37px);
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
