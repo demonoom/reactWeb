@@ -86,9 +86,9 @@ const UploadImgComponents = React.createClass({
         };
 
         return (
-            <Upload {...props}>
-                <Button type="ghost">
-                    <Icon type="upload"/> 点击上传
+            <Upload {...props} className="upload_BtnR">
+                <Button type="ghost" className="upload_Btn">
+                    上传
                 </Button>
             </Upload>
         );

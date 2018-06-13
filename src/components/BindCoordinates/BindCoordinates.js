@@ -310,7 +310,7 @@ const BindCoordinates = React.createClass({
                     //刷新地图
                     _this.getSchoolMapBySchoolId(false)
                     //清空打点
-                    _this.setState({topicImgUrl: []})
+                     _this.setState({topicImgUrl: []})
                 }
             },
             onError: function (error) {
@@ -343,6 +343,7 @@ const BindCoordinates = React.createClass({
                 width="860px"
                 onCancel={this.closebindCoordinatesModel}
                 transitionName=""  //禁用modal的动画效果
+                className="bindCoordinatesBody"
                 closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
                 maskClosable={false} //设置不允许点击蒙层关闭
                 footer={[
@@ -351,9 +352,14 @@ const BindCoordinates = React.createClass({
                 ]}
             >
                 <span className="bindTitlehint">（请先点击教室名称,然后在地图中点击对应位置）</span>
-                <div className="bindCoordinates" style={{height: 450}}>
+                <div className="bindCoordinates" style={{height: 449}}>
                     {/*<div className="public—til—blue">请先点击教室名称,然后在地图中点击对应位置</div>*/}
                     <div className="favorite_scroll bindCoordinates_cont">
+                        <div className="bottom-B-11">
+                            <span className="updateText ri-R-20 upexam_float">上传学校平面图</span>
+                            <UploadImgComponents  callBackParent={this.getUploadedImgList}
+                                                  fileList={this.state.topicImgUrl} />
+                        </div>
                         <canvas
                             style={this.state.sectionStyle}
                             id='schoolMap'
@@ -365,8 +371,7 @@ const BindCoordinates = React.createClass({
                             </div>
                             {this.state.clazzArr}
                         </div>
-                        <UploadImgComponents callBackParent={this.getUploadedImgList}
-                                             fileList={this.state.topicImgUrl}/>
+
                     </div>
                 </div>
             </Modal>

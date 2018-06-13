@@ -9837,17 +9837,18 @@ a:active, a:hover {
 /* 编辑课程样式---end--- */
 
 /* 绑定教室坐标start */
+.bindCoordinatesBody .ant-modal-body{
+    padding: 11px 10px;
+}
 .bindCoordinates {
     overflow: hidden;
 }
 
 .bindCoordinates canvas {
     margin: 0;
-    background: #272a46;
-    border: 10px solid #272a46;
     /*display: inline-block;*/
-    /*width: calc(100% - 240px);*/
-    /*height: calc(100% - 10px);*/
+    width: calc(100% - 240px);
+    height: calc(100% - 10px);
 }
 
 .bindCoordinates_cont {
@@ -9863,8 +9864,9 @@ a:active, a:hover {
     overflow-y: auto;
     overflow-x: hidden;
     position: absolute;
-    top: 0;
+    top: 37px;
     right: 0;
+    border-top: 1px solid #eee;
 }
 
 .bindCoordinates_list {
@@ -9948,5 +9950,37 @@ a:active, a:hover {
     left: 127px;
     font-size: 14px;
     color: #666;
+}
+.updateText{
+    color: #333;
+    font-size: 14px;
+}
+.bottom-B-11{
+    margin-bottom: 11px;
+    height: 26px;
+}
+.ri-R-20{
+    margin-right: 20px;
+}
+.upload_Btn{
+    background: #5d9af2;
+    line-height: 26px;
+    height: 26px;
+    color: #fff;
+    padding: 0;
+    min-width: 70px;
+    text-align: center;
+    border: none;
+}
+.upload_Btn:hover, .upload_Btn:focus{
+    background: #78abf5;
+    color: #fff;
+}
+.upload_BtnR .ant-upload, .upload_BtnR .ant-upload-list{
+    float: left;
+}
+.upload_BtnR .ant-upload-list .ant-upload-list-item{
+    margin-left: 20px;
+    margin-top: -5px;
 }
 /* 绑定教室坐标end */
