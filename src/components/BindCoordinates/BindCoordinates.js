@@ -306,11 +306,11 @@ const BindCoordinates = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
                 if (ret.msg == '调用成功' && ret.success == true) {
                     //刷新地图
                     _this.getSchoolMapBySchoolId(false)
                     //清空打点
+                    _this.setState({topicImgUrl: []})
                 }
             },
             onError: function (error) {
