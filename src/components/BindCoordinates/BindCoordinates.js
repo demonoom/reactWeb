@@ -62,7 +62,7 @@ const BindCoordinates = React.createClass({
         if (isEmpty(data) == false) {
             data.forEach(function (v, i) {
                 if (isEmpty(v.value) == false) {
-                    context.fillText(i + 1, v.value.split('-')[0] * canvas.width, v.value.split('-')[1] * canvas.height)
+                    context.fillText(i + 1, Math.round(v.value.split('-')[0] * canvas.width), Math.round(v.value.split('-')[1] * canvas.height))
                 }
             })
         }
@@ -241,12 +241,11 @@ const BindCoordinates = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
                 if (ret.msg == '调用成功' && ret.success == true) {
                     message.success('成功')
                     _this.setState({isShow: false})
                 } else {
-                    // message.fail(ret.msg)
+                    message.error(ret.msg)
                 }
             },
             onError: function (error) {
@@ -273,8 +272,13 @@ const BindCoordinates = React.createClass({
         canvas = document.getElementById('schoolMap');
         context = canvas.getContext('2d');
         canvas.width = document.getElementsByClassName('bindCoordinates_cont')[0].offsetWidth - 240;
+<<<<<<< HEAD
         canvas.height = document.getElementsByClassName('bindCoordinates_cont')[0].offsetHeight - 37;
         context.font = '400 20px 微软雅黑'
+=======
+        canvas.height = document.getElementsByClassName('bindCoordinates_cont')[0].offsetHeight - 10;
+        context.font = '900 20px 微软雅黑'
+>>>>>>> 2f001ef556a752522b3a6ebb994c4a7645b48a25
         context.fillStyle = '#ffff00'
     },
 
@@ -310,7 +314,7 @@ const BindCoordinates = React.createClass({
                     //刷新地图
                     _this.getSchoolMapBySchoolId(false)
                     //清空打点
-                     _this.setState({topicImgUrl: []})
+                    _this.setState({topicImgUrl: []})
                 }
             },
             onError: function (error) {
@@ -353,12 +357,11 @@ const BindCoordinates = React.createClass({
             >
                 <span className="bindTitlehint">（请先点击教室名称,然后在地图中点击对应位置）</span>
                 <div className="bindCoordinates" style={{height: 449}}>
-                    {/*<div className="public—til—blue">请先点击教室名称,然后在地图中点击对应位置</div>*/}
                     <div className="favorite_scroll bindCoordinates_cont">
                         <div className="bottom-B-11">
                             <span className="updateText ri-R-20 upexam_float">上传学校平面图</span>
-                            <UploadImgComponents  callBackParent={this.getUploadedImgList}
-                                                  fileList={this.state.topicImgUrl} />
+                            <UploadImgComponents callBackParent={this.getUploadedImgList}
+                                                 fileList={this.state.topicImgUrl}/>
                         </div>
                         <canvas
                             style={this.state.sectionStyle}
