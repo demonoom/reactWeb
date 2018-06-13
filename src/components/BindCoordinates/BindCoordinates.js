@@ -275,12 +275,12 @@ const BindCoordinates = React.createClass({
         canvas.height = document.getElementsByClassName('bindCoordinates_cont')[0].offsetHeight - 37;
         context.font = '400 20px 微软雅黑'
         context.fillStyle = '#ffff00'
-        context.shadowColor = 'rgba(0, 0, 0, 0.2)';
+        context.shadowColor = 'rgba(0, 0, 0, 0.6)';
         // 将阴影向右移动15px，向上移动10px
-        context.shadowOffsetX = 2;
-        context.shadowOffsetY = 2;
+        context.shadowOffsetX = 1;
+        context.shadowOffsetY = 1;
         // 轻微模糊阴影
-        context.shadowBlur = 2;
+        context.shadowBlur = 0;
     },
 
     /*获取上传图片信息*/
