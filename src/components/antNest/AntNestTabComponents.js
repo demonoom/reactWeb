@@ -275,17 +275,17 @@ const AntNestTabComponents = React.createClass({
         if (topicObj.type == 7) {
             //模糊作业
             console.log(topicObj);
-            quesNum = <span>
-                {'题目数量:' + topicObj.fuzzyHomework.questionCount}
+            quesNum = <span className="work_count">
+                {'题目数量：' + topicObj.fuzzyHomework.questionCount}
             </span>
             if (JSON.parse(sessionStorage.getItem('loginUser')).colUtype == "TEAC") {
                 UnKnowHomeWorkBtn = <span>
-                <Button icon="message" className="topics_btn antnest_talk teopics_spa">查看作答</Button>
-                <Button icon="message" className="topics_btn antnest_talk teopics_spa">表情分析</Button>
+                <Button icon="search" className="topics_btn antnest_talk ">查看作答</Button>
+                <Button icon="line-chart" className="topics_btn antnest_talk ">表情分析</Button>
             </span>
             } else {
                 UnKnowHomeWorkBtn = <span>
-                <Button icon="message" className="topics_btn antnest_talk teopics_spa">立即作答</Button>
+                <Button icon="edit" className="topics_btn antnest_talk">立即作答</Button>
             </span>
             }
         }

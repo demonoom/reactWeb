@@ -9988,3 +9988,11 @@ a:active, a:hover {
     margin-top: -5px;
 }
 /* 绑定教室坐标end */
+
+/* 模糊作业 */
+.work_count{
+    color: #888;
+    font-size: 14px;
+    padding-top: 6px;
+    display: inline-block;
+}
