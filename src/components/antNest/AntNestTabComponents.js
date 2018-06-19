@@ -295,7 +295,7 @@ const AntNestTabComponents = React.createClass({
             </span>
             } else {
                 UnKnowHomeWorkBtn = <span>
-                <Button icon="edit" className="topics_btn antnest_talk" onClick={this.turnToPPH.bind(this,topicObj)}>立即作答</Button>
+                <Button icon="edit" className="topics_btn antnest_talk " onClick={this.turnToPPH.bind(this,topicObj)}>立即作答</Button>
 
             </span>
             }
