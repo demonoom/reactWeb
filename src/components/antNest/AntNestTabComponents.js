@@ -241,6 +241,16 @@ const AntNestTabComponents = React.createClass({
         this.props.interPublicSidebarSet(obj);
     },
 
+    turnToPPH(data) {
+        console.log(data)
+        console.log(sessionStorage.getItem("ident"));
+        // var url = 'http://jiaoxue.maaee.com:8091/#/questionDetil?courseId=' + e.subject.id;
+        var url = 'http://192.168.50.72:8091/#/waterWork?tid='+data.id+"&stuId="+sessionStorage.getItem("ident");
+        console.log(url)
+        let obj = {mode: 'teachingAdmin', title: '题目水滴页', url: url, width: '380px'};
+        LP.Start(obj);
+    },
+
     /**
      * 构建话题的card对象
      * @param topicObj 话题对象
@@ -269,6 +279,25 @@ const AntNestTabComponents = React.createClass({
         if (topicObj.type == 11 || topicObj.type == 3) {
             commentDisplayTime =
                 <span className="topics_time">(结束时间:{getLocalTime(topicObj.commentDisplayTime)})</span>;
+        }
+        var quesNum = '';
+        var UnKnowHomeWorkBtn = ''
+        if (topicObj.type == 7) {
+            //模糊作业
+            console.log(topicObj);
+            quesNum = <span>
+                {'题目数量:' + topicObj.fuzzyHomework.questionCount}
+            </span>
+            if (JSON.parse(sessionStorage.getItem('loginUser')).colUtype == "TEAC") {
+                UnKnowHomeWorkBtn = <span>
+                <Button icon="message" className="topics_btn antnest_talk teopics_spa">查看作答</Button>
+                <Button icon="message" className="topics_btn antnest_talk teopics_spa">表情分析</Button>
+            </span>
+            } else {
+                UnKnowHomeWorkBtn = <span>
+                <Button icon="message" className="topics_btn antnest_talk teopics_spa" onClick={this.turnToPPH.bind(this,topicObj)}>立即作答</Button>
+            </span>
+            }
         }
         var userHeadPhoto;
         if (isEmpty(topicObj.fromUser.avatar)) {
@@ -646,6 +675,7 @@ const AntNestTabComponents = React.createClass({
                     <span className="antnest_name yichao_blue">{topicObj.fromUser.userName}</span>
                     <span>{topicTitle}</span>
                 </li>
+                {quesNum}
                 <li className="topics_cont">
                     {topicObj.content}
                 </li>
@@ -658,7 +688,8 @@ const AntNestTabComponents = React.createClass({
                     {screatPic}
                     <span>{delButton}</span>
                     <span className="topics_dianzan">
-                         {praiseButton}
+                        {UnKnowHomeWorkBtn}
+                        {praiseButton}
                         <Button icon="message" value={topicObj.id} onClick={antNest.showDiscussModal}
                                 className="topics_btn antnest_talk teopics_spa">评论</Button>
                      </span>
@@ -1930,7 +1961,7 @@ const AntNestTabComponents = React.createClass({
      */
     render() {
         const radioStyle = {
-            display: 'block',   
+            display: 'block',
             height: '30px',
             lineHeight: '30px',
         };
@@ -1977,7 +2008,8 @@ const AntNestTabComponents = React.createClass({
                 <div className="talk_ant_btn1">
                     <Button value="talk" onClick={antNest.showaddTopicModal} className="calmBorderRadius antnest_talk">发表说说</Button>
                     <Button value="topic" onClick={antNest.showaddTopicModal} className="calmBorderRadius antnest_talk">发表话题</Button>
-                    <Button className="calmBorderRadius" style={{display: antNest.state.homeWorkPublish}} value="homework"
+                    <Button className="calmBorderRadius" style={{display: antNest.state.homeWorkPublish}}
+                            value="homework"
                             onClick={antNest.showaddTopicModal}>发布作业</Button>
                 </div>
                 {breadMenuTip}
@@ -2063,7 +2095,8 @@ const AntNestTabComponents = React.createClass({
                                                onChange={this.checkboxOnChange}/>
                             </div>
                             <div className="yinyong3">
-                                <a className="checkbox_left2 checkbox_left2_a antnest_talk" href="javascript:;" onClick={this.choiceCanSeePer}>从蚁群选择</a>
+                                <a className="checkbox_left2 checkbox_left2_a antnest_talk" href="javascript:;"
+                                   onClick={this.choiceCanSeePer}>从蚁群选择</a>
                                 <span>已选择：{this.state.whiteUserListNum}人</span>
                             </div>
                         </Row>

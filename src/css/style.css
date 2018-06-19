@@ -105,9 +105,11 @@ i, cite, em, var, address, dfn {
     .little-layout-aside-r-show {
         height: 596px !important
     }
-    .little-layout-aside-r-show_ant{
-        height:100% !important;
+
+    .little-layout-aside-r-show_ant {
+        height: 100% !important;
     }
+
     .gz_title_flex, .gz_title_flex + div {
         width: 876px !important;
     }
@@ -157,8 +159,9 @@ i, cite, em, var, address, dfn {
     .little-layout-aside-r-show {
         height: 557px !important
     }
-    .little-layout-aside-r-show_ant{
-        height:100% !important;
+
+    .little-layout-aside-r-show_ant {
+        height: 100% !important;
     }
 
     .little-layout-aside-r-show .content {
@@ -1874,9 +1877,11 @@ p.user_cont span.name1 {
     font-size: 14px;
     margin-bottom: 16px !important;
 }
+
 .hei1_17 {
     height: 98%;
 }
+
 .hei2_17 > table {
     padding: 3px 8px !important;
 }
@@ -3112,7 +3117,7 @@ a.topics:hover {
     margin-left: 12px;
     font-size: 14px;
     color: #2896fb;
-    cursor:pointer
+    cursor: pointer
 }
 
 .share_font:hover {
@@ -3525,11 +3530,11 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_jiaoxue {
-    background-position: 0 -198px;
+    background-position: 0 -200px;
 }
 
 .ant-menu-item-selected .icon_jiaoxue {
-    background-position: 0 -250px;
+    background-position: 0 -249px;
 }
 
 .icon_antgroup {
@@ -3557,7 +3562,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_cloud {
-    background-position: 0 -596px;
+    background-position: 0 -600px;
 }
 
 .ant-menu-item-selected .icon_cloud {
@@ -3565,7 +3570,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_schoolGroup {
-    background-position: 0 -695px;
+    background-position: 0 -700px;
 }
 
 .ant-menu-item-selected .icon_schoolGroup {
@@ -3573,7 +3578,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_antdisk {
-    background-position: 0 -796px;
+    background-position: 0 -800px;
 }
 
 .ant-menu-item-selected .icon_antdisk {
@@ -3581,7 +3586,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_ding {
-    background-position: 0 -996px;
+    background-position: 0 -1000px;
 }
 
 .ant-menu-item-selected .icon_ding {
@@ -4378,6 +4383,7 @@ a.color_gary_f, .color_gary_f {
         position: relative; /* 设置子元素为相对定位，可让子元素不继承Alpha值 */
     }
 }
+
 .live_orange {
     background: #7fbefb;
 }
@@ -9168,9 +9174,11 @@ select.course_n:hover {
     width: 100%;
     align-content: flex-start;
 }
-ul.chosenBox{
-    height:100%;
+
+ul.chosenBox {
+    height: 100%;
 }
+
 .selectTab ul {
     height: calc(100% - 65px);
 }
@@ -9338,7 +9346,7 @@ ul.chosenBox{
     font-weight: normal;
     cursor: pointer;
     position: absolute;
-    top:5px;
+    top: 5px;
     left: 5px;
     z-index: 1;
 }
@@ -9363,13 +9371,15 @@ ul.chosenBox{
 /*background: #fff !important;*/
 /*color: #5d9af2 !important;*/
 /*}*/
-.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab{
-    border-radius: 6px 0 0 6px ;
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+    border-radius: 6px 0 0 6px;
     margin-right: 0;
 }
-.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:last-child{
+
+.select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab:last-child {
     border-radius: 0 6px 6px 0;
 }
+
 .select_img_modal .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
     font-size: 14px;
     height: 28px;
@@ -9408,10 +9418,10 @@ ul.chosenBox{
 
 .select_img_modal .ant-tabs {
     color: #fff;
-    padding:0;
+    padding: 0;
 }
 
-.select_img_modal .ant-tabs-nav, .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-nav-container{
+.select_img_modal .ant-tabs-nav, .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-nav-container {
     height: 42px;
 }
 
@@ -9426,15 +9436,19 @@ ul.chosenBox{
     background-color: #F8F8F8;
     border-radius: 2px 2px 0 0;
 }
+
 .select_img_modal .ant-tabs-nav-container {
     margin-bottom: -2px;
 }
-.select_img_modal .more_classroom{
-    top:-30px
+
+.select_img_modal .more_classroom {
+    top: -30px
 }
-.select_img_modal .clearfix > div:first-child{
+
+.select_img_modal .clearfix > div:first-child {
     height: calc(100% - 28px);
 }
+
 .check_img_footer {
     position: fixed;
     bottom: -7px;
@@ -9508,13 +9522,13 @@ ul.chosenBox{
 
 .noom_downloadLive_span {
     display: inline-block;
-    padding:8px 0 12px 0;
+    padding: 8px 0 12px 0;
     width: 90%;
 }
 
 .noom_downloadLive_title {
     font-size: 14px;
-    color:#4f4f4f;
+    color: #4f4f4f;
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -9530,38 +9544,45 @@ ul.chosenBox{
     position: relative;
     border-bottom: 1px dashed #f3f3f3;
 }
-.noom_downloadLive_cont{
+
+.noom_downloadLive_cont {
     color: #888
 }
-.noom_downloadLive_i{
+
+.noom_downloadLive_i {
     font-size: 20px;
 }
-.btn_font{
+
+.btn_font {
     color: #2fa9ff;
     background: transparent;
     border: none;
     letter-spacing: -1.5px;
 }
-.btn_font:hover{
-    color:#40a9ff;
+
+.btn_font:hover {
+    color: #40a9ff;
     background: transparent;
 }
+
 .btn_font:active {
-    color:#096dd9;
+    color: #096dd9;
     background: transparent;
 }
-a:active,a:hover{
-    outline:0;
-    text-decoration:none
+
+a:active, a:hover {
+    outline: 0;
+    text-decoration: none
 }
-.clound_img{
+
+.clound_img {
     text-align: center;
 }
-.clound_img img{
+
+.clound_img img {
     max-width: 100%;
     max-height: 100%;
 }
-
 
 /* 修改弹出框的样式 ---start--- */
 
@@ -9569,13 +9590,16 @@ a:active,a:hover{
 .ant-modal-content {
     border-radius: 2px;
 }
+
 .calmModal {
-    width: 300px!important;
+    width: 300px !important;
 }
+
 .calmModal .ant-modal-content .isDel .ant-checkbox-wrapper {
-    margin-top:13px;
+    margin-top: 13px;
     margin-left: 18px;
 }
+
 .ant-modal-header {
     padding: 0 20px 0 16px;
     height: 42px;
@@ -9587,30 +9611,34 @@ a:active,a:hover{
     background-color: #F8F8FA;
     border-radius: 2px 2px 0 0;
 }
+
 .ant-modal-content .ant-modal-close {
     top: 12px;
 }
-
 
 /* 关闭按钮*/
 
 .ant-modal-content .ant-modal-close-x {
     font-size: 17px;
-    color:#666!important;
+    color: #666 !important;
 }
+
 .calmNewClass .ant-modal-content .ant-modal-header .ant-modal-title {
     font-size: 17px;
-    color:#333;
+    color: #333;
     text-align: center;
 }
+
 .calmNewClass .ant-modal-content .ant-modal-close-x {
     display: none;
 }
+
 .ant-modal-body .isDel,
 .calmNewClass .ant-modal-body {
     font-size: 14px;
-    color:#444;
+    color: #444;
 }
+
 /* .ant-modal-footer .login-form-button, */
 
 .ant-modal-content .calmSure,
@@ -9618,14 +9646,15 @@ a:active,a:hover{
 .ant-modal-footer .calmCancle,
 .ant-modal-footer .calmCancel,
 .ant-modal-footer .calmPre,
-.ant-modal-footer .ant-btn{
+.ant-modal-footer .ant-btn {
     border-radius: 2px;
     background: transparent;
 }
 
-.ant-modal-footer .calmSure{
+.ant-modal-footer .calmSure {
     background: red;
 }
+
 .ant-modal-content .calmSure {
     border: 0;
     color: #fff;
@@ -9639,68 +9668,77 @@ a:active,a:hover{
 .ant-modal-content .calmCancle,
 .ant-modal-footer .calmSubmit,
 .ant-modal-footer .ant-btn-primary,
-.ant-modal-body .class_right .ant-btn-primary{
+.ant-modal-body .class_right .ant-btn-primary {
     color: #fff;
-    background:#5d9af2;
+    background: #5d9af2;
     border: 0;
     border-radius: 2px;
 }
 
 .ant-modal-title {
-    line-height:42px;
+    line-height: 42px;
 }
+
 .isDel .sadFeel {
     vertical-align: middle;
     margin-right: 10px;
 }
-/* 修改弹出框的样式 ---end--- */
 
+/* 修改弹出框的样式 ---end--- */
 
 /* 全屏显示视频的样式---start--- */
 .calmVideoBoxWrap {
     height: 100%;
 }
+
 .calmVideoBoxWrap .calmVideoBox {
     height: 100%;
 }
+
 .calmVideoBoxWrap .calmVideoBox .video-js {
     height: 100%;
 }
-/* 全屏显示视频的样式---end--- */
 
+/* 全屏显示视频的样式---end--- */
 
 /* 显示框---start--- */
 /* 音量 */
-.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal  {
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal {
     position: absolute;
     left: 88%;
 }
-.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal .vjs-menu{
+
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-volume-menu-button-horizontal .vjs-menu {
     left: 3em;
 }
+
 /* 进度条 */
-.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-progress-control.vjs-control{
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-progress-control.vjs-control {
     width: 80%;
     position: absolute;
     left: 4%;
 }
+
 /* 剩余时间 */
 .calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-remaining-time {
     position: absolute;
     left: 85%;
 }
+
 /* 全凭按钮 */
-.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-fullscreen-control.vjs-control.vjs-button{
+.calmVideoBoxWrap .calmVideoBox .vjs-control-bar .vjs-fullscreen-control.vjs-control.vjs-button {
     position: absolute;
     left: 95%;
 }
+
 /* 显示框---end--- */
 
 .startClass {
     height: 50px;
     line-height: 50px;
-    padding:0px 8px 0px 20px;
+    padding: 0px 8px 0px 20px;
 }
+
 .startClass .lesson_start {
     /* border-color: #666;
     color: #666; */
@@ -9708,46 +9746,54 @@ a:active,a:hover{
     float: right;
     margin: 9px 3px;
 }
+
 .startClass .closeClass {
     border-color: red;
     color: red;
 }
+
 .calmBorderRadius {
     border-radius: 2px;
 }
+
 .calmAddButton {
-    margin-left:0;
+    margin-left: 0;
 }
 
 .calmEnterClass .ant-modal-content .ant-modal-header .ant-modal-title {
-    line-height:21px;
+    line-height: 21px;
 }
 
 .localclass_close,
-.localclass_close:hover{
+.localclass_close:hover {
     border: 0;
     color: #fff;
     background: #f73d0c;
 }
+
 .localclass_continue,
-.localclass_continue:hover{
+.localclass_continue:hover {
     border: 0;
     color: #fff;
     background: #5091fe;
 }
-.localclass_btn{
+
+.localclass_btn {
     margin: 10px 3px 0 3px;
     overflow: hidden;
     min-width: 72px;
 }
-.localclass_bg{
+
+.localclass_bg {
     background: #fff6d0;
 }
-.localclass_font{
+
+.localclass_font {
     font-size: 14px;
     color: #3672ed;
 }
-.localclass_operation{
+
+.localclass_operation {
     width: 72px;
 }
 
@@ -9759,26 +9805,186 @@ a:active,a:hover{
 .calmClassName {
     text-align: center;
 }
+
 .calmClassPT {
     padding-left: 7px;
 }
-.ant-col-8.calmClassContent{
+
+.ant-col-8.calmClassContent {
     width: 95px;
 }
+
 .calmContentRow {
-    padding:2px 9px 2px 12px;
+    padding: 2px 9px 2px 12px;
     box-sizing: border-box;
 }
+
 .calmContentRow .ant-col-2 {
-    line-height:28px;
+    line-height: 28px;
 }
+
 .calmContentRow .ant-col-3,
 .calmContentRow .ant-col-6,
 .calmContentRow .ant-col-4 {
     line-height: 28px;
 }
-.ant-upload-list-item.ant-upload-list-item-undefined{
-    height:28px;
+
+.ant-upload-list-item.ant-upload-list-item-undefined {
+    height: 28px;
     line-height: 28px;
 }
+
 /* 编辑课程样式---end--- */
+
+/* 绑定教室坐标start */
+.bindCoordinatesBody .ant-modal-body{
+    padding: 11px 10px;
+}
+.bindCoordinates {
+    overflow: hidden;
+}
+.bindCoordinates .favorite_scroll{
+    height: 100%;
+}
+
+.bindCoordinates canvas {
+    margin: 0;
+    /*display: inline-block;*/
+   /* width: calc(100% - 240px);
+    height: calc(100% - 37px);*/
+}
+
+.bindCoordinates_cont {
+    position: relative;
+}
+
+.bindCoordinates_t {
+    padding: 0;
+    background: #fff;
+    display: inline-block;
+    width: 240px;
+    height: calc(100% - 37px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    top: 37px;
+    right: 0;
+    border-top: 1px solid #eee;
+}
+
+.bindCoordinates_list {
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.bindCoordinates_input {
+    width: 150px;
+    margin-left: 18px;
+}
+
+.bindCoordinates_input:focus {
+    outline: none !important;
+    border: 1px solid #2db7f5;
+    background: #edf9ff;
+}
+
+.bindCoordinates_name {
+    max-width: calc(100% - 95px);
+    color: #333;
+    font-size: 14px;
+    line-height: 40px;
+    display: inline-block;
+}
+
+.bindCoordinates_btn {
+    min-width: 100px;
+    height: 34px;
+    line-height: 34px;
+    margin: 10px 0;
+    position: absolute;
+    bottom: 0;
+    right: 70px;
+    padding: 0;
+    background: #3672ed;
+    border: none;
+}
+
+.bindCoordinates_btn:hover, .bindCoordinates_btn:focus {
+    background: #497ef0
+}
+
+.bindCoordinates_xy {
+    display: inline-block;
+    width: 90px;
+    float: right;
+    color: #666;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.bindCoordinates_t_name {
+    max-width: calc(100% - 90px);
+    padding-left: 18px;
+}
+
+.bindCoordinates_t_xy {
+    display: inline-block;
+    width: 90px;
+    float: right;
+}
+
+.bindCoordinates_t_list {
+    border-bottom: none;
+    padding: 5px 10px 5px 10px;
+    color: #666;
+    font-size: 14px;
+}
+
+.bindCoordinates_t_l {
+    margin-left: 10px;
+}
+
+.bindCoordinates_t_select {
+    color: #497ef0;
+}
+.bindTitlehint{
+    position: absolute;
+    top: 10px;
+    left: 127px;
+    font-size: 14px;
+    color: #666;
+}
+.updateText{
+    color: #333;
+    font-size: 14px;
+    line-height: 26px;
+}
+.bottom-B-11{
+    margin-bottom: 11px;
+    height: 26px;
+}
+.ri-R-20{
+    margin-right: 20px;
+}
+.upload_Btn{
+    background: #5d9af2;
+    line-height: 26px;
+    height: 26px;
+    color: #fff;
+    padding: 0;
+    min-width: 70px;
+    text-align: center;
+    border: none;
+}
+.upload_Btn:hover, .upload_Btn:focus{
+    background: #78abf5;
+    color: #fff;
+}
+.upload_BtnR .ant-upload, .upload_BtnR .ant-upload-list{
+    float: left;
+}
+.upload_BtnR .ant-upload-list .ant-upload-list-item{
+    margin-left: 20px;
+    margin-top: -5px;
+}
+/* 绑定教室坐标end */

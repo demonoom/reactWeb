@@ -244,7 +244,7 @@
                     $(document.body).append(aTag);
                     document.getElementById(`${JSON.parse(data.cloudFile).id}downLoadFile`).click();
                     $(`#${JSON.parse(data.cloudFile).id}downLoadFile`).remove();
-                } else if(data.method == 'openLargeNewPage') {
+                } else if (data.method == 'openLargeNewPage') {
                     let param = {
                         mode: '',
                         title: '',
@@ -253,6 +253,9 @@
 
                     LP.Start(param);
                     return
+                } else if (data.method == "bindCoordinates") {
+                    //打点功能进行显示
+                    window.__bindCoordinates__(1);
                 }
             });
             isAddedListener = true;
