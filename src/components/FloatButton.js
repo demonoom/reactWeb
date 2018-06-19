@@ -102,12 +102,7 @@ const FloatButton = React.createClass({
 
             
             <div className="more_div">
-                {/* <ConfirmModal ref="confirmModal"
-                              title="您确定退出登录么?"
-                              onConfirmModalCancel={floatButton.closeConfirmModal}
-                              onConfirmModalOK={floatButton.logOut}
-                              
-                ></ConfirmModal> */}
+                
                         <Modal
                             className="calmModal"
                             visible={floatButton.state.changeConfirmModalVisible}
