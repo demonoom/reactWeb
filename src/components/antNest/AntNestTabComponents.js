@@ -290,12 +290,12 @@ const AntNestTabComponents = React.createClass({
             </span>
             if (JSON.parse(sessionStorage.getItem('loginUser')).colUtype == "TEAC") {
                 UnKnowHomeWorkBtn = <span>
-                <Button icon="search" className="topics_btn antnest_talk ">查看作答</Button>
-                <Button icon="line-chart" className="topics_btn antnest_talk ">表情分析</Button>
+                <Button className="topics_btn work_topics_btn antnest_talk "><i className="i_eye"></i>查看作答</Button>
+                <Button className="topics_btn antnest_talk "><i className="i_face"></i>表情分析</Button>
             </span>
             } else {
                 UnKnowHomeWorkBtn = <span>
-                <Button icon="edit" className="topics_btn antnest_talk " onClick={this.turnToPPH.bind(this,topicObj)}>立即作答</Button>
+                <Button className="topics_btn antnest_talk " onClick={this.turnToPPH.bind(this,topicObj)}><i className="i_respondence"></i>立即作答</Button>
 
             </span>
             }
@@ -676,7 +676,6 @@ const AntNestTabComponents = React.createClass({
                     <span className="antnest_name yichao_blue">{topicObj.fromUser.userName}</span>
                     <span>{topicTitle}</span>
                 </li>
-                {quesNum}
                 <li className="topics_cont">
                     {topicObj.content}
                 </li>
@@ -685,6 +684,7 @@ const AntNestTabComponents = React.createClass({
                 </li>
                 <li className="topics_bot">
                     <span className="topics_time">{createTime}</span>
+                    <span className="antnest_talk">{quesNum}</span>
                     {commentDisplayTime}
                     {screatPic}
                     <span>{delButton}</span>
