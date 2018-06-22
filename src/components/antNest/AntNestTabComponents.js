@@ -242,12 +242,20 @@ const AntNestTabComponents = React.createClass({
     },
 
     turnToPPH(data) {
-        console.log(data)
-        console.log(sessionStorage.getItem("ident"));
-        // var url = 'http://jiaoxue.maaee.com:8091/#/questionDetil?courseId=' + e.subject.id;
-        var url = 'http://192.168.50.72:8091/#/waterWork?tid='+data.id+"&stuId="+sessionStorage.getItem("ident");
-        console.log(url)
+        var url = 'http://jiaoxue.maaee.com:8091/#/waterWork?tid=' + data.id + "&stuId=" + sessionStorage.getItem("ident");
         let obj = {mode: 'teachingAdmin', title: '题目水滴页', url: url, width: '380px'};
+        LP.Start(obj);
+    },
+
+    turnToLookAtTheAnswer(data) {
+        var url = 'http://jiaoxue.maaee.com:8091/#/lookAtTheAnswer?tpId=' + data.id;
+        let obj = {mode: 'teachingAdmin', title: '作答答案', url: url, width: '380px'};
+        LP.Start(obj);
+    },
+
+    turnToAnswerListFormTeacher(data) {
+        var url = 'http://jiaoxue.maaee.com:8091/#/answerListFormTeacher?teacherId=' + sessionStorage.getItem("ident") + '&topicId=' + data.id;
+        let obj = {mode: 'teachingAdmin', title: '作业表情分析', url: url, width: '380px'};
         LP.Start(obj);
     },
 
@@ -284,20 +292,22 @@ const AntNestTabComponents = React.createClass({
         var UnKnowHomeWorkBtn = ''
         if (topicObj.type == 7) {
             //模糊作业
-            console.log(topicObj);
             quesNum = <span className="work_count">
                 {'题目数量：' + topicObj.fuzzyHomework.questionCount}
             </span>
             if (JSON.parse(sessionStorage.getItem('loginUser')).colUtype == "TEAC") {
                 UnKnowHomeWorkBtn = <span>
-                <Button className="topics_btn work_topics_btn antnest_talk "><i className="i_eye"></i>查看作答</Button>
-                <Button className="topics_btn antnest_talk "><i className="i_face"></i>表情分析</Button>
+                <Button className="topics_btn work_topics_btn antnest_talk "
+                        onClick={this.turnToLookAtTheAnswer.bind(this, topicObj)}><i className="i_eye"></i>查看作答</Button>
+                <Button className="topics_btn antnest_talk "
+                        onClick={this.turnToAnswerListFormTeacher.bind(this, topicObj)}><i
+                    className="i_face"></i>表情分析</Button>
             </span>
             } else {
-                UnKnowHomeWorkBtn = <span>
-                <Button className="topics_btn antnest_talk " onClick={this.turnToPPH.bind(this,topicObj)}><i className="i_respondence"></i>立即作答</Button>
-
-            </span>
+                //     UnKnowHomeWorkBtn = <span>
+                //     <Button className="topics_btn antnest_talk " onClick={this.turnToPPH.bind(this,topicObj)}><i className="i_respondence"></i>立即作答</Button>
+                //
+                // </span>
             }
         }
         var userHeadPhoto;
