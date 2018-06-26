@@ -218,10 +218,11 @@ const Role = React.createClass({
         var columns = [{
             title: '姓名',
             dataIndex: 'name',
-            className: 'dold_text'
+            className: 'dold_text neme_u'
         }, {
             title: '手机号',
             dataIndex: 'phone',
+            className:"phone2"
         }];
 
         var roleArr = this.state.roleArr;
@@ -230,25 +231,29 @@ const Role = React.createClass({
                 columns = [{
                     title: '姓名',
                     dataIndex: 'name',
-                    className: 'dold_text'
+                    className: 'dold_text neme_u'
                 }, {
                     title: '手机号',
                     dataIndex: 'phone',
+                    className: 'phone'
                 }, {
                     title: '所在班级',
                     dataIndex: 'clazz',
+                    className: 'class'
                 }];
             } else if (roleArr[2] != 0 && roleArr[1] == '年级主任') {
                 columns = [{
                     title: '姓名',
                     dataIndex: 'name',
-                    className: 'dold_text'
+                    className: 'dold_text neme_u'
                 }, {
                     title: '手机号',
                     dataIndex: 'phone',
+                    className: 'phone'
                 }, {
                     title: '所在年级',
                     dataIndex: 'grade',
+                    className: 'class'
                 }];
             }
         }
@@ -277,7 +282,7 @@ const Role = React.createClass({
                         <span className="password_ts" style={{marginLeft: 8}}>
                             {hasSelected ? `选中 ${this.state.selectedRowKeys.length} 条记录` : ''}</span>
                     </div>
-                    <Table className="framework_user" rowSelection={rowSelection} columns={columns}
+                    <Table className="framework_user" rowSelection={rowSelection} columns={columns} scroll={{ y: 240 }}
                            dataSource={this.state.mesData}
                            pagination={false}
                     />
