@@ -95,6 +95,7 @@ const Role = React.createClass({
     },
 
     drawTable(data) {
+        console.log(data);
         var mermberNum = data.length;
         var _this = this;
         _this.setState({deleteData: data});
@@ -252,7 +253,6 @@ const Role = React.createClass({
                 }];
             }
         }
-        console.log(columns);
 
         return (
             <div className="schoolgroup">
