@@ -1,12 +1,13 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {Table, Icon, Button, Breadcrumb, message, Modal, Checkbox} from 'antd';
+import {Table, Icon, Button, Breadcrumb, message, Modal, Checkbox, Col, Tag, Input} from 'antd';
 import AddRoleMemberModal from './AddRoleMemberModal';
 import EditRoleModal from './EditRoleModal'
 import ConfirmModal from '../ConfirmModal'
 import {doWebService} from '../../WebServiceHelper';
 
 const confirm = Modal.confirm;
+var selectArr = [];
 
 const Role = React.createClass({
 
@@ -19,6 +20,9 @@ const Role = React.createClass({
             disabled: true,
             selectedRowKeys: [],
             gradeArray: [],
+            userNameFromOri: '',
+            inputVisible: false,
+            tags: [],  //标签显示
         };
     },
 
@@ -103,7 +107,7 @@ const Role = React.createClass({
      * 为班主任增加所属班级
      */
     addClazzToTer() {
-
+        this.setState({ClazzModalVisible: true, ClazzModalTitle: '增加所属班级'})
     },
 
     /**
@@ -130,8 +134,11 @@ const Role = React.createClass({
      * @param item
      */
     updateGradeToTer(item) {
-        console.log(item.grades);
-        // gradeArray
+        var defaultArr = [];
+        item.grades.forEach(function (gradesItem) {
+            defaultArr.push(gradesItem.id)
+        })
+        this.setState({gradeArray: defaultArr})
 
         var _this = this;
         var param = {
@@ -143,28 +150,31 @@ const Role = React.createClass({
             onResponse: function (ret) {
                 var data = ret.response;
                 var arr = []
+                var checkBoxItem;
                 if (isEmpty(data) == false) {
                     data.forEach(function (v, i) {
+                        var checkBoxItem = <Checkbox
+                            defaultChecked={false}
+                            onChange={_this.gradeCheckboxOnChange.bind(this, v)}
+                        >{v.name}</Checkbox>
                         item.grades.forEach(function (k, j) {
-                            if (k.id == v.id) {
-                                arr.push(
-                                    <Checkbox
-                                        defaultChecked={true}
-                                        onChange={_this.gradeCheckboxOnChange.bind(this, v)}
-                                    >{v.name}</Checkbox>
-                                )
-                            } else {
-                                arr.push(
-                                    <Checkbox
-                                        defaultChecked={false}
-                                        onChange={_this.gradeCheckboxOnChange.bind(this, v)}
-                                    >{v.name}</Checkbox>
-                                )
+                            if (v.id == k.id) {
+                                checkBoxItem = <Checkbox
+                                    defaultChecked={true}
+                                    onChange={_this.gradeCheckboxOnChange.bind(this, v)}
+                                >{v.name}</Checkbox>
                             }
                         })
+                        arr.push(checkBoxItem)
                     })
                 }
-                _this.setState({GradeModalVisible: true, gradeArr: arr, gradeItem: item, createType: 5})
+                _this.setState({
+                    GradeModalVisible: true,
+                    gradeArr: arr,
+                    gradeItem: item,
+                    createType: 5,
+                    GradeModalTitle: '修改所属年级'
+                })
             },
             onError: function (error) {
                 message.error(error);
@@ -196,7 +206,13 @@ const Role = React.createClass({
                         )
                     })
                 }
-                _this.setState({GradeModalVisible: true, gradeArr: arr, gradeItem: item, createType: 5})
+                _this.setState({
+                    GradeModalVisible: true,
+                    gradeArr: arr,
+                    gradeItem: item,
+                    createType: 5,
+                    GradeModalTitle: '添加所属年级'
+                })
             },
             onError: function (error) {
                 message.error(error);
@@ -258,8 +274,10 @@ const Role = React.createClass({
                             name: v.userName,
                             // group: v.schoolName,
                             phone: v.phoneNumber,
-                            grade: <span className="role_gradeAlter"><span className="focus_3">{gradeStr.substr(0, gradeStr.length - 1)}</span><a href="javascript:;"
-                                                                                     onClick={_this.updateGradeToTer.bind(this, v)}>修改</a></span>
+                            grade: <span className="role_gradeAlter"><span
+                                className="focus_3">{gradeStr.substr(0, gradeStr.length - 1)}</span><a
+                                href="javascript:;"
+                                onClick={_this.updateGradeToTer.bind(this, v)}>修改</a></span>
                         }
                         mesData.push(person);
                     }
@@ -317,6 +335,10 @@ const Role = React.createClass({
         this.setState({GradeModalVisible: false, gradeArr: []})
     },
 
+    closeClazzModal() {
+        this.setState({ClazzModalVisible: false})
+    },
+
     /**
      * 给此角色添加系统用户所对应的年级和班级
      */
@@ -332,6 +354,13 @@ const Role = React.createClass({
             "method": 'addStrcutreRoleUsersExtend',
             "jsonData": JSON.stringify(obj),
         };
+
+        if (this.state.GradeModalTitle == '修改所属年级') {
+            param = {
+                "method": 'updateStrcutreRoleUsersExtend',
+                "jsonData": JSON.stringify(obj),
+            };
+        }
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -408,15 +437,178 @@ const Role = React.createClass({
     },
 
     /**
+     * 请输入要搜索的班级
+     * @param e
+     */
+    onChangeUserNameFromOri(e) {
+        this.state.searchUserFromOri = [];
+        if (e.target.value.length != 0) {
+            this.searchUserFromOri(e.target.value);
+        }
+        this.setState({userNameFromOri: e.target.value});
+    },
+
+    /**
+     * 搜索班级
+     * @param str
+     */
+    searchUserFromOri(str) {
+        var _this = this;
+        var param = {
+            "method": 'searchClazz',
+            "aid": sessionStorage.getItem("ident"),
+            "keyWord": str,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    if (isEmpty(response) == false) {
+                        _this.showSearchUserFromOri(response)
+                    } else {
+                        //显示没有结果
+                    }
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 构建搜索出来的班级表格
+     * @param data
+     */
+    showSearchUserFromOri(data) {
+        console.log(data);
+        var arr = [];
+        data.forEach(function (v) {
+            arr.push({
+                key: v.id,
+                userId: v.id,
+                userName: v.name,
+            });
+        });
+        this.setState({searchUserFromOri: arr});
+    },
+
+    /**
+     * 表格选中响应函数
+     * @param selectedRowKeys
+     */
+    onSelectChangeClazz(selectedRowKeys) {
+        this.setState({selectedRowKeys});
+    },
+
+    /**
+     * 同步table与tags
+     * @param record
+     * @param selected
+     */
+    onRowSelectedClazz(record, selected) {
+        if (selected) {
+            selectArr.push(record);
+        } else {
+            var key = record.key;
+            for (var i = 0; i < selectArr.length; i++) {
+                if (selectArr[i].key == key) {
+                    selectArr.splice(i, 1);
+                }
+            }
+        }
+        this.setState({tags: selectArr});
+    },
+
+    /**
+     * 用户手动选择/取消选择所有列的回调
+     */
+    onSelectAllClazz(selected, selectedRows, changeRows) {
+        var arr = this.state.tags;
+        var array;
+        //此处应该是连接数组或者是取消数组
+        // 第一个参数布尔值true表示钩中，false表示取消，第三个参数表示钩中的人的数组
+        if (selected) {
+            //数组合并
+            array = arr.concat(changeRows);
+        } else {
+            //在原数组中去除这个数组的项
+            changeRows.forEach(function (data, index) {
+                arr.forEach(function (v, i) {
+                    if (v.key == data.key) {
+                        arr.splice(i, 1);
+                    }
+                })
+            })
+            array = arr;
+        }
+        this.setState({tags: array});
+        selectArr = array;
+    },
+
+    /*标签关闭的回调*/
+    handleClose(removedTag) {
+        const tags = this.state.tags.filter(tag => tag !== removedTag);
+        var arr = [];
+        this.setState({tags});
+        //设置勾选状态   selectedRowKeys
+        for (var i = 0; i < tags.length; i++) {
+            arr.push(tags[i].key);
+        }
+        this.state.selectedRowKeys = arr;
+        //在这里把点击的这一项从selectArr中删除  selectArr全局函数
+        for (var i = 0; i < selectArr.length; i++) {
+            if (selectArr[i].key == removedTag.key) {
+                selectArr.splice(i, 1);
+            }
+        }
+    },
+
+    handleInputChange(e) {
+        this.setState({inputValue: e.target.value});
+    },
+
+    handleInputConfirm() {
+        const state = this.state;
+        const inputValue = state.inputValue;
+        let tags = state.tags;
+        if (inputValue && tags.indexOf(inputValue) === -1) {
+            tags = [...tags, inputValue];
+        }
+        this.setState({
+            tags,
+            inputVisible: false,
+            inputValue: '',
+        });
+    },
+
+    /**
      * 渲染页面
      * @returns {XML}
      */
     render() {
+        const rowSelectionClazz = {
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: this.onSelectChangeClazz,
+            onSelect: this.onRowSelectedClazz,
+            onSelectAll: this.onSelectAllClazz
+        };
+
+        const {tags, inputVisible, inputValue} = this.state;
+
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: this.onSelectChange,
         };
         const hasSelected = this.state.selectedRowKeys.length > 0;
+
+        const memberColumns = [{
+            title: '班级',
+            dataIndex: 'userName',
+            key: 'userName',
+            width: 160,
+            className: 'dold_text departmental_officer'
+        }];
 
         var columns = [{
             title: '姓名',
@@ -529,7 +721,7 @@ const Role = React.createClass({
                 <Modal
                     className="role_grade"
                     visible={this.state.GradeModalVisible}
-                    title="添加所属年级"
+                    title={this.state.GradeModalTitle}
                     onCancel={this.closeGradeModal}
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
@@ -542,6 +734,68 @@ const Role = React.createClass({
                 >
                     <div className="isDel">
                         {this.state.gradeArr}
+                    </div>
+                </Modal>
+
+                <Modal
+                    visible={this.state.ClazzModalVisible}
+                    title={this.state.ClazzModalTitle}
+                    onCancel={this.closeClazzModal}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    className="add_member"
+                    footer={[
+
+                        <button type="ghost" htmlType="reset"
+                                className="ant-btn ant-btn-ghost login-form-button"
+                                onClick={this.closeClazzModal}>取消</button>,
+                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                onClick={this.addGradeModal}>确定</button>
+                    ]}
+                    width={800}
+                >
+
+                    <div id="inPut100" className={this.state.inputClassName}>
+                        <Col span={24} className="right_ri">
+                            <Input
+                                placeholder="请输入要搜索的班级"
+                                value={this.state.userNameFromOri}
+                                onChange={this.onChangeUserNameFromOri}
+                                ref={node => this.userNameInput = node}
+                            />
+
+                            <div className="add_member_tags">
+                                {tags.map((tag, index) => {
+                                    const isLongTag = tag.length > 20;
+                                    const tagElem = (
+                                        <Tag key={tag.key} closable={index !== -1}
+                                             afterClose={() => this.handleClose(tag)}>
+                                            {isLongTag ? `${tag.userName.slice(0, 20)}...` : tag.userName}
+                                        </Tag>
+                                    );
+                                    return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                })}
+                                {inputVisible && (
+                                    <Input
+                                        type="text" size="small"
+                                        style={{width: 78}}
+                                        value={inputValue}
+                                        onChange={this.handleInputChange}
+                                        onBlur={this.handleInputConfirm}
+                                        onPressEnter={this.handleInputConfirm}
+                                    />
+                                )}
+                            </div>
+
+                            <div className="add_member_wrap">
+                                <Table columns={memberColumns}
+                                       pagination={false} dataSource={this.state.searchUserFromOri}
+                                       className="schoolgroup_table1 schoolgroup_table_department"
+                                       scroll={{y: 240}}
+                                       rowSelection={rowSelectionClazz}
+                                />
+                            </div>
+                        </Col>
                     </div>
                 </Modal>
             </div>
