@@ -10041,3 +10041,22 @@ a:active, a:hover {
 .topics_btn:hover .i_respondence{
     background: url(../../src/components/images/icon_respondence_H.png) no-repeat;
 }
+/* 添加所属年级modal */
+.role_grade .ant-modal-body{
+    padding:16px 0
+}
+.role_grade .ant-modal-body .isDel{
+    padding: 0 16px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height:100px;
+    max-height: 320px;
+}
+.role_grade label{
+    width: 190px;
+    margin: 0 0 6px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
