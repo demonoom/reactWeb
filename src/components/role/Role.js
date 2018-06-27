@@ -487,7 +487,7 @@ const Role = React.createClass({
                 </Modal>
 
                 <Modal
-                    className="calmModal"
+                    className="role_grade"
                     visible={this.state.GradeModalVisible}
                     title="添加所属年级"
                     onCancel={this.closeGradeModal}
