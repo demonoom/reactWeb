@@ -218,7 +218,7 @@ const Role = React.createClass({
                             name: v.userName,
                             // group: v.schoolName,
                             phone: v.phoneNumber,
-                            grade: <span>{gradeStr.substr(0, gradeStr.length - 1)}<a href="javascript:;"
+                            grade: <span className="role_gradeAlter"><span className="focus_3">{gradeStr.substr(0, gradeStr.length - 1)}</span><a href="javascript:;"
                                                                                      onClick={_this.updateGradeToTer.bind(this, v)}>修改</a></span>
                         }
                         mesData.push(person);
