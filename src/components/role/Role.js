@@ -106,8 +106,8 @@ const Role = React.createClass({
     /**
      * 为班主任增加所属班级
      */
-    addClazzToTer() {
-        this.setState({ClazzModalVisible: true, ClazzModalTitle: '增加所属班级'})
+    addClazzToTer(item) {
+        this.setState({ClazzModalVisible: true, ClazzModalTitle: '增加所属班级', gradeItem: item, createType: 6})
     },
 
     /**
@@ -238,7 +238,7 @@ const Role = React.createClass({
                             name: v.userName,
                             // group: v.schoolName,
                             phone: v.phoneNumber,
-                            clazz: <a href="javascript:;" onClick={_this.addClazzToTer}>添加</a>
+                            clazz: <a href="javascript:;" onClick={_this.addClazzToTer.bind(this, v)}>添加</a>
                         }
                         mesData.push(person);
                     } else {
@@ -337,6 +337,49 @@ const Role = React.createClass({
 
     closeClazzModal() {
         this.setState({ClazzModalVisible: false})
+    },
+
+    addClazzModal() {
+
+        var memberTargetkeys = this.state.selectedRowKeys;
+        if (memberTargetkeys.length == 0) {
+            message.error('请选择班级', 2)
+            return
+        }
+
+        var _this = this;
+        var obj = {
+            datas: this.state.selectedRowKeys,
+            roleUserId: this.state.gradeItem.roleUserId,
+            createType: this.state.createType
+        }
+
+        var param = {
+            "method": 'addStrcutreRoleUsersExtend',
+            "jsonData": JSON.stringify(obj),
+        };
+
+        // if (this.state.GradeModalTitle == '修改所属年级') {
+        //     param = {
+        //         "method": 'updateStrcutreRoleUsersExtend',
+        //         "jsonData": JSON.stringify(obj),
+        //     };
+        // }
+        console.log(param);
+
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                if (ret.success == true && ret.msg == "调用成功") {
+                    message.success("添加成功");
+                    _this.setState({ClazzModalVisible: false, selectedRowKeys: []});
+                    _this.ajaxData(_this.state.roleId);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -481,7 +524,6 @@ const Role = React.createClass({
      * @param data
      */
     showSearchUserFromOri(data) {
-        console.log(data);
         var arr = [];
         data.forEach(function (v) {
             arr.push({
@@ -750,7 +792,7 @@ const Role = React.createClass({
                                 className="ant-btn ant-btn-ghost login-form-button"
                                 onClick={this.closeClazzModal}>取消</button>,
                         <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                onClick={this.addGradeModal}>确定</button>
+                                onClick={this.addClazzModal}>确定</button>
                     ]}
                     width={800}
                 >
