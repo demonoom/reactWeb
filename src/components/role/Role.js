@@ -125,10 +125,14 @@ const Role = React.createClass({
         this.setState({gradeArray: arr});
     },
 
+    updateGradeToTer(item) {
+        console.log(item);
+    },
+
     /**
      * 为年级主任增加所属年级
      */
-    addGradeToTer(v) {
+    addGradeToTer(item) {
         var _this = this;
         var param = {
             "method": 'getGradesBySchoolId',
@@ -139,14 +143,19 @@ const Role = React.createClass({
             onResponse: function (ret) {
                 var data = ret.response;
                 var arr = []
+                console.log(item.grades);
                 if (isEmpty(data) == false) {
                     data.forEach(function (v, i) {
+                        console.log(v);
                         arr.push(
-                            <Checkbox onChange={_this.gradeCheckboxOnChange.bind(this, v)}>{v.name}</Checkbox>
+                            <Checkbox
+                                defaultChecked={false}
+                                onChange={_this.gradeCheckboxOnChange.bind(this, v)}
+                            >{v.name}</Checkbox>
                         )
                     })
                 }
-                _this.setState({GradeModalVisible: true, gradeArr: arr, gradeItem: v, createType: 5})
+                _this.setState({GradeModalVisible: true, gradeArr: arr, gradeItem: item, createType: 5})
             },
             onError: function (error) {
                 message.error(error);
@@ -200,12 +209,17 @@ const Role = React.createClass({
                         }
                         mesData.push(person);
                     } else {
+                        var gradeStr = '';
+                        v.grades.forEach(function (v, i) {
+                            gradeStr += v.name + ','
+                        });
                         var person = {
                             key: v.colUid,
                             name: v.userName,
                             // group: v.schoolName,
                             phone: v.phoneNumber,
-                            grade: '年级...'
+                            grade: <span>{gradeStr.substr(0, gradeStr.length - 1)}<a href="javascript:;"
+                                                                                     onClick={_this.updateGradeToTer.bind(this, v)}>修改</a></span>
                         }
                         mesData.push(person);
                     }
@@ -260,7 +274,7 @@ const Role = React.createClass({
     },
 
     closeGradeModal() {
-        this.setState({GradeModalVisible: false})
+        this.setState({GradeModalVisible: false, gradeArr: []})
     },
 
     /**
@@ -283,7 +297,8 @@ const Role = React.createClass({
             onResponse: function (ret) {
                 if (ret.success == true && ret.msg == "调用成功") {
                     message.success("添加成功");
-                    _this.setState({GradeModalVisible: false})
+                    _this.setState({GradeModalVisible: false, gradeArr: []});
+                    _this.ajaxData(_this.state.roleId);
                 }
             },
             onError: function (error) {
