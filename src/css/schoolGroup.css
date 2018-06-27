@@ -397,13 +397,13 @@
      width:161px;
     }
     .framework_user .ant-table-thead tr th.phone, .framework_user .ant-table-tbody > tr > td.phone{
-        width:317px;
+        width:257px;
     }
     .framework_user .ant-table-thead tr th.phone2, .framework_user .ant-table-tbody > tr > td.phone2{
         width:609px;
     }
     .framework_user .ant-table-thead tr th.class, .framework_user .ant-table-tbody > tr > td.class{
-        width:292px;
+        width:352px;
     }
 }
 @media only screen and (max-width: 1365px) {
@@ -411,13 +411,13 @@
         width:161px;
     }
     .framework_user .ant-table-thead tr th.phone, .framework_user .ant-table-tbody > tr > td.phone{
-        width:227px;
+        width:167px;
     }
     .framework_user .ant-table-thead tr th.phone2, .framework_user .ant-table-tbody > tr > td.phone2{
         width:429px;
     }
     .framework_user .ant-table-thead tr th.class, .framework_user .ant-table-tbody > tr > td.class{
-        width:202px;
+        width:262px;
     }
 }
 .framework_user .ant-table-tbody > tr > td{

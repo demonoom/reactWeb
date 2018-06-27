@@ -10060,3 +10060,16 @@ a:active, a:hover {
     text-overflow: ellipsis;
 
 }
+.role_gradeAlter{
+    width: 100%;
+    display: inline-block;
+}
+.role_gradeAlter span{
+    width: calc(100% - 35px);
+    display: inline-block;
+}
+.role_gradeAlter a{
+    width: 35px;
+    float: right;
+    text-align: right;
+}
