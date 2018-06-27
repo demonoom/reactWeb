@@ -752,42 +752,47 @@ const Role = React.createClass({
                         <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
                                 onClick={this.addGradeModal}>确定</button>
                     ]}
-                    width={800}
+                    width={692}
                 >
 
                     <div id="inPut100" className={this.state.inputClassName}>
                         <Col span={24} className="right_ri">
-                            <Input
-                                placeholder="请输入要搜索的班级"
-                                value={this.state.userNameFromOri}
-                                onChange={this.onChangeUserNameFromOri}
-                                ref={node => this.userNameInput = node}
-                            />
-
-                            <div className="add_member_tags">
-                                {tags.map((tag, index) => {
-                                    const isLongTag = tag.length > 20;
-                                    const tagElem = (
-                                        <Tag key={tag.key} closable={index !== -1}
-                                             afterClose={() => this.handleClose(tag)}>
-                                            {isLongTag ? `${tag.userName.slice(0, 20)}...` : tag.userName}
-                                        </Tag>
-                                    );
-                                    return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
-                                })}
-                                {inputVisible && (
-                                    <Input
-                                        type="text" size="small"
-                                        style={{width: 78}}
-                                        value={inputValue}
-                                        onChange={this.handleInputChange}
-                                        onBlur={this.handleInputConfirm}
-                                        onPressEnter={this.handleInputConfirm}
-                                    />
-                                )}
+                            <div className="ant-form-item">
+                                <Input
+                                    placeholder="请输入要搜索的班级"
+                                    value={this.state.userNameFromOri}
+                                    onChange={this.onChangeUserNameFromOri}
+                                    ref={node => this.userNameInput = node}
+                                />
                             </div>
-
-                            <div className="add_member_wrap">
+                            <div className="gray_6_12 ant-form-item flex" style={{height: '24px'}}>
+                                <span className="upexam_float " style={{lineHeight: '24px'}}>已选择：</span>
+                                <div className="add_member_tags_wrap">
+                                    <div className="add_member_tags upexam_float">
+                                        {tags.map((tag, index) => {
+                                            const isLongTag = tag.length > 20;
+                                            const tagElem = (
+                                                <Tag key={tag.key} closable={index !== -1}
+                                                     afterClose={() => this.handleClose(tag)}>
+                                                    {isLongTag ? `${tag.userName.slice(0, 20)}...` : tag.userName}
+                                                </Tag>
+                                            );
+                                            return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                        })}
+                                        {inputVisible && (
+                                            <Input
+                                                type="text" size="small"
+                                                style={{width: 78}}
+                                                value={inputValue}
+                                                onChange={this.handleInputChange}
+                                                onBlur={this.handleInputConfirm}
+                                                onPressEnter={this.handleInputConfirm}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="add_member_wrap" style={{height: '338px'}}>
                                 <Table columns={memberColumns}
                                        pagination={false} dataSource={this.state.searchUserFromOri}
                                        className="schoolgroup_table1 schoolgroup_table_department"
