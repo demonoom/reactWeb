@@ -113,20 +113,20 @@ class SystemSettingGhostMenu extends React.Component {
                 liArr.push(lis);
             });
 
-            // var newObj = {
-            //     method: 'openNewPage',
-            //     url: 'http://192.168.50.29:8091/#/classCardHomePageDoor'
-            // }
-            //
-            // var newLi = <li className="multi">
-            //     <ul className="second">
-            //         <li onClick={event => {
-            //             _this.checkWords(newObj, '班牌编辑');
-            //         }}><img className="icon_system_img"/>班牌编辑
-            //         </li>
-            //     </ul>
-            // </li>;
-            // liArr.push(newLi);
+            var newObj = {
+                method: 'openNewPage',
+                url: 'http://192.168.50.29:8091/#/classCardHomePageDoor'
+            }
+
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords(newObj, '班牌编辑');
+                    }}><img className="icon_system_img"/>班牌编辑
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
 
             uls = <li className="ghostMenu_li">
                 <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>

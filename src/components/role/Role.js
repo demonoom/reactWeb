@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {Table, Icon, Button, Breadcrumb, message, Modal} from 'antd';
+import {Table, Icon, Button, Breadcrumb, message, Modal, Checkbox} from 'antd';
 import AddRoleMemberModal from './AddRoleMemberModal';
 import EditRoleModal from './EditRoleModal'
 import ConfirmModal from '../ConfirmModal'
@@ -18,6 +18,7 @@ const Role = React.createClass({
             editRoleModalIsShow: false,
             disabled: true,
             selectedRowKeys: [],
+            gradeArray: [],
         };
     },
 
@@ -84,8 +85,12 @@ const Role = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                var data = ret.response;
-                _this.drawTable(data);
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    _this.drawTable(data);
+                } else {
+
+                }
 
             },
             onError: function (error) {
@@ -94,22 +99,130 @@ const Role = React.createClass({
         });
     },
 
+    /**
+     * 为班主任增加所属班级
+     */
+    addClazzToTer() {
+
+    },
+
+    /**
+     * 年级checkbox点击的回调
+     * @param v
+     * @param e
+     */
+    gradeCheckboxOnChange(v, e) {
+        var arr = this.state.gradeArray;
+        if (e.target.checked) {
+            arr.push(v.id)
+        } else {
+            arr.forEach(function (item, index) {
+                if (item == v.id) {
+                    arr.splice(index, 1);
+                }
+            })
+        }
+        this.setState({gradeArray: arr});
+    },
+
+    /**
+     * 为年级主任增加所属年级
+     */
+    addGradeToTer(v) {
+        var _this = this;
+        var param = {
+            "method": 'getGradesBySchoolId',
+            "schoolId": this.state.loginUser.schoolId,
+            "pageNo": -1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                var arr = []
+                if (isEmpty(data) == false) {
+                    data.forEach(function (v, i) {
+                        arr.push(
+                            <Checkbox onChange={_this.gradeCheckboxOnChange.bind(this, v)}>{v.name}</Checkbox>
+                        )
+                    })
+                }
+                _this.setState({GradeModalVisible: true, gradeArr: arr, gradeItem: v, createType: 5})
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     drawTable(data) {
-        console.log(data);
+        var roleArr = this.state.roleArr;
         var mermberNum = data.length;
         var _this = this;
         _this.setState({deleteData: data});
         _this.setState({mermberNum: mermberNum});
         var mesData = [];
-        data.forEach(function (v, i) {
-            var person = {
-                key: v.colUid,
-                name: v.userName,
-                // group: v.schoolName,
-                phone: v.phoneNumber,
+
+        if (isEmpty(roleArr) == false) {
+            if (roleArr[2] != 0 && roleArr[1] == '班主任') {
+                console.log(data);
+                data.forEach(function (v, i) {
+                    if (isEmpty(v.clazzes)) {
+                        var person = {
+                            key: v.colUid,
+                            name: v.userName,
+                            // group: v.schoolName,
+                            phone: v.phoneNumber,
+                            clazz: <a href="javascript:;" onClick={_this.addClazzToTer}>添加</a>
+                        }
+                        mesData.push(person);
+                    } else {
+                        var person = {
+                            key: v.colUid,
+                            name: v.userName,
+                            // group: v.schoolName,
+                            phone: v.phoneNumber,
+                            clazz: '班级...'
+                        }
+                        mesData.push(person);
+                    }
+                });
+
+            } else if (roleArr[2] != 0 && roleArr[1] == '年级主任') {
+                console.log(data);
+                data.forEach(function (v, i) {
+                    if (isEmpty(v.grades)) {
+                        var person = {
+                            key: v.colUid,
+                            name: v.userName,
+                            // group: v.schoolName,
+                            phone: v.phoneNumber,
+                            grade: <a href="javascript:;" onClick={_this.addGradeToTer.bind(this, v)}>添加</a>
+                        }
+                        mesData.push(person);
+                    } else {
+                        var person = {
+                            key: v.colUid,
+                            name: v.userName,
+                            // group: v.schoolName,
+                            phone: v.phoneNumber,
+                            grade: '年级...'
+                        }
+                        mesData.push(person);
+                    }
+                });
             }
-            mesData.push(person);
-        });
+        } else {
+            data.forEach(function (v, i) {
+                var person = {
+                    key: v.colUid,
+                    name: v.userName,
+                    // group: v.schoolName,
+                    phone: v.phoneNumber,
+                }
+                mesData.push(person);
+            });
+        }
+
         _this.setState({mesData, selectedRowKeys: []});
     },
 
@@ -145,6 +258,40 @@ const Role = React.createClass({
     closeConfirmModal() {
         this.setState({changeConfirmModalVisible: false})
     },
+
+    closeGradeModal() {
+        this.setState({GradeModalVisible: false})
+    },
+
+    /**
+     * 给此角色添加系统用户所对应的年级和班级
+     */
+    addGradeModal() {
+        var _this = this;
+        var obj = {
+            datas: this.state.gradeArray,
+            roleUserId: this.state.gradeItem.roleUserId,
+            createType: this.state.createType
+        }
+
+        var param = {
+            "method": 'addStrcutreRoleUsersExtend',
+            "jsonData": JSON.stringify(obj),
+        };
+
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success == true && ret.msg == "调用成功") {
+                    message.success("添加成功");
+                    _this.setState({GradeModalVisible: false})
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     deleteModal() {
         this.setState({changeConfirmModalVisible: false});
         var _this = this;
@@ -223,7 +370,7 @@ const Role = React.createClass({
         }, {
             title: '手机号',
             dataIndex: 'phone',
-            className:"phone2"
+            className: "phone2"
         }];
 
         var roleArr = this.state.roleArr;
@@ -238,7 +385,7 @@ const Role = React.createClass({
                     dataIndex: 'phone',
                     className: 'phone'
                 }, {
-                    title: '所在班级',
+                    title: '所属班级',
                     dataIndex: 'clazz',
                     className: 'class'
                 }];
@@ -252,7 +399,7 @@ const Role = React.createClass({
                     dataIndex: 'phone',
                     className: 'phone'
                 }, {
-                    title: '所在年级',
+                    title: '所属年级',
                     dataIndex: 'grade',
                     className: 'class'
                 }];
@@ -282,7 +429,7 @@ const Role = React.createClass({
                         <span className="password_ts" style={{marginLeft: 8}}>
                             {hasSelected ? `选中 ${this.state.selectedRowKeys.length} 条记录` : ''}</span>
                     </div>
-                    <Table className="framework_user" rowSelection={rowSelection} columns={columns} scroll={{ y: 240 }}
+                    <Table className="framework_user" rowSelection={rowSelection} columns={columns} scroll={{y: 240}}
                            dataSource={this.state.mesData}
                            pagination={false}
                     />
@@ -304,9 +451,6 @@ const Role = React.createClass({
                                papaName={this.state.papaName}
                 />
 
-                {/* <ConfirmModal
-                    
-                /> */}
                 <Modal
                     className="calmModal"
                     visible={this.state.changeConfirmModalVisible}
@@ -324,6 +468,25 @@ const Role = React.createClass({
                     <div className="isDel">
                         <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")}/>
                         确定删除?
+                    </div>
+                </Modal>
+
+                <Modal
+                    className="calmModal"
+                    visible={this.state.GradeModalVisible}
+                    title="添加所属年级"
+                    onCancel={this.closeGradeModal}
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" className="login-form-button examination_btn_blue calmSure"
+                                onClick={this.addGradeModal}>确定</button>,
+                        <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                onClick={this.closeGradeModal}>取消</button>
+                    ]}
+                >
+                    <div className="isDel">
+                        {this.state.gradeArr}
                     </div>
                 </Modal>
             </div>
