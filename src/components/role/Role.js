@@ -95,7 +95,6 @@ const Role = React.createClass({
                 } else {
 
                 }
-
             },
             onError: function (error) {
                 message.error(error);
@@ -127,6 +126,14 @@ const Role = React.createClass({
             })
         }
         this.setState({gradeArray: arr});
+    },
+
+    /**
+     * 为班级主任修改所属班级
+     * @param item
+     */
+    updateClazzToTer(item) {
+        console.log(item);
     },
 
     /**
@@ -230,7 +237,6 @@ const Role = React.createClass({
 
         if (isEmpty(roleArr) == false) {
             if (roleArr[2] != 0 && roleArr[1] == '班主任') {
-                console.log(data);
                 data.forEach(function (v, i) {
                     if (isEmpty(v.clazzes)) {
                         var person = {
@@ -242,12 +248,19 @@ const Role = React.createClass({
                         }
                         mesData.push(person);
                     } else {
+                        var clazzStr = '';
+                        v.clazzes.forEach(function (v, i) {
+                            clazzStr += v.name + ','
+                        });
                         var person = {
                             key: v.colUid,
                             name: v.userName,
                             // group: v.schoolName,
                             phone: v.phoneNumber,
-                            clazz: '班级...'
+                            clazz: <span className="role_gradeAlter"><span
+                                className="focus_3">{clazzStr.substr(0, clazzStr.length - 1)}</span><a
+                                href="javascript:;"
+                                onClick={_this.updateClazzToTer.bind(this, v)}>修改</a></span>
                         }
                         mesData.push(person);
                     }
@@ -369,7 +382,6 @@ const Role = React.createClass({
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
                 if (ret.success == true && ret.msg == "调用成功") {
                     message.success("添加成功");
                     _this.setState({ClazzModalVisible: false, selectedRowKeys: []});
