@@ -888,7 +888,7 @@ const Role = React.createClass({
                             <div className="add_member_wrap" style={{height: '338px'}}>
                                 <Table columns={memberColumns}
                                        pagination={false} dataSource={this.state.searchUserFromOri}
-                                       className="schoolgroup_table1 schoolgroup_table_department"
+                                       className="schoolgroup_table1 schoolgroup_table_department role_nothingData"
                                        scroll={{y: 240}}
                                        rowSelection={rowSelectionClazz}
                                 />
