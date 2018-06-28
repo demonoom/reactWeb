@@ -140,7 +140,7 @@ const Role = React.createClass({
             defaultSelectArr.push({
                 key: clazzesItem.id,
                 userId: clazzesItem.id,
-                userName: clazzesItem.name,
+                userName: clazzesItem.grade.name + clazzesItem.name,
             })
         })
 
@@ -247,6 +247,7 @@ const Role = React.createClass({
     },
 
     drawTable(data) {
+        debugger
         var roleArr = this.state.roleArr;
         var mermberNum = data.length;
         var _this = this;
@@ -269,7 +270,7 @@ const Role = React.createClass({
                     } else {
                         var clazzStr = '';
                         v.clazzes.forEach(function (v, i) {
-                            clazzStr += v.name + ','
+                            clazzStr += v.grade.name + v.name + ','
                         });
                         var person = {
                             key: v.colUid,
@@ -313,6 +314,16 @@ const Role = React.createClass({
                         }
                         mesData.push(person);
                     }
+                });
+            } else {
+                data.forEach(function (v, i) {
+                    var person = {
+                        key: v.colUid,
+                        name: v.userName,
+                        // group: v.schoolName,
+                        phone: v.phoneNumber,
+                    }
+                    mesData.push(person);
                 });
             }
         } else {
