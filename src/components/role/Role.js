@@ -133,7 +133,26 @@ const Role = React.createClass({
      * @param item
      */
     updateClazzToTer(item) {
-        console.log(item);
+        var defaultArr = [];
+        var defaultSelectArr = [];
+        item.clazzes.forEach(function (clazzesItem) {
+            defaultArr.push(clazzesItem.id)
+            defaultSelectArr.push({
+                key: clazzesItem.id,
+                userId: clazzesItem.id,
+                userName: clazzesItem.name,
+            })
+        })
+
+        this.setState({
+            ClazzModalVisible: true,
+            gradeItem: item,
+            createType: 6,
+            ClazzModalTitle: '修改所属班级',
+            tags: defaultSelectArr,
+            selectedRowKeys: defaultArr
+        })
+        selectArr = defaultSelectArr;
     },
 
     /**
@@ -349,7 +368,8 @@ const Role = React.createClass({
     },
 
     closeClazzModal() {
-        this.setState({ClazzModalVisible: false})
+        this.setState({ClazzModalVisible: false, userNameFromOri: '', searchUserFromOri: [], tags: []})
+        selectArr = []
     },
 
     addClazzModal() {
@@ -372,20 +392,28 @@ const Role = React.createClass({
             "jsonData": JSON.stringify(obj),
         };
 
-        // if (this.state.GradeModalTitle == '修改所属年级') {
-        //     param = {
-        //         "method": 'updateStrcutreRoleUsersExtend',
-        //         "jsonData": JSON.stringify(obj),
-        //     };
-        // }
+        if (this.state.ClazzModalTitle == '修改所属班级') {
+            param = {
+                "method": 'updateStrcutreRoleUsersExtend',
+                "jsonData": JSON.stringify(obj),
+            };
+        }
         console.log(param);
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success == true && ret.msg == "调用成功") {
                     message.success("添加成功");
-                    _this.setState({ClazzModalVisible: false, selectedRowKeys: []});
+                    _this.setState({
+                        ClazzModalVisible: false,
+                        selectedRowKeys: [],
+                        userNameFromOri: '',
+                        searchUserFromOri: [],
+                        tags: []
+                    });
+                    selectArr = []
                     _this.ajaxData(_this.state.roleId);
+
                 }
             },
             onError: function (error) {
