@@ -10073,3 +10073,6 @@ a:active, a:hover {
     float: right;
     text-align: right;
 }
+.role_nothingData .ant-table-placeholder{
+    margin-top:-200px
+}
