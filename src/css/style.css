@@ -9996,3 +9996,83 @@ a:active, a:hover {
     padding-top: 6px;
     display: inline-block;
 }
+.work_topics_btn{
+    margin-right: 16px;
+}
+.topics_btn .i_eye{
+    background: url(../../src/components/images/icon_eye.png) no-repeat;
+    width: 14px;
+    height: 13px;
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    right: 4px;
+    -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.topics_btn:hover .i_eye{
+    background: url(../../src/components/images/icon_eye_H.png) no-repeat;
+}
+.topics_btn .i_face{
+    background: url(../../src/components/images/icon_face.png) no-repeat;
+    width: 14px;
+    height: 13px;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    right: 4px;
+    -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.topics_btn:hover .i_face{
+    background: url(../../src/components/images/icon_face_H.png) no-repeat;
+}
+.topics_btn .i_respondence{
+    background: url(../../src/components/images/icon_respondence.png) no-repeat;
+    width: 14px;
+    height: 13px;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    right: 4px;
+    -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.topics_btn:hover .i_respondence{
+    background: url(../../src/components/images/icon_respondence_H.png) no-repeat;
+}
+/* 添加所属年级modal */
+.role_grade .ant-modal-body{
+    padding:16px 0
+}
+.role_grade .ant-modal-body .isDel{
+    padding: 0 16px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height:100px;
+    max-height: 320px;
+}
+.role_grade label{
+    width: 190px;
+    margin: 0 0 6px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+.role_gradeAlter{
+    width: 100%;
+    display: inline-block;
+}
+.role_gradeAlter span{
+    width: calc(100% - 35px);
+    display: inline-block;
+}
+.role_gradeAlter a{
+    width: 35px;
+    float: right;
+    text-align: right;
+}
+.role_nothingData .ant-table-placeholder{
+    margin-top:-200px
+}

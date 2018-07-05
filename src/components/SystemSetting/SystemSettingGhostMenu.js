@@ -144,7 +144,7 @@ class SystemSettingGhostMenu extends React.Component {
         var liArr = [];
         var uls = '';
         var arr = [];
-
+       
         for (var i = 0; i < data.length; i++) {
             data[i].tabItems.forEach(function (v) {
                 console.log(v);
@@ -158,20 +158,19 @@ class SystemSettingGhostMenu extends React.Component {
                 liArr.push(lis);
             });
 
-            var newObj = {
-                method: 'openNewPage',
-                url: 'http://192.168.50.72:8091/#/ARTextbookList'
-            }
-            
-            var newLi = <li className="multi">
-                <ul className="second">
-                    <li onClick={event => {
-                        _this.checkWords(newObj, 'AR教材');
-                    }}><img className="icon_system_img"/>AR教材
-                    </li>
-                </ul>
-            </li>;
-            liArr.push(newLi);
+          
+            //     url: 'http://192.168.50.29:8091/#/classCardHomePageDoor'
+            // }
+
+            // var newLi = <li className="multi">
+            //     <ul className="second">
+            //         <li onClick={event => {
+            //             _this.checkWords(newObj, '班牌编辑');
+            //         }}><img className="icon_system_img"/>班牌编辑
+            //         </li>
+            //     </ul>
+            // </li>;
+            // liArr.push(newLi);
 
             uls = <li className="ghostMenu_li">
                 <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>
@@ -180,9 +179,23 @@ class SystemSettingGhostMenu extends React.Component {
             arr.push(uls);
             liArr = [];
         }
-
+        var newObj = {
+            method: 'openNewPage',
+            url: 'http://192.168.50.72:8091/#/ARTextbookList'
+        }
+        
+        var newLi = <li className="multi">
+            <ul className="second">
+                <li onClick={event => {
+                    _this.checkWords(newObj, 'AR教材');
+                }}><img className="icon_system_img"/>AR教材
+                </li>
+            </ul>
+        </li>;
+        liArr.push(newLi);
         //手动添加的测试菜单---开始
         var flowUl = <li className="multi">
+            {/* <li>AR教材</li> */}
             {/*<ul className="second">*/}
             {/*<li onClick={event => {*/}
             {/*this.changeMenu(event, 'noomkaoqing', true)*/}
