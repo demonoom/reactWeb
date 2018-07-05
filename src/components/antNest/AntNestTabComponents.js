@@ -241,9 +241,9 @@ const AntNestTabComponents = React.createClass({
         this.props.interPublicSidebarSet(obj);
     },
 
-    turnToPPH(data) {
-        console.log(data)
-        console.log(sessionStorage.getItem("ident"));
+    turnToWaterWork(data) {
+        // console.log(data)
+        // console.log(sessionStorage.getItem("ident"));
         // var url = 'http://jiaoxue.maaee.com:8091/#/questionDetil?courseId=' + e.subject.id;
         var url = 'http://192.168.50.72:8091/#/waterWork?tid='+data.id+"&stuId="+sessionStorage.getItem("ident");
         console.log(url)
@@ -295,7 +295,7 @@ const AntNestTabComponents = React.createClass({
             </span>
             } else {
                 UnKnowHomeWorkBtn = <span>
-                <Button icon="edit" className="topics_btn antnest_talk " onClick={this.turnToPPH.bind(this,topicObj)}>立即作答</Button>
+                <Button icon="edit" className="topics_btn antnest_talk " onClick={this.turnToWaterWork.bind(this,topicObj)}>立即作答</Button>
 
             </span>
             }

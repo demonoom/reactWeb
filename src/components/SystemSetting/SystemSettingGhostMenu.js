@@ -5,8 +5,12 @@ import {Menu, Icon, Row, Col, message} from 'antd';
 import React, {PropTypes} from 'react';
 import {doWebService} from '../../WebServiceHelper';
 import UpLoadModal from './unLoadModal';
+import UpLoadImgModal from "./unLoadImgModal";
+import UploadAttechModal from "./uploadAttechModal";
+import UploadVideoModal from "./UploadVideoModal"
 import {showNoomLargeImg} from '../../utils/utils'
 import {showLargeImg} from '../../utils/utils'
+import { flattenDiagnosticMessageText } from 'typescript';
 
 
 class SystemSettingGhostMenu extends React.Component {
@@ -20,11 +24,17 @@ class SystemSettingGhostMenu extends React.Component {
             beActive: false, // 是活动的，可伸缩的,
             icon: ["user", "dot-chart", "ellipsis"],
             makeDingModalIsShow: false,
+            UploadImgModalIsShow:false,
+            UploadVideoIsShow:false,
+            uploadAttechModalIsShow:false
         }
         this.changeMenu = this.changeMenu.bind(this);
         this.showpanel = this.showpanel.bind(this);
         this.checkWords = this.checkWords.bind(this);
         this.noom = this.noom.bind(this);
+        this.calm = this.calm.bind(this);
+        this.calmVideo = this.calmVideo.bind(this);
+        this.calmAttech = this.calmAttech.bind(this);
         this.closeDingModel = this.closeDingModel.bind(this);
         // this.sendImg = this.sendImg.bind(this);
         this.imgClick = this.imgClick.bind(this);
@@ -37,12 +47,38 @@ class SystemSettingGhostMenu extends React.Component {
 
         //将GhostMenu组件中的方法挂在window上，以便于在littlePanel中能够调用。
         window.__noom__ = this.noom;
+        window.__calm__ = this.calm;
+        window.__calmVideo__ = this.calmVideo;
+        window.__calmAttech__ = this.calmAttech;
     }
 
     imgClick(e) {
         console.log(e);
     }
-
+    calm(callbackId) {
+        this.setState({
+            UploadImgModalIsShow:true
+        })
+        this.setState({
+            callbackId
+        })
+    }
+    calmVideo(callbackId){
+        this.setState({
+            UploadVideoIsShow:true
+        })
+        this.setState({
+            callbackId
+        })
+    }
+    calmAttech(callbackId){
+        this.setState({
+            uploadAttechModalIsShow:true
+        })
+        this.setState({
+            callbackId
+        })
+    }
     noom(callbackId) {
         //控制上传组件的显示与隐藏
         this.setState({makeDingModalIsShow: true});
@@ -51,6 +87,15 @@ class SystemSettingGhostMenu extends React.Component {
 
     closeDingModel() {
         this.setState({makeDingModalIsShow: false});
+        this.setState({
+            UploadImgModalIsShow:false
+        })
+        this.setState({
+            UploadVideoIsShow:false
+        })
+        this.setState({
+            uploadAttechModalIsShow:false
+        })
     }
 
     /**
@@ -113,20 +158,20 @@ class SystemSettingGhostMenu extends React.Component {
                 liArr.push(lis);
             });
 
-            // var newObj = {
-            //     method: 'openNewPage',
-            //     url: 'http://192.168.50.29:8091/#/classCardHomePageDoor'
-            // }
-            //
-            // var newLi = <li className="multi">
-            //     <ul className="second">
-            //         <li onClick={event => {
-            //             _this.checkWords(newObj, '班牌编辑');
-            //         }}><img className="icon_system_img"/>班牌编辑
-            //         </li>
-            //     </ul>
-            // </li>;
-            // liArr.push(newLi);
+            var newObj = {
+                method: 'openNewPage',
+                url: 'http://192.168.50.72:8091/#/ARTextbookList'
+            }
+            
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords(newObj, 'AR教材');
+                    }}><img className="icon_system_img"/>AR教材
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
 
             uls = <li className="ghostMenu_li">
                 <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>
@@ -277,6 +322,21 @@ class SystemSettingGhostMenu extends React.Component {
                 </ul>
                 <UpLoadModal
                     isShow={this.state.makeDingModalIsShow}
+                    closeDingModel={this.closeDingModel}
+                    callbackId={this.state.callbackId}
+                />
+                <UpLoadImgModal
+                    isShow={this.state.UploadImgModalIsShow}
+                    closeDingModel={this.closeDingModel}
+                    callbackId={this.state.callbackId}
+                />
+                <UploadVideoModal
+                    isShow={this.state.UploadVideoIsShow}
+                    closeDingModel={this.closeDingModel}
+                    callbackId={this.state.callbackId}
+                />
+                 <UploadAttechModal
+                    isShow={this.state.uploadAttechModalIsShow}
                     closeDingModel={this.closeDingModel}
                     callbackId={this.state.callbackId}
                 />
