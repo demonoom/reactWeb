@@ -181,7 +181,7 @@ class SystemSettingGhostMenu extends React.Component {
         }
         var newObj = {
             method: 'openNewPage',
-            url: 'http://192.168.50.72:8091/#/ARTextbookList'
+            url: 'http://192.168.50.163:8091/#/ARTextbookList'
         }
         
         var newLi = <li className="multi">
