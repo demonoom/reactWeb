@@ -4,7 +4,9 @@
 import React, {PropTypes} from 'react';
 import {Modal, Icon, Input, Button, Row, Col, message, Checkbox, Transfer, Table, Select, Tag, Tooltip} from 'antd';
 import {isEmpty} from '../../utils/utils';
-import UploadAttechComponents from './UploadAttechComponents';
+import UploadAttechComponents from "./uploadAttechComponents";
+
+// import UploadAttechComponents from './UploadAttechComponents';
 
 
 class MakeDingModal extends React.Component {
