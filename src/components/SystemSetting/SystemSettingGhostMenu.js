@@ -1,15 +1,15 @@
 /**
  * Created by devnote on 17-4-17.
  */
-import {Menu, Icon, Row, Col, message} from 'antd';
-import React, {PropTypes} from 'react';
-import {doWebService} from '../../WebServiceHelper';
+import { Menu, Icon, Row, Col, message } from 'antd';
+import React, { PropTypes } from 'react';
+import { doWebService } from '../../WebServiceHelper';
 import UpLoadModal from './unLoadModal';
 import UpLoadImgModal from "./unLoadImgModal";
 import UploadAttechModal from "./uploadAttechModal";
 import UploadVideoModal from "./UploadVideoModal"
-import {showNoomLargeImg} from '../../utils/utils'
-import {showLargeImg} from '../../utils/utils'
+import { showNoomLargeImg } from '../../utils/utils'
+import { showLargeImg } from '../../utils/utils'
 import { flattenDiagnosticMessageText } from 'typescript';
 
 
@@ -24,9 +24,9 @@ class SystemSettingGhostMenu extends React.Component {
             beActive: false, // 是活动的，可伸缩的,
             icon: ["user", "dot-chart", "ellipsis"],
             makeDingModalIsShow: false,
-            UploadImgModalIsShow:false,
-            UploadVideoIsShow:false,
-            uploadAttechModalIsShow:false
+            UploadImgModalIsShow: false,
+            UploadVideoIsShow: false,
+            uploadAttechModalIsShow: false
         }
         this.changeMenu = this.changeMenu.bind(this);
         this.showpanel = this.showpanel.bind(this);
@@ -44,7 +44,6 @@ class SystemSettingGhostMenu extends React.Component {
         this.getTab();
         //测试
         // this.buildTab([]);
-
         //将GhostMenu组件中的方法挂在window上，以便于在littlePanel中能够调用。
         window.__noom__ = this.noom;
         window.__calm__ = this.calm;
@@ -57,23 +56,23 @@ class SystemSettingGhostMenu extends React.Component {
     }
     calm(callbackId) {
         this.setState({
-            UploadImgModalIsShow:true
+            UploadImgModalIsShow: true
         })
         this.setState({
             callbackId
         })
     }
-    calmVideo(callbackId){
+    calmVideo(callbackId) {
         this.setState({
-            UploadVideoIsShow:true
+            UploadVideoIsShow: true
         })
         this.setState({
             callbackId
         })
     }
-    calmAttech(callbackId){
+    calmAttech(callbackId) {
         this.setState({
-            uploadAttechModalIsShow:true
+            uploadAttechModalIsShow: true
         })
         this.setState({
             callbackId
@@ -81,20 +80,20 @@ class SystemSettingGhostMenu extends React.Component {
     }
     noom(callbackId) {
         //控制上传组件的显示与隐藏
-        this.setState({makeDingModalIsShow: true});
-        this.setState({callbackId});
+        this.setState({ makeDingModalIsShow: true });
+        this.setState({ callbackId });
     }
 
     closeDingModel() {
-        this.setState({makeDingModalIsShow: false});
+        this.setState({ makeDingModalIsShow: false });
         this.setState({
-            UploadImgModalIsShow:false
+            UploadImgModalIsShow: false
         })
         this.setState({
-            UploadVideoIsShow:false
+            UploadVideoIsShow: false
         })
         this.setState({
-            uploadAttechModalIsShow:false
+            uploadAttechModalIsShow: false
         })
     }
 
@@ -139,12 +138,11 @@ class SystemSettingGhostMenu extends React.Component {
      * @param data
      */
     buildTab(data) {
-        console.log(this.state.ident);
         let _this = this;
         var liArr = [];
         var uls = '';
         var arr = [];
-       
+
         for (var i = 0; i < data.length; i++) {
             data[i].tabItems.forEach(function (v) {
                 console.log(v);
@@ -152,13 +150,13 @@ class SystemSettingGhostMenu extends React.Component {
                     <ul className="second">
                         <li onClick={event => {
                             _this.checkWords(v.actionParams, v.name);
-                        }}><img className="icon_system_img" src={v.icon}/>{v.name}</li>
+                        }}><img className="icon_system_img" src={v.icon} />{v.name}</li>
                     </ul>
                 </li>;
                 liArr.push(lis);
             });
 
-          
+
             //     url: 'http://192.168.50.29:8091/#/classCardHomePageDoor'
             // }
 
@@ -173,27 +171,29 @@ class SystemSettingGhostMenu extends React.Component {
             // liArr.push(newLi);
 
             uls = <li className="ghostMenu_li">
-                <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>
+                <li><Icon type={this.state.icon[i]} />{data[i].name}</li>
                 {liArr}
             </li>;
             arr.push(uls);
             liArr = [];
         }
+        if (_this.state.ident == 23836) {
+            var newObj = {
+                method: 'openNewPage',
+                url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
+            }
 
-        // var newObj = {
-        //     method: 'openNewPage',
-        //     url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
-        // }
-        //
-        // var newLi = <li className="multi">
-        //     <ul className="second">
-        //         <li onClick={event => {
-        //             _this.checkWords(newObj, 'AR教材');
-        //         }}><img className="icon_system_img"/>AR教材
-        //         </li>
-        //     </ul>
-        // </li>;
-        // liArr.push(newLi);
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords(newObj, 'AR教材');
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />AR教材
+                </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
+        }
+
 
         //手动添加的测试菜单---开始
         var flowUl = <li className="multi">
@@ -226,7 +226,7 @@ class SystemSettingGhostMenu extends React.Component {
         arr.push(liArr);
         //手动添加的测试菜单---结束
 
-        _this.setState({arr});
+        _this.setState({ arr });
     }
 
     // toggle
@@ -258,7 +258,7 @@ class SystemSettingGhostMenu extends React.Component {
         // add on class
         this.onMenu(event);
         // 1
-        this.setState({beActive: beActive});
+        this.setState({ beActive: beActive });
         this.props.changeTabEvent(channelStr, beActive);
 
     }
@@ -320,16 +320,16 @@ class SystemSettingGhostMenu extends React.Component {
         if (this.state.beActive) {
             hideButton = <div className="headler" onClick={event => {
                 this.toggleGhostMenu(event);
-            }}><Icon type="left"/></div>;
+            }}><Icon type="left" /></div>;
         } else {
             hideButton = "";
         }
 
         return (
             <div className={this.props.visible ? 'ghostMenu ghostMenuShow' : 'ghostMenu ghostMenuHide'}
-                 onClick={event => {
-                     this.props.toggleGhostMenu({visible: false});
-                 }}>
+                onClick={event => {
+                    this.props.toggleGhostMenu({ visible: false });
+                }}>
                 {hideButton}
                 <div className="menu_til">教务管理</div>
                 <ul className="first">
@@ -350,7 +350,7 @@ class SystemSettingGhostMenu extends React.Component {
                     closeDingModel={this.closeDingModel}
                     callbackId={this.state.callbackId}
                 />
-                 <UploadAttechModal
+                <UploadAttechModal
                     isShow={this.state.uploadAttechModalIsShow}
                     closeDingModel={this.closeDingModel}
                     callbackId={this.state.callbackId}
