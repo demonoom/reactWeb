@@ -179,20 +179,20 @@ class SystemSettingGhostMenu extends React.Component {
             arr.push(uls);
             liArr = [];
         }
-        var newObj = {
-            method: 'openNewPage',
-            url: 'http://192.168.50.163:8091/#/ARTextbookList'
-        }
-        
-        var newLi = <li className="multi">
-            <ul className="second">
-                <li onClick={event => {
-                    _this.checkWords(newObj, 'AR教材');
-                }}><img className="icon_system_img"/>AR教材
-                </li>
-            </ul>
-        </li>;
-        liArr.push(newLi);
+        // var newObj = {
+        //     method: 'openNewPage',
+        //     url: 'http://192.168.50.163:8091/#/ARTextbookList'
+        // }
+        //
+        // var newLi = <li className="multi">
+        //     <ul className="second">
+        //         <li onClick={event => {
+        //             _this.checkWords(newObj, 'AR教材');
+        //         }}><img className="icon_system_img" />AR教材
+        //         </li>
+        //     </ul>
+        // </li>;
+        // liArr.push(newLi);
         //手动添加的测试菜单---开始
         var flowUl = <li className="multi">
             {/* <li>AR教材</li> */}
