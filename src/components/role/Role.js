@@ -247,7 +247,7 @@ const Role = React.createClass({
     },
 
     drawTable(data) {
-        debugger
+        
         var roleArr = this.state.roleArr;
         var mermberNum = data.length;
         var _this = this;
