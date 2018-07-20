@@ -61,7 +61,7 @@ const UploadImgComponents = React.createClass({
                 //     return false;
                 // }
 
-                if (fileType !== 'video/mp4' && fileType !== 'video/rvmb' && fileType !== 'video/avi' && fileType !== 'video/ts' && fileType !== 'application/pdf') {
+                if (fileType !== 'video/mp4' && fileType !== 'video/rvmb' && fileType !== 'video/avi' && fileType !== 'video/ts' && fileType !== 'application/pdf' && fileType !== 'application/doc' && fileType !== 'application/xls' && fileType !== 'application/ppt' && fileType !== 'application/docx' && fileType !== 'application/xlsx' && fileType !== 'application/pptx') {
                     message.error('文件格式不符合，请重新上传', 5);
                     return false;
                 }
