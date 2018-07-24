@@ -61,7 +61,7 @@ const UploadImgComponents = React.createClass({
                 //     return false;
                 // }
 
-                if (fileType.indexOf("image") == -1) {
+                if (fileType !== 'image/jpeg') {
                     message.error('文件格式不符合，请重新上传', 5);
                     return false;
                 }

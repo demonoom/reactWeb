@@ -50,25 +50,25 @@ const UploadImgComponents = React.createClass({
             fileList: antUpload.state.fileList,
             //onPreview:antUpload.handlePreview,
             beforeUpload(file) {
+                console.log(file.name,"calm");
                 var currentFileList = antUpload.state.fileList;
                 if (isEmpty(currentFileList) == false && currentFileList.length >= 9) {
                     message.error('最多只能上传9个文件', 5);
                     return false;
                 }
                 var fileType = file.type;
-                // if (fileType !== 'application/pdf' && fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'application/msword' && fileType !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
-                //     message.error('文件格式不符合，请重新上传', 5);
-                //     return false;
-                // }
+                var fileName = file.name;
+                var fileNameArr = fileName.split(".");
 
-                if (fileType.indexOf("application") == -1 && fileType !== 'video/mp4') {
+                if(fileNameArr[1] === "MP4"){
                     message.error('文件格式不符合，请重新上传', 5);
                     return false;
                 }
-                // if (fileType !== 'video/mp4' && fileType !== 'video/rvmb' && fileType !== 'video/avi' && fileType !== 'video/ts' && fileType !== 'application') {
-                //     message.error('文件格式不符合，请重新上传', 5);
-                //     return false;
-                // }
+                if (fileType !== 'video/mp4' &&  fileType !== 'application/pdf' && fileType !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation' && fileType !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && fileType !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                    message.error('文件格式不符合，请重新上传', 5);
+                    return false;
+                }
+               
             },
             onChange(info) {
                 if (info.file.status !== 'uploading') {
