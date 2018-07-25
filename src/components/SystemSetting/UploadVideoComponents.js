@@ -56,15 +56,19 @@ const UploadImgComponents = React.createClass({
                     return false;
                 }
                 var fileType = file.type;
-                // if (fileType !== 'application/pdf' && fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'application/msword' && fileType !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
-                //     message.error('文件格式不符合，请重新上传', 5);
-                //     return false;
-                // }
 
-                if (fileType !== 'video/mp4' && fileType !== 'video/rvmb' && fileType !== 'video/avi' && fileType !== 'video/ts') {
+                var fileName = file.name;
+                var fileNameArr = fileName.split(".");
+
+                if (fileNameArr[1] === "MP4") {
                     message.error('文件格式不符合，请重新上传', 5);
                     return false;
                 }
+                if (fileType !== 'video/mp4' && fileType !== 'application/pdf' && fileType !== 'application/msword' && fileType !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation' && fileType !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && fileType !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                    message.error('文件格式不符合，请重新上传', 5);
+                    return false;
+                }
+
             },
             onChange(info) {
                 if (info.file.status !== 'uploading') {

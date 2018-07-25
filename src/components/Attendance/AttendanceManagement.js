@@ -130,6 +130,10 @@ const AttendanceManagement = React.createClass({
     //增加考勤组
     addAtt() {
         this.setState({optType: 'addAttendance'});
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'http://api.map.baidu.com/getscript?v=2.0&ak=lK9Uq8lbN3p3E8kOh0axyKw7ZEGQ3G2s&services=&t=20180529182003';
+        $("body").append(script);
     },
 
     /**
