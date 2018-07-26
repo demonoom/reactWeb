@@ -130,6 +130,7 @@ const MainLayout = React.createClass({
             selectedRowKeys: [],
             tags: [],  //标签显示
             inputVisible: false,
+            videoPlayModel: false,
             inputValue: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
@@ -190,6 +191,7 @@ const MainLayout = React.createClass({
         window.__noomSelectPic__ = this.noomSelectPic;
         window.__noomShareMbile__ = this.noomShareMbile;
         window.__bindCoordinates__ = this.bindCoordinates;
+        window.__playVideo__ = this.playVideo;
     },
 
     componentWillMount() {
@@ -241,6 +243,24 @@ const MainLayout = React.createClass({
      */
     bindCoordinates() {
         this.refs.bindCoordinatesModel.changeConfirmModalVisible(true)
+    },
+
+    playVideo(src) {
+        console.log(src);
+
+        var videoPlayer = <video id="videoPlayerAr" width={320} controls={false} autoplay>
+            <source type="video/mp4" src={src}/>
+        </video>;
+        this.setState({videoPlayModel: true, videoPlayer});
+        setTimeout(function () {
+            document.getElementById('videoPlayerAr').play();
+        }, 300)
+    },
+
+    videoPlayerModalHandleCancel() {
+        var videoPlayer = '';
+        this.setState({videoPlayModel: false, videoPlayer});
+        document.getElementById('videoPlayerAr').pause();
     },
 
     /**
@@ -3258,6 +3278,21 @@ const MainLayout = React.createClass({
                                 <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")}/>
                                 确定要退出该群组?
                             </div>
+                        </Modal>
+
+                        <Modal title={null}
+                               visible={this.state.videoPlayModel}
+                               transitionName=""  //禁用modal的动画效果
+                               maskClosable={false} //设置不允许点击蒙层关闭
+                               onCancel={this.videoPlayerModalHandleCancel}
+                               footer={null}
+                               className='noomVideoPlayer'
+                               footer={[
+                                   <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                           onClick={this.videoPlayerModalHandleCancel}>关闭</button>
+                               ]}
+                        >
+                            {this.state.videoPlayer}
                         </Modal>
 
                         <BindCoordinates
