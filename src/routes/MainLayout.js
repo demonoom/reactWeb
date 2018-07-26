@@ -248,7 +248,7 @@ const MainLayout = React.createClass({
     playVideo(src) {
         console.log(src);
 
-        var videoPlayer = <video id="videoPlayerAr" width={320} controls={false} autoplay>
+        var videoPlayer = <video id="videoPlayerAr" minLength={320} controls={false} autoplay>
             <source type="video/mp4" src={src}/>
         </video>;
         this.setState({videoPlayModel: true, videoPlayer});
@@ -3287,10 +3287,10 @@ const MainLayout = React.createClass({
                                onCancel={this.videoPlayerModalHandleCancel}
                                footer={null}
                                className='noomVideoPlayer'
-                               footer={[
-                                   <button type="ghost" className="login-form-button examination_btn_white calmCancle"
-                                           onClick={this.videoPlayerModalHandleCancel}>关闭</button>
-                               ]}
+                               {/*footer={[*/}
+                                   {/*<button type="ghost" className="login-form-button examination_btn_white calmCancle"*/}
+                                           {/*onClick={this.videoPlayerModalHandleCancel}>关闭</button>*/}
+                               {/*]}*/}
                         >
                             {this.state.videoPlayer}
                         </Modal>
