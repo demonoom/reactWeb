@@ -3285,7 +3285,6 @@ const MainLayout = React.createClass({
                                transitionName=""  //禁用modal的动画效果
                                maskClosable={false} //设置不允许点击蒙层关闭
                                onCancel={this.videoPlayerModalHandleCancel}
-                               footer={null}
                                className='noomVideoPlayer'
                                footer={[
                                    <button type="ghost" className="login-form-button examination_btn_white calmCancle"
