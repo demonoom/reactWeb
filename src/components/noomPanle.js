@@ -296,6 +296,7 @@
                 } else if (data.method == "finishForRefresh") {
                     document.getElementById(data.windowName + '_back').click()
                 } else if (data.method == "playVideo") {
+                    //播放视频(限一个)
                     window.__playVideo__(data.url);
                 }
             });

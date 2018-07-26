@@ -3287,10 +3287,10 @@ const MainLayout = React.createClass({
                                onCancel={this.videoPlayerModalHandleCancel}
                                footer={null}
                                className='noomVideoPlayer'
-                               {/*footer={[*/}
-                                   {/*<button type="ghost" className="login-form-button examination_btn_white calmCancle"*/}
-                                           {/*onClick={this.videoPlayerModalHandleCancel}>关闭</button>*/}
-                               {/*]}*/}
+                               footer={[
+                                   <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                           onClick={this.videoPlayerModalHandleCancel}>关闭</button>
+                               ]}
                         >
                             {this.state.videoPlayer}
                         </Modal>
