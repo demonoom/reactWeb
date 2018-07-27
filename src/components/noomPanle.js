@@ -3,7 +3,7 @@
  */
 // import {WEB_VERSION} from '../utils/Const';
 
-; (function ($) {
+;(function ($) {
 
 
     var littlePanle = function () {
@@ -99,7 +99,7 @@
             TP.delAll();
         } else {
 
-            $('#' + id).css({ visibility: 'hidden' });
+            $('#' + id).css({visibility: 'hidden'});
             $('#ifr' + id).removeAttr('src');
         }
         utilsCommon.unbind(document, 'paste', onPasteFunction);
@@ -193,7 +193,7 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = { 'callbackId': callbackId, 'params': paths };
+                        var response = {'callbackId': callbackId, 'params': paths};
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
@@ -209,7 +209,7 @@
                     } else {
                         data.url += '&access_user=' + sessionStorage.getItem('ident');
                     }
-                    let obj = { mode: 'teachingAdmin', title: '', url: data.url };
+                    let obj = {mode: 'teachingAdmin', title: '', url: data.url};
                     LP.Start(obj);
                 } else if (data.method == 'setPanelTitle') {
                     var title = data.title;
@@ -264,37 +264,39 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = { 'callbackId': callbackId, 'params': paths };
+                        var response = {'callbackId': callbackId, 'params': paths};
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
-                } else if (data.method == "selectVideo"){
-                     //调用选择图片插件，获取图片的路径存入paths
-                     window.__calmVideo__(data.callbackId);
-                     window.__calmUploadVideo__ = function (result, callbackId) {
-                         var str = result.join(',');
-                         var paths = str;
-                         var callbackId = callbackId;
-                         var response = { 'callbackId': callbackId, 'params': paths };
-                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
-                         var ifm = document.getElementById(data.windowName);
-                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
-                     };
-                }else if(data.method == "selectAttech"){
+                } else if (data.method == "selectVideo") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__calmVideo__(data.callbackId);
+                    window.__calmUploadVideo__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == "selectAttech") {
                     //调用选择图片插件，获取图片的路径存入paths
                     window.__calmAttech__(data.callbackId);
                     window.__calmUploadAttech__ = function (result, callbackId) {
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = { 'callbackId': callbackId, 'params': paths };
+                        var response = {'callbackId': callbackId, 'params': paths};
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
-                } else if(data.method == "finishForRefresh") {
+                } else if (data.method == "finishForRefresh") {
                     document.getElementById(data.windowName + '_back').click()
+                } else if (data.method == "playVideo") {
+                    window.__playVideo__(data.url);
                 }
             });
             isAddedListener = true;
@@ -341,7 +343,7 @@
                 </div>
                 </div>`;
 
-        var objtemplet = { htm: this.htm, id: this.id, ifrid: this.ifrid };
+        var objtemplet = {htm: this.htm, id: this.id, ifrid: this.ifrid};
         let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
 
         objtemplet.htm = $(objtemplet.htm).css(styleObj);
@@ -394,12 +396,12 @@
             classChange = 'multi';
             videoArr.map(function (video, i) {
                 i++;
-                srcList.push({ type: 'video/x-flv', src: video.path });
+                srcList.push({type: 'video/x-flv', src: video.path});
                 listBtn.push("<a class='listBtn' >" + i + "</a>");
             });
         } else {
             let flv = videoArr[0];
-            srcList.push({ type: 'video/x-flv', src: flv.path || flv.url });
+            srcList.push({type: 'video/x-flv', src: flv.path || flv.url});
         }
 
 
@@ -568,12 +570,12 @@
             classChange = 'multi';
             videoArr.map(function (video, i) {
                 i++;
-                srcList.push({ type: 'video/x-flv', src: video.path });
+                srcList.push({type: 'video/x-flv', src: video.path});
                 listBtn.push("<a class='listBtn' >" + i + "</a>");
             });
         } else {
             let flv = videoArr[0];
-            srcList.push({ type: 'video/x-flv', src: flv.path || flv.url });
+            srcList.push({type: 'video/x-flv', src: flv.path || flv.url});
         }
 
 
@@ -677,7 +679,7 @@
                 }
                 $('#InputTxtToPanel').val('');
 
-                con = { command: "simpleClassDanmu", data: { content: tmpTxt1 } };
+                con = {command: "simpleClassDanmu", data: {content: tmpTxt1}};
                 LP.LiveTVSocket.send(con);
 
                 return;
@@ -915,14 +917,14 @@
                 }
             }
         };
-        connection.connect({ command: 'studentLogin', data: { userId: parseInt(obj.uid), vid: obj.vid } });
+        connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
         this.insertClassroom(obj);
     }
 
     // 后进的学生，显示的ppt
     littlePanle.prototype.insertClassroom = function (obj) {
         let _this = this;
-        var param = { method: 'getVclassPPTOpenInfo', vid: obj.vid + '' };
+        var param = {method: 'getVclassPPTOpenInfo', vid: obj.vid + ''};
         doWebService(JSON.stringify(param), {
             onResponse: function (result) {
                 if (!result.success) {
@@ -932,7 +934,7 @@
                 var openInfo = result.response;
                 if (!openInfo) return;
                 //打开课堂中的ppt
-                $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo(openInfo.pptUrl) + "?v=1").css({ 'z-index': 1 });
+                $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo(openInfo.pptUrl) + "?v=1").css({'z-index': 1});
                 $('#' + obj.showTuiPing).hide();
                 //更换当前页
                 $("#" + obj.pptIframeName).on('load', function () {
@@ -993,7 +995,7 @@
 
 
         function playPPT(html) {
-            $("#" + pptIframeName).show().attr("src", html + "?v=1").css({ 'z-index': 1 });
+            $("#" + pptIframeName).show().attr("src", html + "?v=1").css({'z-index': 1});
             $('#' + showTuiPing).hide();
         }
 
@@ -1043,12 +1045,12 @@
 
         switch ($(li).attr('ref')) {
             case 'panleBtn':
-                $('.activity .public').css({ display: 'none' });
-                $('.activity .panle').css({ display: 'block' });
+                $('.activity .public').css({display: 'none'});
+                $('.activity .panle').css({display: 'block'});
                 break;
             case 'publicBtn':
-                $('.activity .panle').css({ display: 'none' });
-                $('.activity .public').css({ display: 'block' });
+                $('.activity .panle').css({display: 'none'});
+                $('.activity .public').css({display: 'block'});
                 break;
 
         }
@@ -1307,7 +1309,7 @@
                     //
                     let zindex = index++;
 
-                    $(item.el).css({ top: topRef, left: leftRef, zIndex: zindex });
+                    $(item.el).css({top: topRef, left: leftRef, zIndex: zindex});
                 }
 
             })
@@ -1589,7 +1591,7 @@ var phone = {
     },
 
     openNewPage(args) {
-        let obj = { mode: 'teachingAdmin', url: args.url };
+        let obj = {mode: 'teachingAdmin', url: args.url};
         LP.Start(obj);
     },
 
@@ -1622,7 +1624,7 @@ var phone = {
 
     playVideoJSON(jsonObject) {
         var obj = eval('(' + jsonObject + ')');
-        top.LP.Start({ url: '', title: obj.title, htmlMode: true, param: obj.liveVideos });
+        top.LP.Start({url: '', title: obj.title, htmlMode: true, param: obj.liveVideos});
     },
 
     showImage(url) {
@@ -1635,12 +1637,12 @@ var phone = {
 
     showPdf(pdfUrl) {
 
-        top.LP.Start({ url: pdfUrl, title: '' });
+        top.LP.Start({url: pdfUrl, title: ''});
     },
 
     playVideo(videoPath) {
 
-        top.LP.Start({ url: videoPath, title: '' });
+        top.LP.Start({url: videoPath, title: ''});
 
     },
 
@@ -1741,7 +1743,7 @@ function doWebService(data, listener) {
     $.ajax({
         type: "post",
         url: WEBSERVICE_URL,
-        data: { params: data },
+        data: {params: data},
         dataType: "json",
         beforeSend: function (XMLHttpRequest) {
             XMLHttpRequest.setRequestHeader("accessUser", sessionStorage.getItem("ident"));
