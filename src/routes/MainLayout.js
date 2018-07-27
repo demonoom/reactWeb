@@ -248,7 +248,7 @@ const MainLayout = React.createClass({
     playVideo(src) {
         console.log(src);
 
-        var videoPlayer = <video id="videoPlayerAr" width={320} controls={false} autoplay>
+        var videoPlayer = <video id="videoPlayerAr" minLength={320} controls={false} autoplay>
             <source type="video/mp4" src={src}/>
         </video>;
         this.setState({videoPlayModel: true, videoPlayer});
