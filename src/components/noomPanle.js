@@ -211,6 +211,14 @@
                     }
                     let obj = {mode: 'teachingAdmin', title: '', url: data.url};
                     LP.Start(obj);
+                } else if (data.method == 'openNewPageInDefault') {
+                    if (data.url.indexOf('?') == -1) {
+                        data.url += '?access_user=' + sessionStorage.getItem('ident');
+                    } else {
+                        data.url += '&access_user=' + sessionStorage.getItem('ident');
+                    }
+                    let obj = {mode: '', title: '', url: data.url};
+                    LP.Start(obj);
                 } else if (data.method == 'setPanelTitle') {
                     var title = data.title;
                     titleNoom = data.title;
