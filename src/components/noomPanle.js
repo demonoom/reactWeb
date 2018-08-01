@@ -5,6 +5,8 @@
 
 ;(function ($) {
 
+    var panelArr = []
+
 
     var littlePanle = function () {
 
@@ -112,6 +114,7 @@
     littlePanle.prototype._teachAdmin_UI_templet = function (obj) {
 
         let id = UUID(8, 16);
+        panelArr.push(id);
         this.id = id;
         this.ifrid = 'ifr' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin">
@@ -119,7 +122,7 @@
                 <h3 class="title" id="${this.ifrid}_title">${obj.title}</h3>
                     <div class="little-tilte">
                         <a class="back" id="${this.ifrid}_back"><i class="anticon anticon-left "></i></a>
-                        <a class="renovate" id="${this.ifrid}_renovate"><i>刷新</i></a>
+                        <!--<a class="renovate" id="${this.ifrid}_renovate"><i>刷新</i></a>-->
                         <a title="分享" class="share" id="${this.ifrid}_share"><i class="anticon anticon-share-alt "></i></a>
                     </div>
                 </div>
@@ -304,6 +307,12 @@
                     };
                 } else if (data.method == "finishForRefresh") {
                     document.getElementById(data.windowName + '_back').click()
+                    for (var i = 0; i < panelArr.length; i++) {
+                        if (panelArr[i] == data.windowName.substr(3, data.windowName.length - 1)) {
+                            document.querySelector('#ifr' + panelArr[i - 1]).src = document.querySelector('#ifr' + panelArr[i - 1]).src + '?finishForRefresh=finishForRefresh';
+                        }
+                    }
+
                 } else if (data.method == "playVideo") {
                     //播放视频(限一个)
                     window.__playVideo__(data.url);
@@ -319,6 +328,8 @@
 
     littlePanle.prototype.sharePanel = function () {
         //分享移动网页
+        // console.log(this.panelArr);
+        console.log(this.ifrel);
         var iframe = this.ifrel[0];
         window.__noomShareMbile__(iframe.src, titleNoom);
 
