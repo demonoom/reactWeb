@@ -85,6 +85,10 @@
 
     };
     littlePanle.prototype.closepanle = function (id) {
+
+        panelArr.splice(panelArr.length - 1, 1)
+        console.log(panelArr);
+
         if (window.liveTVWS) {
             window.liveTVWS._close();
         }
@@ -314,7 +318,6 @@
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
                 } else if (data.method == "finishForRefresh") {
-                    document.getElementById(data.windowName + '_back').click()
                     for (var i = 0; i < panelArr.length; i++) {
                         if (panelArr[i] == data.windowName.substr(3, data.windowName.length - 1)) {
                             var src = document.querySelector('#ifr' + panelArr[i - 1]).src;
@@ -325,6 +328,7 @@
                             }, 500);
                         }
                     }
+                    document.getElementById(data.windowName + '_back').click()
 
                 } else if (data.method == "playVideo") {
                     //播放视频(限一个)
