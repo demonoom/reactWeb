@@ -64,10 +64,15 @@ const UploadImgComponents = React.createClass({
                     message.error('文件格式不符合，请重新上传', 5);
                     return false;
                 }
-                if (fileType !== 'video/mp4' && fileType !== 'application/pdf' && fileType !== 'application/msword' && fileType !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation' && fileType !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && fileType !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+
+                if (fileNameArr[1] !== "mp4" && fileNameArr[1] !== "ppt" && fileNameArr[1] !== "pptx" && fileNameArr[1] !== "doc" && fileNameArr[1] !== "docx" && fileNameArr[1] !== "xlsx" && fileNameArr[1] !== "xls") {
                     message.error('文件格式不符合，请重新上传', 5);
                     return false;
                 }
+                // if (fileType !== 'video/mp4' && fileType !== 'application/pdf' && fileType !== 'application/msword' && fileType !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation' && fileType !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && fileType !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+                //     message.error('文件格式不符合，请重新上传', 5);
+                //     return false;
+                // }
 
             },
             onChange(info) {
