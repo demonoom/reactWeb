@@ -119,6 +119,7 @@
                 <h3 class="title" id="${this.ifrid}_title">${obj.title}</h3>
                     <div class="little-tilte">
                         <a class="back" id="${this.ifrid}_back"><i class="anticon anticon-left "></i></a>
+                        <a class="renovate" id="${this.ifrid}_renovate"><i>刷新</i></a>
                         <a title="分享" class="share" id="${this.ifrid}_share"><i class="anticon anticon-share-alt "></i></a>
                     </div>
                 </div>
