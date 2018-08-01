@@ -182,17 +182,30 @@ class SystemSettingGhostMenu extends React.Component {
             liArr = [];
         }
         if (_this.state.ident == 23836) {
-
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            // url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
-                            url: 'http://172.16.2.128:8091/#/ARTextbookList'
-
+                            url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
+                            // url: 'http://192.168.50.72:8091/#/ARTextbookList'
                         }, 'AR教材');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>AR教材
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
+        }
+        if (_this.state.ident == 23836) {
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords({
+                            method: 'openNewPage',
+                            url: 'http://jiaoxue.maaee.com:8091/#/ARTagList'
+                            // url: 'http://192.168.50.72:8091/#/ARTagList'
+                        }, 'AR标签');
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_VRtag.png"/>AR标签
                     </li>
                 </ul>
             </li>;
@@ -204,7 +217,6 @@ class SystemSettingGhostMenu extends React.Component {
                 method: 'openNewPage',
                 url: 'http://jiaoxue.maaee.com:8091/#/classBrandTemplateList'
             }
-
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
