@@ -4453,8 +4453,24 @@ a.color_gary_f, .color_gary_f {
 .little-layout-aside-r-show .little-tilte {
     height: 45px;
     overflow: hidden;
-    display: inline-block
+    display: inline-block;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top:0;
 
+}
+
+.little-layout-aside-r-show .little-tilte .left{
+    position: absolute;
+    left: 0;
+    top:0;
+}
+
+.little-layout-aside-r-show .little-tilte .right{
+    position: absolute;
+    right: 15px;
+    top:0;
 }
 
 .little-layout-aside-r-show h3.title {
@@ -4498,7 +4514,8 @@ a.color_gary_f, .color_gary_f {
 .little-layout-aside-r-show .zoom,
 .little-layout-aside-r-show .back,
 .little-layout-aside-r-show .forward,
-.little-layout-aside-r-show .shareLittle {
+.little-layout-aside-r-show .shareLittle,
+.little-layout-aside-r-show .renovateLittle{
     display: inline-block;
     position: absolute;
     font-weight: lighter;
@@ -4571,6 +4588,19 @@ a.color_gary_f, .color_gary_f {
 }
 
 .little-layout-aside-r-show .shareLittle:hover {
+    color: #57c5f7
+}
+
+.little-layout-aside-r-show .renovateLittle{
+    right: 93px;
+    top: 9px;
+}
+
+.little-layout-aside-r-show .renovateLittle i {
+    font-size: 20px;
+}
+
+.little-layout-aside-r-show .renovateLittle:hover {
     color: #57c5f7
 }
 
@@ -5396,10 +5426,12 @@ div.btn1 {
     font-weight: normal;
 }
 
-.share i {
+.share i,.renovate i {
     font-size: 18px;
     color: #0078e4;
     font-weight: normal;
+    margin-left: 5px;
+    line-height: 45px;
 }
 
 .yiqun .ant-table-content {

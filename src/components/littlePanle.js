@@ -330,8 +330,8 @@
                 <div class="header draggable">
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
-                        <a title="分享" class="shareLittle"><i class="iconfont">&#xe624;</i></a>
-                        <a title="刷新" class="renovateLittle"><i class="iconfont">&#xe624;</i></a>
+                     <a title="分享" class="shareLittle"><i class="iconfont">&#xe624;</i></a>
+                        <a title="刷新" class="renovateLittle"><i class="iconfont">&#xe67a;</i></a>
                         <a title="关闭" class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                         <a title="全屏" class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a> 
                     </div>
