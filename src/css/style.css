@@ -4593,7 +4593,7 @@ a.color_gary_f, .color_gary_f {
 
 .little-layout-aside-r-show .renovateLittle{
     right: 93px;
-    top: 9px;
+    /*top: 9px;*/
 }
 
 .little-layout-aside-r-show .renovateLittle i {
