@@ -45,6 +45,7 @@ import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 import SendPicModel from '../components/antGroup/SendPicModel'
 import {isEmpty, showLargeImg, setLocalLanaguage, getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
 import BindCoordinates from '../components/BindCoordinates/BindCoordinates'
+import UploadMp3Modal from '../components/UploadMp3Modal'
 //国际化
 import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
@@ -132,6 +133,8 @@ const MainLayout = React.createClass({
             inputVisible: false,
             videoPlayModel: false,
             inputValue: '',
+            selectMp3ModalIsShow: false,
+            selectMp3CallbackId: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -192,6 +195,7 @@ const MainLayout = React.createClass({
         window.__noomShareMbile__ = this.noomShareMbile;
         window.__bindCoordinates__ = this.bindCoordinates;
         window.__playVideo__ = this.playVideo;
+        window.__selectMp3__ = this.selectMp3;
     },
 
     componentWillMount() {
@@ -243,6 +247,16 @@ const MainLayout = React.createClass({
      */
     bindCoordinates() {
         this.refs.bindCoordinatesModel.changeConfirmModalVisible(true)
+    },
+
+    selectMp3(callbackId) {
+        //控制上传组件的显示与隐藏
+        this.setState({selectMp3ModalIsShow: true});
+        this.setState({selectMp3CallbackId: callbackId});
+    },
+
+    closeSelectMp3Model() {
+        this.setState({selectMp3ModalIsShow: false});
     },
 
     playVideo(src) {
@@ -3298,6 +3312,13 @@ const MainLayout = React.createClass({
                         <BindCoordinates
                             ref='bindCoordinatesModel'
                         />
+
+                        <UploadMp3Modal
+                            isShow={this.state.selectMp3ModalIsShow}
+                            closeDingModel={this.closeSelectMp3Model}
+                            callbackId={this.state.selectMp3CallbackId}
+                        />
+
                     </div>
                 </IntlProvider>
             </LocaleProvider>

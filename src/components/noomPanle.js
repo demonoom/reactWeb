@@ -303,6 +303,19 @@
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
+                } else if (data.method == "selectMp3") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__selectMp3__(data.callbackId);
+
+                    window.__noomUpLoad__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
                 } else if (data.method == "selectAttech") {
                     //调用选择图片插件，获取图片的路径存入paths
                     window.__calmAttech__(data.callbackId);
