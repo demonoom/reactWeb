@@ -5,6 +5,8 @@
 
 ;(function ($) {
 
+    var panelArr = []
+
 
     var littlePanle = function () {
 
@@ -83,6 +85,10 @@
 
     };
     littlePanle.prototype.closepanle = function (id) {
+
+        panelArr.splice(panelArr.length - 1, 1)
+        console.log(panelArr);
+
         if (window.liveTVWS) {
             window.liveTVWS._close();
         }
@@ -103,6 +109,7 @@
             $('#ifr' + id).removeAttr('src');
         }
         utilsCommon.unbind(document, 'paste', onPasteFunction);
+        $('#ifr' + id).removeAttr('src');
     };
 
     var isAddedListener = false;
@@ -112,6 +119,7 @@
     littlePanle.prototype._teachAdmin_UI_templet = function (obj) {
 
         let id = UUID(8, 16);
+        panelArr.push(id);
         this.id = id;
         this.ifrid = 'ifr' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin">
@@ -119,6 +127,7 @@
                 <h3 class="title" id="${this.ifrid}_title">${obj.title}</h3>
                     <div class="little-tilte">
                         <a class="back" id="${this.ifrid}_back"><i class="anticon anticon-left "></i></a>
+                        <a title="刷新" class="renovate" id="${this.ifrid}_renovate"><i>刷新</i></a>
                         <a title="分享" class="share" id="${this.ifrid}_share"><i class="anticon anticon-share-alt "></i></a>
                     </div>
                 </div>
@@ -172,6 +181,7 @@
         }
 
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+        $(this.el).find('.renovate').on('click', this.renovate.bind(this, this.id));
         $(this.el).find('.share').on('click', this.sharePanel.bind(this, this.id));
         this.ifrel = $('#' + this.ifrid);
 
@@ -302,7 +312,18 @@
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
                 } else if (data.method == "finishForRefresh") {
+                    for (var i = 0; i < panelArr.length; i++) {
+                        if (panelArr[i] == data.windowName.substr(3, data.windowName.length - 1)) {
+                            var src = document.querySelector('#ifr' + panelArr[i - 1]).src;
+                            var panelId = panelArr[i - 1];
+                            $('#ifr' + panelId).attr("src", "");
+                            setTimeout(function () {
+                                $('#ifr' + panelId).attr("src", src);
+                            }, 500);
+                        }
+                    }
                     document.getElementById(data.windowName + '_back').click()
+
                 } else if (data.method == "playVideo") {
                     //播放视频(限一个)
                     window.__playVideo__(data.url);
@@ -318,10 +339,20 @@
 
     littlePanle.prototype.sharePanel = function () {
         //分享移动网页
+        // console.log(this.panelArr);
+        console.log(this.ifrel);
         var iframe = this.ifrel[0];
         window.__noomShareMbile__(iframe.src, titleNoom);
 
     };
+
+    littlePanle.prototype.renovate = function (id) {
+        var src = $('#ifr' + id).attr("src");
+        $('#ifr' + id).attr("src", "");
+        setTimeout(function () {
+            $('#ifr' + id).attr("src", src);
+        }, 300);
+    }
 
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid) {
         // console.log(this);
