@@ -344,6 +344,9 @@
                 } else if (data.method == "playVideo") {
                     //播放视频(限一个)
                     window.__playVideo__(data.url);
+                } else if (data.method == "playAudio") {
+                    //播放音频(限一个)
+                    window.__playAudio__(data.url);
                 }
             });
             isAddedListener = true;

@@ -195,6 +195,7 @@ const MainLayout = React.createClass({
         window.__noomShareMbile__ = this.noomShareMbile;
         window.__bindCoordinates__ = this.bindCoordinates;
         window.__playVideo__ = this.playVideo;
+        window.__playAudio__ = this.playAudio;
         window.__selectMp3__ = this.selectMp3;
     },
 
@@ -269,6 +270,25 @@ const MainLayout = React.createClass({
         setTimeout(function () {
             document.getElementById('videoPlayerAr').play();
         }, 300)
+    },
+
+    playAudio(src) {
+
+        var audioPlayer = <audio id="audioPlayerAr" controls="controls" autoplay>
+            <source src={src}/>
+        </audio>;
+
+        this.setState({audioPlayModel: true, audioPlayer});
+        setTimeout(function () {
+            document.getElementById('audioPlayerAr').play();
+        }, 300)
+
+    },
+
+    audioPlayerModalHandleCancel() {
+        var audioPlayer = '';
+        this.setState({audioPlayModel: false, audioPlayer});
+        document.getElementById('audioPlayerAr').pause();
     },
 
     videoPlayerModalHandleCancel() {
@@ -3307,6 +3327,21 @@ const MainLayout = React.createClass({
                                ]}
                         >
                             {this.state.videoPlayer}
+                        </Modal>
+
+                        <Modal title={null}
+                               visible={this.state.audioPlayModel}
+                               transitionName=""  //禁用modal的动画效果
+                               maskClosable={false} //设置不允许点击蒙层关闭
+                               onCancel={this.audioPlayerModalHandleCancel}
+                               footer={null}
+                               className='noomVideoPlayer'
+                               footer={[
+                                   <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                           onClick={this.audioPlayerModalHandleCancel}>关闭</button>
+                               ]}
+                        >
+                            {this.state.audioPlayer}
                         </Modal>
 
                         <BindCoordinates
