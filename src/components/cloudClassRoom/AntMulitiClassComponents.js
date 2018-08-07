@@ -870,7 +870,7 @@ const AntMulitiClassComponents = React.createClass({
      * 课程直播
      * @param liveObj（直播对象，普通课程为当前课程，单节课为选定的章节）
      */
-    openLive(liveObj, liveType) {
+    openLive(liveObj, liveType,courseName) {
         //0:课程   1 章节  targetType
         var originTime = liveObj.liveTime;
         //获取当前时间 时间戳
@@ -928,6 +928,7 @@ const AntMulitiClassComponents = React.createClass({
                     // var regExp = new RegExp(specialChar);
                     title = title.replace(specialChar, '');
                 })
+                title = courseName+title;
                 // requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title+"/"+localLanguage;
                 requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title + "?title=" + title;
                 //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
@@ -962,6 +963,7 @@ const AntMulitiClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var classObj = ret.response;
+                var courseName = classObj.courseName;
                 var videosArray = classObj.videos;
                 var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
                 var userId = cloudClassRoomUser.colUid;
@@ -981,7 +983,7 @@ const AntMulitiClassComponents = React.createClass({
                                 if(video.videoStatus != "3"){
                                     playButton = <Button icon="play-circle-o" className="exam-particulars_title"
                                                          title='直播'
-                                                         onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
+                                                         onClick={_this.openLive.bind(_this, video, "mulitiClass",courseName)}></Button>;
                                 }else{
                                     playButton = <img title="表情回顾" src={require('../images/emotionAnalysis.png')}
                                                       onClick={_this.reviewEmotions.bind(_this, video, "mulitiClass")}/>;
@@ -1050,7 +1052,7 @@ const AntMulitiClassComponents = React.createClass({
                             if (video.userID == userId) {
                                 if(video.videoStatus != "3"){
                                     playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播"
-                                                         onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
+                                                         onClick={_this.openLive.bind(_this, video, "mulitiClass",courseName)}></Button>;
                                 }else{
                                     playButton = <img title="表情回顾"
                                                       src={require('../images/emotionAnalysis.png')}
