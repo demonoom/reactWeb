@@ -8,6 +8,7 @@ import UpLoadModal from './unLoadModal';
 import UpLoadImgModal from "./unLoadImgModal";
 import UploadAttechModal from "./uploadAttechModal";
 import UploadVideoModal from "./UploadVideoModal"
+import {AR_TAG_ALLOWED,AR_UPLOAD_ALLOWED} from "../../utils/Const";
 import {showNoomLargeImg} from '../../utils/utils'
 import {showLargeImg} from '../../utils/utils'
 import {flattenDiagnosticMessageText} from 'typescript';
@@ -181,7 +182,7 @@ class SystemSettingGhostMenu extends React.Component {
             arr.push(uls);
             liArr = [];
         }
-        if (_this.state.ident == 23836) {
+        if(AR_UPLOAD_ALLOWED.indexOf(_this.state.ident) != -1){
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
@@ -196,7 +197,7 @@ class SystemSettingGhostMenu extends React.Component {
             </li>;
             liArr.push(newLi);
         }
-        if (_this.state.ident == 23836) {
+        if(AR_TAG_ALLOWED.indexOf(_this.state.ident) != -1){
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {

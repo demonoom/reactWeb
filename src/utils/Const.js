@@ -36,6 +36,12 @@ export const ANT_CLOUD_FILTER_OPTION = 17;
 export const ANT_CLOUD_FILTER_OPTION_IMG = -17;
 //音频题目权限开放账号集合，其中23836和54208为系统测试用户账号
 export const AUDIO_SUBJECT_ALLOWED = ["134770", "134755", "135359", "135872", "135001", "135302", "135303", "135304", "135244", "135167", "23836", "54208"];
+//ar标签权限 马小康权限：ar标签 ar上传
+export const AR_TAG_ALLOWED = ["28905", "23836", "54208"];
+//ar上传权限 其余人：ar上传
+export const AR_UPLOAD_ALLOWED = ["67951", "67940", "67985", "67938", "67937", "64435", "48079", "32527", "31951",
+                    "9324", "31920", "31873", "31750", "28912", "28905", "28904", "22366", "22354", "4103", "5221",
+                    "12063", "24761", "126013", "4298", "32526", "23836", "54208"];
 export const QUESTION_DETAIL_URL = "http://jiaoxue.maaee.com:8091/#/questionDetil";
 export const LOCAL_CLASS_ROOM_URL = IS_DEBUG ? "http://localhost:8090/#/localClassRoom" : "http://jiaoxue.maaee.com:8989/#/localClassRoom";
 var baseEmotionMap = new Map();
