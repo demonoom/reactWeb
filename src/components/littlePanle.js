@@ -330,7 +330,8 @@
                 <div class="header draggable">
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
-                        <a title="分享" class="shareLittle"><i class="iconfont">&#xe624;</i></a>
+                     <a title="分享" class="shareLittle"><i class="iconfont">&#xe624;</i></a>
+                        <a title="刷新" class="renovateLittle"><i class="iconfont">&#xe67a;</i></a>
                         <a title="关闭" class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                         <a title="全屏" class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a> 
                     </div>
@@ -350,6 +351,7 @@
         this.el = $('#' + objtemplet.id);
         $(this.el).drag();
         $(this.el).find('.shareLittle').on('click', this.sharePanel.bind(this, this.id));
+        $(this.el).find('.renovateLittle').on('click', this.renovatePanel.bind(this, this.id));
         $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.zoom').on('click', this.zoomview.bind(this, this.id));
         $(this.el).find('.back').on('click', this.historyControler.bind(this, this.id, -1));
@@ -1170,6 +1172,14 @@
         //分享移动网页
         window.__noomShareMbile__(globalSrc, globalTitle);
     };
+
+    littlePanle.prototype.renovatePanel = function (id) {
+        var src = $('#ifr' + id).attr("src");
+        $('#ifr' + id).attr("src", "");
+        setTimeout(function () {
+            $('#ifr' + id).attr("src", src);
+        }, 300);
+    }
 
 
     littlePanle.prototype.GetLP = function (obj, oldArray) {

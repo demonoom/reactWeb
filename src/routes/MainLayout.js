@@ -45,6 +45,7 @@ import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 import SendPicModel from '../components/antGroup/SendPicModel'
 import {isEmpty, showLargeImg, setLocalLanaguage, getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
 import BindCoordinates from '../components/BindCoordinates/BindCoordinates'
+import UploadMp3Modal from '../components/UploadMp3Modal'
 //国际化
 import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
@@ -132,6 +133,8 @@ const MainLayout = React.createClass({
             inputVisible: false,
             videoPlayModel: false,
             inputValue: '',
+            selectMp3ModalIsShow: false,
+            selectMp3CallbackId: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -192,6 +195,8 @@ const MainLayout = React.createClass({
         window.__noomShareMbile__ = this.noomShareMbile;
         window.__bindCoordinates__ = this.bindCoordinates;
         window.__playVideo__ = this.playVideo;
+        window.__playAudio__ = this.playAudio;
+        window.__selectMp3__ = this.selectMp3;
     },
 
     componentWillMount() {
@@ -245,6 +250,16 @@ const MainLayout = React.createClass({
         this.refs.bindCoordinatesModel.changeConfirmModalVisible(true)
     },
 
+    selectMp3(callbackId) {
+        //控制上传组件的显示与隐藏
+        this.setState({selectMp3ModalIsShow: true});
+        this.setState({selectMp3CallbackId: callbackId});
+    },
+
+    closeSelectMp3Model() {
+        this.setState({selectMp3ModalIsShow: false});
+    },
+
     playVideo(src) {
         console.log(src);
 
@@ -255,6 +270,25 @@ const MainLayout = React.createClass({
         setTimeout(function () {
             document.getElementById('videoPlayerAr').play();
         }, 300)
+    },
+
+    playAudio(src) {
+
+        var audioPlayer = <audio id="audioPlayerAr" controls="controls" autoplay>
+            <source src={src}/>
+        </audio>;
+
+        this.setState({audioPlayModel: true, audioPlayer});
+        setTimeout(function () {
+            document.getElementById('audioPlayerAr').play();
+        }, 300)
+
+    },
+
+    audioPlayerModalHandleCancel() {
+        var audioPlayer = '';
+        this.setState({audioPlayModel: false, audioPlayer});
+        document.getElementById('audioPlayerAr').pause();
     },
 
     videoPlayerModalHandleCancel() {
@@ -3295,9 +3329,31 @@ const MainLayout = React.createClass({
                             {this.state.videoPlayer}
                         </Modal>
 
+                        <Modal title={null}
+                               visible={this.state.audioPlayModel}
+                               transitionName=""  //禁用modal的动画效果
+                               maskClosable={false} //设置不允许点击蒙层关闭
+                               onCancel={this.audioPlayerModalHandleCancel}
+                               footer={null}
+                               className='noomVideoPlayer'
+                               footer={[
+                                   <button type="ghost" className="login-form-button examination_btn_white calmCancle"
+                                           onClick={this.audioPlayerModalHandleCancel}>关闭</button>
+                               ]}
+                        >
+                            {this.state.audioPlayer}
+                        </Modal>
+
                         <BindCoordinates
                             ref='bindCoordinatesModel'
                         />
+
+                        <UploadMp3Modal
+                            isShow={this.state.selectMp3ModalIsShow}
+                            closeDingModel={this.closeSelectMp3Model}
+                            callbackId={this.state.selectMp3CallbackId}
+                        />
+
                     </div>
                 </IntlProvider>
             </LocaleProvider>

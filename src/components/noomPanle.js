@@ -110,13 +110,6 @@
         }
         utilsCommon.unbind(document, 'paste', onPasteFunction);
         $('#ifr' + id).removeAttr('src');
-
-        // var src = $('#ifr' + id).attr("src");
-        // $('#ifr' + id).attr("src","");
-        // setTimeout(function () {
-        //     $('#ifr' + id).attr("src",src);
-        // },1000);
-
     };
 
     var isAddedListener = false;
@@ -133,9 +126,13 @@
                 <div class="header draggable">
                 <h3 class="title" id="${this.ifrid}_title">${obj.title}</h3>
                     <div class="little-tilte">
-                        <a class="back" id="${this.ifrid}_back"><i class="anticon anticon-left "></i></a>
-                        <!--<a class="renovate" id="${this.ifrid}_renovate"><i>刷新</i></a>-->
-                        <a title="分享" class="share" id="${this.ifrid}_share"><i class="anticon anticon-share-alt "></i></a>
+                        <div class="left">
+                             <a class="back" id="${this.ifrid}_back"><i class="anticon anticon-left "></i></a>
+                        </div>
+                        <div class="right">
+                            <a title="刷新" class="renovate" id="${this.ifrid}_renovate"><i class="anticon anticon-reload "></i></a>
+                            <a title="分享" class="share" id="${this.ifrid}_share"><i class="anticon anticon-share-alt "></i></a>
+                        </div>
                     </div>
                 </div>
                 <div class="content">
@@ -188,6 +185,7 @@
         }
 
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+        $(this.el).find('.renovate').on('click', this.renovate.bind(this, this.id));
         $(this.el).find('.share').on('click', this.sharePanel.bind(this, this.id));
         this.ifrel = $('#' + this.ifrid);
 
@@ -305,6 +303,19 @@
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
+                } else if (data.method == "selectMp3") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__selectMp3__(data.callbackId);
+
+                    window.__noomUpLoad__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
                 } else if (data.method == "selectAttech") {
                     //调用选择图片插件，获取图片的路径存入paths
                     window.__calmAttech__(data.callbackId);
@@ -333,6 +344,9 @@
                 } else if (data.method == "playVideo") {
                     //播放视频(限一个)
                     window.__playVideo__(data.url);
+                } else if (data.method == "playAudio") {
+                    //播放音频(限一个)
+                    window.__playAudio__(data.url);
                 }
             });
             isAddedListener = true;
@@ -351,6 +365,14 @@
         window.__noomShareMbile__(iframe.src, titleNoom);
 
     };
+
+    littlePanle.prototype.renovate = function (id) {
+        var src = $('#ifr' + id).attr("src");
+        $('#ifr' + id).attr("src", "");
+        setTimeout(function () {
+            $('#ifr' + id).attr("src", src);
+        }, 300);
+    }
 
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid) {
         // console.log(this);
