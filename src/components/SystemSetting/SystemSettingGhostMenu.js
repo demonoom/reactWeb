@@ -212,7 +212,7 @@ class SystemSettingGhostMenu extends React.Component {
             liArr.push(newLi);
         }
 
-        /*if (_this.state.ident == 23836) {
+        if (_this.state.ident == 23836) {
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
@@ -226,7 +226,7 @@ class SystemSettingGhostMenu extends React.Component {
                 </ul>
             </li>;
             liArr.push(newLi);
-        }*/
+        }
 
         if (_this.state.ident == 23836) {
             // 皮肤管理
