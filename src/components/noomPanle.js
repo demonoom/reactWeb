@@ -6,6 +6,7 @@
 ;(function ($) {
 
     var panelArr = []
+    var renovateFlag = true
 
 
     var littlePanle = function () {
@@ -367,11 +368,16 @@
     };
 
     littlePanle.prototype.renovate = function (id) {
-        var src = $('#ifr' + id).attr("src");
-        $('#ifr' + id).attr("src", "");
-        setTimeout(function () {
-            $('#ifr' + id).attr("src", src);
-        }, 300);
+
+        if (renovateFlag) {
+            renovateFlag = false
+            var src = $('#ifr' + id).attr("src");
+            $('#ifr' + id).attr("src", "");
+            setTimeout(function () {
+                $('#ifr' + id).attr("src", src);
+                renovateFlag = true
+            }, 300);
+        }
     }
 
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid) {
