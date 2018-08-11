@@ -245,6 +245,26 @@ class SystemSettingGhostMenu extends React.Component {
             liArr.push(newLi);
         }
 
+        if (_this.state.ident == 23836) {
+            // 皮肤管理
+            var pwd = sessionStorage.getItem("pd");
+            var newObj = {
+                method: 'openNewPage',
+                url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList'+pwd,
+                // url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd='+pwd
+            }
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords(newObj, '上传视频');
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/v2.png"/>上传视频
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
+        }
+
+
 
         //手动添加的测试菜单---开始
         var flowUl = <li className="multi">
@@ -340,7 +360,15 @@ class SystemSettingGhostMenu extends React.Component {
 
     // teachingAdmin panel
     showpanel(event, urls, name) {
-        urls = urls += "?access_user=" + sessionStorage.getItem("ident");
+        // urls = urls += "?access_user=" + sessionStorage.getItem("ident");
+
+        if (urls.indexOf('?') == -1) {
+            urls = urls += "?access_user=" + sessionStorage.getItem("ident");
+        } else {
+            urls = urls += "&access_user=" + sessionStorage.getItem("ident");
+        }
+
+
         this.onMenu(event);
 
         let param = {
