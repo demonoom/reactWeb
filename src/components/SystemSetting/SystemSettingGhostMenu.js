@@ -251,7 +251,7 @@ class SystemSettingGhostMenu extends React.Component {
             var pwd = sessionStorage.getItem("pd");
             var newObj = {
                 method: 'openNewPage',
-                url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList'+pwd,
+                url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
                 // url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd='+pwd
             }
             var newLi = <li className="multi">
