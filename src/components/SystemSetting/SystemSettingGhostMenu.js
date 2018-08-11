@@ -219,8 +219,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            url: 'http://jiaoxue.maaee.com:8094/#/uploadMusicList'
-                            // url: 'http://192.168.50.72:8091/#/uploadMusicList'
+                            // url: 'http://jiaoxue.maaee.com:8094/#/uploadMusicList'
+                            url: 'http://192.168.50.72:8091/#/uploadMusicList'
                         }, '音乐上传');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>音乐上传
                     </li>
@@ -251,8 +251,8 @@ class SystemSettingGhostMenu extends React.Component {
             var pwd = sessionStorage.getItem("pd");
             var newObj = {
                 method: 'openNewPage',
-                url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
-                // url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd='+pwd
+                // url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
+                url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd='+pwd
             }
             var newLi = <li className="multi">
                 <ul className="second">
