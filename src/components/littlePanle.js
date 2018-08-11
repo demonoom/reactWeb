@@ -7,6 +7,8 @@
     var globalSrc,
         globalTitle;
 
+    var renovateFlag = true
+
     var littlePanle = function () {
 
         this.param = {
@@ -1174,11 +1176,16 @@
     };
 
     littlePanle.prototype.renovatePanel = function (id) {
-        var src = $('#ifr' + id).attr("src");
-        $('#ifr' + id).attr("src", "");
-        setTimeout(function () {
-            $('#ifr' + id).attr("src", src);
-        }, 300);
+
+        if (renovateFlag) {
+            renovateFlag = false
+            var src = $('#ifr' + id).attr("src");
+            $('#ifr' + id).attr("src", "");
+            setTimeout(function () {
+                $('#ifr' + id).attr("src", src);
+                renovateFlag = true
+            }, 300);
+        }
     }
 
 

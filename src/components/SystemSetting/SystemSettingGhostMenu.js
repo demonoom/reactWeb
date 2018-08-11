@@ -8,6 +8,7 @@ import UpLoadModal from './unLoadModal';
 import UpLoadImgModal from "./unLoadImgModal";
 import UploadAttechModal from "./uploadAttechModal";
 import UploadVideoModal from "./UploadVideoModal"
+import {AR_TAG_ALLOWED,AR_UPLOAD_ALLOWED} from "../../utils/Const";
 import {showNoomLargeImg} from '../../utils/utils'
 import {showLargeImg} from '../../utils/utils'
 import {flattenDiagnosticMessageText} from 'typescript';
@@ -181,7 +182,7 @@ class SystemSettingGhostMenu extends React.Component {
             arr.push(uls);
             liArr = [];
         }
-        if (_this.state.ident == 23836) {
+        if(AR_UPLOAD_ALLOWED.indexOf(_this.state.ident) != -1){
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
@@ -196,7 +197,7 @@ class SystemSettingGhostMenu extends React.Component {
             </li>;
             liArr.push(newLi);
         }
-        if (_this.state.ident == 23836) {
+        if(AR_TAG_ALLOWED.indexOf(_this.state.ident) != -1){
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
@@ -212,21 +213,21 @@ class SystemSettingGhostMenu extends React.Component {
             liArr.push(newLi);
         }
 
-        /*if (_this.state.ident == 23836) {
+        if (_this.state.ident == 23836) {
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            // url: 'http://jiaoxue.maaee.com:8091/#/uploadMusicList'
-                            url: 'http://192.168.50.29:8091/#/uploadMusicList'
+                            url: 'http://jiaoxue.maaee.com:8094/#/uploadMusicList'
+                            // url: 'http://192.168.50.72:8091/#/uploadMusicList'
                         }, '音乐上传');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>音乐上传
                     </li>
                 </ul>
             </li>;
             liArr.push(newLi);
-        }*/
+        }
 
         if (_this.state.ident == 23836) {
             // 皮肤管理
