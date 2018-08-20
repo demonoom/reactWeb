@@ -346,3 +346,177 @@ into run
 2018-2-2 15:50:39:into run
 2018-2-2 16:8:14:into run
 2018-2-2 16:8:48:into run
+
+> @ start /home/john/webstormProjects/LittleAntWeb
+> dora --plugins "proxy?port=8090&watchDirs=./mock,webpack"
+
+          proxy: load rule from proxy.config.js
+(node:10680) [DEP0016] DeprecationWarning: 'GLOBAL' is deprecated, use 'global'
+          proxy: listened on 8090
+[babel-plugin-dva-hmr][INFO] got routerPath ./router
+[BABEL] Note: The code generator has deoptimised the styling of "/home/john/webstormProjects/LittleAntWeb/src/routes/MainLayout.js" as it exceeds the max of "100KB".
+[BABEL] Note: The code generator has deoptimised the styling of "/home/john/webstormProjects/LittleAntWeb/src/components/antGroup/AntGroupTabComponents.js" as it exceeds the max of "100KB".
+[BABEL] Note: The code generator has deoptimised the styling of "/home/john/webstormProjects/LittleAntWeb/src/components/antGroup/PersonCenterComponents.js" as it exceeds the max of "100KB".
+[BABEL] Note: The code generator has deoptimised the styling of "/home/john/webstormProjects/LittleAntWeb/src/components/antCloud/AntCloudTableComponents.js" as it exceeds the max of "100KB".
+
+webpack: bundle build is now finished.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+(node:10680) [DEP0013] DeprecationWarning: Calling an asynchronous function without callback is deprecated.
+Killed
+npm ERR! code ELIFECYCLE
+npm ERR! errno 137
+npm ERR! @ start: `dora --plugins "proxy?port=8090&watchDirs=./mock,webpack"`
+npm ERR! Exit status 137
+npm ERR! 
+npm ERR! Failed at the @ start script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/john/.npm/_logs/2018-08-20T02_43_27_008Z-debug.log
+webrtc_to_rtmp_server stopped unexpected, restarting
+
+> @ start /home/john/webstormProjects/LittleAntWeb
+> dora --plugins "proxy?port=8090&watchDirs=./mock,webpack"
+
+          proxy: load rule from proxy.config.js
+(node:11337) [DEP0016] DeprecationWarning: 'GLOBAL' is deprecated, use 'global'
+          proxy: listened on 8090
+Caught exception: Error: listen EADDRINUSE :::8090
+    at Object._errnoException (util.js:1021:11)
+    at _exceptionWithHostPort (util.js:1043:20)
+    at Server.setupListenHandle [as _listen2] (net.js:1344:14)
+    at listenInCluster (net.js:1385:12)
+    at Server.listen (net.js:1469:7)
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.3.8.4@dora-anyproxy/proxy.js:125:38
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:607:21
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:246:17
+    at iterate (/home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:146:13)
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:157:25
+AnyProxy is about to exit with code: 0
+webrtc_to_rtmp_server stopped unexpected, restarting
+
+> @ start /home/john/webstormProjects/LittleAntWeb
+> dora --plugins "proxy?port=8090&watchDirs=./mock,webpack"
+
+          proxy: load rule from proxy.config.js
+(node:11367) [DEP0016] DeprecationWarning: 'GLOBAL' is deprecated, use 'global'
+          proxy: listened on 8090
+Caught exception: Error: listen EADDRINUSE :::8090
+    at Object._errnoException (util.js:1021:11)
+    at _exceptionWithHostPort (util.js:1043:20)
+    at Server.setupListenHandle [as _listen2] (net.js:1344:14)
+    at listenInCluster (net.js:1385:12)
+    at Server.listen (net.js:1469:7)
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.3.8.4@dora-anyproxy/proxy.js:125:38
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:607:21
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:246:17
+    at iterate (/home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:146:13)
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:157:25
+AnyProxy is about to exit with code: 0
+webrtc_to_rtmp_server stopped unexpected, restarting
+
+> @ start /home/john/webstormProjects/LittleAntWeb
+> dora --plugins "proxy?port=8090&watchDirs=./mock,webpack"
+
+          proxy: load rule from proxy.config.js
+(node:11397) [DEP0016] DeprecationWarning: 'GLOBAL' is deprecated, use 'global'
+          proxy: listened on 8090
+Caught exception: Error: listen EADDRINUSE :::8090
+    at Object._errnoException (util.js:1021:11)
+    at _exceptionWithHostPort (util.js:1043:20)
+    at Server.setupListenHandle [as _listen2] (net.js:1344:14)
+    at listenInCluster (net.js:1385:12)
+    at Server.listen (net.js:1469:7)
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.3.8.4@dora-anyproxy/proxy.js:125:38
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:607:21
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:246:17
+    at iterate (/home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:146:13)
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:157:25
+AnyProxy is about to exit with code: 0
+webrtc_to_rtmp_server stopped unexpected, restarting
+
+> @ start /home/john/webstormProjects/LittleAntWeb
+> dora --plugins "proxy?port=8090&watchDirs=./mock,webpack"
+
+          proxy: load rule from proxy.config.js
+(node:11428) [DEP0016] DeprecationWarning: 'GLOBAL' is deprecated, use 'global'
+          proxy: listened on 8090
+Caught exception: Error: listen EADDRINUSE :::8090
+    at Object._errnoException (util.js:1021:11)
+    at _exceptionWithHostPort (util.js:1043:20)
+    at Server.setupListenHandle [as _listen2] (net.js:1344:14)
+    at listenInCluster (net.js:1385:12)
+    at Server.listen (net.js:1469:7)
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.3.8.4@dora-anyproxy/proxy.js:125:38
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:607:21
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:246:17
+    at iterate (/home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:146:13)
+    at /home/john/webstormProjects/LittleAntWeb/node_modules/.0.9.2@async/lib/async.js:157:25
+AnyProxy is about to exit with code: 0
+webrtc_to_rtmp_server stopped unexpected, restarting
+
+> @ start /home/john/webstormProjects/LittleAntWeb
+> dora --plugins "proxy?port=8090&watchDirs=./mock,webpack"
+
+          proxy: load rule from proxy.config.js
+(node:11458) [DEP0016] DeprecationWarning: 'GLOBAL' is deprecated, use 'global'
+          proxy: listened on 8090
+webrtc_to_rtmp_server stopped unexpected, restarting
+
+> @ start /home/john/webstormProjects/LittleAntWeb
+> dora --plugins "proxy?port=8090&watchDirs=./mock,webpack"
+
+          proxy: load rule from proxy.config.js
+(node:11499) [DEP0016] DeprecationWarning: 'GLOBAL' is deprecated, use 'global'
+          proxy: listened on 8090
+webrtc_to_rtmp_server stopped unexpected, restarting
