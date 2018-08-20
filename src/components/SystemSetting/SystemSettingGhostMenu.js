@@ -199,21 +199,21 @@ class SystemSettingGhostMenu extends React.Component {
             liArr = [];
         }
 
-        if (_this.state.ident == 23836) {
-            var newLi = <li className="multi">
-                <ul className="second">
-                    <li onClick={event => {
-                        _this.checkWords({
-                            method: 'openNewPage',
-                            // url: 'http://jiaoxue.maaee.com:8091/#/classCardHomePageDoor',
-                            url: 'http://192.168.50.72:8091/#/classCardHomePageDoor'
-                        }, '班牌编辑');
-                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />班牌编辑
-                    </li>
-                </ul>
-            </li>;
-            liArr.push(newLi);
-        }
+        // if (_this.state.ident == 23836) {
+        //     var newLi = <li className="multi">
+        //         <ul className="second">
+        //             <li onClick={event => {
+        //                 _this.checkWords({
+        //                     method: 'openNewPage',
+        //                     // url: 'http://jiaoxue.maaee.com:8091/#/classCardHomePageDoor',
+        //                     url: 'http://192.168.50.72:8091/#/classCardHomePageDoor'
+        //                 }, '班牌编辑');
+        //             }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />班牌编辑
+        //             </li>
+        //         </ul>
+        //     </li>;
+        //     liArr.push(newLi);
+        // }
         if (AR_UPLOAD_ALLOWED.indexOf(_this.state.ident) != -1) {
             var newLi = <li className="multi">
                 <ul className="second">
@@ -262,6 +262,21 @@ class SystemSettingGhostMenu extends React.Component {
         }
 
         if (_this.state.ident == 23836) {
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords({
+                            method: 'openNewPage',
+                            url: 'http://192.168.50.29:8094/#/authorityManagement'
+                        }, '权限管理');
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>权限管理
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
+        }
+
+        if (_this.state.ident == 23836) {
             // 皮肤管理
             var newObj = {
                 method: 'openNewPage',
@@ -296,7 +311,6 @@ class SystemSettingGhostMenu extends React.Component {
             </li>;
             liArr.push(newLi);
         }
-
 
 
         //手动添加的测试菜单---开始

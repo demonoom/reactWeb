@@ -4,7 +4,7 @@ const child_process = require('child_process');
 //子进程重启
 var cat = child_process.spawn('cat');
 const execOptions = {
-    maxBuffer: 5000 * 1024,
+    maxBuffer: 500 * 1024,
 };
 function getCurrentTime() {
     var da = new Date();
