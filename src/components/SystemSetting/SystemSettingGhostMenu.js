@@ -267,9 +267,24 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            url: 'http://192.168.50.29:8094/#/authorityManagement'
-                        }, '权限管理');
-                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>权限管理
+                            url: 'http://jiaoxue.maaee.com:8094/#/authorityManagement'
+                        }, '有样权限管理');
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>有样权限管理
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
+        }
+
+        if (_this.state.ident == 23836) {
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords({
+                            method: 'openNewPage',
+                            url: 'http://jiaoxue.maaee.com:8094/#/powerAdministrate'
+                        }, '有样角色管理');
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>有样角色管理
                     </li>
                 </ul>
             </li>;
@@ -278,14 +293,13 @@ class SystemSettingGhostMenu extends React.Component {
 
         if (_this.state.ident == 23836) {
             // 皮肤管理
-            var newObj = {
-                method: 'openNewPage',
-                url: 'http://jiaoxue.maaee.com:8091/#/classBrandTemplateList'
-            }
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
-                        _this.checkWords(newObj, '皮肤管理');
+                        _this.checkWords({
+                            method: 'openNewPage',
+                            url: 'http://jiaoxue.maaee.com:8091/#/classBrandTemplateList'
+                        }, '皮肤管理');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_skin.png" />皮肤管理
                     </li>
                 </ul>
@@ -296,15 +310,14 @@ class SystemSettingGhostMenu extends React.Component {
         if (_this.state.ident == 23836) {
             // 上传视频
             var pwd = sessionStorage.getItem("pd");
-            var newObj = {
-                method: 'openNewPage',
-                // url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
-                url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd=' + pwd
-            }
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {
-                        _this.checkWords(newObj, '上传视频');
+                        _this.checkWords({
+                            method: 'openNewPage',
+                            url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
+                            // url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd=' + pwd
+                        }, '上传视频');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/v2.png" />上传视频
                     </li>
                 </ul>
