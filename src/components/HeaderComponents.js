@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react';
-import {Button, Icon,Switch} from 'antd';
+import {Button, Icon, Switch} from 'antd';
 import MaaeeLogo from './MaaeeLogo';
 import ProgressBar from '../components/ProgressBar';
-import {isEmpty,setLocalLanaguage} from '../utils/utils';
+import {isEmpty, setLocalLanaguage} from '../utils/utils';
 
 //国际化
 import {IntlProvider, addLocaleData} from 'react-intl';
@@ -27,7 +27,12 @@ const HeaderComponents = React.createClass({
     checkoutLanguage(checked) {
         //在此处切换isDefineLanguage值
         setLocalLanaguage(checked);
-        location.href="/#/MainLayout";
+
+        if (JSON.parse(sessionStorage.getItem("loginUser")).colUtype == 'TEAC') {
+            location.href = "/#/MainLayout";
+        } else {
+            location.href = "/#/StudentMainLayout";
+        }
     },
 
     render() {
@@ -52,11 +57,11 @@ const HeaderComponents = React.createClass({
         return (
             <div>
                 <MaaeeLogo/>
-              <Switch checkedChildren="中文" unCheckedChildren="English"
+                <Switch checkedChildren="中文" unCheckedChildren="English"
                         onChange={this.checkoutLanguage}
                         defaultChecked={defaultChecked}
                         className="switchWaring"
-              />
+                />
                 <Icon type="search" className="search_header" onClick={this.search}/>
                 <ProgressBar style={{valign: 'bottom'}}></ProgressBar>
                 <Button icon="book" onClick={this.redirectHelpPage} className="colud_bnt help_note">
