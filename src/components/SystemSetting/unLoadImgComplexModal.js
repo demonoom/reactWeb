@@ -80,7 +80,7 @@ class MakeDingModal extends React.Component {
         var arr = this.state.topicImgUrl;
         //传给littlePanel
         var callbackId = this.state.callbackId;
-        window.__calmUpload__(arr, callbackId);
+        window.__selectImgComplexUpload__(arr, callbackId);
         //设置model关闭
         this.MakeDingModalHandleCancel();
     }
@@ -99,7 +99,9 @@ class MakeDingModal extends React.Component {
             >
                 <div className="noomUpLoadFile_wrap">
                     <UploadImagesComponents callBackParent={this.getUploadedImgList}
-                                            fileList={this.state.topicImgUrl}/>
+                                            fileList={this.state.topicImgUrl}
+                                            multiples={true}
+                    />
                     <div className="class_right"><Button className="noomUpLoadFile_btn" type="primary"
                                                          onClick={this.upLoad}>确定</Button></div>
                 </div>

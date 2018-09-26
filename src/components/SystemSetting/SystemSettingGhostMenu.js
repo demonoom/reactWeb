@@ -6,6 +6,7 @@ import React, {PropTypes} from 'react';
 import {doWebService} from '../../WebServiceHelper';
 import UpLoadModal from './unLoadModal';
 import UpLoadImgModal from "./unLoadImgModal";
+import UnLoadImgComplexModal from './unLoadImgComplexModal'
 import UploadAttechModal from "./uploadAttechModal";
 import UploadImgAndVideoModal from "./UploadImgAndVideoModal";
 import UploadVideoModal from "./UploadVideoModal"
@@ -51,6 +52,7 @@ class SystemSettingGhostMenu extends React.Component {
         //将GhostMenu组件中的方法挂在window上，以便于在littlePanel中能够调用。
         window.__noom__ = this.noom;
         window.__calm__ = this.calm;
+        window.__selectImgComplex__ = this.selectImgComplex;
         window.__calmVideo__ = this.calmVideo;
         window.__calmAttech__ = this.calmAttech;
         window.__calmImgAndVideo__ = this.calmImgAndVideo;
@@ -63,6 +65,15 @@ class SystemSettingGhostMenu extends React.Component {
     calm(callbackId) {
         this.setState({
             UploadImgModalIsShow: true
+        })
+        this.setState({
+            callbackId
+        })
+    }
+
+    selectImgComplex = (callbackId) => {
+        this.setState({
+            UploadImgComplexModalIsShow: true
         })
         this.setState({
             callbackId
@@ -114,7 +125,8 @@ class SystemSettingGhostMenu extends React.Component {
             uploadAttechModalIsShow: false
         })
         this.setState({
-            uploadImgAndVideoIsShow: false
+            uploadImgAndVideoIsShow: false,
+            UploadImgComplexModalIsShow: false
         })
     }
 
@@ -220,8 +232,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
-                            // url: 'http://192.168.50.29:8091/#/ARTextbookList'
+                            // url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
+                            url: 'http://192.168.50.29:8091/#/ARTextbookList'
                         }, 'AR教材');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>AR教材
                     </li>
@@ -481,6 +493,11 @@ class SystemSettingGhostMenu extends React.Component {
                 />
                 <UpLoadImgModal
                     isShow={this.state.UploadImgModalIsShow}
+                    closeDingModel={this.closeDingModel}
+                    callbackId={this.state.callbackId}
+                />
+                <UnLoadImgComplexModal
+                    isShow={this.state.UploadImgComplexModalIsShow}
                     closeDingModel={this.closeDingModel}
                     callbackId={this.state.callbackId}
                 />
