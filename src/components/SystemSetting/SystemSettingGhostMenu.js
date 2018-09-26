@@ -220,8 +220,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
-                            // url: 'http://172.16.2.26:8091/#/ARTextbookList'
+                            // url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
+                            url: 'http://192.168.50.72:8091/#/ARTextbookList'
                         }, 'AR教材');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />AR教材
                     </li>
@@ -267,7 +267,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            url: 'http://jiaoxue.maaee.com:8094/#/authorityManagement'
+                            // url: 'http://jiaoxue.maaee.com:8094/#/authorityManagement'
+                            url: 'http://192.168.50.72:8094/#/authorityManagement'
                         }, '有样权限管理');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>有样权限管理
                     </li>
@@ -282,7 +283,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            url: 'http://jiaoxue.maaee.com:8094/#/powerAdministrate'
+                            // url: 'http://jiaoxue.maaee.com:8094/#/powerAdministrate'
+                            url: 'http://192.168.50.72:8094/#/powerAdministrate'
                         }, '有样角色管理');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>有样角色管理
                     </li>
@@ -315,8 +317,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
-                            // url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd=' + pwd
+                            // url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
+                            url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd=' + pwd
                         }, '上传视频');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/v2.png" />上传视频
                     </li>
