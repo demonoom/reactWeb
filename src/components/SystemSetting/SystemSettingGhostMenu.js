@@ -6,6 +6,8 @@ import React, {PropTypes} from 'react';
 import {doWebService} from '../../WebServiceHelper';
 import UpLoadModal from './unLoadModal';
 import UpLoadImgModal from "./unLoadImgModal";
+import UnLoadImgComplexModal from './unLoadImgComplexModal'
+import UnLoadVideoComplexModal   from "./unLoadVideoComplexModal"
 import UploadAttechModal from "./uploadAttechModal";
 import UploadImgAndVideoModal from "./UploadImgAndVideoModal";
 import UploadVideoModal from "./UploadVideoModal"
@@ -51,6 +53,8 @@ class SystemSettingGhostMenu extends React.Component {
         //将GhostMenu组件中的方法挂在window上，以便于在littlePanel中能够调用。
         window.__noom__ = this.noom;
         window.__calm__ = this.calm;
+        window.__selectImgComplex__ = this.selectImgComplex;
+        window.__selectComplexVideo__ = this.selectComplexVideo;
         window.__calmVideo__ = this.calmVideo;
         window.__calmAttech__ = this.calmAttech;
         window.__calmImgAndVideo__ = this.calmImgAndVideo;
@@ -63,6 +67,23 @@ class SystemSettingGhostMenu extends React.Component {
     calm(callbackId) {
         this.setState({
             UploadImgModalIsShow: true
+        })
+        this.setState({
+            callbackId
+        })
+    }
+
+    selectImgComplex = (callbackId) => {
+        this.setState({
+            UploadImgComplexModalIsShow: true
+        })
+        this.setState({
+            callbackId
+        })
+    }
+    selectComplexVideo = (callbackId) => {
+        this.setState({
+            UploadVideoComplexModalIsShow: true
         })
         this.setState({
             callbackId
@@ -114,7 +135,12 @@ class SystemSettingGhostMenu extends React.Component {
             uploadAttechModalIsShow: false
         })
         this.setState({
-            uploadImgAndVideoIsShow: false
+            uploadImgAndVideoIsShow: false,
+            UploadImgComplexModalIsShow: false
+        })
+        this.setState({
+            uploadImgAndVideoIsShow: false,
+            UploadVideoComplexModalIsShow: false
         })
     }
 
@@ -220,13 +246,9 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-<<<<<<< HEAD
                             // url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
                             url: 'http://192.168.50.72:8091/#/ARTextbookList'
-=======
-                            url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
-                            // url: 'http://192.168.50.29:8091/#/ARTextbookList'
->>>>>>> 999788e4de1ac75fcb09d4459ff3ffed7632f549
+
                         }, 'AR教材');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>AR教材
                     </li>
@@ -272,8 +294,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            // url: 'http://jiaoxue.maaee.com:8094/#/authorityManagement'
-                            url: 'http://192.168.50.72:8094/#/authorityManagement'
+                            url: 'http://jiaoxue.maaee.com:8094/#/authorityManagement'
+                            // url: 'http://192.168.50.72:8094/#/authorityManagement'
                         }, '有样权限管理');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>有样权限管理
                     </li>
@@ -288,8 +310,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            // url: 'http://jiaoxue.maaee.com:8094/#/powerAdministrate'
-                            url: 'http://192.168.50.72:8094/#/powerAdministrate'
+                            url: 'http://jiaoxue.maaee.com:8094/#/powerAdministrate'
+                            // url: 'http://192.168.50.72:8094/#/powerAdministrate'
                         }, '有样角色管理');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>有样角色管理
                     </li>
@@ -322,13 +344,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-<<<<<<< HEAD
-                            // url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
-                            url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd=' + pwd
-=======
-                            url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd=' + pwd,
+                            url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
                             // url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd=' + pwd
->>>>>>> 999788e4de1ac75fcb09d4459ff3ffed7632f549
                         }, '上传视频');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/v2.png"/>上传视频
                     </li>
@@ -493,6 +510,16 @@ class SystemSettingGhostMenu extends React.Component {
                 />
                 <UpLoadImgModal
                     isShow={this.state.UploadImgModalIsShow}
+                    closeDingModel={this.closeDingModel}
+                    callbackId={this.state.callbackId}
+                />
+                <UnLoadImgComplexModal
+                    isShow={this.state.UploadImgComplexModalIsShow}
+                    closeDingModel={this.closeDingModel}
+                    callbackId={this.state.callbackId}
+                />
+                <UnLoadVideoComplexModal
+                    isShow={this.state.UploadVideoComplexModalIsShow}
                     closeDingModel={this.closeDingModel}
                     callbackId={this.state.callbackId}
                 />

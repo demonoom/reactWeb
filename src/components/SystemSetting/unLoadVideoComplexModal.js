@@ -4,9 +4,7 @@
 import React, {PropTypes} from 'react';
 import {Modal, Icon, Input, Button, Row, Col, message, Checkbox, Transfer, Table, Select, Tag, Tooltip} from 'antd';
 import {isEmpty} from '../../utils/utils';
-import UploadImgAndVideoComponents from "./UploadImgAndVideoComponents";
-
-// import UploadAttechComponents from './UploadAttechComponents';
+import UploadImgAndVideoComponents from './UploadImgAndVideoComponents';
 
 
 class MakeDingModal extends React.Component {
@@ -82,7 +80,7 @@ class MakeDingModal extends React.Component {
         var arr = this.state.topicImgUrl;
         //传给littlePanel
         var callbackId = this.state.callbackId;
-        window.__calmUploadImgAndVideo__(arr, callbackId);
+        window.__selectComplexVideoUpload__(arr, callbackId);
         //设置model关闭
         this.MakeDingModalHandleCancel();
     }
@@ -92,7 +90,7 @@ class MakeDingModal extends React.Component {
             <Modal
                 visible={this.state.isShow}
                 width={400}
-                title={"上传附件"}
+                title={"上传文件"}
                 onCancel={this.MakeDingModalHandleCancel}
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
@@ -101,11 +99,11 @@ class MakeDingModal extends React.Component {
             >
                 <div className="noomUpLoadFile_wrap">
                     <UploadImgAndVideoComponents callBackParent={this.getUploadedImgList}
-                                         fileList={this.state.topicImgUrl}
-                                         multiples={true}
+                                            fileList={this.state.topicImgUrl}
+                                            multiples={true}
                     />
                     <div className="class_right"><Button className="noomUpLoadFile_btn" type="primary"
-                                                         onClick={this.upLoad}>上传</Button></div>
+                                                         onClick={this.upLoad}>确定</Button></div>
                 </div>
             </Modal>
         );
