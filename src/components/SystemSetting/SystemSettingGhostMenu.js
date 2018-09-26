@@ -246,8 +246,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            // url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
-                            url: 'http://192.168.50.72:8091/#/ARTextbookList'
+                            url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
+                            // url: 'http://192.168.50.72:8091/#/ARTextbookList'
 
                         }, 'AR教材');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>AR教材
@@ -336,23 +336,23 @@ class SystemSettingGhostMenu extends React.Component {
             liArr.push(newLi);
         }
 
-        if (_this.state.ident == 23836) {
-            // 上传视频
-            var pwd = sessionStorage.getItem("pd");
-            var newLi = <li className="multi">
-                <ul className="second">
-                    <li onClick={event => {
-                        _this.checkWords({
-                            method: 'openNewPage',
-                            url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
-                            // url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd=' + pwd
-                        }, '上传视频');
-                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/v2.png"/>上传视频
-                    </li>
-                </ul>
-            </li>;
-            liArr.push(newLi);
-        }
+        // if (_this.state.ident == 23836) {
+        //     // 上传视频
+        //     var pwd = sessionStorage.getItem("pd");
+        //     var newLi = <li className="multi">
+        //         <ul className="second">
+        //             <li onClick={event => {
+        //                 _this.checkWords({
+        //                     method: 'openNewPage',
+        //                     url: 'http://jiaoxue.maaee.com:8094/#/uploadvideoList?pwd='+pwd,
+        //                     // url: 'http://192.168.50.72:8094/#/uploadvideoList?pwd=' + pwd
+        //                 }, '上传视频');
+        //             }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/v2.png"/>上传视频
+        //             </li>
+        //         </ul>
+        //     </li>;
+        //     liArr.push(newLi);
+        // }
 
 
         //手动添加的测试菜单---开始
