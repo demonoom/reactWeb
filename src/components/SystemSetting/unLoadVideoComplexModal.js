@@ -4,7 +4,7 @@
 import React, {PropTypes} from 'react';
 import {Modal, Icon, Input, Button, Row, Col, message, Checkbox, Transfer, Table, Select, Tag, Tooltip} from 'antd';
 import {isEmpty} from '../../utils/utils';
-import UploadImgAndVideoComponents from './UploadImgAndVideoComponents';
+import UploadVideoComponents from './UploadVideoComponents';
 
 
 class MakeDingModal extends React.Component {
@@ -88,6 +88,7 @@ class MakeDingModal extends React.Component {
     render() {
         return (
             <Modal
+                
                 visible={this.state.isShow}
                 width={400}
                 title={"上传文件"}
@@ -98,7 +99,7 @@ class MakeDingModal extends React.Component {
                 className="new_add_ding"
             >
                 <div className="noomUpLoadFile_wrap">
-                    <UploadImgAndVideoComponents callBackParent={this.getUploadedImgList}
+                    <UploadVideoComponents callBackParent={this.getUploadedImgList}
                                             fileList={this.state.topicImgUrl}
                                             multiples={true}
                     />
