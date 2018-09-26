@@ -930,7 +930,6 @@ pageNo   --- 页码，-1取全部
      * 如果不是文件，預覽
      */
     readDoc(e) {
-        debugger
         if (this.state.activeKey == 2) {
             var url = 'http://jiaoxue.maaee.com:8091/#/questionDetil?courseId=' + e.subject.id;
             let obj = {mode: '', title: '我的题目', url: url, width: '380px'};

@@ -102,7 +102,7 @@ class MakeDingModal extends React.Component {
                 <div className="noomUpLoadFile_wrap">
                     <UploadImgAndVideoComponents callBackParent={this.getUploadedImgList}
                                          fileList={this.state.topicImgUrl}
-                                         multiples={true}
+                                         multiples={false}
                     />
                     <div className="class_right"><Button className="noomUpLoadFile_btn" type="primary"
                                                          onClick={this.upLoad}>上传</Button></div>

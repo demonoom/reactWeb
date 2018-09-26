@@ -54,7 +54,7 @@ const UploadImgComponents = React.createClass({
             //onPreview:antUpload.handlePreview,
             beforeUpload(file) {
                 var currentFileList = antUpload.state.fileList;
-                if (isEmpty(currentFileList) == false && currentFileList.length >= 1) {
+                if (isEmpty(currentFileList) == false && currentFileList.length >= 9) {
                     message.error('最多只能上传9个文件', 5);
                     return false;
                 }
