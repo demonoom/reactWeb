@@ -7,7 +7,7 @@ import {doWebService} from '../../WebServiceHelper';
 import UpLoadModal from './unLoadModal';
 import UpLoadImgModal from "./unLoadImgModal";
 import UnLoadImgComplexModal from './unLoadImgComplexModal'
-import UnLoadVideoComplexModal   from "./unLoadVideoComplexModal"
+import UnLoadVideoComplexModal from "./unLoadVideoComplexModal"
 import UploadAttechModal from "./uploadAttechModal";
 import UploadImgAndVideoModal from "./UploadImgAndVideoModal";
 import UploadVideoModal from "./UploadVideoModal"

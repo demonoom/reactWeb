@@ -136,7 +136,6 @@ class AddSubGroupModal extends React.Component {
     }
 
     closeConfirmModal() {
-        // debugger
         this.setState({calmSureDelConfirm: false})
     }
 
