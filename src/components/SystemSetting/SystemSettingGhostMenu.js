@@ -288,21 +288,6 @@ class SystemSettingGhostMenu extends React.Component {
             liArr.push(newLi);
         }
 
-        if (_this.state.ident == 23836) {
-            var newLi = <li className="multi">
-                <ul className="second">
-                    <li onClick={event => {
-                        _this.checkWords({
-                            method: 'openNewPage',
-                            url: 'http://jiaoxue.maaee.com:8091/#/courseRecListst'
-                            // url: 'http://192.168.50.72:8091/#/courseRecListst'
-                        }, '音乐上传');
-                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>课程推荐
-                    </li>
-                </ul>
-            </li>;
-            liArr.push(newLi);
-        }
 
 
         if (_this.state.ident == 23836) {
@@ -347,6 +332,22 @@ class SystemSettingGhostMenu extends React.Component {
                             url: 'http://jiaoxue.maaee.com:8091/#/classBrandTemplateList'
                         }, '皮肤管理');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_skin.png"/>皮肤管理
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
+        }
+
+        if (_this.state.ident == 23836) {
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords({
+                            method: 'openNewPage',
+                            url: 'http://jiaoxue.maaee.com:8091/#/courseRecListst'
+                            // url: 'http://192.168.50.72:8091/#/courseRecListst'
+                        }, '音乐上传');
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>课程推荐
                     </li>
                 </ul>
             </li>;
