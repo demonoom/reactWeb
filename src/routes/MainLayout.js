@@ -2974,6 +2974,13 @@ const MainLayout = React.createClass({
                                             defaultMessage='叮一下'
                                         /></div>
                                 </Menu.Item>
+                                <Menu.Item key="unionClass" className="padding_menu">
+                                    <i className="icon_menu_ios icon_ding"></i>
+                                    <b className="ding_alert" ref='dingAlert'></b>
+                                    <div className="tan">
+                                        联合开课
+                                    </div>
+                                </Menu.Item>
                                 <FloatButton ref="floatButton" messageUtilObj={ms}/>
                             </Menu>
 
