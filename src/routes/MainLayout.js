@@ -2889,7 +2889,7 @@ const MainLayout = React.createClass({
                 mainContent =
                     <Row>
                         <Col span={24}>
-                            <div className="ant-layout-container teachSpacePanel">
+                            <div className="ant-layout-container teachSpacePanel" style={{background:'#fff'}}>
                                 <iframe src={url} style={{width:'100%',height:'100%', border:'none'}}></iframe>
                             </div>
                         </Col>

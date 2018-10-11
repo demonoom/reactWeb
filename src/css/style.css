@@ -3507,7 +3507,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .icon_menu_ios {
-    background: url(../components/images/icon_menu_ios.png) no-repeat;
+    background: url(../components/images/icon_menu_ios.png?v=0.01) no-repeat;
     width: 28px;
     height: 25px;
     display: inline-block;
