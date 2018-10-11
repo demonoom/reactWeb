@@ -244,7 +244,7 @@ ul.cont_t2 {
 }
 
 .ant-layout-aside .ant-layout-sider > .ant-menu > .ant-menu-item {
-    margin: 28px 0 0 0;
+    margin: 24px 0 0 0;
 }
 
 .ant-layout-aside .ant-layout-sider > .ant-menu > .ant-menu-item .nav-text {
@@ -3592,7 +3592,13 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .ant-menu-item-selected .icon_ding {
     background-position: 0 -1050px;
 }
+.icon_joint-class {
+    background-position: 0 -1100px;
+}
 
+.ant-menu-item-selected .icon_joint-class {
+    background-position: 0 -1150px;
+}
 .person_13 {
     font-size: 16px !important;
 }
