@@ -362,19 +362,220 @@
         $(this.el).find('.exitFull').on('click', exitFull);
         this.ifrel = $('#' + objtemplet.ifrid);
 
-        /*与iframe通信*/
-        // var iframe = this.ifrel[0];
-        //
-        // window.addEventListener('message', function (e) {
-        //     var data = JSON.parse(e.data);
-        //     if (data.method == 'selectPictures') {
-        //         alert("执行选择图片逻辑!!");
-        //         var paths = "https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=593ce0758b13632701e0ca61f0e6cb89/fcfaaf51f3deb48fc4b7dd77f11f3a292cf578b8.jpg";
-        //         var callbackId = data.callbackId;
-        //         var response = {'callbackId': callbackId, 'params': paths};
-        //         iframe.contentWindow.postMessage(JSON.stringify(response), '*');
-        //     }
-        // });
+        var iframe = this.ifrel[0];
+        var idd = iframe.id;
+        if (!isAddedListener) {
+            window.addEventListener('message', function (e) {
+                var data = JSON.parse(e.data);
+                console.log(data);
+                //data.method方式
+                //data.callbackId回调方法名
+                //data.errorbackId错误回调方法名
+                if (data.method == 'selectPictures') {
+
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__noom__(data.callbackId);
+
+                    window.__noomUpLoad__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == 'showImage') {
+                    //data.currentUrl   当前的地址
+                    //data.url  全部地址，用#分割
+                    window.__sendImg__(data.currentUrl, data.url);
+
+                } else if (data.method == 'openNewPage') {
+                    if (data.url.indexOf('?') == -1) {
+                        data.url += '?access_user=' + sessionStorage.getItem('ident');
+                    } else {
+                        data.url += '&access_user=' + sessionStorage.getItem('ident');
+                    }
+                    let obj = {mode: 'teachingAdmin', title: '', url: data.url};
+                    LP.Start(obj);
+                } else if (data.method == 'openNewPageInDefault') {
+                    if (data.url.indexOf('?') == -1) {
+                        data.url += '?access_user=' + sessionStorage.getItem('ident');
+                    } else {
+                        data.url += '&access_user=' + sessionStorage.getItem('ident');
+                    }
+                    let obj = {mode: '', title: '', url: data.url};
+                    LP.Start(obj);
+                } else if (data.method == 'setPanelTitle') {
+                    var title = data.title;
+                    titleNoom = data.title;
+                    var id = data.windowName + "_title";
+                    if (title == 'undefined') {
+                        document.getElementById(id).innerText = '';
+                    } else {
+                        document.getElementById(id).innerText = title;
+                    }
+                } else if (data.method == 'showCloudFileShare') {
+                    window.__noomShareId__(data.shareId);
+                } else if (data.method == 'selectUser') {
+                    //user对象
+                    //data.user
+                    window.__noomSelect__(data.user);
+                } else if (data.method == 'selectGroup') {
+                    //group对象
+                    //data.group
+                    window.__noomSelectGroup__(data.group);
+                } else if (data.method == 'setShareAble') {
+                    //关闭分享功能
+                    if (data.shareAble) {
+                        document.getElementById(data.windowName + '_share').style.display = 'none'
+                    }
+                } else if (data.method == 'saveFile') {
+                    //保存到蚁盘,只返回了文件id
+                    window.__noomSaveFileError__(data.id);
+                } else if (data.method == 'downLoadFile') {
+                    //下载文件,返回了文件对象  window.open(url,'_blank')
+                    var aTag = `<a download="help" href="${JSON.parse(data.cloudFile).path}" id="${JSON.parse(data.cloudFile).id}downLoadFile"></a>`;
+                    $(document.body).append(aTag);
+                    document.getElementById(`${JSON.parse(data.cloudFile).id}downLoadFile`).click();
+                    $(`#${JSON.parse(data.cloudFile).id}downLoadFile`).remove();
+                } else if (data.method == 'openLargeNewPage') {
+                    let param = {
+                        mode: '',
+                        title: '',
+                        url: data.url,
+                    };
+
+                    LP.Start(param);
+                    return
+                } else if (data.method == "bindCoordinates") {
+                    //打点功能进行显示
+                    window.__bindCoordinates__(1);
+                } else if (data.method == "selectImages") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__calm__(data.callbackId);
+
+                    window.__calmUpload__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == 'selectImgComplex') {
+                    window.__selectImgComplex__(data.callbackId);
+
+                    window.__selectImgComplexUpload__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == "selectVideo") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__calmVideo__(data.callbackId);
+                    window.__calmUploadVideo__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                }else if (data.method == "selectComplexVideo") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__selectComplexVideo__(data.callbackId);
+                    window.__selectComplexVideoUpload__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == "selectMp3") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__selectMp3__(data.callbackId);
+
+                    window.__noomUpLoad__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == "selectAttech") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__calmAttech__(data.callbackId);
+                    window.__calmUploadAttech__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == "finishForRefresh") {
+                    for (var i = 0; i < panelArr.length; i++) {
+                        if (panelArr[i] == data.windowName.substr(3, data.windowName.length - 1)) {
+                            var src = document.querySelector('#ifr' + panelArr[i - 1]).src;
+                            var panelId = panelArr[i - 1];
+                            $('#ifr' + panelId).attr("src", "");
+                            setTimeout(function () {
+                                $('#ifr' + panelId).attr("src", src);
+                            }, 500);
+                        }
+                    }
+                    document.getElementById(data.windowName + '_back').click()
+
+                } else if (data.method == 'finishForRefreshV2') {
+                    for (var i = 0; i < panelArr.length; i++) {
+                        if (panelArr[i] == data.windowName.substr(3, data.windowName.length - 1)) {
+                            var ifm = document.querySelector('#ifr' + panelArr[i - 1]);
+                            var response = {
+                                'fnName': data.fnName,
+                                'id': data.id,
+                                'name': data.name,
+                                'method': 'finishForRefreshV2'
+                            };
+                            ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                        }
+                    }
+                    document.getElementById(data.windowName + '_back').click()
+                } else if (data.method == "playVideo") {
+                    //播放视频(限一个)
+                    window.__playVideo__(data.url);
+                } else if (data.method == "playAudio") {
+                    //播放音频(限一个)
+                    window.__playAudio__(data.url);
+                } else if (data.method == "selectImgAndVideo") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__calmImgAndVideo__(data.callbackId);
+                    window.__calmUploadImgAndVideo__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+
+                }
+            });
+            isAddedListener = true;
+        }
+
         this.ifrel.on('load', this._default_UI_templet_iframe_event.bind(this, objtemplet.ifrid));
 
 

@@ -176,9 +176,9 @@ const MainLayout = React.createClass({
             return;
         }
 
-        if('unionClass'==e.key){
+        if ('unionClass' == e.key) {
             this.setState({currentKey: e.key, resouceType: 'C'});
-        }else {
+        } else {
             this.setState({currentKey: e.key, resouceType: ''});
         }
         if (e.key != "KnowledgeResources") {
@@ -200,6 +200,11 @@ const MainLayout = React.createClass({
         window.__playVideo__ = this.playVideo;
         window.__playAudio__ = this.playAudio;
         window.__selectMp3__ = this.selectMp3;
+        window.__noomSaveFileError__ = this.noomSaveFile;
+    },
+
+    noomSaveFile() {
+        message.error('请将文件分享给某个人后在动态中进行操作');
     },
 
     componentWillMount() {
@@ -2845,7 +2850,7 @@ const MainLayout = React.createClass({
             case 'unionClass':
                 //叮消息
                 tabComponent = null;
-                middleComponent=null;
+                middleComponent = null;
                 break;
         }
         //
@@ -2885,12 +2890,12 @@ const MainLayout = React.createClass({
                 var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                 var userName = loginUser.userName;
                 var userId = loginUser.colUid
-                var url = "https://www.maaee.com/openvidu/schoolClass/unionClassList.html?teacherId="+userId+"&teacherName="+userName;
+                var url = "https://www.maaee.com/openvidu/schoolClass/unionClassList.html?teacherId=" + userId + "&teacherName=" + userName;
                 mainContent =
                     <Row>
                         <Col span={24}>
-                            <div className="ant-layout-container teachSpacePanel" style={{background:'#fff'}}>
-                                <iframe src={url} style={{width:'100%',height:'100%', border:'none'}}></iframe>
+                            <div className="ant-layout-container teachSpacePanel" style={{background: '#fff'}}>
+                                <iframe src={url} style={{width: '100%', height: '100%', border: 'none'}}></iframe>
                             </div>
                         </Col>
                     </Row>;
