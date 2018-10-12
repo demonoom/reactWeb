@@ -176,8 +176,11 @@ const MainLayout = React.createClass({
             return;
         }
 
-        this.setState({currentKey: e.key, resouceType: ''});
-
+        if('unionClass'==e.key){
+            this.setState({currentKey: e.key, resouceType: 'C'});
+        }else {
+            this.setState({currentKey: e.key, resouceType: ''});
+        }
         if (e.key != "KnowledgeResources") {
             var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
         }
@@ -2839,6 +2842,11 @@ const MainLayout = React.createClass({
                 tabComponent = <DingMessageTabComponents ref="dingMessageTabComponents" showAlert={this.showAlert}/>;
 
                 break;
+            case 'unionClass':
+                //叮消息
+                tabComponent = null;
+                middleComponent=null;
+                break;
         }
         //
         //
@@ -2868,6 +2876,21 @@ const MainLayout = React.createClass({
                             <div className="ant-layout-container teachSpacePanel">
                                 {tabComponent}
                                 {middleComponent}
+                            </div>
+                        </Col>
+                    </Row>;
+                break;
+            case 'C':
+                //联合开课的布局结构,该布局完全占据右侧区域,内嵌iframe来实现
+                var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+                var userName = loginUser.userName;
+                var userId = loginUser.colUid
+                var url = "https://www.maaee.com/openvidu/schoolClass/unionClassList.html?teacherId="+userId+"&teacherName="+userName;
+                mainContent =
+                    <Row>
+                        <Col span={24}>
+                            <div className="ant-layout-container teachSpacePanel" style={{background:'#fff'}}>
+                                <iframe src={url} style={{width:'100%',height:'100%', border:'none'}}></iframe>
                             </div>
                         </Col>
                     </Row>;
@@ -2973,6 +2996,13 @@ const MainLayout = React.createClass({
                                             description='叮一下'
                                             defaultMessage='叮一下'
                                         /></div>
+                                </Menu.Item>
+                                <Menu.Item key="unionClass" className="padding_menu">
+                                    <i className="icon_menu_ios icon_joint-class"></i>
+                                    <b className="ding_alert" ref='dingAlert'></b>
+                                    <div className="tan">
+                                        联合开课
+                                    </div>
                                 </Menu.Item>
                                 <FloatButton ref="floatButton" messageUtilObj={ms}/>
                             </Menu>
