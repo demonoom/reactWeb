@@ -246,8 +246,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            // url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
-                            url: 'http://192.168.50.72:8091/#/ARTextbookList'
+                            url: 'http://jiaoxue.maaee.com:8091/#/ARTextbookList'
+                            // url: 'http://192.168.50.72:8091/#/ARTextbookList'
 
                         }, 'AR教材');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>AR教材
@@ -344,8 +344,8 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            // url: 'http://jiaoxue.maaee.com:8091/#/courseRecListst'
-                            url: 'http://192.168.50.72:8091/#/courseRecListst'
+                            url: 'http://jiaoxue.maaee.com:8091/#/courseRecListst'
+                            // url: 'http://192.168.50.72:8091/#/courseRecListst'
                         }, '课程推荐');
                     }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png"/>课程推荐
                     </li>

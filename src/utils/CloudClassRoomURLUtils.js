@@ -8,7 +8,8 @@ var liveDomain = isDebug ? "192.168.50.15:8080" : "www.maaee.com";
 
 var webserviceURL = "http://" + domain + "/elearning/elearningControl/";
 export const TEACH_LIVE_URL = "https://" + liveDomain + "/Excoord_PhoneService/elearningClass/teacherElearningLive/";
-export const FACE_EMOTIONS_URL = "http://" + liveDomain + "/Excoord_PhoneService/faceEmotion/elearningFaceEmotion";
+// export const FACE_EMOTIONS_URL = "http://" + liveDomain + "/Excoord_PhoneService/faceEmotion/elearningFaceEmotion";
+export const FACE_EMOTIONS_URL = "http://jiaoxue.maaee.com:8093/#/cloundSchoolDetail";
 
 export function doWebService_CloudClassRoom(data, listener) {
     var pro = document.getElementById("pro");
