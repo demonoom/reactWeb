@@ -1379,6 +1379,8 @@ const AntMulitiClassComponents = React.createClass({
             ];
         }
 
+        var reviewModalTitle = <span className='icon_back' onClick={this.reviewInnerModalHandleCancel}>返回</span>;
+
         return (
             <div className="favorite_scroll series_courses">
                 <div className="clearfix">
@@ -1575,7 +1577,7 @@ const AntMulitiClassComponents = React.createClass({
                 </Modal>
 
                 <Modal
-                    title={"课堂回顾"}
+                    title={reviewModalTitle}
                     visible={this.state.reviewInnerModalVisible}
                     onCancel={this.reviewInnerModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
