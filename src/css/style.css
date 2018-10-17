@@ -10151,3 +10151,21 @@ a:active, a:hover {
 .role_nothingData .ant-table-placeholder{
     margin-top:-200px
 }
+/*课堂回顾弹窗*/
+.RechargeModal.playModal .ant-modal-header{
+    padding: 12px 22px 12px 16px !important;
+}
+.RechargeModal.playModal .ant-modal-header .ant-modal-title {
+    line-height: 20px;
+}
+.RechargeModal.playModal iframe{
+    border: 0;
+    height: 400px;
+    width: 100%;
+}
+.RechargeModal.playModal .ant-modal-body{
+    padding: 0!important;
+}
+.RechargeModal.playModal .ant-modal-footer{
+    padding: 10px 16px !important;
+}
