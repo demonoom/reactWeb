@@ -10152,20 +10152,35 @@ a:active, a:hover {
     margin-top:-200px
 }
 /*课堂回顾弹窗*/
+.RechargeModal.playModal .ant-modal{
+    height: 90%;
+    padding-bottom: 0;
+}
 .RechargeModal.playModal .ant-modal-header{
-    padding: 12px 22px 12px 25px !important;
+    padding: 0 0 0 25px !important;
 }
 .RechargeModal.playModal .ant-modal-header .ant-modal-title {
-    line-height: 20px;
+    line-height: 42px;
 }
 .RechargeModal.playModal iframe{
     border: 0;
-    height: 400px;
+    height: calc(90vh - 42px);
     width: 100%;
+    display:block;
 }
 .RechargeModal.playModal .ant-modal-body{
     padding: 0!important;
 }
 .RechargeModal.playModal .ant-modal-footer{
-    padding: 10px 16px !important;
+    padding: 0 !important;
+}
+.RechargeModal.playModal .icon_back{
+    cursor: pointer;
+    background: url("../components/images/icon_back.png") no-repeat -7px center;
+    font-size: 0;
+    background-size: 100%;
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    vertical-align: middle;
 }
