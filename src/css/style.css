@@ -10153,7 +10153,7 @@ a:active, a:hover {
 }
 /*课堂回顾弹窗*/
 .RechargeModal.playModal .ant-modal-header{
-    padding: 12px 22px 12px 16px !important;
+    padding: 12px 22px 12px 25px !important;
 }
 .RechargeModal.playModal .ant-modal-header .ant-modal-title {
     line-height: 20px;

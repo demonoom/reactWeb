@@ -1575,7 +1575,7 @@ const AntMulitiClassComponents = React.createClass({
                 </Modal>
 
                 <Modal
-                    title={"表情分析"}
+                    title={"课堂回顾"}
                     visible={this.state.reviewInnerModalVisible}
                     onCancel={this.reviewInnerModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
