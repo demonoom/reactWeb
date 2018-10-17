@@ -30,7 +30,10 @@ const AntMulitiClassComponents = React.createClass({
             classFliterValue: "1",  //全部、已发布、未发布
             fliterValue: '0',     //全部、直播课、微课
             isSeries: '',
-            classPlayDetailModalVisible: false
+            classPlayDetailModalVisible: false,
+            reviewModalVisible: false,
+            reviewInnerModalVisible: false,
+            reviewUrl: ''
         };
     },
 
@@ -42,6 +45,17 @@ const AntMulitiClassComponents = React.createClass({
         var initPageNo = 1;
         this.setState({isSeries, courseClass, currentPage: initPageNo});
         this.getCourseListBySeries(isSeries, courseClass, initPageNo);
+        window.addEventListener('message', function (response) {
+            var data = response.data;
+            if(typeof(data)=="string" ){
+                var dataJson = JSON.parse(data);
+                var method = dataJson.method;
+                if(method=="openNewPage"){
+                    var url = dataJson.url;
+                    _this.setState({reviewInnerModalVisible: true, reviewInnerUrl: url});
+                }
+            }
+        });
     },
 
     componentWillReceiveProps(nextProps) {
@@ -942,15 +956,21 @@ const AntMulitiClassComponents = React.createClass({
         });
     },
 
+    /**
+     * 课堂回顾
+     * @param liveObj
+     * @param liveType
+     */
     reviewEmotions(liveObj, liveType){
         var loginUser = JSON.parse(sessionStorage.getItem("ident"));
-        var newTab = window.open('about:blank');
+        // var newTab = window.open('about:blank');
         var requestUrl = FACE_EMOTIONS_URL;
 
         requestUrl += "?vid="+liveObj.virtual_classId+"&userId="+loginUser+"&type=2"+"&name="+encodeURI(liveObj.name);
+        this.setState({reviewModalVisible: true, reviewUrl: requestUrl});
         //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
-        newTab.location.href = requestUrl;
-        
+        // newTab.location.href = requestUrl;
+
         // var newTab = window.open('about:blank');
         // var requestUrl = FACE_EMOTIONS_URL;
         // requestUrl += "?vid="+liveObj.virtual_classId;
@@ -1063,7 +1083,7 @@ const AntMulitiClassComponents = React.createClass({
                                     playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播"
                                                          onClick={_this.openLive.bind(_this, video, "mulitiClass",courseName)}></Button>;
                                 }else{
-                                    playButton = <img title="表情回顾"
+                                    playButton = <img title="课程回顾"
                                                       src={require('../images/emotionAnalysis.png')}
                                                       onClick={_this.reviewEmotions.bind(_this, video, "mulitiClass")}/>;
                                 }
@@ -1267,6 +1287,21 @@ const AntMulitiClassComponents = React.createClass({
         this.setState({"tipModalVisible": false, "classDetailModalVisible": false});
         this.getCourseList(this.state.currentPage);
     },
+
+    /**
+     * 课程回顾的modal关闭事件响应函数
+     */
+    reviewModalHandleCancel(){
+        this.setState({reviewModalVisible: false, reviewUrl: '', reviewModalTitle: ''});
+    },
+
+    /**
+     * 课程回顾的modal关闭事件响应函数
+     */
+    reviewInnerModalHandleCancel(){
+        this.setState({reviewInnerModalVisible: false, reviewInnerUrl: ''});
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -1522,6 +1557,33 @@ const AntMulitiClassComponents = React.createClass({
                     footer={[]}>
                     <div className="font_center">
                         当前课程已经直播过，稍后请选择其他章节再次开启直播，谢谢！
+                    </div>
+                </Modal>
+
+                {/*课堂回顾的modal*/}
+                <Modal
+                    title={"课堂回顾"}
+                    visible={this.state.reviewModalVisible}
+                    onCancel={this.reviewModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    wrapClassName="RechargeModal bodyPadding playModal"
+                    footer={[]}>
+                    <div className="font_center" id="font_center">
+                        <iframe src={this.state.reviewUrl}></iframe>
+                    </div>
+                </Modal>
+
+                <Modal
+                    title={"课堂回顾"}
+                    visible={this.state.reviewInnerModalVisible}
+                    onCancel={this.reviewInnerModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    wrapClassName="RechargeModal bodyPadding playModal"
+                    footer={[]}>
+                    <div className="font_center" id="font_center">
+                        <iframe src={this.state.reviewInnerUrl}></iframe>
                     </div>
                 </Modal>
             </div>
