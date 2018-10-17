@@ -1571,7 +1571,7 @@ const AntMulitiClassComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     wrapClassName="RechargeModal bodyPadding playModal"
                     footer={[]}>
-                    <div className="font_center" id="font_center">
+                    <div id="font_center">
                         <iframe src={this.state.reviewUrl}></iframe>
                     </div>
                 </Modal>
@@ -1584,7 +1584,7 @@ const AntMulitiClassComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     wrapClassName="RechargeModal bodyPadding playModal"
                     footer={[]}>
-                    <div className="font_center" id="font_center">
+                    <div id="font_center">
                         <iframe src={this.state.reviewInnerUrl}></iframe>
                     </div>
                 </Modal>
