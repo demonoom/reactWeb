@@ -48,11 +48,15 @@ const AntMulitiClassComponents = React.createClass({
         window.addEventListener('message', function (response) {
             var data = response.data;
             if(typeof(data)=="string" ){
-                var dataJson = JSON.parse(data);
-                var method = dataJson.method;
-                if(method=="openNewPage"){
-                    var url = dataJson.url;
-                    _this.setState({reviewInnerModalVisible: true, reviewInnerUrl: url});
+                try{
+                    var dataJson = JSON.parse(data);
+                    var method = dataJson.method;
+                    if(method=="openNewPage"){
+                        var url = dataJson.url;
+                        _this.setState({reviewInnerModalVisible: true, reviewInnerUrl: url});
+                    }
+                }catch (e){
+
                 }
             }
         });
