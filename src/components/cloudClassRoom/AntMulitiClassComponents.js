@@ -971,7 +971,9 @@ const AntMulitiClassComponents = React.createClass({
         var requestUrl = FACE_EMOTIONS_URL;
 
         requestUrl += "?vid="+liveObj.virtual_classId+"&userId="+loginUser+"&type=2"+"&name="+encodeURI(liveObj.name);
-        this.setState({reviewModalVisible: true, reviewUrl: requestUrl});
+        this.setState({reviewModalVisible: true, reviewUrl: requestUrl},()=>{
+                document.getElementsByClassName("iframeDiv")[0].setAttribute('allowfullscreen','true')
+        });
         //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
         // newTab.location.href = requestUrl;
 
@@ -1576,7 +1578,9 @@ const AntMulitiClassComponents = React.createClass({
                     wrapClassName="RechargeModal bodyPadding playModal"
                     footer={[]}>
                     <div id="font_center">
-                        <iframe src={this.state.reviewUrl}></iframe>
+                        <iframe className="iframeDiv" src={this.state.reviewUrl}
+                         allowfullscreen="true"
+                        ></iframe>
                     </div>
                 </Modal>
 
@@ -1589,7 +1593,9 @@ const AntMulitiClassComponents = React.createClass({
                     wrapClassName="RechargeModal bodyPadding playModal"
                     footer={[]}>
                     <div id="font_center">
-                        <iframe src={this.state.reviewInnerUrl}></iframe>
+                        <iframe className="iframeDiv"  src={this.state.reviewInnerUrl}
+                         allowfullscreen="true"
+                        ></iframe>
                     </div>
                 </Modal>
             </div>
