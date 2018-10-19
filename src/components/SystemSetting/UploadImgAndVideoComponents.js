@@ -64,7 +64,7 @@ const UploadImgAndVideoComponents = React.createClass({
                     return false;
                 }
 
-                if (fileNameArr[1] !== "mp4" && fileNameArr[1] !== "jpg" ) {
+                if (fileNameArr[1] !== "mp4" && fileNameArr[1] !== "jpg" && fileNameArr[1] !== "JPG") {
                     message.error('文件格式不符合，请重新上传', 5);
                     return false;
                 }
