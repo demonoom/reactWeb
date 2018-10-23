@@ -353,19 +353,19 @@ class SystemSettingGhostMenu extends React.Component {
             </li>;
             liArr.push(newLi);
         }
-        var newLi = <li className="multi">
-            <ul className="second">
-                <li onClick={event => {
-                    _this.checkWords({
-                        method: 'openNewPage',
-                        url: 'http://jiaoxue.maaee.com:8091/#/classListMobile'
-                        // url: 'http://192.168.50.72:8091/#/classListMobile'
-                    }, '实时健康数据');
-                }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/healty-icon.png" />实时健康数据
-                    </li>
-            </ul>
-        </li>;
-        liArr.push(newLi);
+        // var newLi = <li className="multi">
+        //     <ul className="second">
+        //         <li onClick={event => {
+        //             _this.checkWords({
+        //                 method: 'openNewPage',
+        //                 url: 'http://jiaoxue.maaee.com:8091/#/classListMobile'
+        //                 // url: 'http://192.168.50.72:8091/#/classListMobile'
+        //             }, '实时健康数据');
+        //         }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/healty-icon.png" />实时健康数据
+        //             </li>
+        //     </ul>
+        // </li>;
+        // liArr.push(newLi);
 
         // if (_this.state.ident == 23836) {
         //     // 上传视频
