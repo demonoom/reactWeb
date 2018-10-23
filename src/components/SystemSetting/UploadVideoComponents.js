@@ -58,7 +58,14 @@ const UploadImgComponents = React.createClass({
                     return false;
                 }
                 var fileType = file.type;
-
+                // console.log((file.size)/1024,"kb")
+                // console.log(((file.size)/1024/1024),"m")
+                // console.log(file.size,"byte")
+                // console.log(file,"file")
+                if((file.size)/1024/1024 > 100) {
+                    message.error('请上传100M内的文件', 5);
+                    return false;
+                }
                 var fileName = file.name;
                 var fileNameArr = fileName.split(".");
 
