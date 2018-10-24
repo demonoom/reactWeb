@@ -46,7 +46,6 @@ export const QUESTION_DETAIL_URL = "http://jiaoxue.maaee.com:8091/#/questionDeti
 export const LOCAL_CLASS_ROOM_URL = IS_DEBUG ? "http://localhost:8090/#/localClassRoom" : "http://jiaoxue.maaee.com:8989/#/localClassRoom";
 //AR教材的schoolId
 export const AR_SCHOOL_ARRAY = [9];
-export const AR_USER_ARRAY = [23836];
 
 var baseEmotionMap = new Map();
 baseEmotionMap.set("[bexp_0001]", "baseEmotions/bexp_0001.png");
