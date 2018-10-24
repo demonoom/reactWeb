@@ -33,6 +33,7 @@ class SystemSettingGhostMenu extends React.Component {
             uploadAttechModalIsShow: false,
             uploadImgAndVideoIsShow: false
         }
+        // console.log(this.state.loginUser.schoolId,"loginUser")
         this.changeMenu = this.changeMenu.bind(this);
         this.showpanel = this.showpanel.bind(this);
         this.checkWords = this.checkWords.bind(this);
@@ -240,7 +241,7 @@ class SystemSettingGhostMenu extends React.Component {
         //     </li>;
         //     liArr.push(newLi);
         // }
-        if (AR_UPLOAD_ALLOWED.indexOf(_this.state.ident) != -1) {
+        if (AR_UPLOAD_ALLOWED.indexOf(_this.state.ident) != -1 || AR_SCHOOL_ARRAY.indexOf(_this.state.loginUser.schoolId) != -1) {
             var newLi = <li className="multi">
                 <ul className="second">
                     <li onClick={event => {

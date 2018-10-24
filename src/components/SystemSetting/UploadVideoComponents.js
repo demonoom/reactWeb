@@ -63,7 +63,7 @@ const UploadImgComponents = React.createClass({
                 // console.log(file.size,"byte")
                 // console.log(file,"file")
                 if((file.size)/1024/1024 > 200) {
-                    message.error('请上传200M内的文件', 5);
+                    message.error('请上传200M以内的文件', 5);
                     return false;
                 }
                 var fileName = file.name;
