@@ -44,6 +44,10 @@ export const AR_UPLOAD_ALLOWED = ["67951", "67940", "67985", "67938", "67937", "
                     "12063", "24761", "126013", "4298", "32526", "23836", "54208"];
 export const QUESTION_DETAIL_URL = "http://jiaoxue.maaee.com:8091/#/questionDetil";
 export const LOCAL_CLASS_ROOM_URL = IS_DEBUG ? "http://localhost:8090/#/localClassRoom" : "http://jiaoxue.maaee.com:8989/#/localClassRoom";
+//AR教材的schoolId
+export const AR_SCHOOL_ARRAY = [9];
+export const AR_USER_ARRAY = [23836];
+
 var baseEmotionMap = new Map();
 baseEmotionMap.set("[bexp_0001]", "baseEmotions/bexp_0001.png");
 baseEmotionMap.set("[bexp_0002]", "baseEmotions/bexp_0002.png");

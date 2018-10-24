@@ -11,7 +11,7 @@ import UnLoadVideoComplexModal from "./unLoadVideoComplexModal"
 import UploadAttechModal from "./uploadAttechModal";
 import UploadImgAndVideoModal from "./UploadImgAndVideoModal";
 import UploadVideoModal from "./UploadVideoModal"
-import { AR_TAG_ALLOWED, AR_UPLOAD_ALLOWED } from "../../utils/Const";
+import { AR_TAG_ALLOWED, AR_UPLOAD_ALLOWED,AR_SCHOOL_ARRAY,AR_USER_ARRAY } from "../../utils/Const";
 import { showNoomLargeImg } from '../../utils/utils'
 import { showLargeImg } from '../../utils/utils'
 import { flattenDiagnosticMessageText } from 'typescript';
