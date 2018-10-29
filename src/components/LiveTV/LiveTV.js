@@ -52,7 +52,7 @@ class LiveTV extends React.Component {
         let _this = this;
         var param = {
             "method": 'getLiveInfos',
-            "userId":_this.state.ident,
+            "userId": _this.state.ident,
             "pageNo": pageNo || 1,
         };
 
@@ -81,7 +81,7 @@ class LiveTV extends React.Component {
             "cityCode": '',
             "schoolId": '',
             "kemu": '',
-            "userId":_this.state.ident,
+            "userId": _this.state.ident,
         };
 
         doWebService(JSON.stringify(param), {
@@ -108,7 +108,7 @@ class LiveTV extends React.Component {
         var param = {
             "method": 'getLivedLiveInfos',
             "pageNo": pageNo || 1,
-            "userId":_this.state.ident,
+            "userId": _this.state.ident,
         };
 
         doWebService(JSON.stringify(param), {
@@ -191,20 +191,20 @@ class LiveTV extends React.Component {
             });
 
 
-        }else {
+        } else {
             this._getHistoryLiveInfos(objref, this._okViewHistoryLive3);
         }
 
 
     }
 
-    _viewLive11(){
+    _viewLive11() {
 
 
     }
 
     // 获取历史搜索直播课信息
-    _preRequestHistorySearch(objref){
+    _preRequestHistorySearch(objref) {
         this._viewHistoryLiveTV(objref);
     }
 
@@ -213,7 +213,7 @@ class LiveTV extends React.Component {
         let title = null;
         let mode = this.currentTab.replace('_tab', '');
 
-        switch (mode){
+        switch (mode) {
             case 'history':
                 this._viewHistoryLiveTV(objref);
                 return;
@@ -242,7 +242,7 @@ class LiveTV extends React.Component {
             // 显示弹窗
             Modal.confirm({
                 title: '请输入密码',
-				className:'4444444',
+                className: '4444444',
                 content: <Input id="tmppwd"/>,
                 okText: '确定',
                 cancelText: '取消',
@@ -266,21 +266,29 @@ class LiveTV extends React.Component {
 
     }
 
+    /**
+     * 营养池被点击
+     * @param type
+     */
     change(type) {
 
         this.currentTab = type + '_tab';
         switch (type) {
             case 'liveTV':
-                this._getLives(1);
-                this.setState({"currentOpt":'lives'});
+                this.setState({lives: [], rsCount: 0}, () => {
+                    this._getLives(1);
+                })
+                this.setState({"currentOpt": 'lives'});
                 break;
             case 'history':
-                this._searchHistoryLives(1);
-                this.setState({"currentOpt":'historyLives'});
+                this.setState({lives: [], rsCount: 0}, () => {
+                    this._searchHistoryLives(1);
+                })
+                this.setState({"currentOpt": 'historyLives'});
                 break;
             case 'exam':
                 this.turnToTestTimeLine();
-                this.setState({"currentOpt":'exam'});
+                this.setState({"currentOpt": 'exam'});
                 break;
         }
     }
@@ -288,14 +296,18 @@ class LiveTV extends React.Component {
     /**
      * 转向到考试功能页面
      */
-    turnToTestTimeLine(){
-        if(typeof(this.refs.testListComponents)!="undefined"){
+    turnToTestTimeLine() {
+        if (typeof(this.refs.testListComponents) != "undefined") {
             this.refs.testListComponents.getTestList();
         }
         // this.setState({"currentOpt":'exam'});
     }
 
-
+    /**
+     * 分页被点击
+     * @param pageno
+     * @private
+     */
     _changePage(pageno) {
         switch (this.currentTab) {
             case 'liveTV_tab':
@@ -311,21 +323,26 @@ class LiveTV extends React.Component {
         let _this = this;
         let txt = $('#searchTxt').val();
         if (!txt) {
-
-            txt = this.userinfo.schoolName;
+            var param = {
+                "method": 'getLivedLiveInfos',
+                "pageNo": pageNo || 1,
+                "cityCode": '',
+                "schoolId": '',
+                "kemu": '',
+                "userId": _this.state.ident,
+            };
+        } else {
+            var param = {
+                "method": 'searchLiveInfosBeanByKeywords',
+                "keywords": txt,
+                "pageNo": pageNo || 1,
+                "userId": _this.state.ident,
+            };
         }
-
-        var param = {
-          //  "method": 'searchLiveInfosByKeywords',
-            "method": 'searchLiveInfosBeanByKeywords',
-            "keywords":  txt,
-            "pageNo": pageNo || 1,
-            "userId":_this.state.ident,
-        };
 
         doWebService(JSON.stringify(param), {
             onResponse: function (res) {
-              //  _this.currentTab = 'historySearch_tab';
+                //  _this.currentTab = 'historySearch_tab';
                 _this.setState({lives: res.response, ...res.pager});
             },
             onError: function (error) {
@@ -343,16 +360,16 @@ class LiveTV extends React.Component {
                 this.titleUi = <div className="public—til—blue">直播课堂</div>;
                 break;
             case 'history_tab':
-				this.titleUi = <div className="public—til—blue">
-					<div className="search">
-                    	<Input id="searchTxt" type="text" placeholder="请输入历史课堂标题！" onPressEnter={(e) => {
-                        	this._searchHistoryLives()
-                   		 }}/>
-                    	<Button icon="search" onClick={(e) => {
-                        	this._searchHistoryLives()
-                    	}}>搜索</Button>
-                	</div>
-				</div>;
+                this.titleUi = <div className="public—til—blue">
+                    <div className="search">
+                        <Input id="searchTxt" type="text" placeholder="请输入历史课堂标题！" onPressEnter={(e) => {
+                            this._searchHistoryLives()
+                        }}/>
+                        <Button icon="search" onClick={(e) => {
+                            this._searchHistoryLives()
+                        }}>搜索</Button>
+                    </div>
+                </div>;
                 break;
             case 'historySearch_tab':
                 this.titleUi = <div className="public—til—blue">历史课堂回顾搜索列表</div>;
@@ -388,9 +405,9 @@ class LiveTV extends React.Component {
 
             return <Card className="live" key={id}>
                 <p className="h3">{liveInfoTitle}</p>
-                <div className="live_img" id={id} onClick={ () => {
+                <div className="live_img" id={id} onClick={() => {
                     _this.view(item)
-                } }>
+                }}>
                     <img className="attention_img" width="100%" src={teacherFace}/>
                     <div className="live_green">
                         <span>{schoolName}</span>
@@ -404,6 +421,7 @@ class LiveTV extends React.Component {
 
 
     }
+
     _buildLivesUi() {
         let dataArr = this.state.lives;
         this.livesUi = null;
@@ -412,22 +430,20 @@ class LiveTV extends React.Component {
             this.livesUi = <img className="noDataTipImg" src={require('../images/noDataTipImg.png')}/>;
             return;
         }
-        if( this.currentTab=='historySearch_tab' ){
+        if (this.currentTab == 'historySearch_tab') {
             return this.historySearch_Ui_build();
         }
         //
         //
         //
         this.livesUi = dataArr.map(function (item) {
-
-            console.log(item);
             let keyIcon;
             let id = item.id;
             let user = item.user;
             let title = item.title;
             let userName = user.userName;
             // let cover = item.liveCover.cover;
-            let liveCover = item.liveCover?item.liveCover:"";
+            let liveCover = item.liveCover ? item.liveCover : "";
             let cover = liveCover.cover;
             let schoolName = item.schoolName;
             let courseName = item.courseName;
@@ -439,9 +455,9 @@ class LiveTV extends React.Component {
 
             return <Card className="live" key={id}>
                 <p className="h3">{title}</p>
-                <div className="live_img" id={id} onClick={ () => {
+                <div className="live_img" id={id} onClick={() => {
                     _this.view(item)
-                } }>
+                }}>
                     <img className="attention_img" width="100%" src={cover}/>
                     <div className="live_green"><span>{schoolName}</span></div>
                 </div>
@@ -452,7 +468,7 @@ class LiveTV extends React.Component {
                             <span className="live_span_1 live_span_3">{userName}</span>
                             <span className="live_color live_orange right_ri live_span_2">{courseName}</span>
                         </li>
-                        <li>
+                        <li style={{height: '21px'}}>
                             {keyIcon}
                             <span className="time right_ri">{startTime}</span>
                         </li>
@@ -487,20 +503,19 @@ class LiveTV extends React.Component {
         </div>;
 
         var mainPanel;
-        if(typeof(this.state.currentOpt)!="undefined" &&  this.state.currentOpt=="exam"){
+        if (typeof(this.state.currentOpt) != "undefined" && this.state.currentOpt == "exam") {
             mainPanel = <div className="favorite_scroll favorite_up">
                 <TestListComponents ref="testListComponents"></TestListComponents>
-                </div>;
-        }else{
-            mainPanel = <div className={this.currentTab} >
-                { this.titleUi  }
-                { this.searchUi  }
+            </div>;
+        } else {
+            mainPanel = <div className={this.currentTab}>
+                {this.titleUi}
+                {this.searchUi}
                 <div id="searchBeforePanel" className="favorite_scroll2 favorite_up favorite_le_h">{this.livesUi}</div>
                 <Pagination total={this.state.rsCount} pageSize={getPageSize()} current={this.state.pageNo}
                             onChange={this._changePage}/>
             </div>;
         }
-
 
 
         return (
