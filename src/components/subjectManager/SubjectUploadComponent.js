@@ -857,7 +857,7 @@ const SubjectUploadComponent = React.createClass({
                             <Col span={20}>
                                 <SubjectContent ref="subjectContent"/>
                                 {/*className="row-t-f roe-t-f-left"*/}
-                                <Button className="row-t-f" onClick={this.showAnalysisModal}>题目解析</Button>
+                                {/*<Button className="row-t-f" onClick={this.showAnalysisModal}>题目解析</Button>*/}
                                 {audioButton}
                             </Col>
                         </Row>
