@@ -46,10 +46,10 @@ const CloudFileUploadComponents = React.createClass({
     },
 
     checkFileInfo(files) {
-        var fileSize = 157286400; //150M
+        var maxFileSize = 157286400; //150M
         var tipMessage="请勿上传超过150M的文件，谢谢!";
         if(AR_SCHOOL_ARRAY.indexOf(this.state.loginUser.schoolId) != -1){
-            fileSize = 524288000;   //500M
+            maxFileSize = 524288000;   //500M
             tipMessage="请勿上传超过500M的文件，谢谢!";
         }
         if (files.length <= 0) {
@@ -73,7 +73,7 @@ const CloudFileUploadComponents = React.createClass({
                 } else if (!this.checkIsRightFileTypeByEndWith(fileType)) {
                     /*message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp3、mp4、flv文件的上传操作,请重新上传,谢谢!",10);*/
                     message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp4、flv文件的上传操作,请重新上传,谢谢!", 10);
-                } else if (fileSize >= parseInt(fileSize)) {
+                } else if (fileSize >= parseInt(maxFileSize)) {
                     message.warning(tipMessage);
                 } else {
                     var fileJson = {label: fileName, value: fileName, fileObj: file};
