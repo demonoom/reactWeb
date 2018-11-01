@@ -139,9 +139,12 @@ class SelectKnowledgeModal extends React.Component {
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret,"ret")
                 if (ret.msg == "调用成功" && ret.success == true) {
                     //children.splice(0);
                     var response = ret.response;
+                console.log(ret.response,"response")
+
                     // _this.setState({knowledgeResponse:response});
                     response.forEach(function (knowledgeInfo) {
                         var knowledgeId = knowledgeInfo.knowledgeId;

@@ -55,7 +55,6 @@ var data = [];
 
 const TeacherAllSubjects = React.createClass({
     getInitialState() {
-
         return {
             selectedRowKeys: [],  // Check here to configure the default column
             loading: false,
@@ -101,10 +100,10 @@ const TeacherAllSubjects = React.createClass({
             "userId": ident,
             "pageNo": pageNo
         };
-
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 data.splice(0);
+                console.log(ret,"ret题目")
                 var response = ret.response;
                 if (response == null || response.length == 0) {
                     _self.setState({totalCount: 0});
@@ -173,6 +172,7 @@ const TeacherAllSubjects = React.createClass({
 
     //删除资源库下的题目
     delMySubjects: function () {
+        console.log("4567890")
         let _self = this;
         var subjectIds = this.state.delSubjectIds;
         var param = {
@@ -180,9 +180,9 @@ const TeacherAllSubjects = React.createClass({
             "userId": sessionStorage.getItem("ident"),
             "subjects": subjectIds
         };
-
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret,"delete")
                 _self.closeConfirmModal();
                 if (ret.response) {
                     message.success("删除成功");

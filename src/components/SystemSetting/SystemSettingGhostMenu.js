@@ -226,21 +226,21 @@ class SystemSettingGhostMenu extends React.Component {
             liArr = [];
         }
 
-        // if (_this.state.ident == 23836) {
-        //     var newLi = <li className="multi">
-        //         <ul className="second">
-        //             <li onClick={event => {
-        //                 _this.checkWords({
-        //                     method: 'openNewPage',
-        //                     // url: 'http://jiaoxue.maaee.com:8091/#/classCardHomePageDoor',
-        //                     url: 'http://192.168.50.72:8091/#/classCardHomePageDoor'
-        //                 }, '班牌编辑');
-        //             }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />班牌编辑2
-        //             </li>
-        //         </ul>
-        //     </li>;
-        //     liArr.push(newLi);
-        // }
+        if (_this.state.ident == 23836) {
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords({
+                            method: 'openNewPage',
+                            // url: 'http://jiaoxue.maaee.com:8091/#/classCardHomePageDoor',
+                            url: 'http://192.168.50.72:8091/#/classCardHomePageDoor'
+                        }, '班牌编辑');
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />班牌编辑2
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
+        }
         if (AR_UPLOAD_ALLOWED.indexOf(_this.state.ident) != -1 || AR_SCHOOL_ARRAY.indexOf(_this.state.loginUser.schoolId) != -1) {
             var newLi = <li className="multi">
                 <ul className="second">

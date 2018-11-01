@@ -378,6 +378,7 @@ const PersonCenterComponents = React.createClass({
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret,"ret222")
                 subjectList.splice(0);
                 data.splice(0);
                 var response = ret.response;

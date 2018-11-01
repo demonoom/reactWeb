@@ -341,7 +341,7 @@ class SUbjectTable extends React.Component {
                 _this.getSubjectDataByKnowledge(sessionStorage.getItem("ident"), _this.state.ScheduleOrSubjectId, _this.state.currentPage, "Y",_this.state.subjectVisible);
             },
             onError: function (error) {
-                message.error(error);
+                // message.error(error);
             }
         });
         this.setState({isDeleteAllSubject: false});
