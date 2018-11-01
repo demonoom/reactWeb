@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {message, Select, Row, Button, Checkbox} from 'antd';
-
+import {AR_SCHOOL_ARRAY} from '../../utils/Const';
 const CheckboxGroup = Checkbox.Group;
 
 var submitFileOptions = [];
@@ -8,7 +8,9 @@ var submitFileOptions = [];
 const CloudFileUploadComponents = React.createClass({
     getInitialState() {
         submitFileOptions = [];
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
+            loginUser: loginUser,
             visible: false,
             submitFileCheckedList: [],
             submitFileOptions: [],
@@ -44,6 +46,12 @@ const CloudFileUploadComponents = React.createClass({
     },
 
     checkFileInfo(files) {
+        var maxFileSize = 157286400; //150M
+        var tipMessage="请勿上传超过150M的文件，谢谢!";
+        if(AR_SCHOOL_ARRAY.indexOf(this.state.loginUser.schoolId) != -1){
+            maxFileSize = 524288000;   //500M
+            tipMessage="请勿上传超过500M的文件，谢谢!";
+        }
         if (files.length <= 0) {
             message.warning("请选择或拖拽待上传的文件,谢谢！");
         } else {
@@ -65,8 +73,8 @@ const CloudFileUploadComponents = React.createClass({
                 } else if (!this.checkIsRightFileTypeByEndWith(fileType)) {
                     /*message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp3、mp4、flv文件的上传操作,请重新上传,谢谢!",10);*/
                     message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp4、flv文件的上传操作,请重新上传,谢谢!", 10);
-                } else if (fileSize >= 157286400) {
-                    message.warning("请勿上传超过150M的文件，谢谢!");
+                } else if (fileSize >= parseInt(maxFileSize)) {
+                    message.warning(tipMessage);
                 } else {
                     var fileJson = {label: fileName, value: fileName, fileObj: file};
                     submitFileOptions.push(fileJson);
