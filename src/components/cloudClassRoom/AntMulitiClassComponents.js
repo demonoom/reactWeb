@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Card, Radio, Row, Col, Button, Icon, message, Steps, Modal, Form, Pagination, Select, Input} from 'antd';
 import {doWebService_CloudClassRoom, TEACH_LIVE_URL,FACE_EMOTIONS_URL} from '../../utils/CloudClassRoomURLUtils';
-import {getPageSize} from '../../utils/Const';
+import {getCloudClassPageSize} from '../../utils/Const';
 import {getLocalTime, formatYMD, formatHM, formatNoSecond} from '../../utils/utils';
 import {isEmpty, cutString, getLocalFromLanguage, isToday} from '../../utils/utils';
 import ConfirmModal from '../ConfirmModal';
@@ -90,7 +90,7 @@ const AntMulitiClassComponents = React.createClass({
             "course_class": courseClass,
             "isseries": '',
             "coursetypeid": '',
-            "numPerPage": getPageSize(),
+            "numPerPage": getCloudClassPageSize(),
             "is_publish": '0',
             "userId": cloudClassRoomUser.colUid
         };
@@ -1439,7 +1439,7 @@ const AntMulitiClassComponents = React.createClass({
                         </div>
                     </div>
 
-                    <Pagination total={this.state.total} pageSize={getPageSize()} current={this.state.currentPage}
+                    <Pagination total={this.state.total} pageSize={getCloudClassPageSize()} current={this.state.currentPage}
                                 onChange={this.pageOnChange}/>
                 </div>
                 <Modal className="modal_course"
