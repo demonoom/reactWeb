@@ -75,9 +75,9 @@ const UpdateClassComponents = React.createClass({
         var updateClassObj = this.props.updateClassObj;
         this.setState({updateClassObj});
         this.findTeamByUserId();
-        /*if(isEmpty(updateClassObj)==false){
+        if(isEmpty(updateClassObj)==false){
             this.initPageInfo(updateClassObj);
-        }*/
+        }
     },
 
     componentWillMount() {
