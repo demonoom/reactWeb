@@ -394,7 +394,7 @@ class SystemSettingGhostMenu extends React.Component {
                             method: 'openNewPage',
                             url: 'http://192.168.50.72:8091/#/pushVideo?schoolId='+_this.state.loginUser.schoolId
                         }, '推送视频');
-                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />推送视频
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />推送视频1
                     </li>
                 </ul>
             </li>;
