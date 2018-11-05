@@ -46,6 +46,7 @@ import SendPicModel from '../components/antGroup/SendPicModel'
 import {isEmpty, showLargeImg, setLocalLanaguage, getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
 import BindCoordinates from '../components/BindCoordinates/BindCoordinates'
 import UploadMp3Modal from '../components/UploadMp3Modal'
+import UploadOnlyVideoModal from '../components/SystemSetting/UploadOnlyVideoModal'
 //国际化
 import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
@@ -134,7 +135,9 @@ const MainLayout = React.createClass({
             videoPlayModel: false,
             inputValue: '',
             selectMp3ModalIsShow: false,
+            calmOnlyVideoModalIsShow: false,
             selectMp3CallbackId: '',
+            calmOnlyVideoCallbackId: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -200,6 +203,7 @@ const MainLayout = React.createClass({
         window.__playVideo__ = this.playVideo;
         window.__playAudio__ = this.playAudio;
         window.__selectMp3__ = this.selectMp3;
+        window.__calmOnlyVideo__ = this.calmOnlyVideo;
         window.__noomSaveFileError__ = this.noomSaveFile;
     },
 
@@ -263,9 +267,17 @@ const MainLayout = React.createClass({
         this.setState({selectMp3ModalIsShow: true});
         this.setState({selectMp3CallbackId: callbackId});
     },
+    calmOnlyVideo(callbackId) {
+        //控制上传组件的显示与隐藏
+        this.setState({calmOnlyVideoModalIsShow: true});
+        this.setState({calmOnlyVideoCallbackId: callbackId});
+    },
 
     closeSelectMp3Model() {
         this.setState({selectMp3ModalIsShow: false});
+    },
+    closecalmOnlyVideoModalIsShowModel() {
+        this.setState({calmOnlyVideoModalIsShow: false});
     },
 
     playVideo(src) {
@@ -3387,6 +3399,11 @@ const MainLayout = React.createClass({
                             isShow={this.state.selectMp3ModalIsShow}
                             closeDingModel={this.closeSelectMp3Model}
                             callbackId={this.state.selectMp3CallbackId}
+                        />
+                        <UploadOnlyVideoModal
+                            isShow={this.state.calmOnlyVideoModalIsShow}
+                            closeDingModel={this.closecalmOnlyVideoModalIsShowModel}
+                            callbackId={this.state.calmOnlyVideoCallbackId}
                         />
 
                     </div>

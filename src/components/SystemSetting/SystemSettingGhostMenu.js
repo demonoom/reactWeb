@@ -386,6 +386,21 @@ class SystemSettingGhostMenu extends React.Component {
         //     liArr.push(newLi);
         // }
 
+        if (_this.state.ident == 23836) {
+            var newLi = <li className="multi">
+                <ul className="second">
+                    <li onClick={event => {
+                        _this.checkWords({
+                            method: 'openNewPage',
+                            url: 'http://192.168.50.72:8091/#/pushVideo?schoolId='+loginUser.schoolId
+                        }, '推送视频');
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />推送视频
+                    </li>
+                </ul>
+            </li>;
+            liArr.push(newLi);
+        }
+
 
         //手动添加的测试菜单---开始
         var flowUl = <li className="multi">
