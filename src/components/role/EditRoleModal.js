@@ -266,7 +266,7 @@ class AddSubGroupModal extends React.Component {
                     ]}
                 >
                     <div className="isDel">
-                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        <img className="sadFeel" src={require("../../../jquery-photo-gallery/icon/sad.png")} />
                         确定删除?
                     </div>
                 </Modal>

@@ -1509,7 +1509,7 @@ const CreateExamPagerComponents = React.createClass({
                     ]}
                 >
                 <div className="isDel">
-                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                <img className="sadFeel" src={require("../../../jquery-photo-gallery/icon/sad.png")} />
                 确定要删除该题目?</div>
 
                 </Modal>
@@ -1532,7 +1532,7 @@ const CreateExamPagerComponents = React.createClass({
                     ]}
                 >
                 <div className="isDel">
-                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                <img className="sadFeel" src={require("../../../jquery-photo-gallery/icon/sad.png")} />
                 确定要删除该答题卡?</div>
 
                 </Modal>
@@ -1555,7 +1555,7 @@ const CreateExamPagerComponents = React.createClass({
                     ]}
                 >
                 <div className="isDel">
-                <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                <img className="sadFeel" src={require("../../../jquery-photo-gallery/icon/sad.png")} />
                 确定要清除全部答题卡?</div>
 
                 </Modal>

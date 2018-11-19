@@ -1,5 +1,8 @@
 const webpack = require('atool-build/lib/webpack');
-const UglifyJSPlugin = require('atool-build/node_modules/webpack/lib/optimize/UglifyJsPlugin')
+const path = require('path');  //引入path模块
+// const UglifyJSPlugin = require('atool-build/node_modules/webpack/lib/optimize/UglifyJsPlugin')
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = function (webpackConfig, env) {
     webpackConfig.babel.plugins.push('transform-runtime');
@@ -82,6 +85,20 @@ module.exports = function (webpackConfig, env) {
             loader.test = /\.css$/;
         }
     });
+
+    //抽取CSS文件插件
+    new ExtractTextPlugin({filename: '[name].css', allChunks: true}),
+
+    new HtmlWebpackPlugin({
+        title: "HtmlPlugin",
+        // filename :"index.html",
+        template: path.join(__dirname, "./src/index.html"),
+        // template:(useDefinedHtml ? useDefinedHtml : defaultHtml),
+        //we must use html-loader here instead of file-loader
+        inject: "body",
+        cache: false,
+        xhtml: false
+    })
 
     return webpackConfig;
 };
