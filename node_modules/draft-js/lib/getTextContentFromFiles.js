@@ -12,8 +12,6 @@
 
 'use strict';
 
-var invariant = require('fbjs/lib/invariant');
-
 var TEXT_CLIPPING_REGEX = /\.textClipping$/;
 
 var TEXT_TYPES = {
@@ -66,9 +64,7 @@ function readFile(file, callback) {
 
   var reader = new FileReader();
   reader.onload = function () {
-    var result = reader.result;
-    !(typeof result === 'string') ? process.env.NODE_ENV !== 'production' ? invariant(false, 'We should be calling "FileReader.readAsText" which returns a string') : invariant(false) : void 0;
-    callback(result);
+    callback(reader.result);
   };
   reader.onerror = function () {
     callback('');

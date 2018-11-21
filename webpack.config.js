@@ -1,6 +1,5 @@
 const webpack = require('atool-build/lib/webpack');
 const path = require('path');  //引入path模块
-// const UglifyJSPlugin = require('atool-build/node_modules/webpack/lib/optimize/UglifyJsPlugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
@@ -14,7 +13,6 @@ module.exports = function (webpackConfig, env) {
     entry: {
         app: './src/index.js'
     }
-
 
     // Support hmr
     if (env === 'development') {
@@ -35,25 +33,25 @@ module.exports = function (webpackConfig, env) {
      * 使用webpack自带Uglify插件
      * 加入了这个插件之后，编译的速度会明显变慢
      */
-    // webpackConfig.plugins.push(
-    //     new UglifyJSPlugin({
-    //         mangle: {
-    //             except: ['$super', '$', 'exports', 'require', 'module', '_']
-    //         },
-    //         output: {
-    //             // 是否输出可读性较强的代码，即会保留空格和制表符，默认为是，为了达到更好的压缩效果，可以设置为 false。
-    //             beautify: false,
-    //             // 是否保留代码中的注释，默认为保留，为了达到更好的压缩效果，可以设置为 false。
-    //             comments: false,
-    //         },
-    //         compress: {
-    //             // 是否剔除代码中所有的  console  语句，默认为不剔除。开启后不仅可以提升代码压缩效果，也可以兼容不支持 console 语句 IE 浏览器。
-    //             drop_console: true,
-    //             // 是否内嵌定义了但是只用到一次的变量，例如把 var x = 5; y = x 转换成 y = 5，默认为不转换。为了达到更好的压缩效果，可以设置为 false。
-    //             collapse_vars: false
-    //         }
-    //     })
-    // )
+    /*webpackConfig.plugins.push(
+        new UglifyJSPlugin({
+            mangle: {
+                except: ['$super', '$', 'exports', 'require', 'module', '_']
+            },
+            output: {
+                // 是否输出可读性较强的代码，即会保留空格和制表符，默认为是，为了达到更好的压缩效果，可以设置为 false。
+                beautify: false,
+                // 是否保留代码中的注释，默认为保留，为了达到更好的压缩效果，可以设置为 false。
+                comments: false,
+            },
+            compress: {
+                // 是否剔除代码中所有的  console  语句，默认为不剔除。开启后不仅可以提升代码压缩效果，也可以兼容不支持 console 语句 IE 浏览器。
+                drop_console: true,
+                // 是否内嵌定义了但是只用到一次的变量，例如把 var x = 5; y = x 转换成 y = 5，默认为不转换。为了达到更好的压缩效果，可以设置为 false。
+                collapse_vars: false
+            }
+        })
+    )*/
 
     // Support CSS Modules
     // Parse all less files as css module.
@@ -87,7 +85,7 @@ module.exports = function (webpackConfig, env) {
     });
 
     //抽取CSS文件插件
-    new ExtractTextPlugin({filename: '[name].css', allChunks: true}),
+    new ExtractTextPlugin({filename: '[name].[contenthash:8].css?v=1', allChunks: true}),
 
     new HtmlWebpackPlugin({
         title: "HtmlPlugin",
@@ -97,7 +95,19 @@ module.exports = function (webpackConfig, env) {
         //we must use html-loader here instead of file-loader
         inject: "body",
         cache: false,
-        xhtml: false
+        xhtml: false,
+        minify: {
+            removeComments: true,
+            collapseWhitespace: true,
+            removeRedundantAttributes: true,
+            useShortDoctype: true,
+            removeEmptyAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            keepClosingSlash: true,
+            minifyJS: true,
+            minifyCSS: true,
+            minifyURLs: true,
+        }
     })
 
     return webpackConfig;

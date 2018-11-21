@@ -4,7 +4,7 @@
     "index": "./src/index.js"
   },
   "dependencies": {
-    "antd": "^2.2.0",
+    "antd": "2.2.0",
     "babel-plugin-import": "^1.0.1",
     "classnames": "^2.2.5",
     "cookie-parser": "^1.4.3",
@@ -27,6 +27,7 @@
     "minimist": "^1.2.0",
     "moment": "^2.16.0",
     "path": "^0.12.7",
+    "paths": "^0.1.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-emoji-picker": "^1.0.13",
@@ -43,7 +44,7 @@
     "window-size": "^1.1.1"
   },
   "devDependencies": {
-    "atool-build": "^0.8.0",
+    "atool-build": "0.8.0",
     "atool-test-mocha": "^0.1.5",
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-plugin-dva-hmr": "^0.2.0",
