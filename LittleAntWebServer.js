@@ -55,11 +55,12 @@ if(debug){
 var maaeeTargetUrl = "http://www.maaee.com";//目标后端服务地址
 var maaeeTargetUrlByHttps = "https://www.maaee.com";//目标后端服务地址
 var ServerOf217Url = "http://60.205.86.217:8585";//目标后端服务地址
+var jiaoxueServerTargetUrl = "http://jiaoxue.maaee.com:8989";//目标后端服务地址
 
 //代理eduction请求路径
 var proxyOptionOfEducation ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/Excoord_For_Education': "/Excoord_For_Education" }
 };
@@ -68,7 +69,7 @@ app.use("/proxy/Excoord_For_Education",proxy(proxyOptionOfEducation));
 //代理Excoord_PhoneService请求路径
 var proxyOptionOfPhoneService ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/Excoord_PhoneService': "/Excoord_PhoneService" }
 };
@@ -77,7 +78,7 @@ app.use("/proxy/Excoord_PhoneService",proxy(proxyOptionOfPhoneService));
 //代理ant_service请求路径
 var proxyOptionOfAntService ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/ant_service': "/ant_service" }
 };
@@ -86,7 +87,7 @@ app.use("/proxy/ant_service",proxy(proxyOptionOfAntService));
 //代理Excoord_PC请求路径
 var proxyOptionOfExcoordPC ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/Excoord_PC': "/Excoord_PC" }
 };
@@ -95,7 +96,7 @@ app.use("/proxy/Excoord_PC",proxy(proxyOptionOfExcoordPC));
 //代理h5Point4请求路径
 var proxyOptionOfH5Point4 ={
     target:maaeeTargetUrlByHttps,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/h5Point4': "/h5Point4" }
 };
@@ -104,7 +105,7 @@ app.use("/proxy/h5Point4",proxy(proxyOptionOfH5Point4));
 //代理h5Point3请求路径
 var proxyOptionOfH5Point3 ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/h5Point3': "/h5Point3" }
 };
@@ -113,7 +114,7 @@ app.use("/proxy/h5Point3",proxy(proxyOptionOfH5Point3));
 //代理h5Point3请求路径
 var proxyOptionOfH5Point2 ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/h5Point2': "/h5Point2" }
 };
@@ -122,7 +123,7 @@ app.use("/proxy/h5Point2",proxy(proxyOptionOfH5Point2));
 //代理h5Point3请求路径
 var proxyOptionOfH5Point ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/h5Point': "/h5Point" }
 };
@@ -131,7 +132,7 @@ app.use("/proxy/h5Point",proxy(proxyOptionOfH5Point));
 //代理live2请求路径
 var proxyOptionOfLive2 ={
     target:ServerOf217Url,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/live2': "/live2" }
 };
@@ -140,7 +141,7 @@ app.use("/proxy/live2",proxy(proxyOptionOfLive2));
 //代理live3请求路径
 var proxyOptionOfLive3 ={
     target:ServerOf217Url,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/live3': "/live3" }
 };
@@ -149,7 +150,7 @@ app.use("/proxy/live3",proxy(proxyOptionOfLive3));
 //代理upload4请求路径
 var proxyOptionOfUpload4 ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/upload4': "/upload4" }
 };
@@ -158,7 +159,7 @@ app.use("/proxy/upload4",proxy(proxyOptionOfUpload4));
 //代理upload5请求路径
 var proxyOptionOfUpload5 ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/upload5': "/upload5" }
 };
@@ -167,7 +168,7 @@ app.use("/proxy/upload5",proxy(proxyOptionOfUpload5));
 //代理upload6请求路径
 var proxyOptionOfUpload6 ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/upload6': "/upload6" }
 };
@@ -176,7 +177,7 @@ app.use("/proxy/upload6",proxy(proxyOptionOfUpload6));
 //代理upload7请求路径
 var proxyOptionOfUpload7 ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/upload7': "/upload7" }
 };
@@ -185,7 +186,7 @@ app.use("/proxy/upload7",proxy(proxyOptionOfUpload7));
 //代理upload8请求路径
 var proxyOptionOfUpload8 ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/upload8': "/upload8" }
 };
@@ -194,7 +195,7 @@ app.use("/proxy/upload8",proxy(proxyOptionOfUpload8));
 //代理upload8请求路径
 var proxyOptionOfUpload2 ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/upload2': "/upload2" }
 };
@@ -203,7 +204,7 @@ app.use("/proxy/upload2",proxy(proxyOptionOfUpload2));
 //代理upload3请求路径
 var proxyOptionOfUpload3 ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/upload3': "/upload3" }
 };
@@ -212,7 +213,7 @@ app.use("/proxy/upload3",proxy(proxyOptionOfUpload3));
 //代理upload请求路径
 var proxyOptionOfUpload ={
     target:maaeeTargetUrl,
-    changeOrigoin:true,
+    changeOrigin:true,
     ws: true,
     pathRewrite: { '^/proxy/upload': "/upload" }
 };
