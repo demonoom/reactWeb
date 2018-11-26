@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>小蚂蚁移动教学平台</title>
+    <link rel="icon" href="../src/components/images/logo_title.png" type="image/x-icon"/>
+    <script src="../jquerylib/jquery-3.2.1.min.js"></script>
+    <script src="../jquerylib/jquery-ui.min1.12.js"></script>
+    <!-- 图片蒙层预览组件 -->
+    <script src="../jquery-photo-gallery/jquery.photo.gallery.js?v=0.4"></script>
+    <script src="../jquerylib/jquery.form.js"></script>
+    <script src="../jquerylib/jquery.jsonp.js"></script>
+    <script src="../textboxio/textboxio.js"></script>
+    <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+    <script src="../jQuery-File-Upload-9.11.2/js/vendor/jquery.ui.widget.js"></script>
+    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+    <script src="../jQuery-File-Upload-9.11.2/js/jquery.iframe-transport.js"></script>
+    <!-- The basic File Upload plugin -->
+    <script src="../jQuery-File-Upload-9.11.2/js/jquery.fileupload.js"></script>
+    <script src="../src/components/jquery.draggable.js"></script>
+    <script src="../jQuery-File-Upload-9.11.2/ajaxUpload.js?v=1.6"></script>
+    <script src="../src/components/littlePanle_websocket.js?v=1.7"></script>
+    <script src="static/videojs-flash.min.js"></script>
+    <script src="../hls-noom-master/video.js"></script>
+    <script src="../hls-noom-master/videojs-contrib-hls.js"></script>
+    <script src="../src/components/littlePanle.js?v=3.4"></script>
+    <script src="../src/components/noomPanle.js?v=4.0"></script>
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=3.5">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/modify.css?v=0.1">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/student.css?v=3.7">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/schoolGroup.css?v=3.9">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/approving.css?v=3.1">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/classroom.css?v=4.2">
+    <!-- emoji picker start -->
+    <link rel="stylesheet" href="../src/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link href="../emojiPicker/lib/css/nanoscroller.css" rel="stylesheet">
+    <link href="../emojiPicker/lib/css/emoji.css" rel="stylesheet">
+    <!-- emoji picker end -->
+    <script src="thirdLib/formBuilder2.9.8/form-builder.min.js"></script>
+    <script src="thirdLib/formBuilder2.9.8/assets/js/form-builder.min.js"></script>
+    <script>
+        //以下声明的对象为全局的textboxio组件对象
+
+        var mytextareaSimpleAnswerEditor;
+        var mytextareaAnswerModifyEditor;
+        //简答题答案组件
+        var mytextareaSimpleAnswerModifyEditor;
+        var mytextareaAnswerEditor;
+        //题干组件
+        var subjectContentEditor;
+        //修改组件
+        var subjectContentForEdit;
+        //题目解析组件
+        var subjectAnalysisContentEditor;
+        //题目解析组件(修改用)
+        var subjectAnalysisContentModifyEditor;
+        //textbox默认的全局配置
+        var defaultConfig = {
+            autosubmit: true,
+            paste: {
+                style: 'retain',  // Overrides default: 'prompt' for MS Office content
+                enableFlashImport: true // Note, true is the default
+            },
+            codeview: {
+                enabled: true,
+                showButton: true
+            },
+            images: {
+                editing: {
+                    enabled: true
+                },
+                allowLocal: true,  //该值为false时，将禁止上传本地图片，图文粘贴时将会只有文字
+                upload: {
+                    url: 'http://60.205.86.217:8890/Excoord_Upload_Server/file/upload'
+                }
+            },
+            css: {
+                styles: [
+                    {rule: 'div'},			// Change selected elements to paragraph elements
+                    {rule: 'h1'},
+                    {rule: 'h2'},
+                    {rule: 'h3'},
+                    {rule: 'h4'},// Change selected elements to heading1 elements, apply blue class. Shown in the styles dropdown as 'Blue heading'
+                    {rule: 'pre'},		// Apply a red class to selected anchor elements
+                ]
+            }
+        };
+        //此处的几个全局对象用来完成题目修改时，向textboxio传递修改数据用
+        var editorContent = "";
+        var analysisEditContent = "";
+        var answerContent = "";
+        var toolbarKey = "";
+    </script>
+
+</head>
+<body onpaste="onPasteFunction()">
+<!--这个style.css一定要写在body定义之后的位置,因为自动插入的index.css必须在这行代码之前-->
+<link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=16.0">
+<div id="root"></div>
+<div class="ant-layout-footer">
+    <div id="componyInfo" style="display:block">小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>
+    <script>
+        var timer;
+
+        function checkIsLogin() {
+            if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
+                timer = setTimeout("checkIsLogin()", 500);
+                $(".ant-layout-footer").css({"display": 'block'});
+            } else {
+                $(".ant-layout-footer").css({"display": 'none'});
+                clearTimeout(timer);
+            }
+        }
+
+        checkIsLogin();
+    </script>
+
+</div>
+
+<!-- Begin emoji-picker JavaScript -->
+<script src="../emojiPicker/lib/js/nanoscroller.min.js"></script>
+<script src="../emojiPicker/lib/js/tether.min.js"></script>
+<script src="../emojiPicker/lib/js/config.js"></script>
+<script src="../emojiPicker/lib/js/util.js"></script>
+<script src="../emojiPicker/lib/js/jquery.emojiarea.js"></script>
+<script src="../emojiPicker/lib/js/emoji-picker.js"></script>
+<!-- End emoji-picker JavaScript -->
+<script type="text/javascript">
+    window.history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
+</script>
+</body>
+</html>

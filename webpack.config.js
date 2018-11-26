@@ -2,11 +2,17 @@ const webpack = require('atool-build/lib/webpack');
 const path = require('path');  //引入path模块
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// 引入 ParallelUglifyPlugin 插件
+const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
 
 module.exports = function (webpackConfig, env) {
     webpackConfig.babel.plugins.push('transform-runtime');
     webpackConfig.babel.plugins.push(['import', {
         libraryName: 'antd',
+        style: 'css',
+    }]);
+    webpackConfig.babel.plugins.push(['import', {
+        libraryName: 'style',
         style: 'css',
     }]);
 
@@ -28,34 +34,12 @@ module.exports = function (webpackConfig, env) {
         return !(plugin instanceof webpack.optimize.CommonsChunkPlugin);
     });
 
-    /**
-     * js代码压缩
-     * 使用webpack自带Uglify插件
-     * 加入了这个插件之后，编译的速度会明显变慢
-     */
-    /*webpackConfig.plugins.push(
-        new UglifyJSPlugin({
-            mangle: {
-                except: ['$super', '$', 'exports', 'require', 'module', '_']
-            },
-            output: {
-                // 是否输出可读性较强的代码，即会保留空格和制表符，默认为是，为了达到更好的压缩效果，可以设置为 false。
-                beautify: false,
-                // 是否保留代码中的注释，默认为保留，为了达到更好的压缩效果，可以设置为 false。
-                comments: false,
-            },
-            compress: {
-                // 是否剔除代码中所有的  console  语句，默认为不剔除。开启后不仅可以提升代码压缩效果，也可以兼容不支持 console 语句 IE 浏览器。
-                drop_console: true,
-                // 是否内嵌定义了但是只用到一次的变量，例如把 var x = 5; y = x 转换成 y = 5，默认为不转换。为了达到更好的压缩效果，可以设置为 false。
-                collapse_vars: false
-            }
-        })
-    )*/
-
     // Support CSS Modules
     // Parse all less files as css module.
     webpackConfig.module.loaders.forEach(function (loader, index) {
+        if(loader.test.toString() === '/\\.html?$/'){
+            loader.loader = 'html';
+        }
         if (typeof loader.test === 'function' && loader.test.toString().indexOf('\\.less$') > -1) {
             loader.include = /node_modules/;
             loader.test = /\.less$/;
@@ -84,31 +68,74 @@ module.exports = function (webpackConfig, env) {
         }
     });
 
-    //抽取CSS文件插件
-    new ExtractTextPlugin({filename: '[name].[contenthash:8].css?v=1', allChunks: true}),
+    // 添加一个plugin
+    webpackConfig.plugins.push(
+        //将开发模式变为生产模式
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: '"production"',
+            },
+        }),
 
-    new HtmlWebpackPlugin({
-        title: "HtmlPlugin",
-        // filename :"index.html",
-        template: path.join(__dirname, "./src/index.html"),
-        // template:(useDefinedHtml ? useDefinedHtml : defaultHtml),
-        //we must use html-loader here instead of file-loader
-        inject: "body",
-        cache: false,
-        xhtml: false,
-        minify: {
-            removeComments: true,
-            collapseWhitespace: true,
-            removeRedundantAttributes: true,
-            useShortDoctype: true,
-            removeEmptyAttributes: true,
-            removeStyleLinkTypeAttributes: true,
-            keepClosingSlash: true,
-            minifyJS: true,
-            minifyCSS: true,
-            minifyURLs: true,
-        }
-    })
+        //抽取CSS文件插件
+        new ExtractTextPlugin({filename: '[name].[contenthash:8].css?v=1', allChunks: true}),
+
+        new HtmlWebpackPlugin({
+            title: "HtmlPlugin",
+            // filename :"index.html",
+            template: "./index_deploy.html",
+            filename: 'index.html', // 输出文件【注意：这里的根路径是module.exports.output.path】
+            // template:(useDefinedHtml ? useDefinedHtml : defaultHtml),
+            //we must use html-loader here instead of file-loader
+            inject:"body",
+            hash:true,
+            chunks: ["common",'index'],
+        }),
+
+        new ParallelUglifyPlugin({
+            // 传递给 UglifyJS的参数如下：
+            uglifyJS: {
+                output: {
+                    /*
+                     是否输出可读性较强的代码，即会保留空格和制表符，默认为输出，为了达到更好的压缩效果，
+                     可以设置为false
+                    */
+                    beautify: false,
+                    /*
+                     是否保留代码中的注释，默认为保留，为了达到更好的压缩效果，可以设置为false
+                    */
+                    comments: false
+                },
+                compress: {
+                    /*
+                     是否在UglifyJS删除没有用到的代码时输出警告信息，默认为输出，可以设置为false关闭这些作用
+                     不大的警告
+                    */
+                    warnings: false,
+
+                    /*
+                     是否删除代码中所有的console语句，默认为不删除，开启后，会删除所有的console语句
+                    */
+                    drop_console: true,
+
+                    /*
+                     是否内嵌虽然已经定义了，但是只用到一次的变量，比如将 var x = 1; y = x, 转换成 y = 5, 默认为不
+                     转换，为了达到更好的压缩效果，可以设置为false
+                    */
+                    collapse_vars: true,
+
+                    /*
+                     是否提取出现了多次但是没有定义成变量去引用的静态值，比如将 x = 'xxx'; y = 'xxx'  转换成
+                     var a = 'xxxx'; x = a; y = a; 默认为不转换，为了达到更好的压缩效果，可以设置为false
+                    */
+                    reduce_vars: true
+                }
+            }
+        })
+
+    );
+
+
 
     return webpackConfig;
 };
