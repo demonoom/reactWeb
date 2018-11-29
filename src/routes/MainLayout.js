@@ -3318,7 +3318,7 @@ const MainLayout = React.createClass({
                             ]}
                         >
                             <div className="isDel">
-                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                                <img className="sadFeel" src={require("../../jquery-photo-gallery/icon/sad.png")}/>
                                 确定要移除选中的群成员?
                             </div>
                         </Modal>
@@ -3337,7 +3337,7 @@ const MainLayout = React.createClass({
                             ]}
                         >
                             <div className="isDel">
-                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                                <img className="sadFeel" src={require("../../jquery-photo-gallery/icon/sad.png")}/>
                                 确定要解散该群组?
                             </div>
                         </Modal>
@@ -3356,7 +3356,7 @@ const MainLayout = React.createClass({
                             ]}
                         >
                             <div className="isDel">
-                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")}/>
+                                <img className="sadFeel" src={require("../../jquery-photo-gallery/icon/sad.png")}/>
                                 确定要退出该群组?
                             </div>
                         </Modal>

@@ -587,12 +587,12 @@ class SUbjectTable extends React.Component {
         var title;
         if (this.state.optType == "bySchedule") {
             title = <div className="isDel">
-                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        <img className="sadFeel" src={require("../../jquery-photo-gallery/icon/sad.png")} />
                         确定要删除题目吗?
                     </div>
         } else {
             title = <div className="isDel">
-                        <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        <img className="sadFeel" src={require("../../jquery-photo-gallery/icon/sad.png")} />
                         确定要删除题目吗?
                         <Checkbox defaultChecked={false} onChange={this.isDeleteAll}>同步删除备课计划下的题目</Checkbox>
                     </div>
@@ -617,7 +617,7 @@ class SUbjectTable extends React.Component {
                             ]}
                         >
                             <div className="isDel">
-                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                <img className="sadFeel" src={require("../../jquery-photo-gallery/icon/sad.png")} />
                                 确定要删除该题目?
                             </div>
                         </Modal>

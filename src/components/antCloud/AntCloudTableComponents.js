@@ -2606,7 +2606,7 @@ pageNo   --- 页码，-1取全部
                     ]}
                 >
                     <div className="isDel">
-                        <img className="sadFeel" src={require("../../../dist/jquery-photo-gallery/icon/sad.png")} />
+                        <img className="sadFeel" src={require("../../../jquery-photo-gallery/icon/sad.png")} />
                         确定要删除选中的文件/文件夹?
                     </div>
                 </Modal>

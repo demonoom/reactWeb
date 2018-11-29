@@ -569,7 +569,7 @@ class CourseWare extends React.Component {
                             ]}
                         >
                             <div className="isDel">
-                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                <img className="sadFeel" src={require("../../jquery-photo-gallery/icon/sad.png")} />
                                 确定要删除该课件?
                                 <Checkbox onChange={this.isDeleteAll}>同步删除备课计划下的课件</Checkbox>
                             </div>
@@ -593,7 +593,7 @@ class CourseWare extends React.Component {
                             ]}
                         >
                             <div className="isDel">
-                                <img className="sadFeel" src={require("../../dist/jquery-photo-gallery/icon/sad.png")} />
+                                <img className="sadFeel" src={require("../../jquery-photo-gallery/icon/sad.png")} />
                                 确定要删除该课件?
                             </div>
                         </Modal>
