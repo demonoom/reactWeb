@@ -2,7 +2,7 @@
  * Created by madapeng on 17-4-17.
  */
 
-;(function ($) {
+; (function ($) {
 
     var globalSrc,
         globalTitle;
@@ -102,7 +102,7 @@
             LP.delAll();
         } else {
 
-            $('#' + id).css({visibility: 'hidden'});
+            $('#' + id).css({ visibility: 'hidden' });
             $('#ifr' + id).removeAttr('src');
         }
         utilsCommon.unbind(document, 'paste', onPasteFunction);
@@ -117,7 +117,7 @@
         this.ifrid = 'ifr' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin">
                 <div class="header draggable">
-                <h3 class="title">${ obj.title }</h3>
+                <h3 class="title">${ obj.title}</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
                         <!--<div class="goback">后退</div>-->
@@ -125,7 +125,7 @@
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${ obj.url }" name="${this.ifrid}" ></iframe>
+                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${obj.url}" name="${this.ifrid}" ></iframe>
                     </section>
                 </div>
                 </div>`;
@@ -192,7 +192,7 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
@@ -203,7 +203,7 @@
                     window.__sendImg__(data.currentUrl, data.url);
 
                 } else if (data.method == 'openNewPage') {
-                    let obj = {mode: 'teachingAdmin', title: '', url: data.url};
+                    let obj = { mode: 'teachingAdmin', title: '', url: data.url };
                     LP.Start(obj);
                 }
             });
@@ -222,7 +222,7 @@
         this.ifrid = 'ifr' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin little-layout-aside-r-show_ant">
                 <div class="header draggable">
-                <h3 class="title">${ obj.title }</h3>
+                <h3 class="title">${ obj.title}</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
                         <!--<div class="goback">后退</div>-->
@@ -230,7 +230,7 @@
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${ obj.url }" name="${this.ifrid}" ></iframe>
+                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${obj.url}" name="${this.ifrid}" ></iframe>
                     </section>
                 </div>
                 </div>`;
@@ -282,7 +282,7 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
@@ -293,7 +293,7 @@
                     window.__sendImg__(data.currentUrl, data.url);
 
                 } else if (data.method == 'openNewPage') {
-                    let obj = {mode: 'teachingAdmin', title: '', url: data.url};
+                    let obj = { mode: 'teachingAdmin', title: '', url: data.url };
                     LP.Start(obj);
                 }
             });
@@ -323,14 +323,14 @@
 
     };
 
-//
+    //
     littlePanle.prototype._default_UI_templet = function (obj) {
         let id = UUID(8, 16);
         this.id = id;
         this.ifrid = 'ifr' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
-                <h3 class="title">${ obj.title }</h3>
+                <h3 class="title">${ obj.title}</h3>
                     <div class="little-tilte">
                      <a title="分享" class="shareLittle"><i class="iconfont">&#xe624;</i></a>
                         <a title="刷新" class="renovateLittle"><i class="iconfont">&#xe67a;</i></a>
@@ -340,12 +340,12 @@
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  ></iframe>
+                        <iframe  border={0} id="${this.ifrid}"  src="${obj.url}"  ></iframe>
                     </section>
                 </div>
                 </div>`;
 
-        var objtemplet = {htm: this.htm, id: this.id, ifrid: this.ifrid};
+        var objtemplet = { htm: this.htm, id: this.id, ifrid: this.ifrid };
         let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
 
         objtemplet.htm = $(objtemplet.htm).css(styleObj);
@@ -380,7 +380,7 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
@@ -396,7 +396,7 @@
                     } else {
                         data.url += '&access_user=' + sessionStorage.getItem('ident');
                     }
-                    let obj = {mode: 'teachingAdmin', title: '', url: data.url};
+                    let obj = { mode: 'teachingAdmin', title: '', url: data.url };
                     LP.Start(obj);
                 } else if (data.method == 'openNewPageInDefault') {
                     if (data.url.indexOf('?') == -1) {
@@ -404,7 +404,7 @@
                     } else {
                         data.url += '&access_user=' + sessionStorage.getItem('ident');
                     }
-                    let obj = {mode: '', title: '', url: data.url};
+                    let obj = { mode: '', title: '', url: data.url };
                     LP.Start(obj);
                 } else if (data.method == 'setPanelTitle') {
                     var title = data.title;
@@ -459,7 +459,7 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
@@ -471,7 +471,7 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
@@ -483,19 +483,19 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
-                }else if (data.method == "selectComplexVideo") {
+                } else if (data.method == "selectComplexVideo") {
                     //调用选择图片插件，获取图片的路径存入paths
                     window.__selectComplexVideo__(data.callbackId);
                     window.__selectComplexVideoUpload__ = function (result, callbackId) {
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
@@ -508,7 +508,7 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
@@ -520,7 +520,7 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
@@ -565,25 +565,37 @@
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
 
-                }else if (data.method == "selectOnlyVideo"){
+                } else if (data.method == "selectOnlyVideo") {
                     //调用选择图片插件，获取图片的路径存入paths
                     window.__calmOnlyVideo__(data.callbackId);
                     window.__calmUploadOnlyVideo__ = function (result, callbackId) {
                         var str = result.join(',');
                         var paths = str;
                         var callbackId = callbackId;
-                        var response = {'callbackId': callbackId, 'params': paths};
+                        var response = { 'callbackId': callbackId, 'params': paths };
                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
-               }
+                } else if (data.method == "selectOnlyExcel") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__calmOnlyExcel__(data.callbackId);
+                    window.__calmUploadOnlyExcel__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = { 'callbackId': callbackId, 'params': paths };
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                }
             });
             isAddedListener = true;
         }
@@ -613,18 +625,18 @@
             classChange = 'multi';
             videoArr.map(function (video, i) {
                 i++;
-                srcList.push({type: 'video/x-flv', src: video.path});
+                srcList.push({ type: 'video/x-flv', src: video.path });
                 listBtn.push("<a class='listBtn' >" + i + "</a>");
             });
         } else {
             let flv = videoArr[0];
-            srcList.push({type: 'video/x-flv', src: flv.path || flv.url});
+            srcList.push({ type: 'video/x-flv', src: flv.path || flv.url });
         }
 
 
         let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
-                <h3 class="title">${ obj.title }</h3>
+                <h3 class="title">${ obj.title}</h3>
                     <div class="little-tilte">
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                     </div>
@@ -633,7 +645,7 @@
                     <section class="littleAnt-iframe-panle ${classChange}">
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
                        src="${srcList[0].src}"   data-setup='{}'></video> 
-                       <div class="list-group" >${ listBtn.length ? listBtn.join('') : '' }</div>
+                       <div class="list-group" >${ listBtn.length ? listBtn.join('') : ''}</div>
                     </section>
                 </div>
                 </div>`;
@@ -687,7 +699,7 @@
 							<div class="little-tilte">
                     			<a class="back"><i class="anticon anticon-left "></i></a>
                     		</div>
-                			<span>${ obj.title }</span>
+                			<span>${ obj.title}</span>
                			 </div>
                 <div class="content">
                     <section class="liveTV tab">
@@ -787,12 +799,12 @@
             classChange = 'multi';
             videoArr.map(function (video, i) {
                 i++;
-                srcList.push({type: 'video/x-flv', src: video.path});
+                srcList.push({ type: 'video/x-flv', src: video.path });
                 listBtn.push("<a class='listBtn' >" + i + "</a>");
             });
         } else {
             let flv = videoArr[0];
-            srcList.push({type: 'video/x-flv', src: flv.path || flv.url});
+            srcList.push({ type: 'video/x-flv', src: flv.path || flv.url });
         }
 
 
@@ -810,7 +822,7 @@
 							<div class="little-tilte">
                     			<a class="back"><i class="anticon anticon-left "></i></a>
                     		</div>
-                			<span>${ obj.title }</span>
+                			<span>${ obj.title}</span>
                			 </div>
                 <div class="content">
 					<div class="right_cont">
@@ -824,7 +836,7 @@
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
                        src="${srcList[0].src}"   data-setup='{}'></video>
                       
-                       <div class="list-group" >${ listBtn.length ? listBtn.join('') : '' }</div>
+                       <div class="list-group" >${ listBtn.length ? listBtn.join('') : ''}</div>
                     </section>
 					</div>
                 </div>
@@ -896,7 +908,7 @@
                 }
                 $('#InputTxtToPanel').val('');
 
-                con = {command: "simpleClassDanmu", data: {content: tmpTxt1}};
+                con = { command: "simpleClassDanmu", data: { content: tmpTxt1 } };
                 LP.LiveTVSocket.send(con);
 
                 return;
@@ -930,7 +942,7 @@
     };
 
 
-//fileupload 图片上传
+    //fileupload 图片上传
     littlePanle.prototype._initBtnUploadBtn = function (elId, param) {
 
 
@@ -1044,7 +1056,7 @@
                             log.info('关闭禁言！');
                         }
                         break;
-                    case'classOver':
+                    case 'classOver':
                         log.info('下课了！');
                         __this.closepanle(obj.warpid);
                         setTimeout(function () {
@@ -1066,7 +1078,7 @@
                             });
                         });
                         break;
-                    case'simpleClassDanmu': // 弹幕
+                    case 'simpleClassDanmu': // 弹幕
                         clearInterval(window.simpleClassDanmuT);
                         if (this.screenLock()) return;
                         let sayText = info.data.message.content;
@@ -1127,21 +1139,21 @@
                         break;
 
 
-                    default :
+                    default:
                         __this.parsePPT.call(__this, obj, info);
 
                         break;
                 }
             }
         };
-        connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
+        connection.connect({ command: 'studentLogin', data: { userId: parseInt(obj.uid), vid: obj.vid } });
         this.insertClassroom(obj);
     }
 
-// 后进的学生，显示的ppt
+    // 后进的学生，显示的ppt
     littlePanle.prototype.insertClassroom = function (obj) {
         let _this = this;
-        var param = {method: 'getVclassPPTOpenInfo', vid: obj.vid + ''};
+        var param = { method: 'getVclassPPTOpenInfo', vid: obj.vid + '' };
         doWebService(JSON.stringify(param), {
             onResponse: function (result) {
                 if (!result.success) {
@@ -1151,7 +1163,7 @@
                 var openInfo = result.response;
                 if (!openInfo) return;
                 //打开课堂中的ppt
-                $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo(openInfo.pptUrl) + "?v=1").css({'z-index': 1});
+                $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo(openInfo.pptUrl) + "?v=1").css({ 'z-index': 1 });
                 $('#' + obj.showTuiPing).hide();
                 //更换当前页
                 $("#" + obj.pptIframeName).on('load', function () {
@@ -1212,7 +1224,7 @@
 
 
         function playPPT(html) {
-            $("#" + pptIframeName).show().attr("src", html + "?v=1").css({'z-index': 1});
+            $("#" + pptIframeName).show().attr("src", html + "?v=1").css({ 'z-index': 1 });
             $('#' + showTuiPing).hide();
         }
 
@@ -1262,12 +1274,12 @@
 
         switch ($(li).attr('ref')) {
             case 'panleBtn':
-                $('.activity .public').css({display: 'none'});
-                $('.activity .panle').css({display: 'block'});
+                $('.activity .public').css({ display: 'none' });
+                $('.activity .panle').css({ display: 'block' });
                 break;
             case 'publicBtn':
-                $('.activity .panle').css({display: 'none'});
-                $('.activity .public').css({display: 'block'});
+                $('.activity .panle').css({ display: 'none' });
+                $('.activity .public').css({ display: 'block' });
                 break;
 
         }
@@ -1476,7 +1488,7 @@
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     break;
 
-                default :
+                default:
                     //暂时把这个限制去掉
                     // if ((this.mgr.length - _this.hideArr.length) >= 2) {
                     //     log.info('打开太多！');
@@ -1542,7 +1554,7 @@
                     //
                     let zindex = index++;
 
-                    $(item.el).css({top: topRef, left: leftRef, zIndex: zindex});
+                    $(item.el).css({ top: topRef, left: leftRef, zIndex: zindex });
                 }
 
             });
@@ -1605,22 +1617,22 @@ function enterFull(el) {
     var docElm = document.documentElement;
     if (el) docElm = el;
     var iframe = $(el).find("iframe")[0];
-    if (iframe != null && typeof(iframe) != 'undefined') {
+    if (iframe != null && typeof (iframe) != 'undefined') {
         el = iframe;
     }
-//W3C
+    //W3C
     if (docElm.requestFullscreen) {
         el.requestFullscreen();
     }
-//FireFox
+    //FireFox
     else if (docElm.mozRequestFullScreen) {
         el.mozRequestFullScreen();
     }
-//Chrome等
+    //Chrome等
     else if (docElm.webkitRequestFullScreen) {
         el.webkitRequestFullScreen();
     }
-//IE11
+    //IE11
     else if (docElm.msRequestFullscreen) {
         el.msRequestFullscreen();
     }
@@ -1809,7 +1821,7 @@ var phone = {
     },
 
     openNewPage(args) {
-        let obj = {mode: 'teachingAdmin', url: args.url};
+        let obj = { mode: 'teachingAdmin', url: args.url };
         LP.Start(obj);
     },
 
@@ -1842,7 +1854,7 @@ var phone = {
 
     playVideoJSON(jsonObject) {
         var obj = eval('(' + jsonObject + ')');
-        top.LP.Start({url: '', title: obj.title, htmlMode: true, param: obj.liveVideos});
+        top.LP.Start({ url: '', title: obj.title, htmlMode: true, param: obj.liveVideos });
     },
 
     showImage(url) {
@@ -1855,12 +1867,12 @@ var phone = {
 
     showPdf(pdfUrl) {
 
-        top.LP.Start({url: pdfUrl, title: ''});
+        top.LP.Start({ url: pdfUrl, title: '' });
     },
 
     playVideo(videoPath) {
 
-        top.LP.Start({url: videoPath, title: ''});
+        top.LP.Start({ url: videoPath, title: '' });
 
     },
 
@@ -1961,7 +1973,7 @@ function doWebService(data, listener) {
     $.ajax({
         type: "post",
         url: WEBSERVICE_URL,
-        data: {params: data},
+        data: { params: data },
         dataType: "json",
         beforeSend: function (XMLHttpRequest) {
             XMLHttpRequest.setRequestHeader("accessUser", sessionStorage.getItem("ident"));
