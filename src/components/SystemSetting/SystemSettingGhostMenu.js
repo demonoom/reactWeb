@@ -232,8 +232,8 @@ class SystemSettingGhostMenu extends React.Component {
         //             <li onClick={event => {
         //                 _this.checkWords({
         //                     method: 'openNewPage',
-        //                     // url: 'http://jiaoxue.maaee.com:8091/#/classCardHomePageDoor',
-        //                     url: 'http://192.168.50.72:8091/#/classCardHomePageDoor'
+        //                     url: 'http://jiaoxue.maaee.com:8091/#/classCardHomePageDoor',
+        //                     // url: 'http://192.168.50.72:8091/#/classCardHomePageDoor'
         //                 }, '班牌编辑');
         //             }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />班牌编辑2
         //             </li>
@@ -392,10 +392,10 @@ class SystemSettingGhostMenu extends React.Component {
                     <li onClick={event => {
                         _this.checkWords({
                             method: 'openNewPage',
-                            url: 'http://jiaoxue.maaee.com:8091/#/pushVideo?schoolId='+_this.state.loginUser.schoolId+"&userId="+_this.state.ident
-                            // url: 'http://192.168.50.72:8091/#/pushVideo?schoolId='+_this.state.loginUser.schoolId+"&userId="+_this.state.ident
+                            // url: 'http://jiaoxue.maaee.com:8091/#/pushVideo?schoolId='+_this.state.loginUser.schoolId+"&userId="+_this.state.ident
+                            url: 'http://192.168.50.72:8091/#/pushVideo?schoolId='+_this.state.loginUser.schoolId+"&userId="+_this.state.ident
                         }, '推送视频');
-                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />推送视频1
+                    }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />推送视频
                     </li>
                 </ul>
             </li>;

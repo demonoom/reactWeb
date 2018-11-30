@@ -47,6 +47,7 @@ import {isEmpty, showLargeImg, setLocalLanaguage, getMessageFromLanguage, getLoc
 import BindCoordinates from '../components/BindCoordinates/BindCoordinates'
 import UploadMp3Modal from '../components/UploadMp3Modal'
 import UploadOnlyVideoModal from '../components/SystemSetting/UploadOnlyVideoModal'
+import UploadOnlyExcelModal from '../components/SystemSetting/UploadOnlyExcelModal'
 //国际化
 import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
@@ -136,8 +137,10 @@ const MainLayout = React.createClass({
             inputValue: '',
             selectMp3ModalIsShow: false,
             calmOnlyVideoModalIsShow: false,
+            calmOnlyExcelModalIsShow: false,
             selectMp3CallbackId: '',
             calmOnlyVideoCallbackId: '',
+            calmOnlyExcelCallbackId: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -204,6 +207,7 @@ const MainLayout = React.createClass({
         window.__playAudio__ = this.playAudio;
         window.__selectMp3__ = this.selectMp3;
         window.__calmOnlyVideo__ = this.calmOnlyVideo;
+        window.__calmOnlyExcel__ = this.calmOnlyExcel;
         window.__noomSaveFileError__ = this.noomSaveFile;
     },
 
@@ -272,12 +276,20 @@ const MainLayout = React.createClass({
         this.setState({calmOnlyVideoModalIsShow: true});
         this.setState({calmOnlyVideoCallbackId: callbackId});
     },
+    calmOnlyExcel(callbackId) {
+        //控制上传组件的显示与隐藏
+        this.setState({calmOnlyExcelModalIsShow: true});
+        this.setState({calmOnlyExcelCallbackId: callbackId});
+    },
 
     closeSelectMp3Model() {
         this.setState({selectMp3ModalIsShow: false});
     },
     closecalmOnlyVideoModalIsShowModel() {
         this.setState({calmOnlyVideoModalIsShow: false});
+    },
+    closecalmOnlyExcelModalIsShowModel() {
+        this.setState({calmOnlyExcelModalIsShow: false});
     },
 
     playVideo(src) {
@@ -3404,6 +3416,11 @@ const MainLayout = React.createClass({
                             isShow={this.state.calmOnlyVideoModalIsShow}
                             closeDingModel={this.closecalmOnlyVideoModalIsShowModel}
                             callbackId={this.state.calmOnlyVideoCallbackId}
+                        />
+                        <UploadOnlyExcelModal
+                            isShow={this.state.calmOnlyExcelModalIsShow}
+                            closeDingModel={this.closecalmOnlyExcelModalIsShowModel}
+                            callbackId={this.state.calmOnlyExcelCallbackId}
                         />
 
                     </div>

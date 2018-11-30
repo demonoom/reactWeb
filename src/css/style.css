@@ -10184,3 +10184,42 @@ a:active, a:hover {
     display: inline-block;
     vertical-align: middle;
 }
+.new_add_ding-excel{
+    margin-bottom: 20px;
+}
+.new_add_ding-excel-cont{
+    font-size: 16px;
+    color:#333;
+}
+.new_add_ding-excel-blue{
+    color:#3672ED;
+    text-decoration: underline;
+    font-size: 16px;
+
+}
+.new_add_ding-excel-bluebtn{
+    color: #3672ED;
+    font-size: 16px;
+    border: 1px solid #3672ED;
+    line-height: 16px;
+    float: right;
+    height: 26px;
+    width: 70px;
+    text-align: center;
+    line-height: 22px;
+    border-radius: 2px;
+    position: relative;
+    top: 8px;
+    left: 40px;
+    float: right;
+}
+.new_add_ding-excel-bluebtn .noomUpLoadFileDiv{
+    color: #3672ED;
+    margin-bottom: 0
+}
+.new_add_ding-excel > span > .ant-upload-list{
+    padding-left:0 !important
+}
+.new_add_ding-excel > span > .ant-upload-list > .ant-upload-list-item{
+    font-size: 14px !important
+}

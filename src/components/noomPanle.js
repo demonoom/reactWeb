@@ -411,7 +411,19 @@
                          var ifm = document.getElementById(data.windowName);
                          ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                      };
-                }
+                }else if (data.method == "selectOnlyExcel"){
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__calmOnlyExcel__(data.callbackId);
+                    window.__calmUploadOnlyExcel__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+               }
             });
             isAddedListener = true;
         }
