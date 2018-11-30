@@ -30,8 +30,14 @@ class ClazzStatusModal extends React.Component {
             var vid = _this.props.vid;
             var userId = this.state.loginUser.colUid;
             var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid+"&version="+rdInt;
-            this.setState({isShow,vid,clazzStatusUrl});
-            $("#clazzStatusFrame")[0].window.location.reload();
+            // http://192.168.50.139:8091/#/classPractice?userId=3568&vid=35153
+            // var clazzStatusUrl = "http://192.168.50.139:8091/#/classPractice?userId="+userId+"&vid="+vid+"&version="+rdInt;
+            var ifr = <iframe src={clazzStatusUrl}></iframe>;
+            this.setState({isShow,vid,clazzStatusUrl,ifr});
+            /*if(typeof($("#clazzStatusFrame").contentWindow)!='undefined' ){
+                $("#clazzStatusFrame").contentWindow.location.reload();
+            }*/
+            this.setState({isShow});
         }
     }
 
@@ -43,13 +49,19 @@ class ClazzStatusModal extends React.Component {
             var vid = this.props.vid;
             var userId = this.state.loginUser.colUid;
             var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid+"&version="+rdInt;
-            this.setState({isShow,vid,clazzStatusUrl});
-            $("#clazzStatusFrame")[0].window.location.reload();
+            // var clazzStatusUrl = "http://192.168.50.139:8091/#/classPractice?userId="+userId+"&vid="+vid+"&version="+rdInt;
+            var ifr = <iframe src={clazzStatusUrl}></iframe>;
+            this.setState({isShow,vid,clazzStatusUrl,ifr});
+            // $("#clazzStatusFrame")[0].window.location.reload();
+            /*if(typeof($("#clazzStatusFrame").contentWindow)!='undefined' ){
+                $("#clazzStatusFrame").contentWindow.location.reload();
+            }*/
         }
+        this.setState({isShow});
     }
 
     ClazzStatusModalHandleCancel() {
-        this.setState({"isShow": false});
+        this.setState({"isShow": false,ifr:''});
         this.props.onCancel();
     }
 
@@ -70,7 +82,7 @@ class ClazzStatusModal extends React.Component {
                    footer={null}
             >
                 <Row className="modal_flex">
-                        <div className="modal_iframe_cont"><iframe id="clazzStatusFrame" src={this.state.clazzStatusUrl}></iframe></div>
+                        <div className="modal_iframe_cont">{this.state.ifr}</div>
                 </Row>
             </Modal>
         );
