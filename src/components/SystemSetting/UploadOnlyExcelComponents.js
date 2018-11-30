@@ -106,7 +106,7 @@ const UploadOnlyExcelComponents = React.createClass({
 
         return (
             <div className="new_add_ding-excel">
-                <span className="new_add_ding-excel-cont">请参考模板<a href="http://60.205.86.217/upload9/2018-11-30/17/5738102b-204c-4ae5-a476-e99b3364ef98.xlsx" className="new_add_ding-excel-blue">(下载)</a>使用Excel格式批量上传课程表</span>
+                <span className="new_add_ding-excel-cont">请参考模板<a href="http://60.205.86.217/upload9/2018-11-30/18/d7de46c1-711d-4fa9-ab14-35b6e999b693.xlsx" className="new_add_ding-excel-blue">(下载)</a>使用Excel格式批量上传课程表</span>
                 <Upload {...props}>
                     <div className='noom_cursor noomUpLoadFileDiv'>
                         {/* <Icon className="noomUpLoadFile" type="plus-circle"/> */}
