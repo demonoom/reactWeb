@@ -192,6 +192,15 @@ var proxyOptionOfUpload8 ={
 };
 app.use("/proxy/upload8",proxy(proxyOptionOfUpload8));
 
+//代理upload9请求路径
+var proxyOptionOfUpload9 ={
+    target:maaeeTargetUrl,
+    changeOrigin:true,
+    ws: true,
+    pathRewrite: { '^/proxy/upload9': "/upload9" }
+};
+app.use("/proxy/upload9",proxy(proxyOptionOfUpload9));
+
 //代理upload8请求路径
 var proxyOptionOfUpload2 ={
     target:maaeeTargetUrl,
