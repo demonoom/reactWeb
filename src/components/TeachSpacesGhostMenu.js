@@ -50,15 +50,15 @@ class GhostMenu extends React.Component {
 
 
     // teachingAdmin panel
-    showpanel(event) {
+    showpanel(event,key,param) {
 
         this.onMenu(event);
 
-        let param = {
+        /*let param = {
             mode: 'teachingAdmin',
             title: '教务管理',
             url: 'http://www.maaee.com/Excoord_PhoneService/permission/permissionList/' + this.state.ident,
-        }
+        }*/
 
         LP.Start(param);
     }
@@ -140,15 +140,59 @@ class GhostMenu extends React.Component {
                             </li>
                         </ul>
                     </li>
-                    {/*<li><Icon type="exception"/>更多</li>
+                    <li><Icon type="credit-card"/>班牌管理</li>
                     <li className="multi">
                         <ul className="second">
                             <li onClick={ event => {
-                                this.showpanel(event, 'teachingAdmin', false)
-                            }}>教学管理
+                                this.showpanel(event, 'clazzDutyList',{
+                                    mode: 'teachingAdmin',
+                                    title: '班级值日管理',
+                                    url: 'http://jiaoxue.maaee.com:8091/#/clazzDutyList?access_user=' + this.state.ident,
+                                }, false)
+                            }}>班级值日管理
                             </li>
                         </ul>
-                    </li>*/}
+                    </li>
+
+                    <li className="multi">
+                        <ul className="second">
+                            <li onClick={ event => {
+                                this.showpanel(event, 'notifyBack',{
+                                    mode: 'teachingAdmin',
+                                    title: '通知管理',
+                                    url: 'http://jiaoxue.maaee.com:8091/#/notifyBack?access_user=' + this.state.ident,
+                                }, false)
+                            }}>通知管理
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li className="multi">
+                        <ul className="second">
+                            <li onClick={ event => {
+                                this.showpanel(event, 'classDemeanorList',{
+                                    mode: 'teachingAdmin',
+                                    title: '班级风采管理',
+                                    url: 'http://jiaoxue.maaee.com:8091/#/classDemeanorList?access_user=' + this.state.ident,
+                                }, false)
+                            }}>班级风采管理
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li className="multi">
+                        <ul className="second">
+                            <li onClick={ event => {
+                                this.showpanel(event, 'classHonorList',{
+                                    mode: 'teachingAdmin',
+                                    title: '班级荣誉管理',
+                                    url: 'http://jiaoxue.maaee.com:8091/#/classHonorList?access_user=' + this.state.ident,
+                                }, false)
+                            }}>班级荣誉管理
+                            </li>
+                        </ul>
+                    </li>
+
                 </ul>
             </div>
         );
