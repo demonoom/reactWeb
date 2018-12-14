@@ -93,6 +93,15 @@ var proxyOptionOfExcoordPC ={
 };
 app.use("/proxy/Excoord_PC",proxy(proxyOptionOfExcoordPC));
 
+//代理h5Point5请求路径
+var proxyOptionOfH5Point5 ={
+    target:maaeeTargetUrl,
+    changeOrigin:true,
+    ws: true,
+    pathRewrite: { '^/proxy/h5Point5': "/h5Point5" }
+};
+app.use("/proxy/h5Point5",proxy(proxyOptionOfH5Point5));
+
 //代理h5Point4请求路径
 var proxyOptionOfH5Point4 ={
     target:maaeeTargetUrlByHttps,
