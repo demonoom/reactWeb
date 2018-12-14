@@ -1,8 +1,10 @@
 /**
  * Created by devnote on 17-4-17.
  */
-import {Menu, Icon, Row, Col} from 'antd';
+import {Menu, Icon, Row, Col,message} from 'antd';
 import React, {PropTypes} from 'react';
+import { doWebService } from '../WebServiceHelper';
+import {isEmpty} from '../utils/utils';
 
 class GhostMenu extends React.Component {
 
@@ -11,9 +13,15 @@ class GhostMenu extends React.Component {
         this.state = {
             ident : sessionStorage.getItem("ident"),
             beActive: true, // 是活动的，可伸缩的
+            isClazzMaster:false,    //是否是班主任角色
         }
         this.changeMenu = this.changeMenu.bind(this);
         this.showpanel = this.showpanel.bind(this);
+        this.getStructureRoleUserByUserId = this.getStructureRoleUserByUserId.bind(this);
+    }
+
+    componentDidMount(){
+        this.getStructureRoleUserByUserId();
     }
 
 
@@ -45,22 +53,52 @@ class GhostMenu extends React.Component {
         // 1
         this.setState({beActive: beActive});
         this.props.changeTabEvent(channelStr, beActive);
-
+        this.getStructureRoleUserByUserId();
     }
 
 
     // teachingAdmin panel
-    showpanel(event) {
+    showpanel(event,key,param) {
 
         this.onMenu(event);
 
-        let param = {
+        /*let param = {
             mode: 'teachingAdmin',
             title: '教务管理',
             url: 'http://www.maaee.com/Excoord_PhoneService/permission/permissionList/' + this.state.ident,
-        }
+        }*/
 
         LP.Start(param);
+    }
+
+    //获取当前用户的角色,用来控制教学空间的菜单项目可见性
+    getStructureRoleUserByUserId() {
+        var _this = this;
+        var param = {
+            "method": 'getStructureRoleUserByUserId',
+            "userId": sessionStorage.getItem("ident")
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var isClazzMaster = false;
+                if (isEmpty(response)==false) {
+                    for(var i=0;i<response.length;i++){
+                        var roleInfo = response[i];
+                        var roleType = roleInfo.type;
+                        if(roleType == 6){
+                            //班主任
+                            isClazzMaster = true;
+                            break;
+                        }
+                    }
+                }
+                _this.setState({isClazzMaster});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     }
 
 
@@ -74,9 +112,65 @@ class GhostMenu extends React.Component {
         }else{
             hideButton="";
         }
-
-        return (
-            <div className={this.props.visible ? 'ghostMenu ghostMenuShow' : 'ghostMenu ghostMenuHide' }
+        var masterMenu = <div className={this.props.visible ? 'ghostMenu ghostMenuShow' : 'ghostMenu ghostMenuHide' }
+                              onClick={event => {
+                                  this.props.toggleGhostMenu({visible: false});
+                              }}>
+            {hideButton}
+            <div className="menu_til">教学空间</div>
+            <ul className="first">
+                <li ><Icon type="book"/>备课</li>
+                <li className="multi">
+                    <ul className="second">
+                        <li onClick={ event => {
+                            this.changeMenu(event, 'teachTimes', true)
+                        }}>备课计划
+                        </li>
+                        <li onClick={ event => {
+                            this.changeMenu(event, 'KnowledgeResources', true)
+                        }}>资源库
+                        </li>
+                    </ul>
+                </li>
+                <li><Icon type="laptop" />本地课堂</li>
+                <li className="multi">
+                    <ul className="second">
+                        <li onClick={ event => {
+                            this.changeMenu(event, 'localClassRoom', false)
+                        }}>开启课堂
+                        </li>
+                    </ul>
+                </li>
+                <li><Icon type="file-text"/>作业</li>
+                <li className="multi">
+                    <ul className="second">
+                        <li onClick={ event => {
+                            this.changeMenu(event, 'homeWork', false)
+                        }}>布置作业
+                        </li>
+                    </ul>
+                </li>
+                <li><Icon type="exception"/>考试系统</li>
+                <li className="multi">
+                    <ul className="second">
+                        <li onClick={ event => {
+                            this.changeMenu(event, 'examination', false)
+                        }}>组卷
+                        </li>
+                        <li onClick={ event => {
+                            this.changeMenu(event, 'test', false)
+                        }}>考试
+                        </li>
+                        <li onClick={ event => {
+                            this.changeMenu(event, 'examAnalysis', false)
+                        }}>成绩分析
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>;
+        if(this.state.isClazzMaster == true){
+            masterMenu = <div className={this.props.visible ? 'ghostMenu ghostMenuShow' : 'ghostMenu ghostMenuHide' }
                  onClick={event => {
                      this.props.toggleGhostMenu({visible: false});
                  }}>
@@ -114,15 +208,6 @@ class GhostMenu extends React.Component {
                             </li>
                         </ul>
                     </li>
-                    {/*<li><Icon type="area-chart"/>分析评价</li>
-                    <li className="multi">
-                        <ul className="second">
-                            <li onClick={ event => {
-                                this.changeMenu(event, 'studyEvaluate', false)
-                            }}>学情分析
-                            </li>
-                        </ul>
-                    </li>*/}
                     <li><Icon type="exception"/>考试系统</li>
                     <li className="multi">
                         <ul className="second">
@@ -140,16 +225,65 @@ class GhostMenu extends React.Component {
                             </li>
                         </ul>
                     </li>
-                    {/*<li><Icon type="exception"/>更多</li>
+                    <li><Icon type="credit-card"/>班牌管理</li>
                     <li className="multi">
                         <ul className="second">
                             <li onClick={ event => {
-                                this.showpanel(event, 'teachingAdmin', false)
-                            }}>教学管理
+                                this.showpanel(event, 'clazzDutyList',{
+                                    mode: 'teachingAdmin',
+                                    title: '班级值日管理',
+                                    url: 'http://jiaoxue.maaee.com:8091/#/clazzDutyList?access_user=' + this.state.ident,
+                                }, false)
+                            }}>班级值日管理
                             </li>
                         </ul>
-                    </li>*/}
+                    </li>
+
+                    <li className="multi">
+                        <ul className="second">
+                            <li onClick={ event => {
+                                this.showpanel(event, 'notifyBack',{
+                                    mode: 'teachingAdmin',
+                                    title: '通知管理',
+                                    url: 'http://jiaoxue.maaee.com:8091/#/notifyBack?access_user=' + this.state.ident,
+                                }, false)
+                            }}>通知管理
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li className="multi">
+                        <ul className="second">
+                            <li onClick={ event => {
+                                this.showpanel(event, 'classDemeanorList',{
+                                    mode: 'teachingAdmin',
+                                    title: '班级风采管理',
+                                    url: 'http://jiaoxue.maaee.com:8091/#/classDemeanorList?access_user=' + this.state.ident,
+                                }, false)
+                            }}>班级风采管理
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li className="multi">
+                        <ul className="second">
+                            <li onClick={ event => {
+                                this.showpanel(event, 'classHonorList',{
+                                    mode: 'teachingAdmin',
+                                    title: '班级荣誉管理',
+                                    url: 'http://jiaoxue.maaee.com:8091/#/classHonorList?access_user=' + this.state.ident,
+                                }, false)
+                            }}>班级荣誉管理
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
+            </div>;
+        }
+
+        return (
+            <div>
+                {masterMenu}
             </div>
         );
     }

@@ -29,9 +29,9 @@ class ClazzStatusModal extends React.Component {
         if(isShow==true){
             var vid = _this.props.vid;
             var userId = this.state.loginUser.colUid;
-            var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid+"&version="+rdInt;
+            // var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid+"&version="+rdInt;
             // http://192.168.50.139:8091/#/classPractice?userId=3568&vid=35153
-            // var clazzStatusUrl = "http://192.168.50.139:8091/#/classPractice?userId="+userId+"&vid="+vid+"&version="+rdInt;
+            var clazzStatusUrl = "http://jiaoxue.maaee.com:8091/#/classPractice?userId="+userId+"&vid="+vid+"&version="+rdInt;
             var ifr = <iframe src={clazzStatusUrl}></iframe>;
             this.setState({isShow,vid,clazzStatusUrl,ifr});
             /*if(typeof($("#clazzStatusFrame").contentWindow)!='undefined' ){
@@ -48,8 +48,8 @@ class ClazzStatusModal extends React.Component {
         if(isShow == true){
             var vid = this.props.vid;
             var userId = this.state.loginUser.colUid;
-            var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid+"&version="+rdInt;
-            // var clazzStatusUrl = "http://192.168.50.139:8091/#/classPractice?userId="+userId+"&vid="+vid+"&version="+rdInt;
+            // var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid+"&version="+rdInt;
+            var clazzStatusUrl = "http://jiaoxue.maaee.com:8091/#/classPractice?userId="+userId+"&vid="+vid+"&version="+rdInt;
             var ifr = <iframe src={clazzStatusUrl}></iframe>;
             this.setState({isShow,vid,clazzStatusUrl,ifr});
             // $("#clazzStatusFrame")[0].window.location.reload();
