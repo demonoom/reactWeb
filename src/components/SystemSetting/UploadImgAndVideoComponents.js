@@ -1,6 +1,6 @@
-import React, {PropTypes} from 'react';
-import {Upload, Icon, message, Modal} from 'antd';
-import {isEmpty} from '../../utils/Const';
+import React, { PropTypes } from 'react';
+import { Upload, Icon, message, Modal } from 'antd';
+import { isEmpty } from '../../utils/Const';
 
 var fileList = [];
 var antUpload;
@@ -16,15 +16,15 @@ const UploadImgAndVideoComponents = React.createClass({
     },
 
     componentDidMount() {
-        antUpload.setState({"defaultFileList": []});
+        antUpload.setState({ "defaultFileList": [] });
     },
     /**
      * 蚁巢发布图片组件
      * @param nextProps
      */
     componentWillReceiveProps(nextProps) {
-        if (isEmpty(nextProps) == false && (typeof(nextProps.fileList) == "undefined" || nextProps.fileList.length == 0)) {
-            antUpload.setState({fileList: []});
+        if (isEmpty(nextProps) == false && (typeof (nextProps.fileList) == "undefined" || nextProps.fileList.length == 0)) {
+            antUpload.setState({ fileList: [] });
         }
     },
 
@@ -37,7 +37,7 @@ const UploadImgAndVideoComponents = React.createClass({
     },
 
     handleCancel() {
-        antUpload.setState({previewVisible: false, "defaultFileList": []})
+        antUpload.setState({ previewVisible: false, "defaultFileList": [] })
     },
 
     render() {
@@ -61,37 +61,43 @@ const UploadImgAndVideoComponents = React.createClass({
                 var fileNameArr = fileName.split(".");
 
                 if (fileNameArr[1] === "MP4") {
-                    message.error('文件格式不符合，请重新上传', 5);
+                    message.error('请上传mp4类型的视频', 5);
+                    return false;
+                }
+                if (fileNameArr[1] === "JPG") {
+                    message.error('请上传jpg类型的图片', 5);
                     return false;
                 }
 
-                if (fileNameArr[1] !== "mp4" && fileNameArr[1] !== "jpg" && fileNameArr[1] !== "JPG") {
+                if (fileNameArr[1] !== "mp4" && fileNameArr[1] !== "jpg") {
                     message.error('文件格式不符合，请重新上传', 5);
                     return false;
                 }
-                // if (fileType !== 'video/mp4' && fileType !== 'application/pdf' && fileType !== 'application/msword' && fileType !== 'application/vnd.openxmlformats-officedocument.presentationml.presentation' && fileType !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' && fileType !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-                //     message.error('文件格式不符合，请重新上传', 5);
-                //     return false;
-                // }
+                if (fileNameArr[1] == "jpg") {
+                    if ((file.size) / 1024 / 1024 > 2) {
+                        message.error('请上传2M以内的图片', 5);
+                        return false;
+                    }
+                }
 
             },
             onChange(info) {
                 if (info.file.status !== 'uploading') {
                     //上传进度
                     var percent = info.file.percent;
-                    antUpload.setState({uploadPercent: percent, progressState: 'block'});
+                    antUpload.setState({ uploadPercent: percent, progressState: 'block' });
                     if (info.file.status === "removed") {
                         antUpload.props.callBackParent(info.file, "removed");
                     }
                 }
                 if (info.file.status === 'done') {
                     antUpload.props.callBackParent(info.file);
-                    antUpload.setState({uploadPercent: 0, progressState: 'none', "defaultFileList": []});
+                    antUpload.setState({ uploadPercent: 0, progressState: 'none', "defaultFileList": [] });
                     message.success(`${info.file.name} 文件上传成功`, 5);
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败.`, 5);
                 }
-                antUpload.setState({"fileList": info.fileList});
+                antUpload.setState({ "fileList": info.fileList });
             },
             onRemove(file) {
             },
@@ -101,13 +107,13 @@ const UploadImgAndVideoComponents = React.createClass({
             <div className="ding_modal_left_noom">
                 <Upload {...props}>
                     <div className='noom_cursor noomUpLoadFileDiv'>
-                        <Icon className="noomUpLoadFile" type="plus-circle"/>
+                        <Icon className="noomUpLoadFile" type="plus-circle" />
                         <span>添加文件</span>
                     </div>
                 </Upload>
                 <Modal maskClosable={false} visible={antUpload.state.previewVisible} footer={null}
-                       onCancel={antUpload.handleCancel}>
-                    <img alt="example" style={{width: '100%'}} src={antUpload.state.previewImage}/>
+                    onCancel={antUpload.handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={antUpload.state.previewImage} />
                 </Modal>
             </div>
         );
