@@ -57,6 +57,7 @@ import enUS from 'antd/lib/locale-provider/en_US';
 import GuideModal from '../components/GuideModal';
 import {createStore} from 'redux';
 import {doWebService} from '../WebServiceHelper';
+import UploadImgAndVideoModal from "../components/SystemSetting/UploadImgAndVideoModal";
 
 const Panel = Collapse.Panel;
 
@@ -143,6 +144,7 @@ const MainLayout = React.createClass({
             calmOnlyExcelCallbackId: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
+        this.calmImgAndVideo = this.calmImgAndVideo.bind(this);
     },
 
     openNotification() {
@@ -209,10 +211,20 @@ const MainLayout = React.createClass({
         window.__calmOnlyVideo__ = this.calmOnlyVideo;
         window.__calmOnlyExcel__ = this.calmOnlyExcel;
         window.__noomSaveFileError__ = this.noomSaveFile;
+        window.__calmImgAndVideo__ = this.calmImgAndVideo;
     },
 
     noomSaveFile() {
         message.error('请将文件分享给某个人后在动态中进行操作');
+    },
+
+    calmImgAndVideo(callbackId) {
+        this.setState({
+            uploadImgAndVideoIsShow: true
+        })
+        this.setState({
+            callbackId
+        })
     },
 
     componentWillMount() {
@@ -2720,6 +2732,12 @@ const MainLayout = React.createClass({
         });
     },
 
+    closeDingModel() {
+        this.setState({
+            uploadImgAndVideoIsShow: false,
+        })
+    },
+
     render() {
 
         const {tags, inputVisible, inputValue} = this.state;
@@ -3422,7 +3440,11 @@ const MainLayout = React.createClass({
                             closeDingModel={this.closecalmOnlyExcelModalIsShowModel}
                             callbackId={this.state.calmOnlyExcelCallbackId}
                         />
-
+                        <UploadImgAndVideoModal
+                            isShow={this.state.uploadImgAndVideoIsShow}
+                            closeDingModel={this.closeDingModel}
+                            callbackId={this.state.callbackId}
+                        />
                     </div>
                 </IntlProvider>
             </LocaleProvider>
