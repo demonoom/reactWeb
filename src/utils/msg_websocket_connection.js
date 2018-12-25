@@ -17,6 +17,7 @@ export function MsgConnection() {
     this.connecting = false;
     this.reconnectTimeout;
     this.heartBeatTimeout;
+    this.pingButNotRecievePongCount = 0;
     this.connect = function (loginProtocol) {
         var connection = this;
         connection.connecting = true;
@@ -25,6 +26,7 @@ export function MsgConnection() {
         //监听消息
         connection.ws.onmessage = function (event) {
             connection.connecting = false;
+            connection.pingButNotRecievePongCount = 0;
             //如果服务器在发送ping命令,则赶紧回复PONG命令
             if (event.data == connection.PING_COMMAND) {
                 connection.send(connection.PONG_COMMAND);
@@ -64,6 +66,7 @@ export function MsgConnection() {
         connection.ws.onopen = function (event) {
             connection.connecting = false;
             connection.connected = true;
+            connection.pingButNotRecievePongCount = 0;
             connection.send(loginProtocol);
             //	console.log("连接到服务器 ....");
         };
@@ -86,12 +89,21 @@ export function MsgConnection() {
         var connection = this;
         if (connection.loginProtocol != null && !connection.connected && !connection.connecting) {
             connection.reconnectTimeout = setTimeout(function () {
-                connection.connect(connection.loginProtocol);
-                connection.reconnect();
+                // connection.connect(connection.loginProtocol);
+                // connection.reconnect();
+                connection.innerReconnect();
                 console.log("重连中 ...");
             }, 1000 * 10);
         }
     };
+
+    this.innerReconnect = function(){
+        var connection = this;
+        if (connection.loginProtocol != null && !connection.connecting) {
+            connection.connect(connection.loginProtocol);
+            console.log("bracelet ws 重连中 ...");
+        }
+    }
 
     this.send = function (jsonProtocal) {
         var connection = this;
@@ -105,6 +117,11 @@ export function MsgConnection() {
         var connection = this;
         var pingCommand = connection.PING_COMMAND;
         connection.heartBeatTimeout = setTimeout(function () {
+            if(connection.pingButNotRecievePongCount >=2 ){
+               clearInterval(connection.reconnectTimeout);
+               connection.innerReconnect();
+            }
+            connection.pingButNotRecievePongCount = connection.pingButNotRecievePongCount + 1;
             connection.send(pingCommand);
             // console.log("客户端发送ping命令 , 希望服务器回答pong...");
             connection.heartBeat();

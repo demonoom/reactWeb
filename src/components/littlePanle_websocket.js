@@ -88,34 +88,48 @@ function ClazzConnection(host) {
         };
     };
 
-
-    this.send = function (jsonProtocal) {
-
-        if (!this.connecting && this.connected) {
-            this.ws.send(JSON.stringify(jsonProtocal));
-        }
-    };
-
     //每次重连间隔为20秒
     this.reconnect = function () {
-        var _this = this;
-        if (!this.classOver && this.loginProtocol != null && !this.connected && !this.connecting) {
-            this.tmpT_1 = setTimeout(function () {
-                _this.connect(_this.loginProtocol);
-                _this.reconnect();
-                console.log("重连中 ...");
-            }, 1000 * 10);
-        }
+        var connection = this;
+		if(!connection.classOver && connection.loginProtocol != null && !connection.connected && !connection.connecting){
+			setTimeout(function (){
+				connection.connect(connection.loginProtocol);
+				connection.reconnect();
+				console.log("重连中 ...");
+			}, 1000*10);
+    	}
+        // var _this = this;
+        // if (!this.classOver && this.loginProtocol != null && !this.connected && !this.connecting) {
+        //     this.tmpT_1 = setTimeout(function () {
+        //         _this.connect(_this.loginProtocol);
+        //         _this.reconnect();
+        //         console.log("重连中 ...");
+        //     }, 1000 * 10);
+        // }
     };
+
+    this.disconnect = function(){
+		var connection = this;
+		connection.classOver = true;
+		connection.ws.close();
+	};
+    
+    this.send = function(jsonProtocal){
+		var connection = this;
+		if(!connection.connecting && connection.connected){
+			connection.ws.send(JSON.stringify(jsonProtocal));
+		}
+	};
 
     //因为网页中和客户端的处理机制还不太一样，网页中的心跳检测时间缩短到10秒钟
     this.heartBeat = function () {
-        var _this = this;
-        this.tmpT_2 = setTimeout(function () {
-            _this.send(_this.PING_COMMAND);
-            //  console.log("客户端发送ping命令 , 希望服务器回答pong...");
-            _this.heartBeat();
-        }, 1000 * 10);
+        var connection = this;
+		var pingCommand = connection.PING_COMMAND;
+		setTimeout(function (){
+			connection.send(pingCommand);
+			console.log("客户端发送ping命令 , 希望服务器回答pong...");
+			connection.heartBeat();
+		}, 1000*10);
     };
 
     //此对象一创建就开始心跳检测
