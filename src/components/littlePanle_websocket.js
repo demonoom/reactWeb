@@ -13,12 +13,13 @@ function ClazzConnection(host) {
     this.connected = false;
     this.connecting = false;
     let _this = this;
+    var connection = this;
+
     this.reconnectTimeout;
     this.heartBeatTimeout;
     this.pingButNotRecievePongCount = 0;
     this.connect = function (loginProtocol) {
 
-        var connection = this;
         connection.connecting = true;
         connection.loginProtocol = loginProtocol;
         window.liveTVWS = connection.ws = new WebSocket(connection.WS_URL);
@@ -78,7 +79,7 @@ function ClazzConnection(host) {
             connection.connected = true;
             connection.pingButNotRecievePongCount = 0;
             connection.send(loginProtocol);
-            //   console.log("连接到服务器 ....");
+              console.log("连接到服务器 ....");
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;

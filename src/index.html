@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>小蚂蚁移动教学平台</title>
-    <link rel="stylesheet" href="index.css?v=0.0.1"/>
-    <link rel="icon" href="../src/components/images/logo_title.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="index.css?v=0.0.1" />
+    <link rel="icon" href="../src/components/images/logo_title.png" type="image/x-icon" />
     <script src="../jquerylib/jquery-3.2.1.min.js"></script>
     <script src="../jquerylib/jquery-ui.min1.12.js"></script>
     <!-- 图片蒙层预览组件 -->
@@ -84,12 +85,12 @@
             },
             css: {
                 styles: [
-                    {rule: 'div'},			// Change selected elements to paragraph elements
-                    {rule: 'h1'},
-                    {rule: 'h2'},
-                    {rule: 'h3'},
-                    {rule: 'h4'},// Change selected elements to heading1 elements, apply blue class. Shown in the styles dropdown as 'Blue heading'
-                    {rule: 'pre'},		// Apply a red class to selected anchor elements
+                    { rule: 'div' },			// Change selected elements to paragraph elements
+                    { rule: 'h1' },
+                    { rule: 'h2' },
+                    { rule: 'h3' },
+                    { rule: 'h4' },// Change selected elements to heading1 elements, apply blue class. Shown in the styles dropdown as 'Blue heading'
+                    { rule: 'pre' },		// Apply a red class to selected anchor elements
                 ]
             }
         };
@@ -101,45 +102,47 @@
     </script>
 
 </head>
+
 <body onpaste="onPasteFunction()">
 
-<div id="root"></div>
-<div class="ant-layout-footer">
-    <div id="componyInfo" style="display:block">小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>
-    <script>
-        var timer;
+    <div id="root"></div>
+    <div class="ant-layout-footer">
+        <div id="componyInfo" style="display:block">小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>
+        <script>
+            var timer;
 
-        function checkIsLogin() {
-            if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
-                timer = setTimeout("checkIsLogin()", 500);
-                $(".ant-layout-footer").css({"display": 'block'});
-            } else {
-                $(".ant-layout-footer").css({"display": 'none'});
-                clearTimeout(timer);
+            function checkIsLogin() {
+                if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
+                    timer = setTimeout("checkIsLogin()", 500);
+                    $(".ant-layout-footer").css({ "display": 'block' });
+                } else {
+                    $(".ant-layout-footer").css({ "display": 'none' });
+                    clearTimeout(timer);
+                }
             }
-        }
 
-        checkIsLogin();
+            checkIsLogin();
+        </script>
+
+    </div>
+
+    <!-- Begin emoji-picker JavaScript -->
+    <script src="../emojiPicker/lib/js/nanoscroller.min.js"></script>
+    <script src="../emojiPicker/lib/js/tether.min.js"></script>
+    <script src="../emojiPicker/lib/js/config.js"></script>
+    <script src="../emojiPicker/lib/js/util.js"></script>
+    <script src="../emojiPicker/lib/js/jquery.emojiarea.js"></script>
+    <script src="../emojiPicker/lib/js/emoji-picker.js"></script>
+    <!-- End emoji-picker JavaScript -->
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=lK9Uq8lbN3p3E8kOh0axyKw7ZEGQ3G2s"></script>-->
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=lK9Uq8lbN3p3E8kOh0axyKw7ZEGQ3G2s&services=&t=20180529182003"></script>-->
+    <script type="text/javascript">
+        window.history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+        });
     </script>
-
-</div>
-
-<!-- Begin emoji-picker JavaScript -->
-<script src="../emojiPicker/lib/js/nanoscroller.min.js"></script>
-<script src="../emojiPicker/lib/js/tether.min.js"></script>
-<script src="../emojiPicker/lib/js/config.js"></script>
-<script src="../emojiPicker/lib/js/util.js"></script>
-<script src="../emojiPicker/lib/js/jquery.emojiarea.js"></script>
-<script src="../emojiPicker/lib/js/emoji-picker.js"></script>
-<!-- End emoji-picker JavaScript -->
-<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=lK9Uq8lbN3p3E8kOh0axyKw7ZEGQ3G2s"></script>-->
-<!--<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=lK9Uq8lbN3p3E8kOh0axyKw7ZEGQ3G2s&services=&t=20180529182003"></script>-->
-<script type="text/javascript">
-    window.history.pushState(null, null, document.URL);
-    window.addEventListener('popstate', function () {
-        history.pushState(null, null, document.URL);
-    });
-</script>
-<script src="index.js?v=3.3.2"></script>
+    <script src="index.js?v=3.3.2"></script>
 </body>
+
 </html>
