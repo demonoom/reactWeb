@@ -62,7 +62,7 @@ export function SimpleWebsocketConnection() {
             connection.connecting = false;
             connection.connected = true;
             connection.pingButNotRecievePongCount = 0;
-            	console.log("连接到服务器 ....");
+            	console.log("simp 连接到服务器 ....");
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;

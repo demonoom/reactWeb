@@ -2064,6 +2064,7 @@ const AntGroupTabComponents = React.createClass({
         var messageList = [];
         ms.msgWsListener = {
             onError: function (errorMsg) {
+                console.log(errorMsg,'onError');
                 if (_this.state.errorModalIsShow == false) {
                     _this.setState({"errorModalIsShow": true});
                     ms.closeConnection();
@@ -2084,6 +2085,7 @@ const AntGroupTabComponents = React.createClass({
             }, onWarn: function (warnMsg) {
                 message.warning(warnMsg);
             }, onMessage: function (info) {
+                console.log(info);
                 mesReFlag = true;
                 var messageList = antGroup.state.messageList;
                 // console.log(info);

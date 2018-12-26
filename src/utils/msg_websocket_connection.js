@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
-import { IS_DEBUG } from './Const';
-import { IS_LIVE_DEBUG } from './Const';
+import React, {PropTypes} from 'react';
+import {IS_DEBUG} from './Const';
+import {IS_LIVE_DEBUG} from './Const';
 
 export function MsgConnection() {
     this.msgWsListener = null;
@@ -95,7 +95,7 @@ export function MsgConnection() {
         }
     };
 
-    this.innerReconnect = function () {
+    this.innerReconnect = function(){
         var connection = this;
         if (connection.loginProtocol != null && !connection.connecting) {
             connection.connect(connection.loginProtocol);
@@ -115,9 +115,9 @@ export function MsgConnection() {
         var connection = this;
         var pingCommand = connection.PING_COMMAND;
         connection.heartBeatTimeout = setTimeout(function () {
-            if (connection.pingButNotRecievePongCount >= 2) {
-                clearInterval(connection.reconnectTimeout);
-                connection.innerReconnect();
+            if(connection.pingButNotRecievePongCount >=2 ){
+               clearInterval(connection.reconnectTimeout);
+               connection.innerReconnect();
             }
             connection.pingButNotRecievePongCount = connection.pingButNotRecievePongCount + 1;
             connection.send(pingCommand);
