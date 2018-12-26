@@ -66,7 +66,6 @@ export function MsgConnection() {
         connection.ws.onclose = function (event) {
             connection.connecting = false;
             connection.connected = false;
-            //	console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function (event) {
