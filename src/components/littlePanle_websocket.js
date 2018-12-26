@@ -13,23 +13,26 @@ function ClazzConnection(host) {
     this.connected = false;
     this.connecting = false;
     let _this = this;
+    this.reconnectTimeout;
+    this.heartBeatTimeout;
+    this.pingButNotRecievePongCount = 0;
     this.connect = function (loginProtocol) {
-
         var connection = this;
+        if (connection.ws != null) {
+            try {
+                connection.ws.close();
+            } catch (e) {
+                console.log(e);
+            }
+        }
         connection.connecting = true;
         connection.loginProtocol = loginProtocol;
         window.liveTVWS = connection.ws = new WebSocket(connection.WS_URL);
-        window.liveTVWS._close = function () {
-            window.liveTVWS.close();
-            _this.classOver = true;
-            _this.loginProtocol = null;
-            clearTimeout(_this.tmpT_1);
-            clearTimeout(_this.tmpT_2);
-        }
         //监听消息
         connection.ws.onmessage = function (event) {
 
             connection.connecting = false;
+            connection.pingButNotRecievePongCount = 0;
             //如果服务器在发送ping命令,则赶紧回复PONG命令
             if (event.data == connection.PING_COMMAND) {
                 connection.send(connection.PONG_COMMAND);
@@ -72,49 +75,73 @@ function ClazzConnection(host) {
         connection.ws.onclose = function (event) {
             connection.connecting = false;
             connection.connected = false;
-            connection.reconnect();
-            //   console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function (event) {
             connection.connecting = false;
             connection.connected = true;
+            connection.pingButNotRecievePongCount = 0;
             connection.send(loginProtocol);
-            //   console.log("连接到服务器 ....");
+            console.log("class ws 连接到服务器 ....");
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;
-            console.log("收到服务器的 onerror ....");
         };
     };
 
+    this.closeConnection = function () {
+        var connection = this;
+        connection.loginProtocol = null;
+        clearTimeout(connection.reconnectTimeout);
+        clearTimeout(connection.heartBeatTimeout);
+        connection.ws.close();
+    };
 
-    this.send = function (jsonProtocal) {
-
-        if (!this.connecting && this.connected) {
-            this.ws.send(JSON.stringify(jsonProtocal));
-        }
+    this.disconnect = function () {
+        var connection = this;
+        connection.closeConnection();
     };
 
     //每次重连间隔为20秒
     this.reconnect = function () {
-        var _this = this;
-        if (!this.classOver && this.loginProtocol != null && !this.connected && !this.connecting) {
-            this.tmpT_1 = setTimeout(function () {
-                _this.connect(_this.loginProtocol);
-                _this.reconnect();
-                console.log("重连中 ...");
+        var connection = this;
+        if (connection.loginProtocol != null && !connection.connecting && !connection.classOver) {
+            connection.reconnectTimeout = setTimeout(function () {
+                connection.innerReconnect();
             }, 1000 * 10);
+        }
+    };
+
+
+
+    this.innerReconnect = function () {
+        var connection = this;
+        if (connection.loginProtocol != null && !connection.connecting && !connection.classOver) {
+            connection.connect(connection.loginProtocol);
+            console.log("class ws 重连中 ...");
+        }
+    };
+
+
+    this.send = function (jsonProtocal) {
+        var connection = this;
+        if (!connection.connecting && connection.connected) {
+            connection.ws.send(JSON.stringify(jsonProtocal));
         }
     };
 
     //因为网页中和客户端的处理机制还不太一样，网页中的心跳检测时间缩短到10秒钟
     this.heartBeat = function () {
-        var _this = this;
-        this.tmpT_2 = setTimeout(function () {
-            _this.send(_this.PING_COMMAND);
-            //  console.log("客户端发送ping命令 , 希望服务器回答pong...");
-            _this.heartBeat();
+        var connection = this;
+        connection.heartBeatTimeout = setTimeout(function () {
+            if (connection.pingButNotRecievePongCount >= 2) {
+                clearInterval(connection.reconnectTimeout);
+                connection.innerReconnect();
+            }
+            connection.pingButNotRecievePongCount = connection.pingButNotRecievePongCount + 1;
+            var pingCommand = connection.PING_COMMAND;
+            connection.send(pingCommand);
+            connection.heartBeat();
         }, 1000 * 10);
     };
 

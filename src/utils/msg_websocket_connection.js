@@ -1,12 +1,12 @@
-import React, {PropTypes} from 'react';
-import {IS_DEBUG} from './Const';
-import {IS_LIVE_DEBUG} from './Const';
+import React, { PropTypes } from 'react';
+import { IS_DEBUG } from './Const';
+import { IS_LIVE_DEBUG } from './Const';
 
 export function MsgConnection() {
     this.msgWsListener = null;
     this.REMOTE_URL = "wss://www.maaee.com:7889/Excoord_MessageServer/message";
-    this.LOCAL_URL = "ws://192.168.43.210:8080/Excoord_MessageServer/message";
-    this.LOCAL_URL_LIVE = "ws://192.168.43.210:8889/Excoord_MessageServer/message";
+    this.LOCAL_URL = "ws://192.168.50.34:8080/Excoord_MessageServer/message";
+    this.LOCAL_URL_LIVE = "ws://192.168.50.34:8889/Excoord_MessageServer/message";
     this.WS_URL = IS_DEBUG ? (IS_LIVE_DEBUG ? this.LOCAL_URL_LIVE : this.LOCAL_URL) : this.REMOTE_URL;
     console.log("WS_URL----------------->" + this.WS_URL);
     this.ws = null;
@@ -17,18 +17,27 @@ export function MsgConnection() {
     this.connecting = false;
     this.reconnectTimeout;
     this.heartBeatTimeout;
+    this.pingButNotRecievePongCount = 0;
     this.connect = function (loginProtocol) {
         var connection = this;
+        if (connection.ws != null) {
+            try {
+                connection.ws.close();
+            } catch (e) {
+                console.log(e);
+            }
+        }
         connection.connecting = true;
         connection.loginProtocol = loginProtocol;
         connection.ws = new WebSocket(connection.WS_URL);
         //监听消息
         connection.ws.onmessage = function (event) {
             connection.connecting = false;
+            connection.pingButNotRecievePongCount = 0;
             //如果服务器在发送ping命令,则赶紧回复PONG命令
             if (event.data == connection.PING_COMMAND) {
                 connection.send(connection.PONG_COMMAND);
-                // console.log("收到服务器的 ping , 给服务器回复 pong...");
+                console.log("收到服务器的 ping , 给服务器回复 pong...");
                 return;
             }
             if (event.data == connection.PONG_COMMAND) {
@@ -57,19 +66,18 @@ export function MsgConnection() {
         connection.ws.onclose = function (event) {
             connection.connecting = false;
             connection.connected = false;
-            connection.reconnect();
             //	console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function (event) {
             connection.connecting = false;
             connection.connected = true;
+            connection.pingButNotRecievePongCount = 0;
             connection.send(loginProtocol);
-            //	console.log("连接到服务器 ....");
+            console.log("msg ws 连接到服务器 ....");
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;
-            //	console.log("收到服务器的 onerror ....");
         };
     };
 
@@ -84,14 +92,21 @@ export function MsgConnection() {
     //每次重连间隔为20秒
     this.reconnect = function () {
         var connection = this;
-        if (connection.loginProtocol != null && !connection.connected && !connection.connecting) {
+        if (connection.loginProtocol != null && !connection.connecting) {
             connection.reconnectTimeout = setTimeout(function () {
-                connection.connect(connection.loginProtocol);
-                connection.reconnect();
-                console.log("重连中 ...");
+                connection.innerReconnect();
+                console.log("msg ws 重连中 ...");
             }, 1000 * 10);
         }
     };
+
+    this.innerReconnect = function () {
+        var connection = this;
+        if (connection.loginProtocol != null && !connection.connecting) {
+            connection.connect(connection.loginProtocol);
+            console.log("msg ws 重连中 ...");
+        }
+    }
 
     this.send = function (jsonProtocal) {
         var connection = this;
@@ -105,6 +120,11 @@ export function MsgConnection() {
         var connection = this;
         var pingCommand = connection.PING_COMMAND;
         connection.heartBeatTimeout = setTimeout(function () {
+            if (connection.pingButNotRecievePongCount >= 2) {
+                clearInterval(connection.reconnectTimeout);
+                connection.innerReconnect();
+            }
+            connection.pingButNotRecievePongCount = connection.pingButNotRecievePongCount + 1;
             connection.send(pingCommand);
             // console.log("客户端发送ping命令 , 希望服务器回答pong...");
             connection.heartBeat();

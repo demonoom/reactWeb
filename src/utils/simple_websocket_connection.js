@@ -1,10 +1,10 @@
-import React, {PropTypes} from 'react';
-import {IS_DEBUG} from './Const';
+import React, { PropTypes } from 'react';
+import { IS_DEBUG } from './Const';
 
 export function SimpleWebsocketConnection() {
     this.msgWsListener = null;
     this.REMOTE_URL = "wss://www.maaee.com:7891/Excoord_SimpleWsServer/simple";
-    this.LOCAL_URL = "ws://192.168.43.210:8080/Excoord_SimpleWsServer/simple";
+    this.LOCAL_URL = "ws://192.168.50.34:8080/Excoord_SimpleWsServer/simple";
     this.WS_URL = IS_DEBUG ? this.LOCAL_URL : this.REMOTE_URL;
     this.ws = null;
     this.PING_COMMAND = "ping_0123456789_abcdefg";
@@ -13,17 +13,26 @@ export function SimpleWebsocketConnection() {
     this.connecting = false;
     this.reconnectTimeout;
     this.heartBeatTimeout;
+    this.pingButNotRecievePongCount = 0;
     this.connect = function () {
         var connection = this;
+        if (connection.ws != null) {
+            try {
+                connection.ws.close();
+            } catch (e) {
+                console.log(e);
+            }
+        }
         connection.connecting = true;
         connection.ws = new WebSocket(connection.WS_URL);
         //监听消息
         connection.ws.onmessage = function (event) {
             connection.connecting = false;
+            connection.pingButNotRecievePongCount = 0;
             //如果服务器在发送ping命令,则赶紧回复PONG命令
             if (event.data == connection.PING_COMMAND) {
                 connection.send(connection.PONG_COMMAND);
-                // console.log("收到服务器的 ping , 给服务器回复 pong...");
+                console.log("收到服务器的 ping , 给服务器回复 pong...");
                 return;
             }
             if (event.data == connection.PONG_COMMAND) {
@@ -52,18 +61,16 @@ export function SimpleWebsocketConnection() {
         connection.ws.onclose = function (event) {
             connection.connecting = false;
             connection.connected = false;
-            connection.reconnect();
-            //	console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function (event) {
             connection.connecting = false;
             connection.connected = true;
-            //	console.log("连接到服务器 ....");
+            connection.pingButNotRecievePongCount = 0;
+            console.log("simp 连接到服务器 ....");
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;
-            //	console.log("收到服务器的 onerror ....");
         };
     };
 
@@ -79,10 +86,16 @@ export function SimpleWebsocketConnection() {
         var connection = this;
         if (!connection.connected && !connection.connecting) {
             connection.reconnectTimeout = setTimeout(function () {
-                connection.connect();
-                connection.reconnect();
-                console.log("重连中 ...");
+                connection.innerReconnect();
             }, 1000 * 10);
+        }
+    };
+
+    this.innerReconnect = function () {
+        var connection = this;
+        if (!connection.connecting) {
+            connection.connect();
+            console.log("simple 重连中 ...");
         }
     };
 
@@ -98,8 +111,12 @@ export function SimpleWebsocketConnection() {
         var connection = this;
         var pingCommand = connection.PING_COMMAND;
         connection.heartBeatTimeout = setTimeout(function () {
+            if (connection.pingButNotRecievePongCount >= 2) {
+                clearInterval(connection.reconnectTimeout);
+                connection.innerReconnect();
+            }
+            connection.pingButNotRecievePongCount = connection.pingButNotRecievePongCount + 1;
             connection.send(pingCommand);
-            // console.log("客户端发送ping命令 , 希望服务器回答pong...");
             connection.heartBeat();
         }, 1000 * 10);
     };
