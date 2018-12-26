@@ -25,7 +25,7 @@ export function SimpleWebsocketConnection() {
             //如果服务器在发送ping命令,则赶紧回复PONG命令
             if (event.data == connection.PING_COMMAND) {
                 connection.send(connection.PONG_COMMAND);
-                // console.log("收到服务器的 ping , 给服务器回复 pong...");
+                console.log("收到服务器的 ping , 给服务器回复 pong...");
                 return;
             }
             if (event.data == connection.PONG_COMMAND) {
@@ -62,11 +62,11 @@ export function SimpleWebsocketConnection() {
             connection.connecting = false;
             connection.connected = true;
             connection.pingButNotRecievePongCount = 0;
-            //	console.log("连接到服务器 ....");
+            	console.log("连接到服务器 ....");
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;
-            //	console.log("收到服务器的 onerror ....");
+            	console.log("收到服务器的 onerror ....");
         };
     };
 
@@ -83,9 +83,6 @@ export function SimpleWebsocketConnection() {
         if (!connection.connected && !connection.connecting) {
             connection.reconnectTimeout = setTimeout(function () {
                 connection.innerReconnect();
-                // connection.connect();
-                // connection.reconnect();
-                // console.log("重连中 ...");
             }, 1000 * 10);
         }
     };

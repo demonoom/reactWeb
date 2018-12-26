@@ -1,6 +1,6 @@
-import React, {PropTypes} from 'react';
-import {IS_DEBUG} from './Const';
-import {IS_LIVE_DEBUG} from './Const';
+import React, { PropTypes } from 'react';
+import { IS_DEBUG } from './Const';
+import { IS_LIVE_DEBUG } from './Const';
 
 export function MsgConnection() {
     this.msgWsListener = null;
@@ -30,7 +30,7 @@ export function MsgConnection() {
             //如果服务器在发送ping命令,则赶紧回复PONG命令
             if (event.data == connection.PING_COMMAND) {
                 connection.send(connection.PONG_COMMAND);
-                // console.log("收到服务器的 ping , 给服务器回复 pong...");
+                console.log("收到服务器的 ping , 给服务器回复 pong...");
                 return;
             }
             if (event.data == connection.PONG_COMMAND) {
@@ -68,7 +68,7 @@ export function MsgConnection() {
             connection.connected = true;
             connection.pingButNotRecievePongCount = 0;
             connection.send(loginProtocol);
-            //	console.log("连接到服务器 ....");
+            console.log("msg ws 连接到服务器 ....");
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;
@@ -87,21 +87,19 @@ export function MsgConnection() {
     //每次重连间隔为20秒
     this.reconnect = function () {
         var connection = this;
-        if (connection.loginProtocol != null && !connection.connected && !connection.connecting) {
+        if (connection.loginProtocol != null && !connection.connecting) {
             connection.reconnectTimeout = setTimeout(function () {
-                // connection.connect(connection.loginProtocol);
-                // connection.reconnect();
                 connection.innerReconnect();
-                console.log("重连中 ...");
+                console.log("msg ws 重连中 ...");
             }, 1000 * 10);
         }
     };
 
-    this.innerReconnect = function(){
+    this.innerReconnect = function () {
         var connection = this;
         if (connection.loginProtocol != null && !connection.connecting) {
             connection.connect(connection.loginProtocol);
-            console.log("bracelet ws 重连中 ...");
+            console.log("msg ws 重连中 ...");
         }
     }
 
@@ -117,9 +115,9 @@ export function MsgConnection() {
         var connection = this;
         var pingCommand = connection.PING_COMMAND;
         connection.heartBeatTimeout = setTimeout(function () {
-            if(connection.pingButNotRecievePongCount >=2 ){
-               clearInterval(connection.reconnectTimeout);
-               connection.innerReconnect();
+            if (connection.pingButNotRecievePongCount >= 2) {
+                clearInterval(connection.reconnectTimeout);
+                connection.innerReconnect();
             }
             connection.pingButNotRecievePongCount = connection.pingButNotRecievePongCount + 1;
             connection.send(pingCommand);
