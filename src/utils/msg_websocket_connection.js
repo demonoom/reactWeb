@@ -5,8 +5,8 @@ import { IS_LIVE_DEBUG } from './Const';
 export function MsgConnection() {
     this.msgWsListener = null;
     this.REMOTE_URL = "wss://www.maaee.com:7889/Excoord_MessageServer/message";
-    this.LOCAL_URL = "ws://192.168.43.210:8080/Excoord_MessageServer/message";
-    this.LOCAL_URL_LIVE = "ws://192.168.43.210:8889/Excoord_MessageServer/message";
+    this.LOCAL_URL = "ws://192.168.50.34:8080/Excoord_MessageServer/message";
+    this.LOCAL_URL_LIVE = "ws://192.168.50.34:8889/Excoord_MessageServer/message";
     this.WS_URL = IS_DEBUG ? (IS_LIVE_DEBUG ? this.LOCAL_URL_LIVE : this.LOCAL_URL) : this.REMOTE_URL;
     console.log("WS_URL----------------->" + this.WS_URL);
     this.ws = null;
@@ -20,6 +20,13 @@ export function MsgConnection() {
     this.pingButNotRecievePongCount = 0;
     this.connect = function (loginProtocol) {
         var connection = this;
+        if (connection.ws != null) {
+            try {
+                connection.ws.close();
+            } catch (e) {
+                console.log(e);
+            }
+        }
         connection.connecting = true;
         connection.loginProtocol = loginProtocol;
         connection.ws = new WebSocket(connection.WS_URL);
@@ -59,8 +66,6 @@ export function MsgConnection() {
         connection.ws.onclose = function (event) {
             connection.connecting = false;
             connection.connected = false;
-            connection.reconnect();
-            //	console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function (event) {
@@ -72,7 +77,6 @@ export function MsgConnection() {
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;
-            //	console.log("收到服务器的 onerror ....");
         };
     };
 
