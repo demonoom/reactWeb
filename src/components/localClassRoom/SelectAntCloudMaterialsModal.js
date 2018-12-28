@@ -504,7 +504,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var _this = this;
         var fileLogo;
         if (directory) {
-            fileLogo = <span className="cloud_text">
+            fileLogo = <span className="cloud_text" style={{overflow:'hidden'}}>
                 <i className="cloud_icon cloud_icon_file upexam_float"></i>
                 <span className="antnest_name affix_bottom_tc">{name}</span>
             </span>;
