@@ -84,6 +84,7 @@ const Login = Form.create()(React.createClass({
                     var uuid = data.uuid;
                     var user = data.user;
                     if(uuid == machineId){
+                        console.log('登录😄')
                         _this.loginSystem(user);
                     }
                     console.log("data==============>"+data);

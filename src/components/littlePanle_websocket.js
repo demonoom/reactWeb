@@ -13,13 +13,18 @@ function ClazzConnection(host) {
     this.connected = false;
     this.connecting = false;
     let _this = this;
-    var connection = this;
-
     this.reconnectTimeout;
     this.heartBeatTimeout;
     this.pingButNotRecievePongCount = 0;
     this.connect = function (loginProtocol) {
-
+        var connection = this;
+        if (connection.ws != null) {
+            try {
+                connection.ws.close();
+            } catch (e) {
+                console.log(e);
+            }
+        }
         connection.connecting = true;
         connection.loginProtocol = loginProtocol;
         window.liveTVWS = connection.ws = new WebSocket(connection.WS_URL);
@@ -70,8 +75,6 @@ function ClazzConnection(host) {
         connection.ws.onclose = function (event) {
             connection.connecting = false;
             connection.connected = false;
-            connection.reconnect();
-            //   console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function (event) {
@@ -79,11 +82,10 @@ function ClazzConnection(host) {
             connection.connected = true;
             connection.pingButNotRecievePongCount = 0;
             connection.send(loginProtocol);
-              console.log("连接到服务器 ....");
+            console.log("class ws 连接到服务器 ....");
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;
-            console.log("收到服务器的 onerror ....");
         };
     };
 
@@ -100,11 +102,9 @@ function ClazzConnection(host) {
         connection.closeConnection();
     };
 
-
-
-
     //每次重连间隔为20秒
     this.reconnect = function () {
+        var connection = this;
         if (connection.loginProtocol != null && !connection.connecting && !connection.classOver) {
             connection.reconnectTimeout = setTimeout(function () {
                 connection.innerReconnect();

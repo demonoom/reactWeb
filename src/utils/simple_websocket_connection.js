@@ -1,10 +1,10 @@
-import React, {PropTypes} from 'react';
-import {IS_DEBUG} from './Const';
+import React, { PropTypes } from 'react';
+import { IS_DEBUG } from './Const';
 
 export function SimpleWebsocketConnection() {
     this.msgWsListener = null;
     this.REMOTE_URL = "wss://www.maaee.com:7891/Excoord_SimpleWsServer/simple";
-    this.LOCAL_URL = "ws://192.168.43.210:8080/Excoord_SimpleWsServer/simple";
+    this.LOCAL_URL = "ws://192.168.50.34:8080/Excoord_SimpleWsServer/simple";
     this.WS_URL = IS_DEBUG ? this.LOCAL_URL : this.REMOTE_URL;
     this.ws = null;
     this.PING_COMMAND = "ping_0123456789_abcdefg";
@@ -16,6 +16,13 @@ export function SimpleWebsocketConnection() {
     this.pingButNotRecievePongCount = 0;
     this.connect = function () {
         var connection = this;
+        if (connection.ws != null) {
+            try {
+                connection.ws.close();
+            } catch (e) {
+                console.log(e);
+            }
+        }
         connection.connecting = true;
         connection.ws = new WebSocket(connection.WS_URL);
         //监听消息
@@ -54,19 +61,16 @@ export function SimpleWebsocketConnection() {
         connection.ws.onclose = function (event) {
             connection.connecting = false;
             connection.connected = false;
-            connection.reconnect();
-            //	console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function (event) {
             connection.connecting = false;
             connection.connected = true;
             connection.pingButNotRecievePongCount = 0;
-            	console.log("simp 连接到服务器 ....");
+            console.log("simp 连接到服务器 ....");
         };
         connection.ws.onerror = function (event) {
             connection.connecting = false;
-            	console.log("收到服务器的 onerror ....");
         };
     };
 
@@ -87,7 +91,7 @@ export function SimpleWebsocketConnection() {
         }
     };
 
-    this.innerReconnect = function(){
+    this.innerReconnect = function () {
         var connection = this;
         if (!connection.connecting) {
             connection.connect();
@@ -107,7 +111,7 @@ export function SimpleWebsocketConnection() {
         var connection = this;
         var pingCommand = connection.PING_COMMAND;
         connection.heartBeatTimeout = setTimeout(function () {
-            if(connection.pingButNotRecievePongCount >=2 ){
+            if (connection.pingButNotRecievePongCount >= 2) {
                 clearInterval(connection.reconnectTimeout);
                 connection.innerReconnect();
             }
