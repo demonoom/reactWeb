@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react';
-import { isEmpty } from '../../utils/utils';
-import { LOCAL_CLASS_ROOM_URL } from '../../utils/Const';
-import { Button, message, Table, Modal } from 'antd';
-import { doWebService } from '../../WebServiceHelper'
+import React, {PropTypes} from 'react';
+import {isEmpty} from '../../utils/utils';
+import {LOCAL_CLASS_ROOM_URL} from '../../utils/Const';
+import {Button, message, Table, Modal} from 'antd';
+import {doWebService} from '../../WebServiceHelper'
 
 const classRoomColumns = [{
     title: '班级',
@@ -71,15 +71,14 @@ const LocalClasses = React.createClass({
                             var classId = classInfoArray[0];
                             var className = classInfoArray[1];
                             var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                                className="lesson_start">开课</Button></div>;
+                                                          className="lesson_start">开课</Button></div>;
                             if (isEmpty(_this.state.courseState) == false && _this.state.courseState == true) {
                                 if (classId == _this.state.classId) {
                                     openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                                        className="localclass_btn" disabled>正在开课</Button></div>;
-                                }
-                                else {
+                                                              className="localclass_btn" disabled>正在开课</Button></div>;
+                                } else {
                                     openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                                        className="localclass_btn" disabled>开课</Button></div>;
+                                                              className="localclass_btn" disabled>开课</Button></div>;
                                 }
                             }
 
@@ -90,7 +89,7 @@ const LocalClasses = React.createClass({
                             }
                             classRoomList.push(obj);
                         })
-                        _this.setState({ classRoomList });
+                        _this.setState({classRoomList});
                         _this.getDisconnectedClass();
                     }
                 } else {
@@ -114,15 +113,14 @@ const LocalClasses = React.createClass({
             var classId = classInfoArray[0];
             var className = classInfoArray[1];
             var openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                className="localclass_continue localclass_btn">开课</Button></div>;
+                                          className="localclass_continue localclass_btn">开课</Button></div>;
             if (isHaveDisconnection == true) {
                 if (classId == _this.state.classId) {
                     openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                        className="localclass_btn" disabled>正在开课</Button></div>;
-                }
-                else {
+                                              className="localclass_btn" disabled>正在开课</Button></div>;
+                } else {
                     openButton = <div><Button onClick={_this.openClass.bind(_this, classId)}
-                        className="localclass_btn" disabled>开课</Button></div>;
+                                              className="localclass_btn" disabled>开课</Button></div>;
                 }
             }
 
@@ -133,7 +131,7 @@ const LocalClasses = React.createClass({
             }
             classRoomList.push(obj);
         })
-        _this.setState({ classRoomList });
+        _this.setState({classRoomList});
     },
 
     /**
@@ -145,8 +143,8 @@ const LocalClasses = React.createClass({
         var classType = "A";
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
-        // localClassRoomWindow = window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
-        localClassRoomWindow = window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        localClassRoomWindow = window.open(LOCAL_CLASS_ROOM_URL + "?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
+        // localClassRoomWindow = window.open("http://localhost:8090/#/localClassRoom?userId=" + userId + "&account=" + account + "&classCode=" + classId + "&classType=" + classType);
         var refreshTime = 0;
         var timer = setInterval(function () {
             _this.getDisconnectedClass();
@@ -200,7 +198,7 @@ const LocalClasses = React.createClass({
                     isHaveDisconnection = true;
                 } else {
                     isHaveDisconnection = false;
-                    _this.setState({ courseState: false });
+                    _this.setState({courseState: false});
                 }
                 _this.rebuildClassRoomList(isHaveDisconnection);
             },
@@ -232,7 +230,7 @@ const LocalClasses = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 console.log(ret);
-                _this.setState({ courseState: false });
+                _this.setState({courseState: false});
             },
             onError: function (error) {
                 message.error(error);
@@ -241,7 +239,7 @@ const LocalClasses = React.createClass({
         if (isEmpty(localClassRoomWindow) == false) {
             localClassRoomWindow.close();
         }
-        _this.setState({ courseState: false });
+        _this.setState({courseState: false});
         var isHaveDisconnectedClass = false;
         _this.rebuildClassRoomList(isHaveDisconnectedClass);
     },
@@ -250,14 +248,14 @@ const LocalClasses = React.createClass({
      * 点击关闭课堂弹出确认modal
      */
     showConfirmModal(e) {
-        this.setState({ changeConfirmModalVisible: true })
+        this.setState({changeConfirmModalVisible: true})
     },
 
     /**
      * 关闭下课弹窗modal
      */
     closeConfirmModal() {
-        this.setState({ changeConfirmModalVisible: false })
+        this.setState({changeConfirmModalVisible: false})
     },
 
     /**
@@ -266,7 +264,7 @@ const LocalClasses = React.createClass({
     disConnectClassRoom() {
         var _this = this;
         _this.closeDisconnectionClass();
-        this.setState({ changeConfirmModalVisible: false })
+        this.setState({changeConfirmModalVisible: false})
 
     },
 
@@ -282,7 +280,7 @@ const LocalClasses = React.createClass({
                 正在开课
             </span>
             <Button onClick={this.openClass.bind(this, this.state.classId)}
-                className="localclass_continue right_ri localclass_btn">继续上课</Button>
+                    className="localclass_continue right_ri localclass_btn">继续上课</Button>
             <Button onClick={this.showConfirmModal} className="localclass_close right_ri localclass_btn">关闭课堂</Button>
         </div>
         var _this = this;
@@ -304,21 +302,21 @@ const LocalClasses = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <button type="primary" className="login-form-button examination_btn_blue calmSure"
-                            onClick={this.disConnectClassRoom}>确定</button>,
+                                onClick={this.disConnectClassRoom}>确定</button>,
                         <button type="ghost" className="login-form-button examination_btn_white calmCancle"
-                            onClick={this.closeConfirmModal}>取消</button>
+                                onClick={this.closeConfirmModal}>取消</button>
                     ]}
                 >
                     <div className="isDel">
-                        <img className="sadFeel" src={require("../../../jquery-photo-gallery/icon/sad.png")} />
+                        <img className="sadFeel" src={require("../../../jquery-photo-gallery/icon/sad.png")}/>
                         确定要下课吗?
                     </div>
                 </Modal>
 
                 <div className="localclass_scroll">
                     <Table columns={classRoomColumns}
-                        dataSource={this.state.classRoomList}
-                        pagination={false} scroll={{ y: '420px' }} />
+                           dataSource={this.state.classRoomList}
+                           pagination={false} scroll={{y: '420px'}}/>
                 </div>
             </div>
         );

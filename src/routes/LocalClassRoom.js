@@ -593,7 +593,7 @@ const LocalClassRoom = React.createClass({
                         </Button>
                     </div>
                     <div className="classroom_btn_finish">
-                        <Button className="classroom_btn_b classroom_btn_finish add_out"
+                        <Button className="classroom_btn_b classroom_btn_finish add_out" style={{top:0}}
                                 onClick={this.showConfirmModal}>
                             <i><img src={require('../components/images/classroom_finish.png')}/></i>
                             <div>下课</div>
