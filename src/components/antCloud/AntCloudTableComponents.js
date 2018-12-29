@@ -943,7 +943,7 @@ pageNo   --- 页码，-1取全部
         var createUid = e.createUid;
         var name = e.name;
         if (type == 'mp4') {
-            var url = 'http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/' + e.uuid + '/' + e.id;
+            var url = 'http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/' + e.uuid + '/' + this.state.ident;
             this.view(event, url, name);
         } else if (type == 'jpg' || type == 'bmp' || type == 'png') {
             var url = path;
@@ -2424,14 +2424,14 @@ pageNo   --- 页码，-1取全部
                 }
             } else {
                 if (cloudTable.state.currentDirectoryId != -1) {
-                    uploadButton = <Button 
+                    uploadButton = <Button
                                         className="calmBorderRadius"
                                         value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                 }
             }
             delBtn =
                 <div className="cloud_tool">
-                    <Button type="primary" 
+                    <Button type="primary"
                             className="calmBorderRadius"
                             onClick={cloudTable.showdelAllDirectoryConfirmModal}
                                                     disabled={!hasSelected && cloudTable.state.delBtnReadOnly}
@@ -2474,8 +2474,8 @@ pageNo   --- 页码，-1取全部
                 // 非第一级文件夹
                 newButton = <Button value="newDirectory" className="calmBorderRadius antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
                 //使用者只有上传的权限
-                uploadButton = <Button 
-                                    value="uploadFile" 
+                uploadButton = <Button
+                                    value="uploadFile"
                                     className="calmBorderRadius"
                                     onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                 /*if(cloudTable.state.currentDirMaxPermission!=3
@@ -2584,7 +2584,7 @@ pageNo   --- 页码，-1取全部
                               onConfirmModalCancel={cloudTable.closeConfirmModal}
                               onConfirmModalOK={cloudTable.deleteCloudFiles}
                 ></ConfirmModal> */}
-                 <Modal 
+                 <Modal
                     visible={cloudTable.state.confirmModal}
                     title="提示"
                     className="calmModal"
@@ -2593,15 +2593,15 @@ pageNo   --- 页码，-1取全部
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                             <button type="primary" 
-                                    className="calmSure login-form-button examination_btn_blue" 
-                                    onClick={cloudTable.deleteCloudFiles} 
+                             <button type="primary"
+                                    className="calmSure login-form-button examination_btn_blue"
+                                    onClick={cloudTable.deleteCloudFiles}
                                     >
                             确定</button>
-                            <button type="ghost" 
-                                    className="calmPre  login-form-button examination_btn_white" 
+                            <button type="ghost"
+                                    className="calmPre  login-form-button examination_btn_white"
                                     onClick={cloudTable.closeConfirmModal} >取消</button>
-                           
+
                         </div>
                     ]}
                 >
@@ -2620,7 +2620,7 @@ pageNo   --- 页码，-1取全部
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                            
+
                             <Button type="ghost" htmlType="reset" className="login-form-button"
                                     onClick={cloudTable.cloudFileUploadModalHandleCancel}>
                                 取消

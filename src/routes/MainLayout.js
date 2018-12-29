@@ -161,7 +161,6 @@ const MainLayout = React.createClass({
     },
     toolbarClick: function (e) {
 
-
         if ('teachSpace' == e.key) {
 
             if (e.key == this.state.currentKey) {
