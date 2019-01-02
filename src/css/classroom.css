@@ -248,6 +248,16 @@
     padding: 0 !important;
     height: 459px;
 }
+.modal_classroom_push_new .ant-modal-title{
+    line-height: 21px;
+}
+.file_hiddenName{
+    width: 480px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
 .modal_classroom_push_left{
     width: 242px;
     height: 458px;
@@ -334,6 +344,11 @@
 .classroom_push_td{
     display: flex;
     line-height: 28px;
+    color: #333;
+    font-size: 14px;
+}
+.choose_topicNew .ant-modal-title{
+    line-height: 21px;
 }
 .classroom_left_i{
     font-size: 22px;

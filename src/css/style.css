@@ -9229,7 +9229,7 @@ select.course_n:hover {
 }
 
 .selectTab .ant-tabs-nav {
-    margin-left: 154px;
+    margin-left: 188px;
 }
 
 .selectTab .ant-tabs-tabpane {
@@ -9342,9 +9342,18 @@ ul.chosenBox {
 }
 
 .selectTab .antnest_name {
-    line-heigh-t: 0;
-}
 
+}
+.selectTab .antnest_name_new{
+    width: 530px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    margin-right: 0;
+    font-size: 14px;
+    color: #333;
+}
 .chosenBox li {
     width: 192px;
     height: 192px;
@@ -9387,7 +9396,9 @@ ul.chosenBox {
     display: none;
 
 }
-
+.select_img_modal{
+    width: 616px !important;
+}
 .select_img_modal .ant-modal-content {
     height: 540px
 }

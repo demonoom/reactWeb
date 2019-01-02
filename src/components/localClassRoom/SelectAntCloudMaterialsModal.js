@@ -506,7 +506,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         if (directory) {
             fileLogo = <span className="cloud_text" style={{overflow:'hidden'}}>
                 <i className="cloud_icon cloud_icon_file upexam_float"></i>
-                <span className="antnest_name affix_bottom_tc">{name}</span>
+                <span className="antnest_name affix_bottom_tc antnest_name_new">{name}</span>
             </span>;
         } else {
             var lastPointIndex = name.lastIndexOf(".");
@@ -548,7 +548,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
             }
             fileLogo = <div className="classroom_push_td">
                 {fileTypeLog}
-                <span className="classroom_file_50">{name}</span>
+                <span className="classroom_file_50 antnest_name_new">{name}</span>
             </div>;
         }
         return fileLogo;

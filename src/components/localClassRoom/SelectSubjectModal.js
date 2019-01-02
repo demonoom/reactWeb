@@ -194,7 +194,7 @@ class SelectSubjectModal extends React.Component {
         };
 
         return (
-            <Modal title="推送题目" className="modal_classroom modal_classroom_push" visible={this.state.isShow}
+            <Modal title="推送题目" className="modal_classroom modal_classroom_push modal_classroom_push_new" visible={this.state.isShow}
                    onCancel={this.SelectSubjectModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    maskClosable={false} //设置不允许点击蒙层关闭

@@ -168,7 +168,7 @@ class SelectAntCloudSubjectsModal extends React.Component {
         if (directory) {
             fileLogo = <span className="cloud_text">
                 <i className="cloud_icon cloud_icon_file upexam_float"></i>
-                <span className="antnest_name affix_bottom_tc">{name}</span>
+                <span className="antnest_name affix_bottom_tc file_hiddenName">{name}</span>
             </span>;
         } else {
             var content = <article id='contentHtml' className='content'
@@ -327,11 +327,12 @@ class SelectAntCloudSubjectsModal extends React.Component {
             onChange: this.onSubjectTableSelectChange,
         };
         return (
-            <Modal className="modal_classroom modal_classroom_push modal_classroom_box choose_topic"
+            <Modal className="modal_classroom modal_classroom_push modal_classroom_box choose_topic choose_topicNew"
                    visible={this.state.isShow}
                    onCancel={this.SelectSubjectModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    title="选择题目"
+                   width={616}
                    maskClosable={false} //设置不允许点击蒙层关闭
                    footer={null}
                    closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
