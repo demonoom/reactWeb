@@ -56,24 +56,27 @@ const UploadImgAndVideoComponents = React.createClass({
                     return false;
                 }
                 var fileType = file.type;
-
                 var fileName = file.name;
                 var fileNameArr = fileName.split(".");
 
-                if (fileNameArr[1] === "MP4") {
-                    message.error('请上传mp4类型的视频', 5);
-                    return false;
-                }
-                if (fileNameArr[1] === "JPG") {
+                // if (fileNameArr[1] === "MP4") {
+                //     message.error('请上传mp4类型的视频', 5);
+                //     return false;
+                // }
+                console.log(fileNameArr[1],"file2")
+                if (fileNameArr[1] === "png") {
                     message.error('请上传jpg类型的图片', 5);
                     return false;
                 }
-
-                if (fileNameArr[1] !== "mp4" && fileNameArr[1] !== "jpg") {
+                if (fileNameArr[1] === "PNG") {
+                    message.error('请上传jpg类型的图片', 5);
+                    return false;
+                }
+                if (fileNameArr[1] !== "mp4" && fileNameArr[1] !== "MP4" && fileNameArr[1] !== "jpg" && fileNameArr[1] !== "JPG" && fileNameArr[1] !== "jpeg" && fileNameArr[1] !== "JPEG") {
                     message.error('文件格式不符合，请重新上传', 5);
                     return false;
                 }
-                if (fileNameArr[1] == "jpg") {
+                if (fileNameArr[1] == "jpg" && fileNameArr[1] == "JPG" && fileNameArr[1] == "jpeg" && fileNameArr[1] == "JPEG") {
                     if ((file.size) / 1024 / 1024 > 2) {
                         message.error('请上传2M以内的图片', 5);
                         return false;

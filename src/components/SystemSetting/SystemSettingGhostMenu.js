@@ -233,7 +233,7 @@ class SystemSettingGhostMenu extends React.Component {
         //                 _this.checkWords({
         //                     method: 'openNewPage',
         //                     // url: 'http://jiaoxue.maaee.com:8091/#/classCardHomePageDoor',
-        //                     url: 'http://192.168.43.169:8091/#/classCardHomePageDoor'
+        //                     url: 'http://192.168.50.72:8091/#/classCardHomePageDoor'
         //                 }, '班牌编辑');
         //             }}><img className="icon_system_img" src="http://60.205.111.227/upload2/common/img/icon_ar.png" />班牌编辑2
         //             </li>
