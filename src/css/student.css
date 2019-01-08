@@ -149,6 +149,7 @@ li.liveTV:hover, li.history:hover, li.exam:hover {
 .panle_book img{
 	height: 100%;
 	max-width: 100%;
+	object-fit: contain;
 }
 .showDanmuArea{
     position: absolute;
@@ -246,9 +247,11 @@ li.liveTV:hover, li.history:hover, li.exam:hover {
 }
 .textarea_1{
 	 width: calc(100% - 100px);
+	display: inline-block;
 }
 .textarea_2{
 	 width: calc(100% - 164px);
+	display: inline-block;
 }
 .inputArea button, .file_btn{
 	color: #fff;
