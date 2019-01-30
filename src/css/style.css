@@ -1328,11 +1328,6 @@ element.style {
     text-align: center !important;
     margin: 0 auto;
 }
-
-.choose_class {
-    width: 920px !important
-}
-
 .col17_le {
     border-left: 12px #fff solid !important;
 }
@@ -1746,7 +1741,9 @@ analyze_iframe_2 > div {
     transform: translate(-50%, -50%);
     padding-bottom: 23px !important;
 }
-
+.choose_class {
+    width: 920px !important
+}
 p.user_cont1, div.user_cont1 {
     text-align: center;
     height: 150px;

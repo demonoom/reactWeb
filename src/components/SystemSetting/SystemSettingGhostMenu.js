@@ -472,6 +472,7 @@ class SystemSettingGhostMenu extends React.Component {
     }
 
     checkWords(words, name) {
+            debugger
         var _this = this;
         //words就是返回的对象
         if (words.method == 'operateStructure') {
