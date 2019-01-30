@@ -2102,7 +2102,7 @@ const UpdateExamPagerComponents = React.createClass({
                         </Col>
                         <Col span={12}>
                             <button type="primary" htmlType="submit"
-                                    className="calmBorderRadius login-form-button class_right examination_btn_blue"
+                                    className="calmBorderRadius login-form-button class_right examination_btn_blue examination_btn_green"
                                     onClick={createExamPager.addAnswerCard}>
                                 添加题目
                             </button>

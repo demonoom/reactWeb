@@ -266,16 +266,16 @@ const ExamUpLoadModel = React.createClass({
                         <div className="ant-col-14"><Input value={this.state.excellentFractionalLine}
                                                            onChange={this.excellentFractionalLineOnChange}/></div>
                     </div>
-                    <div className="row_div">
-                        <div className="ding_t_red ding_t_12 exam_analysis_red">＊先上传双向细目表，再上传成绩单</div>
-                        <span className="ding_t_red ding_t_12 exam_analysis_red"
+                    <div className="row_div" style={{marginBottom:'15px'}}>
+                        <div className="ding_t_12 exam_analysis_red" style={{lineHeight:'24px'}}>＊先上传双向细目表，再上传成绩单</div>
+                        <span className="ding_t_12 exam_analysis_red"
                               style={{marginLeft: 132}}>＊点击查看文件规范要求:</span>
-                        <span className="ding_t_red ding_t_12 exam_analysis_red noom_cursor"
-                              style={{marginLeft: 8, color: 'blue'}}
+                        <span className="ding_t_12 exam_analysis_red noom_cursor"
+                              style={{marginLeft: 8, color: '#0084ff', textDecoration: 'underline'}}
                               onClick={this.ckeckFirstImg}
                         >双向细目表规范</span>
-                        <span className="ding_t_red ding_t_12 exam_analysis_red noom_cursor"
-                              style={{marginLeft: 5, color: 'blue'}}
+                        <span className="ding_t_12 exam_analysis_red noom_cursor"
+                              style={{marginLeft: 15, color: '#0084ff', textDecoration: 'underline'}}
                               onClick={this.secFirstImg}
                         >试卷成绩规范</span>
                         <img id='firstImg' style={{display: 'none'}}

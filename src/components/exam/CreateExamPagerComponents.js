@@ -1732,7 +1732,7 @@ const CreateExamPagerComponents = React.createClass({
                             <span className="text_30"></span>
                         </Col>
                         <Col span={12}>
-                            <button type="primary" className="calmBorderRadius login-form-button class_right examination_btn_blue"
+                            <button type="primary" className="calmBorderRadius login-form-button class_right examination_btn_blue examination_btn_green"
                                     onClick={createExamPager.addAnswerCard}>
                                 添加题目
                             </button>
