@@ -44,7 +44,8 @@ class PersonCenterMenu extends React.Component {
                     <Menu.Item key="mySubject"><i className="iconfont menu_left_i">&#xe6f8;</i>我的题目</Menu.Item>
                     <Menu.Item key="myFavorites"><Icon type="star-o" className="menu_left_i" />我的收藏</Menu.Item>
                     <Menu.Item key="myFollows"><Icon type="heart-o" className="menu_left_i" />我的关注</Menu.Item>
-                    <Menu.Item key="myMTV"><i className="iconfont menu_left_i">&#xe617;</i>我的直播课</Menu.Item>
+                    {/*2019.1.30取消我的直播课，在回顾里看视频即可*/}
+                    {/*<Menu.Item key="myMTV"><i className="iconfont menu_left_i">&#xe617;</i>我的直播课</Menu.Item>*/}
                     {/*<Menu.Item key="findStudentPwd">找回学生密码</Menu.Item>*/}
                 </Menu>
 

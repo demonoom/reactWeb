@@ -119,6 +119,15 @@ class GhostMenu extends React.Component {
             {hideButton}
             <div className="menu_til">教学空间</div>
             <ul className="first">
+                <li ><Icon type="book"/>常用</li>
+                <li className="multi">
+                    <ul className="second">
+                        <li onClick={ event => {
+                            console.log(event);
+                        }}>审批
+                        </li>
+                    </ul>
+                </li>
                 <li ><Icon type="book"/>备课</li>
                 <li className="multi">
                     <ul className="second">
@@ -148,6 +157,18 @@ class GhostMenu extends React.Component {
                             this.changeMenu(event, 'homeWork', false)
                         }}>布置作业
                         </li>
+                        <li onClick={ event => {
+                            console.log(event);
+                        }}>作业统计
+                        </li>
+                        <li onClick={ event => {
+                            console.log(event);
+                        }}>作业表情统计
+                        </li>
+                        <li onClick={ event => {
+                            console.log(event);
+                        }}>错题本
+                        </li>
                     </ul>
                 </li>
                 <li><Icon type="exception"/>考试系统</li>
@@ -164,6 +185,19 @@ class GhostMenu extends React.Component {
                         <li onClick={ event => {
                             this.changeMenu(event, 'examAnalysis', false)
                         }}>成绩分析
+                        </li>
+                    </ul>
+                </li>
+                <li><Icon type="exception"/>数据中心</li>
+                <li className="multi">
+                    <ul className="second">
+                        <li onClick={ event => {
+                            console.log(event);
+                        }}>课堂回顾统计
+                        </li>
+                        <li onClick={ event => {
+                            console.log(event);
+                        }}>手环数据统计
                         </li>
                     </ul>
                 </li>

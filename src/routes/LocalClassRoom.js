@@ -139,8 +139,8 @@ const LocalClassRoom = React.createClass({
             "data": {
                 "password": sessionStorage.getItem("pd"),
                 "account": account,
-                "classType": classType,
-                "classCode": classCode,
+                "classType": classType, //A
+                "classCode": classCode, //班级
                 "userId": userId
             }
         };
