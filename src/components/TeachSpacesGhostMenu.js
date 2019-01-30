@@ -119,7 +119,7 @@ class GhostMenu extends React.Component {
             {hideButton}
             <div className="menu_til">教学空间</div>
             <ul className="first">
-                <li ><Icon type="book"/>常用</li>
+                <li ><Icon type="copy"/>常用</li>
                 <li className="multi">
                     <ul className="second">
                         <li onClick={ event => {
@@ -188,7 +188,7 @@ class GhostMenu extends React.Component {
                         </li>
                     </ul>
                 </li>
-                <li><Icon type="exception"/>数据中心</li>
+                <li><Icon type="bar-chart" />数据中心</li>
                 <li className="multi">
                     <ul className="second">
                         <li onClick={ event => {

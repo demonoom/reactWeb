@@ -1001,7 +1001,9 @@ html, body, #root {
     word-wrap: break-word;
     white-space: pre-wrap;
 }
-
+.bnt2_tex-15{
+    font-size: 15px;
+}
 .ant-collapse > .ant-collapse-item > .ant-collapse-header {
     height: 42px;
     line-height: 42px;
@@ -1737,7 +1739,7 @@ analyze_iframe_2 > div {
 
 .ant-modal {
     position: absolute;
-    width: 616px;
+    width: 616px !important;
     margin: 0 auto;
     top: 50%;
     left: 50%;
@@ -2618,9 +2620,11 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     color: #fff;
     background-color: #2db7f5;
     border-color: #2db7f5;
-    border-radius: 6px;
+    border-radius: 2px;
     outline: none;
-    cursor: pointer
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .examination_btn_blue:hover {
@@ -4238,7 +4242,9 @@ a.color_gary_f, .color_gary_f {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
+.cloud_text-470{
+    width: 470px;
+}
 .live {
     width: 265px;
     margin: 10px 15px 10px 4px;
@@ -10235,4 +10241,7 @@ a:active, a:hover {
 }
 .new_add_ding-excel > span > .ant-upload-list > .ant-upload-list-item{
     font-size: 14px !important
+}
+.ant-upload-list-picture-card .ant-upload-list-item-thumbnail, .ant-upload-list-picture-card .ant-upload-list-item-thumbnail img{
+    object-fit: cover;
 }

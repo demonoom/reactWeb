@@ -104,8 +104,8 @@
 }
 .schoolgroup_table_department .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .schoolgroup_table_department .ant-table-tbody > tr > td.ant-table-selection-column{
     padding:8px;
-    color: #333;
-    font-size: 14px;
+    color: #333 !important;
+    font-size: 14px !important;
 }
 
 .schoolgroup_table_department .ant-table-thead > tr > th.ant-table-selection-column{

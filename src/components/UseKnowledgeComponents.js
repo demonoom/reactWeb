@@ -253,7 +253,7 @@ const UseKnowledgeComponents = React.createClass({
     buildFileLogo(name, directory, e) {
         var fileLogo;
         if (directory) {
-            fileLogo = <span className="cloud_text">
+            fileLogo = <span className="cloud_text focus_3 cloud_text-470">
                 <i className="cloud_icon cloud_icon_file upexam_float"></i>
                <span className="antnest_name affix_bottom_tc">{name}</span>
             </span>;

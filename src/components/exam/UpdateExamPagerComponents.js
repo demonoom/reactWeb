@@ -1942,6 +1942,7 @@ const UpdateExamPagerComponents = React.createClass({
                 <Modal className="knowledge_span_wi"
                        visible={createExamPager.state.bindKnowledgeModalVisible}
                        title="知识点"
+                       width={616}
                        onCancel={createExamPager.bindKnowledgeModalHandleCancel}
                        maskClosable={false} //设置不允许点击蒙层关闭
                        transitionName=""  //禁用modal的动画效果
