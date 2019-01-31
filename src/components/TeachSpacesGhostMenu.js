@@ -60,7 +60,6 @@ class GhostMenu extends React.Component {
 
     // teachingAdmin panel
     showpanel(event, key, param) {
-        debugger
 
         this.onMenu(event);
 
@@ -164,7 +163,7 @@ class GhostMenu extends React.Component {
                         }}>布置作业
                         </li>
                         <li onClick={event => {
-                            console.log(event);
+                            this.changeMenu(event, 'jobStatistics', false)
                         }}>作业统计
                         </li>
                         <li onClick={event => {
@@ -268,7 +267,7 @@ class GhostMenu extends React.Component {
                             }}>布置作业
                             </li>
                             <li onClick={event => {
-                                console.log(event);
+                                this.changeMenu(event, 'jobStatistics', false)
                             }}>作业统计
                             </li>
                             <li onClick={event => {

@@ -130,7 +130,6 @@ class LiveTV extends React.Component {
 
     // 历史回顾推送的图片
     _getHistoryLiveInfos(objParam, fn) {
-        debugger
         let _this = this;
         var param = {
             "method": 'getHandOutsByVid',
