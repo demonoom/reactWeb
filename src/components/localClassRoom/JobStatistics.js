@@ -17,6 +17,7 @@ const JobStatistics = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
+            pageNo: 1,
         };
     },
 
@@ -26,15 +27,15 @@ const JobStatistics = React.createClass({
 
     initPage() {
         examsArray.splice(0);
-        this.getUserHomeworkInfoList()
+        this.getUserHomeworkInfoList(this.state.pageNo)
     },
 
-    getUserHomeworkInfoList() {
+    getUserHomeworkInfoList(pageNo) {
         var _this = this;
         var param = {
             "method": "getUserHomeworkInfoList",
             "ident": _this.state.loginUser.colUid,
-            "pageNo": 1
+            "pageNo": pageNo
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -43,7 +44,7 @@ const JobStatistics = React.createClass({
                     if (response.length == 0) {
                         message.warning("没有更多的内容了!");
                     } else {
-                        examsArray.splice(0);
+                        // examsArray.splice(0);
                         TimeLineItemArray.splice(0);
                         response.forEach(function (e) {
                             var colCid = e.colCid;
@@ -51,8 +52,9 @@ const JobStatistics = React.createClass({
                             var clazzName = e.clazzName;
                             var colCourse = e.colCourse;
                             var useDate = formatYMD(e.useDate);
-                            var hcount = e.hcount
-                            _this.buildExamsArray(colCid, colClazzId, clazzName, colCourse, useDate, hcount);
+                            var originUseDate = e.useDate;
+                            var hcount = e.hcount;
+                            _this.buildExamsArray(colCid, colClazzId, clazzName, colCourse, useDate, hcount, originUseDate);
                         });
                         _this.buildTimeLineItem();
                         var pager = ret.pager;
@@ -68,14 +70,15 @@ const JobStatistics = React.createClass({
         });
     },
 
-    buildExamsArray(colCid, colClazzId, clazzName, colCourse, useDate, hcount) {
+    buildExamsArray(colCid, colClazzId, clazzName, colCourse, useDate, hcount, originUseDate) {
         var everyExamJson = {
             "id": colCid,
             "courseName": clazzName,
             "colClazzId": colClazzId,
             "colCourse": colCourse,
             "useDate": useDate,
-            "hcount": hcount
+            "hcount": hcount,
+            "originUseDate": originUseDate
         };
         var eveyDayJson = {"examDay": useDate, "examJson": [everyExamJson]};
         var isExist = false;
@@ -102,7 +105,6 @@ const JobStatistics = React.createClass({
             var currentItemSubDivArray = [];
             eveyDayJson.examJson.forEach(function (examJsonArray) {
                 console.log(examJsonArray);
-                debugger
                 var titleClassName;
                 var contentClassName;
                 switch (examJsonArray.courseName) {
@@ -125,8 +127,13 @@ const JobStatistics = React.createClass({
                 }
                 var currentItemSubDiv =
                     <div className="time_content" onClick={() => {
-                        console.log(1)
+                        LP.Start({
+                            mode: 'teachingAdmin',
+                            title: `${examJsonArray.courseName}的作业统计`,
+                            url: 'http://www.maaee.com/ant_service/edu/homework_history_web?uid=' + _this.state.loginUser.colUid + '&cid=' + examJsonArray.id + '&clazzId=' + examJsonArray.colClazzId + '&date=' + examJsonArray.originUseDate,
+                        });
                     }}>
+                        <div className="triangle_right triangle_yellow"><span>{examJsonArray.colCourse}</span></div>
                         <h2 className={titleClassName}>{examJsonArray.courseName}</h2>
                         <div className={contentClassName}>
                             <p className="headline">{examJsonArray.hcount + '道题'}</p>
@@ -146,16 +153,27 @@ const JobStatistics = React.createClass({
     },
 
     getMoreExams() {
-
+        var pageNo = this.state.pageNo;
+        pageNo = parseInt(pageNo) + 1;
+        this.setState({pageNo});
+        console.log("see more" + pageNo);
+        this.getUserHomeworkInfoList(pageNo);
     },
 
     render() {
 
         return (
-            <div className="exam_timeline">
-                <Timeline pending={<a onClick={this.getMoreExams}>查看更多</a>}>
-                    {this.state.TimeLineItemArray}
-                </Timeline>
+            <div>
+                <div className="public—til—blue">
+                    作业统计
+                </div>
+                <div className="favorite_scroll favorite_up">
+                    <div className="exam_timeline">
+                        <Timeline pending={<a onClick={this.getMoreExams}>查看更多</a>}>
+                            {this.state.TimeLineItemArray}
+                        </Timeline>
+                    </div>
+                </div>
             </div>
         );
     }
