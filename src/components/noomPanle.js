@@ -316,7 +316,7 @@
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
-                }else if (data.method == "selectComplexVideo") {
+                } else if (data.method == "selectComplexVideo") {
                     //调用选择图片插件，获取图片的路径存入paths
                     window.__selectComplexVideo__(data.callbackId);
                     window.__selectComplexVideoUpload__ = function (result, callbackId) {
@@ -399,19 +399,19 @@
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
 
-                }else if (data.method == "selectOnlyVideo"){
-                     //调用选择图片插件，获取图片的路径存入paths
-                     window.__calmOnlyVideo__(data.callbackId);
-                     window.__calmUploadOnlyVideo__ = function (result, callbackId) {
-                         var str = result.join(',');
-                         var paths = str;
-                         var callbackId = callbackId;
-                         var response = {'callbackId': callbackId, 'params': paths};
-                         //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
-                         var ifm = document.getElementById(data.windowName);
-                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
-                     };
-                }else if (data.method == "selectOnlyExcel"){
+                } else if (data.method == "selectOnlyVideo") {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__calmOnlyVideo__(data.callbackId);
+                    window.__calmUploadOnlyVideo__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == "selectOnlyExcel") {
                     //调用选择图片插件，获取图片的路径存入paths
                     window.__calmOnlyExcel__(data.callbackId);
                     window.__calmUploadOnlyExcel__ = function (result, callbackId) {
@@ -423,7 +423,54 @@
                         var ifm = document.getElementById(data.windowName);
                         ifm.contentWindow.postMessage(JSON.stringify(response), '*');
                     };
-               }
+                } else if (data.method == "fullScreen") {
+                    var res = data;
+                    /* global layer */
+                    /* global $ */
+                    let index = layer.open({
+                        type: 2,
+                        title: '课堂回顾',
+                        shadeClose: true,
+                        shade: false,
+                        maxmin: true, //开启最大化最小化按钮
+                        area: 'auto',
+                        content: "https://jiaoxue.maaee.com:9093/#/cloundSchoolFullScreen?videoSrc=" + encodeURIComponent(data.src) + "&currentTime=" + data.currentTime + "&isPlay=" + data.isPlay,
+                        move: '.layui-layer-title',
+                        success: function (layero, index) {
+                            $('.layui-layer-content iframe')[0].style = 'height: ' + (document.body.clientHeight - 43) + 'px';
+                        },
+                        offset: 'lb',
+                        min: function () { //点击最小化后的回调函数
+                        },
+
+                        full: function () { //点击最大化后的回调函数
+                            console.log(document.body.clientHeight, 'document.body.clientHeight')
+                            //随意设置的最大化 800px 大小
+                            $('.layui-layer-content iframe')[0].style = 'height: ' + (document.body.clientHeight - 43) + 'px';
+
+                        },
+
+                        restore: function () { //点击还原后的回调函数
+                            //固定 150 px 的最小化窗口大小
+                            $('.layui-layer-content iframe')[0].style = 'height: 150px';
+                            // 设置全屏高度后导致拖动窗口高度发生变化,重置窗口高度
+                            $('.layui-layer')[0].style.height = '150px';
+                        },
+                        cancel: function () {
+                            let data = {
+                                method: 'willCancel',
+                                windowName: res.windowName
+                            };
+                            $('.layui-layer-content iframe').get(0).contentWindow.postMessage(data, '*');
+                            console.log('执行完毕')
+                        }
+                    });
+                    $('.layui-layer-content iframe')[0].style = 'height: ' + (document.body.clientHeight - 43) + 'px';
+                    layer.full(index);
+                } else if (data.method == 'didCancel') {
+                    var ifm = document.getElementById(data.ifream_Name);
+                    ifm.contentWindow.postMessage(data, '*');
+                }
             });
             isAddedListener = true;
         }
@@ -471,7 +518,7 @@
         this.ifrid = 'ifr' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
-                <h3 class="title">${ obj.title}</h3>
+                <h3 class="title">${obj.title}</h3>
                     <div class="little-tilte">
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                         <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a> 
@@ -548,7 +595,7 @@
 
         let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
-                <h3 class="title">${ obj.title}</h3>
+                <h3 class="title">${obj.title}</h3>
                     <div class="little-tilte">
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                     </div>
@@ -557,7 +604,7 @@
                     <section class="littleAnt-iframe-panle ${classChange}">
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
                        src="${srcList[0].src}"   data-setup='{}'></video> 
-                       <div class="list-group" >${ listBtn.length ? listBtn.join('') : ''}</div>
+                       <div class="list-group" >${listBtn.length ? listBtn.join('') : ''}</div>
                     </section>
                 </div>
                 </div>`;
@@ -611,7 +658,7 @@
 							<div class="little-tilte">
                     			<a class="back"><i class="anticon anticon-left "></i></a>
                     		</div>
-                			<span>${ obj.title}</span>
+                			<span>${obj.title}</span>
                			 </div>
                 <div class="content">
                     <section class="liveTV tab">
@@ -734,7 +781,7 @@
 							<div class="little-tilte">
                     			<a class="back"><i class="anticon anticon-left "></i></a>
                     		</div>
-                			<span>${ obj.title}</span>
+                			<span>${obj.title}</span>
                			 </div>
                 <div class="content">
 					<div class="right_cont">
@@ -748,7 +795,7 @@
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
                        src="${srcList[0].src}"   data-setup='{}'></video>
                       
-                       <div class="list-group" >${ listBtn.length ? listBtn.join('') : ''}</div>
+                       <div class="list-group" >${listBtn.length ? listBtn.join('') : ''}</div>
                     </section>
 					</div>
                 </div>
@@ -1502,14 +1549,11 @@ function exitFull() {
 
     if (docElm.exitFullscreen) {
         docElm.exitFullscreen();
-    }
-    else if (docElm.mozCancelFullScreen) {
+    } else if (docElm.mozCancelFullScreen) {
         docElm.mozCancelFullScreen();
-    }
-    else if (docElm.webkitCancelFullScreen) {
+    } else if (docElm.webkitCancelFullScreen) {
         docElm.webkitCancelFullScreen();
-    }
-    else if (docElm.msExitFullscreen) {
+    } else if (docElm.msExitFullscreen) {
         docElm.msExitFullscreen();
     }
     if (typeof fn == 'function') fn();
@@ -1627,7 +1671,7 @@ var UploadFile1 = function (readerResult) {
     xhr.open("POST", url, true);
     xhr.setRequestHeader('enctype', 'multipart/form-data');
     //   xhr.setRequestHeader('Content-Type', 'image/png');
-    // 
+    //
 
     let fd = new FormData();
     fd.append('fileName', new Date().getTime() + '.jpg');
@@ -1650,7 +1694,7 @@ var UploadFile1 = function (readerResult) {
     // xhr.send(fd);
 
     xhr.onreadystatechange = function () {
-        //  
+        //
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 console.log("response: " + xhr.responseText);
