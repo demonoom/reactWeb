@@ -176,7 +176,7 @@ class SUbjectTable extends React.Component {
                         if (parseInt(e.score) < 0) {
                             subjectScore = '--';
                         }
-                        var subjectOpt = <div className="smallclass"><span className="toobar"><Button value={e.id}
+                        var subjectOpt = <div className="smallclass Operating-Air"><span className="toobar"><Button value={e.id}
                                                                                                       title="删除"
                                                                                                       onClick={_this.showConfirmModal}><Icon
                             type="delete"/></Button></span></div>;

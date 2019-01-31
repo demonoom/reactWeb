@@ -623,10 +623,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
-                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
+                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe783;</i>所属知识点
                     </button>
 					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  className="examination_btn_gray" onClick={createExamPager.showAnalysisModal}>
-                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>解析
+                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_1">&#xe61d;</i>解析
                     </Button>
                 </Col>
                
@@ -666,10 +666,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
-                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
+                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe783;</i>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>解析
+                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_1">&#xe61d;</i>解析
                     </button>
                 </Col>
                 
@@ -712,10 +712,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}  className="calmBorderRadius examination_btn_gray">
-                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
+                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe783;</i>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>解析
+                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_1">&#xe61d;</i>解析
                     </button>
                 </Col>
             </Row>
@@ -756,10 +756,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
-                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
+                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe783;</i>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>解析
+                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_1">&#xe61d;</i>解析
                     </button>
                 </Col>
                 <Col span={13}>
@@ -861,7 +861,7 @@ const CreateExamPagerComponents = React.createClass({
                     type="简答题";
                     break;
             }
-            return <Card key={e.answerTitle+"#"+e.answerSubjectType} title={e.answerTitle+"("+type+")"} className="upexam_topic" extra={<button title={e.answerTitle} value={e.answerTitle+"#"+e.answerSubjectType} icon="delete" onClick={createExamPager.showDelAnswerCardConfirmModal} className="btn_gray_exam examination_btn_gray">															                        <i className="iconfont btn_gray_exam_del">&#xe62f;</i></button>} style={{width: 650}}>
+            return <Card key={e.answerTitle+"#"+e.answerSubjectType} title={e.answerTitle+"("+type+")"} className="upexam_topic" extra={<button title={e.answerTitle} value={e.answerTitle+"#"+e.answerSubjectType} icon="delete" onClick={createExamPager.showDelAnswerCardConfirmModal} className="btn_gray_exam examination_btn_gray examination_btn_graySupplement"><i className="iconfont btn_gray_exam_del">&#xe62f;</i></button>}>
                 {
                     subjectArray.map((item,j)=>item.divContent)
                 }

@@ -470,6 +470,7 @@ const AssignHomeWorkComponents = React.createClass({
                        onCancel={assignHomeWork.subjectModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
+                       height="590"
                        footer={[
                            <Button key="ok" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>取消</Button>,
                            <Button key="return" type="primary" size="large"

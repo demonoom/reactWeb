@@ -857,7 +857,7 @@ const UpdateExamPagerComponents = React.createClass({
             pointBtn = <Button value={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
                                onClick={createExamPager.showBindKnowledgeModal} className="calmBorderRadius examination_btn_gray">
                 <i id={answerTitle + "#" + num + "#knowledgePoint#" + answerSubjectType}
-                   className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
+                   className="iconfont iconfont_knowledge pointBtn">&#xe783;</i>所属知识点
             </Button>
         }
         return pointBtn;
@@ -909,7 +909,7 @@ const UpdateExamPagerComponents = React.createClass({
             analysisBtn = <Button value={answerTitle + "#" + num + "#analysis#" + answerSubjectType}
                                   onClick={createExamPager.showAnalysisModal} className="examination_btn_gray ">
                 <i id={answerTitle + "#" + num + "#analysis#" + answerSubjectType}
-                   className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>
+                   className="iconfont iconfont_knowledge analysisBtn exam_icon_1">&#xe61d;</i>
                 解析
             </Button>
         }
@@ -1126,11 +1126,11 @@ const UpdateExamPagerComponents = React.createClass({
                 </div>
             </Row>
             <Row className="ant-form-item">
-                <Col span={3}>图片答案：</Col>
-                <Col span={18}>
+                <Col span={3} className="right_upexam">图片答案：</Col>
+                <Col span={18} className="Picture-answer">
                     <AntUploadComponents fileList={imageAnswerFileArray}
                                          params={answerTitle + "#" + num + "#imageAnswer#" + answerSubjectType}
-                                         callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
+                                         callBackParent={createExamPager.getImgAnswerList} ></AntUploadComponents>
                 </Col>
             </Row>
             <Row className="ant-form-item">
@@ -1206,7 +1206,7 @@ const UpdateExamPagerComponents = React.createClass({
             return <Card key={e.answerTitle + "#" + e.answerSubjectType} title={e.answerTitle + "(" + type + ")"}
                          extra={<button title={e.answerTitle} value={e.answerTitle + "#" + e.answerSubjectType}
                                         icon="delete" onClick={createExamPager.showDelAnswerCardConfirmModal}
-                                        className="btn_gray_exam examination_btn_gray"><i
+                                        className="btn_gray_exam examination_btn_gray examination_btn_graySupplement"><i
                              className="iconfont btn_gray_exam_del">&#xe62f;</i></button>} className="upexam_topic">
                 {
                     subjectArray.map((item, j) => item.divContent)
@@ -1917,8 +1917,8 @@ const UpdateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <Button type="primary" className="calmSave" onClick={createExamPager.addAnalysisForCurrentSubject}>确定</Button>,
-                        <Button type="ghost" className="calmCancle" onClick={createExamPager.analysisModalHandleCancel}>取消</Button>
+                        <Button type="primary" className="calmSave login-form-button examination_btn_blue" onClick={createExamPager.addAnalysisForCurrentSubject}>确定</Button>,
+                        <Button type="ghost" className="calmCancel login-form-button examination_btn_white" onClick={createExamPager.analysisModalHandleCancel}>取消</Button>
                         
                     ]}
                 >
@@ -2123,7 +2123,7 @@ const UpdateExamPagerComponents = React.createClass({
                    <button type="primary" htmlType="submit"
                            className="login-form-button class_right examination_btn_blue"
                            onClick={createExamPager.saveExampager}>
-                    保存111
+                    保存
                    </button>
                    <button type="ghost" htmlType="reset" className="login-form-button examination_btn_white"
                            onClick={createExamPager.handleCancel}>

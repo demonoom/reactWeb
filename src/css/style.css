@@ -1016,6 +1016,12 @@ html, body, #root {
     top: 16px;
     right: 0;
 }
+.bnt2_right button{
+    border: none;
+    background: none;
+    padding: 0 !important;
+    margin: 0 8px;
+}
 
 .bnt3_right {
     width: 100px;
@@ -2602,9 +2608,9 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
 }
 
 .examination_btn_gray {
-    background: #f7f7f7;
+    background: #fff;
     border: 1px solid #d9d9d9;
-    border-radius: 6px;
+    border-radius: 2px;
     cursor: pointer;
     outline: none;
 }
@@ -2613,7 +2619,10 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     background: #fff;
     border: 1px solid #57c5f7
 }
-
+.examination_btn_graySupplement{
+    position: relative;
+    top: -6px;
+}
 .examination_btn_blue {
     color: #fff;
     background-color: #0084ff;
@@ -10250,4 +10259,18 @@ a:active, a:hover {
 }
 .ant-upload-list-picture-card .ant-upload-list-item-thumbnail, .ant-upload-list-picture-card .ant-upload-list-item-thumbnail img{
     object-fit: cover;
+}
+.Picture-answer .ant-upload-list-item.ant-upload-list-item-undefined{
+    height: 64px;
+    line-height: 64px;
+}
+.Picture-answer .ant-upload-list-item-info{
+    height: 48px;
+    line-height: 48px;
+}
+.Operating-Air button{
+    border: none;
+    background: none;
+    padding: 0 !important;
+    margin: 0 8px;
 }
