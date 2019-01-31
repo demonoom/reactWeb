@@ -930,7 +930,7 @@ const SubjectUploadComponent = React.createClass({
                 <Modal
                     visible={this.state.subjectAnalysisModalVisible}
                     title="题目解析"
-                    className="modol_width queanswer_modol_width"
+                    className="modol_width queanswer_modol_width queanswer_modol_widthchange"
                     maskClosable={false} //设置不允许点击蒙层关闭
                     onCancel={this.subjectAnalysisModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
@@ -949,7 +949,7 @@ const SubjectUploadComponent = React.createClass({
                     ]}
                 >
                     <Row>
-                        <Col span={2}>题目解析：</Col>
+                        <Col span={2}>解析：</Col>
                         <Col span={22}>
                             <SubjectAnalysisContent analysisContent={this.state.analysisContent}
                                                     ref="subjectAnalysisContentComponent"></SubjectAnalysisContent>

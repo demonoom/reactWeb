@@ -839,7 +839,7 @@ const SubjectEditComponents = React.createClass({
                     ]}
                 >
                     <Row>
-                        <Col span={2}>题目解析：</Col>
+                        <Col span={2}>解析：</Col>
                         <Col span={22}>
                             <SubjectAnalysisContentEditor ref="subjectAnalysisModifyContentEditor"></SubjectAnalysisContentEditor>
                         </Col>
