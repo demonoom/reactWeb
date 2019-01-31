@@ -1,4 +1,4 @@
-import React from  'react';
+import React from 'react';
 import {Row, Col, Tabs} from 'antd';
 import LessonPlans from './LessonPlans';
 import ResourcesCenter from './ResourcesCenter';
@@ -14,9 +14,12 @@ import ExamPagerTabComponents from './exam/ExamPagerTabComponents';
 import ExamAnalysisComponents from './examAnalysis/examAnalysis';
 import TestListComponents from './createTest/TestListComponents';
 import LocalClasses from './localClassRoom/LocalClasses';
+import JobStatistics from './localClassRoom/JobStatistics'
+
 const TabPane = Tabs.TabPane;
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
+
 moment.locale('zh-cn');
 import {createStore} from 'redux';
 
@@ -78,7 +81,6 @@ class TeachSpaces extends React.Component {
     }
 
 
-
     // 资源库
     getResourcesCenter(optContent, breadCrumbArray) {
 
@@ -104,8 +106,6 @@ class TeachSpaces extends React.Component {
     }
 
 
-
-
     render() {
 
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
@@ -116,13 +116,13 @@ class TeachSpaces extends React.Component {
             default : // teachTimes
 
                 // 备课计划 LessonPlan  Schedule
-                this.middleComponent = <LessonPlanMenus callbackParent={this.getLessonPlans }/>;
-                this.tabComponent = <LessonPlans  refData={this.state.refData} />;
+                this.middleComponent = <LessonPlanMenus callbackParent={this.getLessonPlans}/>;
+                this.tabComponent = <LessonPlans refData={this.state.refData}/>;
                 break;
             case 'KnowledgeResources':
                 // 知识库
-                this.middleComponent = <KnowledgeMenuComponents callbackParent={this.getResourcesCenter }/>;
-                this.tabComponent = <ResourcesCenter ref='resourcesCenter' />;
+                this.middleComponent = <KnowledgeMenuComponents callbackParent={this.getResourcesCenter}/>;
+                this.tabComponent = <ResourcesCenter ref='resourcesCenter'/>;
                 break;
             case 'homeWork':
                 // 布置作业，家庭作业
@@ -152,7 +152,9 @@ class TeachSpaces extends React.Component {
                 // 开启本地课堂
                 this.tabComponent = <LocalClasses ref="localClasses"/>;
                 break;
-
+            case 'jobStatistics':
+                this.tabComponent = <JobStatistics/>;
+                break;
         }
 
 
@@ -175,4 +177,3 @@ class TeachSpaces extends React.Component {
 ;
 export default TeachSpaces;
 
-  
