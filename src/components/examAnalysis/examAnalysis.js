@@ -166,7 +166,7 @@ const ExamAnalysisComponents = React.createClass({
             key: 'action',
             className: 'class_right right',
             render: (text, record) => (
-                <span>
+                <span className="Operating-Air">
                     <Button type="button" className="score3_i" icon="area-chart"
                             onClick={_this.analysis.bind(this, record)}></Button>
                     <Button type="button" icon="delete"

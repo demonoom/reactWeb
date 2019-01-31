@@ -329,12 +329,12 @@ class KnowledgePointModal extends React.Component {
         return (
             <Modal
                 visible={this.state.isShow}
-                width={616}
                 title={"选择知识点"}
                 onCancel={this.SelectKnowledgeModalHandleCancel}
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
                 footer={[buttons]}
+                className={'modal-434'}
             >
                 <Row className="ant-form-item">
                     <Col span={24}>
@@ -366,7 +366,7 @@ class KnowledgePointModal extends React.Component {
                                     />
                                 </Col>
                                 <Col span={4} className="right_look">
-                                    <Button type="primary" className="calmAddButton calmBorderRadius roe-t-f-left"
+                                    <Button type="primary" className="calmAddButton calmBorderRadius roe-t-f-left add-2-btn"
                                             onClick={this.addNewTags}>新增</Button>
                                 </Col>
                             </div>

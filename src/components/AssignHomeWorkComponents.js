@@ -428,7 +428,7 @@ const AssignHomeWorkComponents = React.createClass({
                             <div>
                                 <Row>
                                     <Col span={24}>
-                                            <Button type="add_study add_study-b"
+                                            <Button className="btnLeftno"  type="add_study add_study-b"
                                                     onClick={assignHomeWork.showSubjectModal}><Icon
                                                 type="check-circle-o"/>选择题目</Button>
                                             <div className="class_bo">

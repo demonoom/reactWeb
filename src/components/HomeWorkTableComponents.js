@@ -234,7 +234,7 @@ const HomeWorkTableComponents = React.createClass({
         };
         return (
       
-                <Table columns={columns} dataSource={subTable.state.tableData} pagination={{
+                <Table className="Operating-Air Operating-Air-table" columns={columns} dataSource={subTable.state.tableData} pagination={{
                     total: subTable.state.totalCount,
                     pageSize: getPageSize(),
                     onChange: subTable.pageOnChange

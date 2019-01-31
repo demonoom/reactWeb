@@ -565,7 +565,7 @@ class SUbjectTable extends React.Component {
                 </div></div>;
             }
             subjectTable =
-                <div className="pl_hei"><Table rowSelection={rowSelection} columns={columns} dataSource={data}
+                <div className="pl_hei"><Table className="Operating-Air" rowSelection={rowSelection} columns={columns} dataSource={data}
                                                pagination={{
                                                    total: this.state.totalCount,
                                                    pageSize: getPageSize(),
@@ -575,7 +575,7 @@ class SUbjectTable extends React.Component {
                                                }} /></div>;
         } else {
             delBtn = '';
-            subjectTable = <div className="pl_hei2"><Table columns={columns} dataSource={data} pagination={{
+            subjectTable = <div className="pl_hei2"><Table  className="Operating-Air" columns={columns} dataSource={data} pagination={{
                 total: this.state.totalCount,
                 pageSize: getPageSize(),
                 defaultCurrent: this.state.currentPage,
