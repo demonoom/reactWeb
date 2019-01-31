@@ -6690,11 +6690,14 @@ select.course_n:hover {
     padding: 4px 8px;
     color: #0078e4;
     margin-top: 8px;
+    height: 38px;
+    line-height: 38px;
 }
 
 .course_section_info {
     padding: 8px;
     border-bottom: 1px solid #e9e9e9;
+    height: 48px;
 }
 
 .course_section_info:last-child {
