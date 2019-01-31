@@ -55,7 +55,7 @@ const FavoriteSubjectItems = React.createClass({
             dataIndex: 'subjectScore',
         }, {
             title: '操作',
-            className: 'ant-table-selection-score',
+            className: 'ant-table-selection-score Operating-Air',
             dataIndex: 'subjectOpt',
         },
     ],

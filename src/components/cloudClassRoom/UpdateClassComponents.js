@@ -1707,7 +1707,7 @@ const UpdateClassComponents = React.createClass({
                             defaultMessage='课程封面'
                         />
                     </Col>
-                    <Col span={18}>
+                    <Col span={18} className="Picture-answer">
                         <ImageAnswerUploadComponents fileList={fileList}
                                                      callBackParent={this.getLessonImageList}
                                                      updateClassObj={this.state.updateClassObj}
@@ -1761,7 +1761,7 @@ const UpdateClassComponents = React.createClass({
                                 />
                             </Col>
                             {/*{lessonJson.videoNameObj}*/}
-                            <Col span={6}>{InputObj}</Col>
+                            <Col span={8}>{InputObj}</Col>
                             <Col span={4} className="class_right"> {lessonJson.teacherObj}</Col>
                             {/*{lessonJson.timeObj}*/}
 
@@ -1839,7 +1839,7 @@ const UpdateClassComponents = React.createClass({
                                         defaultMessage='课时'
                                     />
                                 </Col>
-                                <Col span={6} className="calmClassName">
+                                <Col span={8} className="calmClassName">
                                     <FormattedMessage
                                         id='name'
                                         description='名称'
@@ -1854,7 +1854,7 @@ const UpdateClassComponents = React.createClass({
                                     />
                                 </Col>
                                 <Col span={4} className="class_right">附件名</Col>
-                                <Col span={3} className="class_right">微课上传</Col>
+                                <Col span={3} className="class_right">上传</Col>
                                 <Col span={2} className="class_right">
                                     <FormattedMessage
                                         id='delete'

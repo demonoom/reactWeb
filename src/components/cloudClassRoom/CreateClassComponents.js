@@ -1531,7 +1531,7 @@ const CreateClassComponents = React.createClass({
                                     />
                                 </Col>
                                 <Col span={4} className="class_right">附件名</Col>
-                                <Col span={3} className="class_right">微课上传</Col>
+                                <Col span={3} className="class_right">上传</Col>
                                 <Col span={2} className="class_right">
                                     <FormattedMessage
                                         id='delete'

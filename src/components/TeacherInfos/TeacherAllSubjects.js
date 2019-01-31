@@ -46,7 +46,7 @@ const columns = [
     },*/
     {
         title: '操作',
-        className: 'ant-table-selection-score3 ant-table-selection-score3-again',
+        className: 'ant-table-selection-score3 ant-table-selection-score3-again Operating-Air',
         dataIndex: 'subjectOpt',
     },
 ];
