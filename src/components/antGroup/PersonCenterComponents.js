@@ -2303,7 +2303,7 @@ const PersonCenterComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userSubjects" className="topics_rela">
-                    <Table columns={subjectTableColumns} dataSource={data} pagination={{
+                    <Table className="Operating-Air" columns={subjectTableColumns} dataSource={data} pagination={{
                         total: personCenter.state.totalSubjectCount,
                         pageSize: getPageSize(),
                         onChange: personCenter.onSubjectPageChange
