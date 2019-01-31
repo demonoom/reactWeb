@@ -735,7 +735,7 @@ const SubjectEditComponents = React.createClass({
                             </Col>
                             <Col span={20}>
                                 <SubjectContentEditor ref="subjectContentEditor"/>
-                                <Button className="row-t-f" onClick={this.showAnalysisModifyModal}>题目解析</Button>
+                                <Button className="row-t-f" style={{marginTop:'15px', marginBottom:'15px'}} onClick={this.showAnalysisModifyModal}>题目解析</Button>
                                 {audioButton}
                             </Col>
                         </Row>
@@ -820,7 +820,7 @@ const SubjectEditComponents = React.createClass({
                 <Modal
                     visible={this.state.subjectAnalysisModifyModalVisible}
                     title="题目解析"
-                    className="modol_width queanswer_modol_width"
+                    className="modol_width queanswer_modol_width queanswer_modol_widthchange"
                     maskClosable={false} //设置不允许点击蒙层关闭
                     onCancel={this.subjectAnalysisModifyModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
