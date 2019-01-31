@@ -1707,7 +1707,7 @@ const UpdateClassComponents = React.createClass({
                             defaultMessage='课程封面'
                         />
                     </Col>
-                    <Col span={18}>
+                    <Col span={18} className="Picture-answer">
                         <ImageAnswerUploadComponents fileList={fileList}
                                                      callBackParent={this.getLessonImageList}
                                                      updateClassObj={this.state.updateClassObj}

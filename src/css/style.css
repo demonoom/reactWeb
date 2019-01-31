@@ -6709,18 +6709,26 @@ select.course_n:hover {
     width: 50%;
     text-overflow: ellipsis;
     overflow: hidden;
+    float: left;
+    white-space: nowrap;
+    line-height: 31px;
 }
 
 .course_section_title span.cont, .course_section_info span.cont {
     width: 20%;
+    float: left;
+    line-height: 31px;
 }
 
 .course_section_title span.time, .course_section_info span.time1 {
     width: 20%;
+    float: left;
+    line-height: 31px;
 }
 
 .course_section_title span.cont3, .course_section_info span.cont3 {
     width: 10%;
+    height: 31px;
 }
 
 .course_section_info span.time1 {
@@ -10185,7 +10193,7 @@ a:active, a:hover {
 }
 /*课堂回顾弹窗*/
 .RechargeModal.playModal .ant-modal{
-    height: 90%;
+    height: 89%;
     padding-bottom: 0;
 }
 .RechargeModal.playModal .ant-modal-header{
