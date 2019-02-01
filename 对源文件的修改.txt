@@ -1,0 +1,30 @@
+node_modules增加 layui-layer
+
+layui-layer layer.css 第887行
+        注释掉 blr: expression(this.onFocus=this.blur());
+
+layui-layer layer.js 第839行
+
+        给layer.full方法增加回调函数
+
+        layer.full = function(index,callback){
+            var layero = $('#'+ doms[0] + index), timer;
+            ready.record(layero);
+            if(!doms.html.attr('layer-full')){
+                doms.html.css('overflow','hidden').attr('layer-full', index);
+            }
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+                var isfix = layero.css('position') === 'fixed';
+                layer.style(index, {
+                    top: isfix ? 0 : win.scrollTop(),
+                    left: isfix ? 0 : win.scrollLeft(),
+                    width: win.width(),
+                    height: win.height()
+                }, true);
+                layero.find('.layui-layer-min').hide();
+                if(callback){
+                    callback();
+                }
+            }, 100);
+        };
