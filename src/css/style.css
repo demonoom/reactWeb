@@ -10304,3 +10304,6 @@ a:active, a:hover {
 .queanswer_modol_widthchange{
     width: 520px !important;
 }
+.layui-layer {
+    display: none;
+}

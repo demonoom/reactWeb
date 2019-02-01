@@ -425,8 +425,10 @@
                     };
                 } else if (data.method == "fullScreen") {
                     var res = data;
-                    /* global layer */
-                    /* global $ */
+                    // react 兼容 start
+                    var left = 0;
+                    var top = document.body.clientHeight - 150 - 42;
+                    // react 兼容 end
                     let index = layer.open({
                         type: 2,
                         title: '课堂回顾',
@@ -455,6 +457,12 @@
                             $('.layui-layer-content iframe')[0].style = 'height: 150px';
                             // 设置全屏高度后导致拖动窗口高度发生变化,重置窗口高度
                             $('.layui-layer')[0].style.height = '150px';
+
+                            // react 兼容 start
+                            $('.layui-layer').get(0).style.left = left + 'px';
+                            console.log(top, 'toppp');
+                            $('.layui-layer').get(0).style.top = top + 'px';
+                            // react 兼容 end
                         },
                         cancel: function () {
                             let data = {
@@ -463,10 +471,24 @@
                             };
                             $('.layui-layer-content iframe').get(0).contentWindow.postMessage(data, '*');
                             console.log('执行完毕')
+                        },
+                        // react 兼容 start
+                        moveEnd: function (layero) {
+                            left = $('.layui-layer').get(0).style.left.toString().substring($('.layui-layer').get(0).style.left.toString().length - 2, $('.layui-layer').get(0).style.left.toString().length);
+                            top = $('.layui-layer').get(0).style.top.toString().substring($('.layui-layer').get(0).style.top.toString().length - 2, $('.layui-layer').get(0).style.top.toString().length);
                         }
+                        // react 兼容 end
                     });
                     $('.layui-layer-content iframe')[0].style = 'height: ' + (document.body.clientHeight - 43) + 'px';
-                    layer.full(index);
+                    // react 兼容 start
+                    $('.layui-layer').get(0).style.left = left;
+                    // react 兼容 end
+                    layer.full(index, function () {
+                        $('.layui-layer').show();
+                    });
+                    // react 兼容 start
+                    $('.layui-layer').get(0).style.left = left;
+                    // react 兼容 end
                 } else if (data.method == 'didCancel') {
                     var ifm = document.getElementById(data.ifream_Name);
                     ifm.contentWindow.postMessage(data, '*');
