@@ -10307,3 +10307,21 @@ a:active, a:hover {
 .layui-layer {
     display: none;
 }
+.Share-files{
+    width: 700px !important;
+}
+.rename-modal{
+    width: 440px !important;
+}
+.Move-files{
+    width: 432px;
+    display: inline-block;
+}
+.Text-interception{
+    width: 488px;
+    box-sizing: content-box;
+    display: inline-block;
+}
+.btn_font-top{
+    padding-top: 3px;
+}

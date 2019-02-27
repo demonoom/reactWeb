@@ -64,6 +64,7 @@ var permissionTableColumns = [{
 var targetDirColumns = [{
     title: '文件夹名称',
     dataIndex: 'dirName',
+    className:'Text-interception focus_3'
 }, {
     title: '操作',
     className: 'ant-table-selection-user schoolgroup_operate',
@@ -412,7 +413,7 @@ const AntCloudTableComponents = React.createClass({
                 var moveDirOpt;
                 if (e.directory == true) {
                     moveDirOpt = <div>
-                        <Button className="btn_font"
+                        <Button className="btn_font btn_font-top"
                                 onClick={cloudTable.moveFileToTargetDir.bind(cloudTable, key, "moveDirModal")}>确定</Button>
                     </div>;
                 } else {
@@ -438,7 +439,7 @@ const AntCloudTableComponents = React.createClass({
         if (directory) {
             fileLogo = <span className="cloud_text">
                 <i className="cloud_icon cloud_icon_file upexam_float"></i>
-                <span className="antnest_name affix_bottom_tc"
+                <span className="antnest_name affix_bottom_tc Move-files focus_3"
                       onClick={cloudTable.intoDirectoryInner.bind(cloudTable, e, optSrc)}>{name}</span>
             </span>;
         } else {
@@ -2548,7 +2549,7 @@ pageNo   --- 页码，-1取全部
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={cloudTable.reNameModalHandleOk}
                        onCancel={cloudTable.reNameModalHandleCancel}
-                       className="schoolgroup_modal"
+                       className="schoolgroup_modal rename-modal"
                 >
                     <div className="">
                         <Row className="ant_row">
