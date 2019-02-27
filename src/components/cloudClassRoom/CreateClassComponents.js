@@ -16,6 +16,7 @@ import {FormattedMessage} from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import 'moment/locale/zh-cn';
 
+
 const dateFormat = 'YYYY/MM/DD';
 const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
 const Step = Steps.Step;
@@ -52,6 +53,7 @@ const CreateClassComponents = React.createClass({
             cloudClassRoomUser: cloudClassRoomUser,
             isWeiClass: false,
             isShowClass: false,
+            isOnlyOwnSchool:false,
             upLoadNum: 0,
             knowledgePointNum: 0,
             isTestClass: false,//默认测试课选中状态
@@ -92,6 +94,8 @@ const CreateClassComponents = React.createClass({
         var isTestClass = this.state.isTestClass;
         var isSeries = nextProps.isSeries;
         var courseClass = nextProps.courseClass;
+        var isOnlyOwnSchool = this.state.isOnlyOwnSchool;
+
         if (isEmpty(courseClass) == false && courseClass == "29") {
             isSeries = "";
         } else {
@@ -148,6 +152,7 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.isFree = 1;
         courseInfoJson.isLimit = 1;
         courseInfoJson.showCourse = 0;   //展示课默认为0
+        courseInfoJson.limitSchoolIds = [];
         courseInfoJson.test = ""; //测试课默认为空
         if (isEmpty(isSeries)) {
             courseInfoJson.courseClass = '29';
@@ -167,6 +172,7 @@ const CreateClassComponents = React.createClass({
             "isFree": 1,
             "isLimit": 1,
             "showCourse": 0,
+            "limitSchoolIds":[],
             "money": 0,
             "limitPerson": 0,
             "defaultSubjectSelected": "",
@@ -178,6 +184,7 @@ const CreateClassComponents = React.createClass({
             "numInputDisable": true,
             isWeiClass: false,
             isShowClass: false,
+            isOnlyOwnSchool:false,
             isTestClass: false,//默认测试课选中状态
             noomTages: []
         });
@@ -454,6 +461,18 @@ const CreateClassComponents = React.createClass({
             courseInfoJson.showCourse = 0;
         }
     },
+    /**
+     * 勾选是否仅本校血汗恶搞观看的回调
+     */
+    isOnlyOwnSchool(e) {
+        this.setState({isOnlyOwnSchool: e.target.checked});
+        if (e.target.checked) {
+            //钩中展示课
+            courseInfoJson.limitSchoolIds.push(this.state.cloudClassRoomUser.schoolId)
+        } else {
+            courseInfoJson.limitSchoolIds = [];
+        }
+    },
 
     /**
      * 创建课程时，勾选是否为测试课的回调
@@ -672,7 +691,7 @@ const CreateClassComponents = React.createClass({
             }
         }
 
-        lessonArray.forEach(function (lessonObj) {
+        lessonArray.forEach(function (lessonObj,i) {
             if (lessonObj.lessonNum > removeSequence) {
                 lessonObj.lessonNum -= 1;
             }
@@ -1353,8 +1372,18 @@ const CreateClassComponents = React.createClass({
                         />
                     </Checkbox>
                 </Row>
-                {/*测试课*/}
-                {isShowTestClass}
+                  {/*测试课*/}
+                  {isShowTestClass}
+                <Row>
+                    <Checkbox onChange={this.isOnlyOwnSchool} checked={this.state.isOnlyOwnSchool} className="upexam_le_datika">
+                        <FormattedMessage
+                            id='isOnlyClass'
+                            description='是否为仅本校学生观看'
+                            defaultMessage='是否为仅本校学生观看'
+                        />
+                    </Checkbox>
+                </Row>
+              
                 {/*<Row>
                     <Col span={4}>授课时间：</Col>
                     <Col span={18}>
