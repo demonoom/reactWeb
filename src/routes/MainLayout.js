@@ -3307,7 +3307,7 @@ const MainLayout = React.createClass({
 
                         <Modal
                             visible={this.state.shareToAntNestVisible}
-                            title="分享文件"
+                            title="分享文件得到的"
                             onCancel={this.shareToAntNestModalHandleCancel}
                             transitionName=""  //禁用modal的动画效果
                             maskClosable={false} //设置不允许点击蒙层关闭
