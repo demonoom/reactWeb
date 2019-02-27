@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>小蚂蚁移动教学平台</title>
-    <link rel="icon" href="../src/components/images/logo_title.png" type="image/x-icon" />
+    <link rel="icon" href="../src/components/images/logo_title.png" type="image/x-icon"/>
     <script src="../jquerylib/jquery-3.2.1.min.js"></script>
     <script src="../src/layer/layer.js"></script>
     <script src="../jquerylib/jquery-ui.min1.12.js"></script>
@@ -30,7 +30,7 @@
     <script src="../hls-noom-master/video.js"></script>
     <script src="../hls-noom-master/videojs-contrib-hls.js"></script>
     <script src="../src/components/littlePanle.js?v=3.4"></script>
-    <script src="../src/components/noomPanle.js?v=4.1"></script>
+    <script src="../src/components/noomPanle.js?v=4.2"></script>
     <!--<link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=3.5">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/modify.css?v=0.1">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/student.css?v=3.7">
@@ -82,12 +82,12 @@
             },
             css: {
                 styles: [
-                    { rule: 'div' },			// Change selected elements to paragraph elements
-                    { rule: 'h1' },
-                    { rule: 'h2' },
-                    { rule: 'h3' },
-                    { rule: 'h4' },// Change selected elements to heading1 elements, apply blue class. Shown in the styles dropdown as 'Blue heading'
-                    { rule: 'pre' },		// Apply a red class to selected anchor elements
+                    {rule: 'div'},			// Change selected elements to paragraph elements
+                    {rule: 'h1'},
+                    {rule: 'h2'},
+                    {rule: 'h3'},
+                    {rule: 'h4'},// Change selected elements to heading1 elements, apply blue class. Shown in the styles dropdown as 'Blue heading'
+                    {rule: 'pre'},		// Apply a red class to selected anchor elements
                 ]
             }
         };
@@ -101,55 +101,55 @@
 </head>
 
 <body onpaste="onPasteFunction()">
-    <!--这个style.css一定要写在body定义之后的位置,因为自动插入的index.css必须在这行代码之前-->
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=16.0">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=3.5">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/modify.css?v=0.1">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/student.css?v=3.7">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/schoolGroup.css?v=3.9">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/approving.css?v=3.1">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/classroom.css?v=4.2">
-    <!-- emoji picker start -->
-    <link rel="stylesheet" href="../src/css/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link href="../emojiPicker/lib/css/nanoscroller.css" rel="stylesheet">
-    <link href="../emojiPicker/lib/css/emoji.css" rel="stylesheet">
-    <!-- emoji picker end -->
-    <div id="root"></div>
-    <div class="ant-layout-footer">
-        <div id="componyInfo" style="display:block">小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>
-        <script>
-            var timer;
+<!--这个style.css一定要写在body定义之后的位置,因为自动插入的index.css必须在这行代码之前-->
+<link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=16.0">
+<link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=3.5">
+<link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/modify.css?v=0.1">
+<link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/student.css?v=3.7">
+<link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/schoolGroup.css?v=3.9">
+<link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/approving.css?v=3.1">
+<link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/classroom.css?v=4.2">
+<!-- emoji picker start -->
+<link rel="stylesheet" href="../src/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link href="../emojiPicker/lib/css/nanoscroller.css" rel="stylesheet">
+<link href="../emojiPicker/lib/css/emoji.css" rel="stylesheet">
+<!-- emoji picker end -->
+<div id="root"></div>
+<div class="ant-layout-footer">
+    <div id="componyInfo" style="display:block">小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>
+    <script>
+        var timer;
 
-            function checkIsLogin() {
-                if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
-                    timer = setTimeout("checkIsLogin()", 500);
-                    $(".ant-layout-footer").css({ "display": 'block' });
-                } else {
-                    $(".ant-layout-footer").css({ "display": 'none' });
-                    clearTimeout(timer);
-                }
+        function checkIsLogin() {
+            if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
+                timer = setTimeout("checkIsLogin()", 500);
+                $(".ant-layout-footer").css({"display": 'block'});
+            } else {
+                $(".ant-layout-footer").css({"display": 'none'});
+                clearTimeout(timer);
             }
+        }
 
-            checkIsLogin();
-        </script>
-
-    </div>
-
-    <!-- Begin emoji-picker JavaScript -->
-    <script src="../emojiPicker/lib/js/nanoscroller.min.js"></script>
-    <script src="../emojiPicker/lib/js/tether.min.js"></script>
-    <script src="../emojiPicker/lib/js/config.js"></script>
-    <script src="../emojiPicker/lib/js/util.js"></script>
-    <script src="../emojiPicker/lib/js/jquery.emojiarea.js"></script>
-    <script src="../emojiPicker/lib/js/emoji-picker.js"></script>
-    <!-- End emoji-picker JavaScript -->
-    <script type="text/javascript">
-        console.log("9999999")
-        window.history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', function () {
-            history.pushState(null, null, document.URL);
-        });
+        checkIsLogin();
     </script>
+
+</div>
+
+<!-- Begin emoji-picker JavaScript -->
+<script src="../emojiPicker/lib/js/nanoscroller.min.js"></script>
+<script src="../emojiPicker/lib/js/tether.min.js"></script>
+<script src="../emojiPicker/lib/js/config.js"></script>
+<script src="../emojiPicker/lib/js/util.js"></script>
+<script src="../emojiPicker/lib/js/jquery.emojiarea.js"></script>
+<script src="../emojiPicker/lib/js/emoji-picker.js"></script>
+<!-- End emoji-picker JavaScript -->
+<script type="text/javascript">
+    console.log("9999999")
+    window.history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
+</script>
 </body>
 
 </html>
