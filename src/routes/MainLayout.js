@@ -3178,7 +3178,7 @@ const MainLayout = React.createClass({
                             onCancel={this.addDeGroupMemberModalHandleCancel}
                             transitionName=""  //禁用modal的动画效果
                             maskClosable={false} //设置不允许点击蒙层关闭
-                            className="add_member"
+                            className="add_member Share-files"
                             footer={[
 
                                 <button type="ghost" htmlType="reset"
@@ -3187,7 +3187,7 @@ const MainLayout = React.createClass({
                                 <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
                                         onClick={this.addGroupMember}>确定</button>
                             ]}
-                            width={800}
+                            width={700}
                         >
                             <div style={{display: this.state.idea, marginBottom: '14px'}}>
                                 <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}
@@ -3307,7 +3307,7 @@ const MainLayout = React.createClass({
 
                         <Modal
                             visible={this.state.shareToAntNestVisible}
-                            title="分享文件得到的"
+                            title="分享文件"
                             onCancel={this.shareToAntNestModalHandleCancel}
                             transitionName=""  //禁用modal的动画效果
                             maskClosable={false} //设置不允许点击蒙层关闭
