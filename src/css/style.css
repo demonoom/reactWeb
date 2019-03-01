@@ -10325,3 +10325,9 @@ a:active, a:hover {
 .btn_font-top{
     padding-top: 3px;
 }
+.create-ding{
+    width: 850px !important;
+}
+.Individual-editor{
+    width: 520px !important;
+}

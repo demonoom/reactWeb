@@ -1301,7 +1301,7 @@ const MyFollowExtend = React.createClass({
                          <span className="col1">点赞次数：{e[11]}</span>
                       </div>
 
-                            <div className="bnt2_right">
+                            <div className="bnt2_right Operating-Air">
                                 <a href={e[3]} target="_blank" title="下载" download={e[3]}
                                    className="te_download_a"><Button icon="download"/></a>
                                 <Button style={{float: 'right'}} type="" icon="export" title="使用" value={e[0]}

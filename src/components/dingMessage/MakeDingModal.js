@@ -375,7 +375,7 @@ class MakeDingModal extends React.Component {
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
                 footer={[]}
-                className="new_add_ding"
+                className="new_add_ding create-ding"
             >
 
                 <Row className="ant-form-item">
