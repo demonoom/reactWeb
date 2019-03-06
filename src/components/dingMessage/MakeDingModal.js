@@ -377,7 +377,6 @@ class MakeDingModal extends React.Component {
                 footer={[]}
                 className="new_add_ding create-ding"
             >
-
                 <Row className="ant-form-item">
                     <Col span={24}>
                         <div className="ant-transfer make_dingPanel">
@@ -440,7 +439,7 @@ class MakeDingModal extends React.Component {
                                     onKeyUp={this.onKeyUp}
                                 />
                                 <div>
-                                    <Table className="ding_Person" rowSelection={rowSelection} columns={columns}
+                                    <Table className="ding_Person" rowSelection={rowSelection} columns={columns} scroll={{ y: 385 }}
                                            dataSource={this.state.humArr} pagination={false}/>
                                 </div>
                             </Col>

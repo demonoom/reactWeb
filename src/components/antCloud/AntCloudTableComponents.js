@@ -2568,7 +2568,7 @@ pageNo   --- 页码，-1取全部
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={cloudTable.makeDirectory}
                        onCancel={cloudTable.mkdirModalHandleCancel}
-                       className="schoolgroup_modal"
+                       className="schoolgroup_modal rename-modal"
                 >
                     <div className="">
                         <Row className="ant_row">
