@@ -1929,6 +1929,7 @@ const MainLayout = React.createClass({
     },
 
     sendMessage_noom_user(userInfo) {
+        console.log("333")
         var _this = this;
         var content = '';
         var createTime = '';

@@ -4,7 +4,7 @@ import { IS_DEBUG } from './Const';
 export function SimpleWebsocketConnection() {
     this.msgWsListener = null;
     this.REMOTE_URL = "wss://www.maaee.com:7891/Excoord_SimpleWsServer/simple";
-    this.LOCAL_URL = "ws://192.168.50.34:8080/Excoord_SimpleWsServer/simple";
+    this.LOCAL_URL = "ws://192.168.50.172:8080/Excoord_SimpleWsServer/simple";
     this.WS_URL = IS_DEBUG ? this.LOCAL_URL : this.REMOTE_URL;
     this.ws = null;
     this.PING_COMMAND = "ping_0123456789_abcdefg";

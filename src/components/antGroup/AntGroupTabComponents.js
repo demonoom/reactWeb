@@ -3172,7 +3172,7 @@ const AntGroupTabComponents = React.createClass({
             "method": 'getUser2UserMessages',
             "user1Id": sessionStorage.getItem("ident"),
             "user2Id": userObj.colUid,
-            "timeNode": timeNode
+            "timeNode": -1
         };
         isRequesting = true;
         doWebService(JSON.stringify(param), {
