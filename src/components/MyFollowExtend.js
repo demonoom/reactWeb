@@ -648,7 +648,6 @@ const MyFollowExtend = React.createClass({
      * 获取群聊天信息
      */
     getUser2UserMessages(userObj){
-        console.log("222")
         let _this = this;
         this.turnToMessagePage(userObj);
         var timeNode = (new Date()).valueOf();

@@ -1929,11 +1929,9 @@ const MainLayout = React.createClass({
     },
 
     sendMessage_noom_user(userInfo) {
-        console.log("333")
         var _this = this;
         var content = '';
         var createTime = '';
-
         var param = {
             "method": 'getUser2UserMessages',
             "user1Id": sessionStorage.getItem("ident"),
