@@ -1414,6 +1414,7 @@ pageNo   --- 页码，-1取全部
      * 显示文件上传的窗口
      */
     showUploadFileModal() {
+        
         uploadFileList.splice(0, uploadFileList.length);
         if (cloudTable.state.activeKey == '1') {
             cloudTable.setState({
