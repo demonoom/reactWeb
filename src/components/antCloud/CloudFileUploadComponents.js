@@ -1,12 +1,12 @@
-import React, {PropTypes} from 'react';
-import {message, Select, Row, Button, Checkbox} from 'antd';
-import {AR_SCHOOL_ARRAY} from '../../utils/Const';
+import React, { PropTypes } from 'react';
+import { message, Select, Row, Button, Checkbox } from 'antd';
+import { AR_SCHOOL_ARRAY } from '../../utils/Const';
 const CheckboxGroup = Checkbox.Group;
 
 var submitFileOptions = [];
 
 const CloudFileUploadComponents = React.createClass({
-    getInitialState() {
+    getInitialState () {
         submitFileOptions = [];
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
@@ -17,41 +17,43 @@ const CloudFileUploadComponents = React.createClass({
         };
     },
 
-    initFileUploadPage() {
-        this.setState({submitFileCheckedList: [], submitFileOptions: []});
+    initFileUploadPage () {
+        this.setState({ submitFileCheckedList: [], submitFileOptions: [] });
         var fileField = document.getElementById("fileField");
         fileField.value = "";
     },
 
     //拖拽过程中，通过该函数阻止浏览器默认动作
-    dragOver(e) {
+    dragOver (e) {
         e.preventDefault();
         submitFileOptions.splice(0);
-        this.setState({submitFileCheckedList: [], submitFileOptions: submitFileOptions});
+        this.setState({ submitFileCheckedList: [], submitFileOptions: submitFileOptions });
     },
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps () {
         var fatherState = this.props.fatherState;
         if (fatherState == false) {
-            this.setState({submitFileCheckedList: [], submitFileOptions: []});
+            this.setState({ submitFileCheckedList: [], submitFileOptions: [] });
             this.props.callBackParent([]);
         }
     },
 
     //鼠标拖放以后，获取当前的文件
-    sbumitFile(e) {
+    sbumitFile (e) {
         e.preventDefault();
         var files = e.dataTransfer.files;
         this.checkFileInfo(files);
     },
 
-    checkFileInfo(files) {
-        var maxFileSize = 157286400; //150M
-        var tipMessage="请勿上传超过150M的文件，谢谢!";
-        if(AR_SCHOOL_ARRAY.indexOf(this.state.loginUser.schoolId) != -1){
-            maxFileSize = 524288000;   //500M
-            tipMessage="请勿上传超过500M的文件，谢谢!";
-        }
+    checkFileInfo (files) {
+        var maxFileSize = 524288000; //500M
+        var tipMessage = "请勿上传超过500M的文件，谢谢!";
+        // var maxFileSize = 157286400; //150M
+        // var tipMessage="请勿上传超过150M的文件，谢谢!";
+        // if(AR_SCHOOL_ARRAY.indexOf(this.state.loginUser.schoolId) != -1){
+        //     maxFileSize = 524288000;   //500M
+        //     tipMessage="请勿上传超过500M的文件，谢谢!";
+        // }
         if (files.length <= 0) {
             message.warning("请选择或拖拽待上传的文件,谢谢！");
         } else {
@@ -76,27 +78,27 @@ const CloudFileUploadComponents = React.createClass({
                 } else if (fileSize >= parseInt(maxFileSize)) {
                     message.warning(tipMessage);
                 } else {
-                    var fileJson = {label: fileName, value: fileName, fileObj: file};
+                    var fileJson = { label: fileName, value: fileName, fileObj: file };
                     submitFileOptions.push(fileJson);
                 }
             }
-            this.setState({submitFileCheckedList: [], submitFileOptions: submitFileOptions});
+            this.setState({ submitFileCheckedList: [], submitFileOptions: submitFileOptions });
             //回调，将已上传的文件列表传给父组件
             this.props.callBackParent(submitFileOptions);
         }
     },
 
     //判断已上传文件个数，目前只允许单文件上传
-    checkSubmitFileCount() {
+    checkSubmitFileCount () {
         var isOk = false;
-        if(this.state.submitFileOptions.length>=1){
-            isOk=true;
+        if (this.state.submitFileOptions.length >= 1) {
+            isOk = true;
         }
         return isOk;
     },
 
     //检查当前文件是否已经上传
-    checkCurrentFileIsSubmit(fileName) {
+    checkCurrentFileIsSubmit (fileName) {
         for (var i = 0; i < this.state.submitFileOptions.length; i++) {
             var fileJson = this.state.submitFileOptions[i];
             if (fileJson.value == fileName) {
@@ -110,7 +112,7 @@ const CloudFileUploadComponents = React.createClass({
      * @param fileType，如ppt、pptx等
      * @returns {boolean}
      */
-    checkIsRightFileTypeByEndWith(fileType) {
+    checkIsRightFileTypeByEndWith (fileType) {
         var isOk = true;
         /*if(fileType == "pptx"){
             //pptx格式
@@ -136,7 +138,7 @@ const CloudFileUploadComponents = React.createClass({
      * @param fileType
      * @returns {boolean}
      */
-    checkIsRightFileType(fileType) {
+    checkIsRightFileType (fileType) {
         var isOk = true;
 
         /*if(fileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation"){
@@ -163,7 +165,7 @@ const CloudFileUploadComponents = React.createClass({
     },
 
     //移除列表中已上传的文件
-    removeFile() {
+    removeFile () {
         var checkedList = this.state.submitFileCheckedList;
         if (checkedList.length == 0) {
             message.warning("请选择文件后移除");
@@ -180,7 +182,7 @@ const CloudFileUploadComponents = React.createClass({
                     }
                     i++;
                 }
-                this.setState({submitFileCheckedList: [], submitFileOptions: submitFileOptions});
+                this.setState({ submitFileCheckedList: [], submitFileOptions: submitFileOptions });
                 var fileField = document.getElementById("fileField");
                 fileField.value = "";
             }
@@ -189,10 +191,10 @@ const CloudFileUploadComponents = React.createClass({
     },
 
     submitFileCheckBoxOnChange: function (checkedValues) {
-        this.setState({submitFileCheckedList: checkedValues});
+        this.setState({ submitFileCheckedList: checkedValues });
     },
 
-    selectFile(e) {
+    selectFile (e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -202,35 +204,35 @@ const CloudFileUploadComponents = React.createClass({
         submitFileOptions.splice(0);
         var files = target.files;
         this.checkFileInfo(files);
-        this.setState({submitFileOptions});
+        this.setState({ submitFileOptions });
     },
 
-    F_Open_dialog() {
+    F_Open_dialog () {
         document.getElementById("fileField").click();
     },
 
-    render() {
+    render () {
         return (
             <div>
                 <Row>
                     <div className="upload_area" onDragOver={this.dragOver} onDrop={this.sbumitFile}>
                         <input type="file" name="fileField" webkitdirectory multiple className="file" id="fileField"
-                               size="28" onChange={this.selectFile} style={{display: 'none'}}/>
+                            size="28" onChange={this.selectFile} style={{ display: 'none' }} />
                         <Button type="primary" icon="plus" className="add_bnt" size={5}
-                                onClick={this.F_Open_dialog}></Button>
-                        <span style={{align: 'center'}}>请将文件拖拽到此区域实现上传</span>
+                            onClick={this.F_Open_dialog}></Button>
+                        <span style={{ align: 'center' }}>请将文件拖拽到此区域实现上传</span>
                     </div>
                 </Row>
                 <Row>
                     <div className="date_tr">
                         已上传文件列表<Button type="primary" className="calmBorderRadius add_out add_study"
-                                       onClick={this.removeFile}>移除</Button>
+                            onClick={this.removeFile}>移除</Button>
                     </div>
                     <div className="le_1">
-                        <CheckboxGroup options={this.state.submitFileOptions} style={{margin: '9px'}}
-                                       defaultValue={this.state.submitFileCheckedList}
-                                       value={this.state.submitFileCheckedList}
-                                       onChange={this.submitFileCheckBoxOnChange}/>
+                        <CheckboxGroup options={this.state.submitFileOptions} style={{ margin: '9px' }}
+                            defaultValue={this.state.submitFileCheckedList}
+                            value={this.state.submitFileCheckedList}
+                            onChange={this.submitFileCheckBoxOnChange} />
                     </div>
                 </Row>
             </div>
