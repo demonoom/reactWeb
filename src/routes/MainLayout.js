@@ -1932,7 +1932,6 @@ const MainLayout = React.createClass({
         var _this = this;
         var content = '';
         var createTime = '';
-
         var param = {
             "method": 'getUser2UserMessages',
             "user1Id": sessionStorage.getItem("ident"),
