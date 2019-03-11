@@ -62,6 +62,7 @@ const UpdateClassComponents = React.createClass({
             defaultTeamSelected: '',
             isWeiClass: false,
             isShowClass: false,
+            isOnlyOwnSchool:false,
             tags: [],
             noomTages: [],
             isTestClass: false,//默认测试课勾选状态
@@ -166,6 +167,7 @@ const UpdateClassComponents = React.createClass({
         var moneyInputDisable;
         var isShowseclect = false;
         var LessionIsUpdateDisable = false;
+       
         videoJsonArray = [];
 
         if (money != 0) {
@@ -267,6 +269,14 @@ const UpdateClassComponents = React.createClass({
             this.setState({isTestClass: false});
         }
 
+        //是否为仅允许本校观看勾选状态
+        var limitSchoolIds =updateClassObj.limitSchoolIds;
+        if(limitSchoolIds.length == 0){
+            this.setState({isOnlyOwnSchool: false});
+        }else {
+            this.setState({isOnlyOwnSchool: true});
+        }
+
         _this.setState({
             isWeiClass,
             updateId: updateClassObj.id,
@@ -299,6 +309,7 @@ const UpdateClassComponents = React.createClass({
         courseInfoJson.isFree = isFree;
         courseInfoJson.isLimit = isLimit;
         courseInfoJson.showCourse = showCourse;
+        courseInfoJson.limitSchoolIds = limitSchoolIds;
         courseInfoJson.content = content;
         courseInfoJson.isSeries = isSeries;
         courseInfoJson.courseTypeId = courseTypeId;
@@ -1365,6 +1376,17 @@ const UpdateClassComponents = React.createClass({
         }
     },
 
+    //是否为勾选课程
+    isOnlyOwnSchool(e) {
+        this.setState({isOnlyOwnSchool: e.target.checked});
+        if (e.target.checked) {
+            //钩中展示课
+            courseInfoJson.limitSchoolIds.push(this.state.cloudClassRoomUser.schoolId)
+        } else {
+            courseInfoJson.limitSchoolIds = [];
+        }
+    },
+
     removeWeiClass() {
 
     },
@@ -1691,6 +1713,15 @@ const UpdateClassComponents = React.createClass({
                 </Row>
 
                 {isShowTestClass}
+                <Row>
+                    <Checkbox onChange={this.isOnlyOwnSchool} checked={this.state.isOnlyOwnSchool} className="upexam_le_datika">
+                        <FormattedMessage
+                            id='isOnlyClass'
+                            description='是否为仅本校学生观看'
+                            defaultMessage='是否为仅本校学生观看'
+                        />
+                    </Checkbox>
+                </Row>
                 {/*<Row>*/}
                 {/*<Col span={4}>授课时间：</Col>*/}
                 {/*<Col span={18}>*/}
@@ -1895,7 +1926,6 @@ const UpdateClassComponents = React.createClass({
                 if (typeof(this.state.lessonArray) != "undefined") {
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
-                        console.log(lessonJson);
                         var deleteDisable = lessonJson.deleteDisable;
                         var videoNameObj = lessonJson.videoNameObj;
                         var videoName = lessonJson.videoName;

@@ -1564,11 +1564,6 @@ a:hover {
     text-decoration: underline;
 
 }
-
-.ant-table-fixed-header .ant-table-scroll .ant-table-header {
-
-}
-
 .ant-checkbox-wrapper {
     display: inline-block;
     padding-right: 10px;
@@ -1721,7 +1716,6 @@ analyze_iframe_2 > div {
 	} 横向滚动条和纵向滚动条相交处尖角的颜色 */
 .ant-table-fixed-header .ant-table-scroll .ant-table-header {
     overflow: hidden;
-    width: calc(100% - 8px);
 }
 
 .ant-table-fixed-header-new1 {
@@ -1874,7 +1868,7 @@ p.user_cont span.name1 {
 }
 
 .knowledge_width {
-    width: 800px !important;
+    width: 750px !important;
 }
 
 .ant-form-item {
@@ -7419,15 +7413,6 @@ select.course_n:hover {
     color: #fff;
     border: 1px solid #0D97FF;
 }
-
-.ding_Person .ant-table-body {
-    height: 422px;
-    overflow: auto;
-    border: 1px solid #E4E4E4;
-    margin-top: 10px;
-    border-radius: 4px;
-}
-
 .ding_modal_left {
     margin-right: 10px;
     margin-top: 15px;
@@ -7445,27 +7430,27 @@ select.course_n:hover {
 .ding_hide {
     display: none;
 }
-
+.ding_Person{
+    border: 1px solid #E4E4E4;
+    border-radius: 4px;
+    margin-top: 9px;
+}
+.ding_Person .ant-table-tbody > tr:last-child > td{
+    border-bottom: none;
+}
 .ding_Person .ant-table-thead {
-    position: fixed;
     z-index: 2;
 }
 
 .ding_Person .ant-table-thead > tr > th.ant-table-selection-column {
-    width: 60px;
+    width: 5%;
     padding: 12px 8px;
     text-align: right;
 }
 
 .ding_Person .ant-table table th.dold_text, .ding_Person .ant-table table td.dold_text {
-    width: 205px;
+    padding: 12px 8px;
 }
-
-.ding_Person .ant-table-tbody {
-    display: block;
-    margin-top: 53px;
-}
-
 .ding_Person .ant-modal-footer {
     padding: 0
 }
@@ -8622,24 +8607,30 @@ select.course_n:hover {
 .select_knoledge_top2 {
     margin-top: 18px;
 }
-
+.select_knoledge_Person{
+    border: 1px solid #E4E4E4;
+    border-radius: 4px;
+}
 .select_knoledge_Person .ant-table-placeholder {
     border-left: 1px solid #E4E4E4;
     border-right: 1px solid #E4E4E4;
 }
 
 .select_knoledge_Person .ant-table-body {
-    height: 351px;
     overflow: auto;
+    overflow-x: hidden;
+}
+select_knoledge_Person{
     border: 1px solid #E4E4E4;
     border-radius: 4px;
 }
 
 .select_knoledge_Person .ant-table-thead {
-    position: fixed;
     z-index: 2;
 }
-
+.select_knoledge_Person .ant-table-fixed-header .ant-table-scroll .ant-table-header{
+    padding-bottom: 6px !important;
+}
 .select_knoledge_Person .ant-table-thead > tr > th.ant-table-selection-column {
     width: 40px;
     padding: 12px 8px;
@@ -8648,6 +8639,7 @@ select.course_n:hover {
 
 .select_knoledge_Person .ant-table table th.dold_text {
     width: 360px;
+    padding: 12px 8px;
 }
 
 .select_knoledge_Person .ant-table table td.dold_text {
@@ -8656,7 +8648,6 @@ select.course_n:hover {
 
 .select_knoledge_Person .ant-table-tbody {
     display: block;
-    margin-top: 53px;
 }
 
 .select_knoledge_Person .ant-modal-footer {
@@ -10295,6 +10286,12 @@ a:active, a:hover {
 .modal-434{
     width: 434px !important;
 }
+.modal-434 .ant-modal-body{
+    padding-bottom: 0 !important;
+}
+.modal-434 .ant-form-item{
+    margin-bottom: 0 !important;
+}
 .add-2-btn{
     margin-top: -2px;
 }
@@ -10306,4 +10303,28 @@ a:active, a:hover {
 }
 .layui-layer {
     display: none;
+}
+.Share-files{
+    width: 700px !important;
+}
+.rename-modal{
+    width: 440px !important;
+}
+.Move-files{
+    width: 432px;
+    display: inline-block;
+}
+.Text-interception{
+    width: 488px;
+    box-sizing: content-box;
+    display: inline-block;
+}
+.btn_font-top{
+    padding-top: 3px;
+}
+.create-ding{
+    width: 850px !important;
+}
+.Individual-editor{
+    width: 520px !important;
 }

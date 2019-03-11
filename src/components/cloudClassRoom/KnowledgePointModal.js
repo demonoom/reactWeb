@@ -373,7 +373,7 @@ class KnowledgePointModal extends React.Component {
                             <div>
                                 <Col span={24}>
                                     <Table showHeader={this.state.headerIsShow} className="select_knoledge_Person"
-                                           rowSelection={rowSelection} columns={columns}
+                                           rowSelection={rowSelection} columns={columns}  scroll={{ y: 240 }}
                                            dataSource={this.state.tableData} pagination={false}/>
                                     <div className="schoolgroup_operate schoolgroup_more">
                                         <a onClick={this.loadMore}

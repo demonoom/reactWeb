@@ -2073,6 +2073,7 @@ const AntNestTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.discussModalHandleOk}
                        onCancel={antNest.discussModalHandleCancel}
+                       className="Individual-editor"
                 >
                     <div className="group_send_pinglun">
                         <Row>
