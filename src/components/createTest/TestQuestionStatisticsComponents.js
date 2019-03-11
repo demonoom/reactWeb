@@ -1,24 +1,25 @@
 import React, {PropTypes} from 'react';
-import {Timeline, Button, Popover, message,Steps,Icon,Progress,Modal,Collapse,Row,Col,Card} from 'antd';
+import {Timeline, Button, Popover, message, Steps, Icon, Progress, Modal, Collapse, Row, Col, Card} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {formatYMD} from '../../utils/utils';
 import {getLocalTime} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
+
 const Step = Steps.Step;
 const Panel = Collapse.Panel;
 
-var examsArray=[];
-var TimeLineItemArray=[];
+var examsArray = [];
+var TimeLineItemArray = [];
 const TestQuestionStatisticsComponents = React.createClass({
     getInitialState() {
         return {
             ident: sessionStorage.getItem('ident'),
-            tipModalVisible:false,
+            tipModalVisible: false,
         };
     },
 
-    componentDidMount(){
+    componentDidMount() {
         var _this = this;
         _this.getExmQuestionStatistics();
     },
@@ -26,7 +27,8 @@ const TestQuestionStatisticsComponents = React.createClass({
     /**
      * 获取本次考试分数排名列表
      */
-    getExmQuestionStatistics(){
+    getExmQuestionStatistics() {
+        debugger
         var _this = this;
         var param = {
             "method": 'getExmQuestionStatistics',
@@ -35,72 +37,72 @@ const TestQuestionStatisticsComponents = React.createClass({
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.msg == "调用成功" && ret.success == true){
+                if (ret.msg == "调用成功" && ret.success == true) {
                     var response = ret.response;
                     var paper = response.paper;
                     var questionTypes = paper.questionTypes;
                     var paperTitle = paper.title;
                     var createTime = getLocalTime(paper.createTime);
-                    var mainCardArray=[];
+                    var mainCardArray = [];
                     questionTypes.forEach(function (questionType) {
                         var type = questionType.type;
-                        var cardArray=[];
+                        var cardArray = [];
                         var cardTitle;
-                        switch (type){
+                        switch (type) {
                             case 0:
-                                cardTitle="选择";
+                                cardTitle = "选择";
                                 break;
                             case 1:
-                                cardTitle="判断";
+                                cardTitle = "判断";
                                 break;
                             case 2:
-                                cardTitle="填空";
+                                cardTitle = "填空";
                                 break;
                             case 3:
-                                cardTitle="简答";
+                                cardTitle = "简答";
                                 break;
                         }
                         var statistics = response.statistics;
 
-                        var index=1;
-                        for(var i=0;i<statistics.length;i++){
+                        var index = 1;
+                        for (var i = 0; i < statistics.length; i++) {
                             var e = statistics[i];
                             var question = e.question;
                             var questionType = question.type;
-                            if(questionType!=type){
+                            if (questionType != type) {
                                 continue;
                             }
-                            switch (questionType){
+                            switch (questionType) {
                                 case 0:
                                     //cardTitle="选择";
-                                    _this.buildChoiceCard(question,e,index,questionType,cardArray);
+                                    _this.buildChoiceCard(question, e, index, questionType, cardArray);
                                     break;
                                 case 1:
                                     // cardTitle="判断";
-                                    _this.buildCorrectCard(question,e,index,questionType,cardArray);
+                                    _this.buildCorrectCard(question, e, index, questionType, cardArray);
                                     break;
                                 case 2:
                                     // cardTitle="填空";
-                                    _this.buildFillBlankCard(question,e,index,questionType,cardArray);
+                                    _this.buildFillBlankCard(question, e, index, questionType, cardArray);
                                     break;
                                 case 3:
                                     // cardTitle="简答";
-                                    _this.buildSimpleAnswerCard(question,e,index,questionType,cardArray);
+                                    _this.buildSimpleAnswerCard(question, e, index, questionType, cardArray);
                                     break;
                             }
-                            index = index+1;
+                            index = index + 1;
                         }
                         /*statistics.forEach(function (e) {
 
                         });*/
 
-                        var mainCard=<Card key={type} title={cardTitle} className="exam-particulars_cont">
+                        var mainCard = <Card key={type} title={cardTitle} className="exam-particulars_cont">
                             {cardArray}
                         </Card>;
                         mainCardArray.push(mainCard);
                     });
                     _this.setState({
-                        paperTitle,createTime,mainCardArray
+                        paperTitle, createTime, mainCardArray
                     });
                 }
             },
@@ -111,7 +113,7 @@ const TestQuestionStatisticsComponents = React.createClass({
         });
     },
 
-    buildChoiceCard(question,e,index,type,cardArray){
+    buildChoiceCard(question, e, index, type, cardArray) {
         var _this = this;
         //正确答案
         var textAnswer = question.textAnswer;
@@ -123,7 +125,7 @@ const TestQuestionStatisticsComponents = React.createClass({
         var rightPercent = e.rightPercent;
         //选项分析
         var optionStatistics = e.optionStatistics;
-        var optionASelectPercent = optionStatistics.optionRightSelectPercent;
+        var optionASelectPercent = optionStatistics.optionASelectPercent;
         var optionASelectUsers = optionStatistics.optionASelectUsers;
         var optionBSelectPercent = optionStatistics.optionBSelectPercent;
         var optionBSelectUsers = optionStatistics.optionBSelectUsers;
@@ -135,7 +137,7 @@ const TestQuestionStatisticsComponents = React.createClass({
         var optionESelectUsers = optionStatistics.optionESelectUsers;
         var optionFSelectPercent = optionStatistics.optionFSelectPercent;
         var optionFSelectUsers = optionStatistics.optionFSelectUsers;
-        var everyRow=<div className="exam_card"><Card key={type+index} className="upexam_topic" >
+        var everyRow = <div className="exam_card"><Card key={type + index} className="upexam_topic">
             <Row>
                 <Col span={24}>{index}.&nbsp;&nbsp;正确答案：{textAnswer}</Col>
             </Row>
@@ -151,12 +153,18 @@ const TestQuestionStatisticsComponents = React.createClass({
             <Row>
                 <Col span={6}>选此项</Col>
                 {/*getchoicedUser*/}
-                <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionASelectUsers)}>{optionASelectUsers.length}</a></Col>
-                <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionBSelectUsers)}>{optionBSelectUsers.length}</a></Col>
-                <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionCSelectUsers)}>{optionCSelectUsers.length}</a></Col>
-                <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionDSelectUsers)}>{optionDSelectUsers.length}</a></Col>
-                <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionESelectUsers)}>{optionESelectUsers.length}</a></Col>
-                <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionFSelectUsers)}>{optionFSelectUsers.length}</a></Col>
+                <Col span={3}><a
+                    onClick={_this.getchoicedUser.bind(_this, optionASelectUsers)}>{optionASelectUsers.length}</a></Col>
+                <Col span={3}><a
+                    onClick={_this.getchoicedUser.bind(_this, optionBSelectUsers)}>{optionBSelectUsers.length}</a></Col>
+                <Col span={3}><a
+                    onClick={_this.getchoicedUser.bind(_this, optionCSelectUsers)}>{optionCSelectUsers.length}</a></Col>
+                <Col span={3}><a
+                    onClick={_this.getchoicedUser.bind(_this, optionDSelectUsers)}>{optionDSelectUsers.length}</a></Col>
+                <Col span={3}><a
+                    onClick={_this.getchoicedUser.bind(_this, optionESelectUsers)}>{optionESelectUsers.length}</a></Col>
+                <Col span={3}><a
+                    onClick={_this.getchoicedUser.bind(_this, optionFSelectUsers)}>{optionFSelectUsers.length}</a></Col>
             </Row>
             <Row>
                 <Col span={6}>选择率(%)</Col>
@@ -168,28 +176,30 @@ const TestQuestionStatisticsComponents = React.createClass({
                 <Col span={3}>{optionFSelectPercent}</Col>
             </Row>
         </Card>
-		<div className="line_block">
+            <div className="line_block">
                 <Col span={24}>
-                    <Button onClick={_this.getRightUser.bind(_this,rightUsers)} className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
-                    <Button onClick={_this.getWrongUser.bind(_this,wrongUsers)} className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
+                    <Button onClick={_this.getRightUser.bind(_this, rightUsers)}
+                            className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
+                    <Button onClick={_this.getWrongUser.bind(_this, wrongUsers)}
+                            className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
                     <Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
                 </Col>
             </div>
-			</div>;
+        </div>;
         cardArray.push(everyRow);
     },
 
-    buildCorrectCard(question,e,index,type,cardArray){
+    buildCorrectCard(question, e, index, type, cardArray) {
         var _this = this;
         //正确答案
         var textAnswerNo = question.textAnswer;
         var textAnswer;
-        switch (textAnswerNo){
+        switch (textAnswerNo) {
             case "0":
-                textAnswer="错误";
+                textAnswer = "错误";
                 break;
             case "1":
-                textAnswer="正确";
+                textAnswer = "正确";
                 break;
         }
         //正确用户数组
@@ -205,7 +215,7 @@ const TestQuestionStatisticsComponents = React.createClass({
         var optionRightSelectUsers = optionStatistics.optionRightSelectUsers;
         var optionWrongSelectPercent = optionStatistics.optionWrongSelectPercent;
         var optionWrongSelectUsers = optionStatistics.optionWrongSelectUsers;
-        var everyRow=<div className="exam_card"><Card key={type+index} className="upexam_topic">
+        var everyRow = <div className="exam_card"><Card key={type + index} className="upexam_topic">
             <Row>
                 <Col span={24}>{index}&nbsp;&nbsp;正确答案：{textAnswer}</Col>
             </Row>
@@ -216,8 +226,10 @@ const TestQuestionStatisticsComponents = React.createClass({
             </Row>
             <Row>
                 <Col span={6}>选此项</Col>
-                <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionRightSelectUsers)}>{optionRightSelectUsers.length}</a></Col>
-                <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionWrongSelectUsers)}>{optionWrongSelectUsers.length}</a></Col>
+                <Col span={3}><a
+                    onClick={_this.getchoicedUser.bind(_this, optionRightSelectUsers)}>{optionRightSelectUsers.length}</a></Col>
+                <Col span={3}><a
+                    onClick={_this.getchoicedUser.bind(_this, optionWrongSelectUsers)}>{optionWrongSelectUsers.length}</a></Col>
             </Row>
             <Row>
                 <Col span={6}>选择率(%)</Col>
@@ -225,18 +237,20 @@ const TestQuestionStatisticsComponents = React.createClass({
                 <Col span={3}>{optionWrongSelectPercent}</Col>
             </Row>
         </Card>
-		<div className="line_block">
-			<Col span={24}>
-				<Button onClick={_this.getRightUser.bind(_this,rightUsers)} className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
-				<Button onClick={_this.getWrongUser.bind(_this,wrongUsers)} className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
-				<Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
-			</Col>
-		</div>
-		</div>;
+            <div className="line_block">
+                <Col span={24}>
+                    <Button onClick={_this.getRightUser.bind(_this, rightUsers)}
+                            className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
+                    <Button onClick={_this.getWrongUser.bind(_this, wrongUsers)}
+                            className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
+                    <Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
+                </Col>
+            </div>
+        </div>;
         cardArray.push(everyRow);
     },
 
-    buildFillBlankCard(question,e,index,type,cardArray){
+    buildFillBlankCard(question, e, index, type, cardArray) {
         var _this = this;
         //正确答案
         var textAnswer = question.textAnswer;
@@ -249,129 +263,133 @@ const TestQuestionStatisticsComponents = React.createClass({
         //正确率
         var rightPercent = e.rightPercent;
         var imgObj;
-        if(typeof(imageAnswer)!="undefined" && imageAnswer!=null && imageAnswer != ""){
+        if (typeof (imageAnswer) != "undefined" && imageAnswer != null && imageAnswer != "") {
             imgObj = <Row>
-                    <Col span={24}><span className="topics_zan"><img src={imageAnswer}  onClick={showLargeImg}/></span></Col>
-                </Row>;
-        }
-        var everyRow=<div className="exam_card"><Card key={type+index} className="upexam_topic" >
-            <Row>
-                <Col span={24}>{index}.&nbsp;&nbsp;正确答案：{textAnswer}</Col>
-            </Row>
-            {imgObj}
-        </Card>
-		<div className="line_block">
-			<Col span={24}>
-				<Button onClick={_this.getRightUser.bind(_this,rightUsers)} className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
-				<Button onClick={_this.getWrongUser.bind(_this,wrongUsers)} className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
-				<Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
-			</Col>
-		</div>
-		</div>;
-        cardArray.push(everyRow);
-    },
-
-    buildSimpleAnswerCard(question,e,index,type,cardArray){
-        var _this = this;
-        //正确答案
-        var textAnswer = question.textAnswer;
-        var imageAnswer = question.imageAnswer;
-        var imageAnalysis = question.imageAnalysis;
-        //正确用户数组
-        var rightUsers = e.rightUsers;
-        //答错用户集合
-        var wrongUsers = e.wrongUsers;
-        //正确率
-        var rightPercent = e.rightPercent;
-        var imgObj;
-        if(typeof(imageAnswer)!="undefined" && imageAnswer!=null && imageAnswer != "" ){
-            imgObj = <Row>
-                <Col span={24}><span className="topics_zan"><img src={imageAnswer}  onClick={showLargeImg}/></span></Col>
+                <Col span={24}><span className="topics_zan"><img src={imageAnswer} onClick={showLargeImg}/></span></Col>
             </Row>;
         }
-        var everyRow=<div className="exam_card"><Card key={type+index} className="upexam_topic" >
+        var everyRow = <div className="exam_card"><Card key={type + index} className="upexam_topic">
             <Row>
                 <Col span={24}>{index}.&nbsp;&nbsp;正确答案：{textAnswer}</Col>
             </Row>
             {imgObj}
         </Card>
-		<div className="line_block">
-			<Col span={24}>
-				<Button onClick={_this.getRightUser.bind(_this,rightUsers)} className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
-				<Button onClick={_this.getWrongUser.bind(_this,wrongUsers)} className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
-				<Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
-			</Col>
-		</div>
-		</div>;
+            <div className="line_block">
+                <Col span={24}>
+                    <Button onClick={_this.getRightUser.bind(_this, rightUsers)}
+                            className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
+                    <Button onClick={_this.getWrongUser.bind(_this, wrongUsers)}
+                            className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
+                    <Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
+                </Col>
+            </div>
+        </div>;
+        cardArray.push(everyRow);
+    },
+
+    buildSimpleAnswerCard(question, e, index, type, cardArray) {
+        var _this = this;
+        //正确答案
+        var textAnswer = question.textAnswer;
+        var imageAnswer = question.imageAnswer;
+        var imageAnalysis = question.imageAnalysis;
+        //正确用户数组
+        var rightUsers = e.rightUsers;
+        //答错用户集合
+        var wrongUsers = e.wrongUsers;
+        //正确率
+        var rightPercent = e.rightPercent;
+        var imgObj;
+        if (typeof (imageAnswer) != "undefined" && imageAnswer != null && imageAnswer != "") {
+            imgObj = <Row>
+                <Col span={24}><span className="topics_zan"><img src={imageAnswer} onClick={showLargeImg}/></span></Col>
+            </Row>;
+        }
+        var everyRow = <div className="exam_card"><Card key={type + index} className="upexam_topic">
+            <Row>
+                <Col span={24}>{index}.&nbsp;&nbsp;正确答案：{textAnswer}</Col>
+            </Row>
+            {imgObj}
+        </Card>
+            <div className="line_block">
+                <Col span={24}>
+                    <Button onClick={_this.getRightUser.bind(_this, rightUsers)}
+                            className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
+                    <Button onClick={_this.getWrongUser.bind(_this, wrongUsers)}
+                            className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
+                    <Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
+                </Col>
+            </div>
+        </div>;
         cardArray.push(everyRow);
     },
 
     /**
      * 显示回答正确学生名单
      */
-    getRightUser(rightUsersArray){
+    getRightUser(rightUsersArray) {
         var _this = this;
         var userLiArray = [];
-        if(typeof(rightUsersArray)!="undefined" && rightUsersArray.length==0){
+        if (typeof (rightUsersArray) != "undefined" && rightUsersArray.length == 0) {
             message.warning("没有学生!");
-        }else{
+        } else {
             rightUsersArray.forEach(function (user) {
-                var userLi = <div className="group_fr" onClick={_this.checkStudentExamSubmitResult.bind(_this,user)}>
-                    <span className="attention_img"><img src={user.avatar} /></span>
+                var userLi = <div className="group_fr" onClick={_this.checkStudentExamSubmitResult.bind(_this, user)}>
+                    <span className="attention_img"><img src={user.avatar}/></span>
                     <span>{user.userName}</span>
                 </div>
                 userLiArray.push(userLi);
             });
-            _this.setState({"tipLiArray":userLiArray,"tipModalVisible":true,"tipTitle":"回答正确学生名单"});
+            _this.setState({"tipLiArray": userLiArray, "tipModalVisible": true, "tipTitle": "回答正确学生名单"});
         }
     },
 
     /**
      * 显示回答错误学生名单
      */
-    getWrongUser(wrongUsersArray){
+    getWrongUser(wrongUsersArray) {
         var _this = this;
         var userLiArray = [];
-        if(typeof(wrongUsersArray)!="undefined" && wrongUsersArray.length==0){
+        if (typeof (wrongUsersArray) != "undefined" && wrongUsersArray.length == 0) {
             message.warning("没有学生!");
-        }else{
+        } else {
             wrongUsersArray.forEach(function (user) {
-                var userLi = <div className="group_fr" onClick={_this.checkStudentExamSubmitResult.bind(_this,user)}>
-                    <span className="attention_img"><img src={user.avatar} /></span>
+                var userLi = <div className="group_fr" onClick={_this.checkStudentExamSubmitResult.bind(_this, user)}>
+                    <span className="attention_img"><img src={user.avatar}/></span>
                     <span>{user.userName}</span>
                 </div>
                 userLiArray.push(userLi);
             });
-            _this.setState({"tipLiArray":userLiArray,"tipModalVisible":true,"tipTitle":"回答错误学生名单"});
+            _this.setState({"tipLiArray": userLiArray, "tipModalVisible": true, "tipTitle": "回答错误学生名单"});
         }
     },
 
-    checkStudentExamSubmitResult(userObj){
-        this.props.onCheckButtonClick(this.props.exmId,userObj);
+    checkStudentExamSubmitResult(userObj) {
+        this.props.onCheckButtonClick(this.props.exmId, userObj);
     },
 
     /**
      * 显示选择指定选项的学生名单
      */
-    getchoicedUser(choiceUsersArray){
+    getchoicedUser(choiceUsersArray) {
         var _this = this;
         var userLiArray = [];
-        if(typeof(choiceUsersArray)!="undefined" && choiceUsersArray.length==0){
+        if (typeof (choiceUsersArray) != "undefined" && choiceUsersArray.length == 0) {
             message.warning("没有学生!");
-        }else{
+        } else {
             choiceUsersArray.forEach(function (user) {
-                var userLi = <div className="group_fr" onClick={_this.checkStudentExamSubmitResult.bind(_this,user)}>
-                    <span className="attention_img"><img src={user.avatar} /></span>
+                var userLi = <div className="group_fr" onClick={_this.checkStudentExamSubmitResult.bind(_this, user)}>
+                    <span className="attention_img"><img src={user.avatar}/></span>
                     <span>{user.userName}</span>
                 </div>
                 userLiArray.push(userLi);
             });
-            _this.setState({"tipLiArray":userLiArray,"tipModalVisible":true,"tipTitle":"选择该选项的学生名单"});
+            _this.setState({"tipLiArray": userLiArray, "tipModalVisible": true, "tipTitle": "选择该选项的学生名单"});
         }
     },
 
-    tipModalHandleCancel(){
-        this.setState({"tipModalVisible":false});
+    tipModalHandleCancel() {
+        this.setState({"tipModalVisible": false});
     },
 
     render() {
