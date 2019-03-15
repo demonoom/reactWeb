@@ -113,7 +113,6 @@ function ClazzConnection(host) {
     };
 
 
-
     this.innerReconnect = function () {
         var connection = this;
         if (connection.loginProtocol != null && !connection.connecting && !connection.classOver) {
