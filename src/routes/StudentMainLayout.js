@@ -453,6 +453,18 @@ const StudentMainLayout = React.createClass({
         this.refs.antGroupTabComponents.sendPicToOthers(url);
     },
 
+     search() {
+        //打开littlepanel
+        var loginUserId = sessionStorage.getItem("ident");
+        let obj = {
+                mode: 'teachingAdmin',
+                url: 'http://www.maaee.com//Excoord_PhoneService/antSearch/indexSearch/' + loginUserId,
+                title: '搜索'
+            }
+        ;
+        LP.Start(obj);
+    },
+
     changeIsSearch() {
         this.setState({isSearch: false});
     },
@@ -654,7 +666,7 @@ const StudentMainLayout = React.createClass({
 
                     <div className="ant-layout-main">
                         <div className="ant-layout-header">
-                            <HeaderComponents/>
+                            <HeaderComponents search={this.search}/>
                         </div>
                         <div className="ant-layout-operation">
                             {mainContent}
