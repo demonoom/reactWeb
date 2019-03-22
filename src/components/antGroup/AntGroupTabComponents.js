@@ -269,7 +269,7 @@ const AntGroupTabComponents = React.createClass({
         var messageList = this.state.messageList;
         var id = this.state.loginUser.colUid;
         if (isEmpty(messageList) == false && messageList.length > 0) {
-            if (typeof(messageList[0].groupReadState) != 'undefined') {
+            if (typeof (messageList[0].groupReadState) != 'undefined') {
                 //群组消息
                 messageList.forEach(function (v, i) {
                     if (v.fromUser.colUid != id) {
@@ -395,7 +395,7 @@ const AntGroupTabComponents = React.createClass({
      */
     checkTalkReaders(e) {
         var _this = this;
-        if (typeof(e.groupReadState) != 'undefined') {
+        if (typeof (e.groupReadState) != 'undefined') {
             //群消息
             this.refs.dingPanel.className = 'read_panel ding_enter';
             //渲染详情面板
@@ -1398,7 +1398,7 @@ const AntGroupTabComponents = React.createClass({
         //console.log(megObj.groupReadState);区分是群还是个人  个人传个人  群传未读人
         if (isEmpty(megObj.attachmentType) == true && isEmpty(megObj.fileName) == true && isEmpty(megObj.expressionItem) == true) {
             //文字
-            if (typeof(megObj.groupReadState) != 'undefined') {
+            if (typeof (megObj.groupReadState) != 'undefined') {
                 //群
                 _this.checkNevReaders(megObj.uuid);
             } else {
@@ -1783,6 +1783,11 @@ const AntGroupTabComponents = React.createClass({
      * 让上传组件显示
      */
     sendFile() {
+        if (antGroup.state.loginUser.colUtype === 'STUD') {
+            antGroup.canSendFile();
+            return
+        }
+
         //清空上传文件数组
         uploadFileList.splice(0, uploadFileList.length);
         antGroup.setState({cloudFileUploadModalVisible: true, uploadPercent: 0, progressState: 'none'});
@@ -1811,6 +1816,27 @@ const AntGroupTabComponents = React.createClass({
             var fileObj = fileJson.fileObj;
             uploadFileList.push(fileObj);
         }
+    },
+
+    canSendFile() {
+        var param = {
+            "method": 'canSendFile',
+            "userId": antGroup.state.loginUser.colUid,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success) {
+                    //清空上传文件数组
+                    uploadFileList.splice(0, uploadFileList.length);
+                    antGroup.setState({cloudFileUploadModalVisible: true, uploadPercent: 0, progressState: 'none'});
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -2064,7 +2090,7 @@ const AntGroupTabComponents = React.createClass({
         var messageList = [];
         ms.msgWsListener = {
             onError: function (errorMsg) {
-                console.log(errorMsg,'onError');
+                console.log(errorMsg, 'onError');
                 if (_this.state.errorModalIsShow == false) {
                     _this.setState({"errorModalIsShow": true});
                     ms.closeConnection();
@@ -2155,7 +2181,7 @@ const AntGroupTabComponents = React.createClass({
                                 }
                             } else if (e.toType == 4) {
                                 //处理聊天的群组消息
-                                if (("SGZH" == colUtype || isEmpty(groupObj) == false && groupObj.chatGroupId == e.toId )) {
+                                if (("SGZH" == colUtype || isEmpty(groupObj) == false && groupObj.chatGroupId == e.toId)) {
                                     imgTagArray.splice(0);
                                     var message = {
                                         'fromUser': fromUser,
@@ -2818,7 +2844,7 @@ const AntGroupTabComponents = React.createClass({
      * @param response
      */
     tipNotic(response) {
-        if (typeof(response) != "undefined" && response.length == 0) {
+        if (typeof (response) != "undefined" && response.length == 0) {
             notification.open({
                 message: '',
                 description: '没有更多消息了',
@@ -2958,7 +2984,7 @@ const AntGroupTabComponents = React.createClass({
                             }
                             ;
                             timeSign = messageOfSinge.createTime;
-                            if (("SGZH" == colUtype || groupObj.chatGroupId == e.toId ) && e.toType == 4) {
+                            if (("SGZH" == colUtype || groupObj.chatGroupId == e.toId) && e.toType == 4) {
                                 var uuid = e.uuid;
                                 var showType = e.showType;
                                 uuidsArray.push(uuid);
@@ -5052,7 +5078,7 @@ const AntGroupTabComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
-                            
+
                             <Button type="ghost" htmlType="reset" className="login-form-button"
                                     onClick={antGroup.cloudFileUploadModalHandleCancel}>
                                 取消
