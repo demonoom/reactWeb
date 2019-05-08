@@ -7,7 +7,7 @@
 
     var panelArr = []
     var renovateFlag = true
-
+    
 
     var littlePanle = function () {
 

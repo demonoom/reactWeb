@@ -5,8 +5,8 @@ import { IS_LIVE_DEBUG } from './Const';
 export function MsgConnection() {
     this.msgWsListener = null;
     this.REMOTE_URL = "wss://www.maaee.com:7889/Excoord_MessageServer/message";
-    this.LOCAL_URL = "ws://47.93.156.90:8080/Excoord_MessageServer/message";
-    this.LOCAL_URL_LIVE = "ws://47.93.156.90:8889/Excoord_MessageServer/message";
+    this.LOCAL_URL = "ws://192.168.50.139:8080/Excoord_MessageServer/message";
+    this.LOCAL_URL_LIVE = "ws://192.168.50.139:8889/Excoord_MessageServer/message";
     this.WS_URL = IS_DEBUG ? (IS_LIVE_DEBUG ? this.LOCAL_URL_LIVE : this.LOCAL_URL) : this.REMOTE_URL;
     console.log("WS_URL----------------->" + this.WS_URL);
     this.ws = null;
@@ -62,7 +62,7 @@ export function MsgConnection() {
                 }
             }
         };
-        // 打开WebSocket 
+        // 打开WebSocket
         connection.ws.onclose = function (event) {
             connection.connecting = false;
             connection.connected = false;

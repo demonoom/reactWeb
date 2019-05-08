@@ -2888,7 +2888,6 @@ const MainLayout = React.createClass({
 
                 break;
             case 'unionClass':
-                //叮消息
                 tabComponent = null;
                 middleComponent = null;
                 break;
